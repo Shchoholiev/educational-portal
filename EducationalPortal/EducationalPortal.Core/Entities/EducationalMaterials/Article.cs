@@ -2,7 +2,7 @@
 
 namespace EducationalPortal.Core.Entities.EducationalMaterials
 {
-    public class Articles : MaterialsBase
+    public class Article : MaterialsBase
     {
         public Resource Resource { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace EducationalPortal.Core.Repository
+namespace EducationalPortal.Application.Repository
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
@@ -12,9 +12,7 @@ namespace EducationalPortal.Core.Repository
 
         Task Delete(int id);
 
-        Task Save();
-
-        Task Attach(params object[] obj);
+        void Attach(params object[] obj);
 
         Task<TEntity> GetOne(int? id);
 
@@ -25,8 +23,11 @@ namespace EducationalPortal.Core.Repository
         Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate,
-                                   params Expression<Func<TEntity, object>>[] includeProperties);
+                                   params Expression<Func<TEntity, object>>[] includeProperties); 
 
         Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber);
+
+        Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber, 
+                                   params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

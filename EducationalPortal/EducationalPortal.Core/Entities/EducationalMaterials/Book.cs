@@ -2,7 +2,7 @@
 
 namespace EducationalPortal.Core.Entities.EducationalMaterials
 {
-    public class Books : MaterialsBase
+    public class Book : MaterialsBase
     {
         public int PagesCount { get; set; }
 
