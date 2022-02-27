@@ -26,7 +26,8 @@ namespace EducationalPortal.Application.Services
 
         public async Task Delete(int id)
         {
-            await this._articlesRepository.Delete(id);
+            var article = await this._articlesRepository.GetOne(id);
+            await this._articlesRepository.Delete(article);
         }
 
         public async Task<IEnumerable<Article>> GetAll()

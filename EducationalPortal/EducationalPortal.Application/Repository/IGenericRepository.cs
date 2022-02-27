@@ -10,8 +10,6 @@ namespace EducationalPortal.Application.Repository
 
         Task Delete(TEntity item);
 
-        Task Delete(int id);
-
         void Attach(params object[] obj);
 
         Task<TEntity> GetOne(int? id);
