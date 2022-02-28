@@ -20,5 +20,7 @@ namespace EducationalPortal.Core.Entities
         public List<MaterialsBase> Materials { get; set; }
 
         public List<UsersSkills> UsersSkills { get; set; }
+
+        public List<UsersCourses> UsersCourses { get; set; }
     }
 }

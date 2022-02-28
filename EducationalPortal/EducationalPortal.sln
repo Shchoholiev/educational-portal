@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationalPortal.Core", "EducationalPortal.Core\EducationalPortal.Core.csproj", "{754DE828-1691-4494-9C22-6C0CB4B03A3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducationalPortal.Application", "EducationalPortal.Application\EducationalPortal.Application.csproj", "{DB711D62-3156-4757-8751-4176B02FC671}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationalPortal.Application", "EducationalPortal.Application\EducationalPortal.Application.csproj", "{DB711D62-3156-4757-8751-4176B02FC671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducationalPortal.Infrastructure", "EducationalPortal.Infrastructure\EducationalPortal.Infrastructure.csproj", "{8696FA2A-88DF-4FE3-93C2-12F44DB5A218}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DB711D62-3156-4757-8751-4176B02FC671}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB711D62-3156-4757-8751-4176B02FC671}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB711D62-3156-4757-8751-4176B02FC671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8696FA2A-88DF-4FE3-93C2-12F44DB5A218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8696FA2A-88DF-4FE3-93C2-12F44DB5A218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8696FA2A-88DF-4FE3-93C2-12F44DB5A218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8696FA2A-88DF-4FE3-93C2-12F44DB5A218}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

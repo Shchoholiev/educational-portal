@@ -5,16 +5,16 @@ namespace EducationalPortal.Application.Repository
 {
     public interface IUserRepository
     {
-        Task Add(User user);
+        Task AddAsync(User user);
 
-        Task Update(User user);
+        Task UpdateAsync(User user);
 
-        Task Delete(User user);
+        Task DeleteAsync(User user);
 
-        Task<User> GetOne(int id);
+        Task<User> GetOneAsync(int id);
 
-        Task<IEnumerable<User>> GetAll();
+        Task<IEnumerable<User>> GetAllAsync();
 
-        Task<IEnumerable<User>> GetAll(Expression<Func<User, bool>> predicate);
+        Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate);
     }
 }

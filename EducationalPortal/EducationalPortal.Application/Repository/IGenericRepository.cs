@@ -4,28 +4,28 @@ namespace EducationalPortal.Application.Repository
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        Task Add(TEntity item);
+        Task AddAsync(TEntity item);
 
-        Task Update(TEntity item);
+        Task UpdateAsync(TEntity item);
 
-        Task Delete(TEntity item);
+        Task DeleteAsync(TEntity item);
 
         void Attach(params object[] obj);
 
-        Task<TEntity> GetOne(int? id);
+        Task<TEntity> GetOneAsync(int? id);
 
-        Task<TEntity> GetOne(int? id, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<TEntity> GetOneAsync(int? id, params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<IEnumerable<TEntity>> GetAll();
+        Task<IEnumerable<TEntity>> GetAllAsync();
 
-        Task<IEnumerable<TEntity>> GetAll(params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<IEnumerable<TEntity>> GetAll(Expression<Func<TEntity, bool>> predicate,
+        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                    params Expression<Func<TEntity, object>>[] includeProperties); 
 
-        Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber);
+        Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber);
 
-        Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber, 
+        Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber, 
                                    params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }
