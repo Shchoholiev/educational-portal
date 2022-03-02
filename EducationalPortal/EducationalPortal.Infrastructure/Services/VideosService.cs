@@ -3,7 +3,7 @@ using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 
-namespace EducationalPortal.Application.Services
+namespace EducationalPortal.Infrastructure.Services
 {
     public class VideosService : IVideosService
     {

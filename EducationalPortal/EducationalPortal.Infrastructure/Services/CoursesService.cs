@@ -2,7 +2,7 @@
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 
-namespace EducationalPortal.Application.Services
+namespace EducationalPortal.Infrastructure.Services
 {
     public class CoursesService : ICoursesService
     {
