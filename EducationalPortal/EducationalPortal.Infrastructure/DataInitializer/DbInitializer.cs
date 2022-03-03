@@ -3,12 +3,13 @@ using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
+using Microsoft.EntityFrameworkCore;
 
 namespace EducationalPortal.Infrastructure.DataInitializer
 {
     public static class DbInitializer
     {
-        public static async void Initialize(ApplicationContext context)
+        public static async Task Initialize(ApplicationContext context)
         {
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
@@ -37,10 +38,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             {
                 Name = "Describing An Object With Different Data Types",
                 Link = "https://firebasestorage.googleapis.com/v0/b/educational-portal-584a2.appspot.com/o/Describing%20An%20Object%20With%20Different%20Data%20Types.mp4?alt=media&token=dddb5f82-3514-40dd-a798-76b4f565083e",
-                Duration = TimeOnly.MinValue.AddMinutes(6.1),
+                Duration = DateTime.MinValue.AddMinutes(6.1),
                 Quality = q360p,
             };
-
             context.Videos.Add(csharpVideo1);
             context.SaveChanges();
 
@@ -61,9 +61,12 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 PublicationYear = 2020,
                 Authors = new List<Author> { troelsen } 
             };
+            context.Books.Add(csharpBook);
+            context.SaveChanges();
 
             var resource1 = new Resource { Name = "microsoft.com" };
             context.Resources.Add(resource1);
+            context.SaveChanges();
 
             var csharpArticle = new Article
             {
@@ -71,6 +74,8 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 Link = "https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/",
                 Resource = resource1,
             };
+            context.Articles.Add(csharpArticle);
+            context.SaveChanges();
 
             var csharpSkills = new List<Skill>
             {
@@ -102,6 +107,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 Price = 100,
                 Skills = csharpSkills,
             };
+            context.Courses.Add(courseCSharp);
+            context.Entry(courseCSharp).State = EntityState.Added;
+            context.SaveChanges();
 
             var coursesMaterials1 = new CoursesMaterials
             {
@@ -122,8 +130,13 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 coursesMaterials1, coursesMaterials2,
             };
 
+            courseCSharp.Id = 1;
             courseCSharp.CoursesMaterials = csharpCoursesMaterials;
-            context.Courses.Add(courseCSharp);
+            //context.Courses.Add(courseCSharp);
+            //context.SaveChanges();
+
+            context.Courses.Update(courseCSharp);
+            context.SaveChanges();
         }
     }
 }
