@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Repository
 {
-    public interface IUserRepository
+    public interface IUsersRepository
     {
         Task AddAsync(User user);
 

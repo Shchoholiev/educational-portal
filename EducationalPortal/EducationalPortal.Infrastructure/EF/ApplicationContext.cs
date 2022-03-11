@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.FluentAPI;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,8 @@ namespace EducationalPortal.Infrastructure.EF
         }
 
         public DbSet<Course> Courses { get; set; }
+
+        public DbSet<UsersCourses> UsersCourses { get; set; }
 
         public DbSet<Video> Videos { get; set; }
 

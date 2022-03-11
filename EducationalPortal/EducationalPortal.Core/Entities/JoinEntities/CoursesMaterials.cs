@@ -5,6 +5,7 @@ namespace EducationalPortal.Core.Entities.JoinEntities
     public class CoursesMaterials
     {
         public int CourseId { get; set; }
+
         public Course Course { get; set; }
 
         public int MaterialId { get; set; }

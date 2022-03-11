@@ -1,4 +1,6 @@
-﻿using EducationalPortal.Web.Models;
+﻿using EducationalPortal.Application.Repository;
+using EducationalPortal.Core.Entities;
+using EducationalPortal.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,15 +8,16 @@ namespace EducationalPortal.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICoursesRepository _courseRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ICoursesRepository courseRepository)
         {
-            _logger = logger;
+            _courseRepository = courseRepository;
         }
 
         public IActionResult Index()
         {
+            //var course = await _courseRepository.GetCourseAsync(1);
             return View();
         }
 

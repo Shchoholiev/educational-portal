@@ -135,8 +135,8 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             //context.Courses.Add(courseCSharp);
             //context.SaveChanges();
 
-            context.Courses.Update(courseCSharp);
-            context.SaveChanges();
+            //context.Courses.Update(courseCSharp);
+            //context.SaveChanges();
         }
     }
 }

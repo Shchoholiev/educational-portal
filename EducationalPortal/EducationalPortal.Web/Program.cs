@@ -2,8 +2,8 @@ using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.DI;
 using EducationalPortal.Infrastructure.EF;
 
-var context = new ApplicationContext();
-await DbInitializer.Initialize(context);
+//var context = new ApplicationContext();
+//await DbInitializer.Initialize(context);
 
 var builder = WebApplication.CreateBuilder(args);
 
