@@ -1,6 +1,6 @@
 ﻿namespace EducationalPortal.Core.Entities.EducationalMaterials.Properties
 {
-    public class Resource
+    public class Resource : EntityBase
     {
         public string Name { get; set; }
     }

@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.FluentAPI;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,13 @@ namespace EducationalPortal.Infrastructure.EF
         public ApplicationContext(DbContextOptions<ApplicationContext> options) 
             : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string connectionString = @"server=(LocalDb)\MSSQLLocalDB;database=EducationalPortal;integrated security=True;
+                    MultipleActiveResultSets=True;App=EntityFramework;";
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,6 +40,8 @@ namespace EducationalPortal.Infrastructure.EF
         }
 
         public DbSet<Course> Courses { get; set; }
+
+        public DbSet<UsersCourses> UsersCourses { get; set; }
 
         public DbSet<Video> Videos { get; set; }
 

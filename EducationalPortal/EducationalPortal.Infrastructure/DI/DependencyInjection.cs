@@ -1,9 +1,8 @@
 ﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Repository;
-using EducationalPortal.Application.Services;
-using EducationalPortal.Core.Entities;
 using EducationalPortal.Infrastructure.EF;
 using EducationalPortal.Infrastructure.Repository;
+using EducationalPortal.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +20,7 @@ namespace EducationalPortal.Infrastructure.DI
                 options.UseSqlServer(connectionString)
             );
 
-            services.AddScoped<IGenericRepository<Course>, CoursesRepository>();
+            services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;
@@ -33,7 +32,7 @@ namespace EducationalPortal.Infrastructure.DI
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<IVideosService, VideosService>();
             services.AddScoped<ICoursesService, CoursesService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, UsersService>();
 
             return services;
         }

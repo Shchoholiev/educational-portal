@@ -35,12 +35,12 @@ namespace EducationalPortal.Infrastructure.Repository
             await this.SaveAsync();
         }
 
-        public async Task<TEntity> GetOneAsync(int? id)
+        public async Task<TEntity> GetOneAsync(int id)
         {
             return await this._table.FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<TEntity> GetOneAsync(int? id, params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<TEntity> GetOneAsync(int id, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var items = await this.GetAllAsync(includeProperties);
             return items.FirstOrDefault(i => i.Id == id);

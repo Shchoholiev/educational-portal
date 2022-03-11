@@ -5,11 +5,11 @@ using EducationalPortal.Core.Entities;
 
 namespace EducationalPortal.Infrastructure.Services
 {
-    public class UserService : IUserService
+    public class UsersService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUsersRepository _userRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UsersService(IUsersRepository userRepository)
         {
             this._userRepository = userRepository;
         }

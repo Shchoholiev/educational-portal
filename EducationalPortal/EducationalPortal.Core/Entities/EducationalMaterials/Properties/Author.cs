@@ -1,6 +1,6 @@
 ﻿namespace EducationalPortal.Core.Entities.EducationalMaterials.Properties
 {
-    public class Author
+    public class Author : EntityBase
     {
         public string FullName { get; set; }
 

@@ -12,9 +12,9 @@ namespace EducationalPortal.Application.Repository
 
         void Attach(params object[] obj);
 
-        Task<TEntity> GetOneAsync(int? id);
+        Task<TEntity> GetOneAsync(int id);
 
-        Task<TEntity> GetOneAsync(int? id, params Expression<Func<TEntity, object>>[] includeProperties);
+        Task<TEntity> GetOneAsync(int id, params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 

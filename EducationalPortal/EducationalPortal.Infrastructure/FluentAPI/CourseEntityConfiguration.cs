@@ -17,6 +17,9 @@ namespace EducationalPortal.Infrastructure.FluentAPI
 
             builder.HasMany<UsersCourses>(c => c.UsersCourses)
                    .WithOne(uc => uc.Course);
+
+            builder.Ignore(c => c.Materials);
+            builder.Ignore(c => c.Users);
         } 
     }
 }
