@@ -104,12 +104,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "of Windows programming. The focus at first is on simple Console applications. This course " +
                               "works with Visual Studio 2013, or Visual Studio 2015. You'll learn in a detailed and " +
                               "deliberate way so you can set a foundation and move from basic to more advanced concepts easily.",
-                Price = 100,
+                Price = 89.99,
                 Skills = csharpSkills,
             };
-            context.Courses.Add(courseCSharp);
-            context.Entry(courseCSharp).State = EntityState.Added;
-            context.SaveChanges();
 
             var coursesMaterials1 = new CoursesMaterials
             {
@@ -120,23 +117,27 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 
             var coursesMaterials2 = new CoursesMaterials
             {
-                Material = csharpVideo1,
+                Material = csharpBook,
                 Course = courseCSharp,
                 Index = 2,
             };
 
-            var csharpCoursesMaterials = new List<CoursesMaterials>
+            var coursesMaterials3 = new CoursesMaterials
             {
-                coursesMaterials1, coursesMaterials2,
+                Material = csharpArticle,
+                Course = courseCSharp,
+                Index = 3,
             };
 
-            courseCSharp.Id = 1;
-            courseCSharp.CoursesMaterials = csharpCoursesMaterials;
-            //context.Courses.Add(courseCSharp);
-            //context.SaveChanges();
+            var csharpCoursesMaterials = new List<CoursesMaterials>
+            {
+                coursesMaterials1, coursesMaterials2, coursesMaterials3
+            };
 
-            //context.Courses.Update(courseCSharp);
-            //context.SaveChanges();
+            courseCSharp.CoursesMaterials = csharpCoursesMaterials;
+
+            context.Courses.Add(courseCSharp);
+            context.SaveChanges();
         }
     }
 }

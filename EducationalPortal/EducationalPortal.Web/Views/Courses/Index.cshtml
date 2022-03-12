@@ -1,10 +1,50 @@
-﻿@model IEnumerable<EducationalPortal.Core.Entities.Course>
+﻿@using EducationalPortal.Web.Paging
+@model PagedList<EducationalPortal.Core.Entities.Course>
 
 @{
     ViewData["Title"] = "Courses";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h4>Courses</h4>
+
+<section class="d-flex flex-wrap">
+    @foreach (var course in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@course.Thumbnail" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">@course.Name</h5>
+                <p class="card-text" style="overflow: hidden; max-height: 50px;">@course.Description</p>
+                <div class="d-flex flex-row justify-content-between">
+                    <h5 class="text-primary">$@course.Price</h5>
+                    <a asp-action="" class="btn btn-primary">Add to cart</a>
+                </div>
+            </div>
+        </div>   
+    }
+</section>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    //var previousPageNumber = Model.PageNumber - 1;
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+    //var nextPageNumber = Model.PageNumber + 1;
+}
+
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a asp-action="Index" asp-route-PageNumber="@(Model.PageNumber - 1)" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a asp-action="Index" asp-route-PageNumber="@i" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a asp-action="Index" asp-route-PageNumber="@(Model.PageNumber + 1)" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>

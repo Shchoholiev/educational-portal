@@ -1,21 +1,25 @@
 ﻿using EducationalPortal.Core.Entities;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Interfaces
 {
     public interface ICoursesService
     {
-        Task AddCourse(Course course);
+        Task AddCourseAsync(Course course);
 
-        Task<Course> GetCourse(int id);
+        Task UpdateCourseAsync(Course course);
 
-        Task<IEnumerable<Course>> GetCourses();
+        Task DeleteCourseAsync(int id);
 
-        Task<IEnumerable<Course>> GetPage(int pageSize, int pageNumber);
+        Task<Course> GetCourseAsync(int id);
 
-        Task UpdateCourse(Course course);
+        Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber);
 
-        Task DeleteCourse(int id);
+        Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber,
+                                               Expression<Func<Course, bool>> predicate);
 
-        Task<IEnumerable<Skill>> GetSkills();
+        Task<IEnumerable<Skill>> GetSkillsAsync();
+
+        Task<int> GetCountAsync();
     }
 }

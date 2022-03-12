@@ -19,7 +19,6 @@ namespace EducationalPortal.Infrastructure.FluentAPI
                    .WithOne(uc => uc.Course);
 
             builder.Ignore(c => c.Materials);
-            builder.Ignore(c => c.Users);
         } 
     }
 }
