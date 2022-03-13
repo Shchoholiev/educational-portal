@@ -73,6 +73,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 Name = "LINQ",
                 Link = "https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/",
                 Resource = resource1,
+                PublicationDate = new DateTime(2022, 2, 18),
             };
             context.Articles.Add(csharpArticle);
             context.SaveChanges();
@@ -94,6 +95,8 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             {
                 Name = "CSharp",
                 Thumbnail = "https://firebasestorage.googleapis.com/v0/b/educational-portal-584a2.appspot.com/o/csharp.jpg?alt=media&token=6c21dc45-aead-4083-b439-177201aa0938",
+                ShortDescription = "Learning to code C#? We have provided HD video lectures, " +
+                                   "live coding sessions, and nearly 100 exercises to learn on!",
                 Description = "My name is Tom Owsiak. I'm the author of \"Beginning C# Hands-On-The Core Language\" " +
                               "from Packt Publishing. Let's take a look at every this course has to offer. I have an " +
                               "updated version of a  similar course with Visual Studio 2017. Please search \"Learn C# " +
@@ -104,12 +107,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "of Windows programming. The focus at first is on simple Console applications. This course " +
                               "works with Visual Studio 2013, or Visual Studio 2015. You'll learn in a detailed and " +
                               "deliberate way so you can set a foundation and move from basic to more advanced concepts easily.",
-                Price = 100,
+                Price = 89.99,
                 Skills = csharpSkills,
             };
-            context.Courses.Add(courseCSharp);
-            context.Entry(courseCSharp).State = EntityState.Added;
-            context.SaveChanges();
 
             var coursesMaterials1 = new CoursesMaterials
             {
@@ -120,23 +120,27 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 
             var coursesMaterials2 = new CoursesMaterials
             {
-                Material = csharpVideo1,
+                Material = csharpBook,
                 Course = courseCSharp,
                 Index = 2,
             };
 
-            var csharpCoursesMaterials = new List<CoursesMaterials>
+            var coursesMaterials3 = new CoursesMaterials
             {
-                coursesMaterials1, coursesMaterials2,
+                Material = csharpArticle,
+                Course = courseCSharp,
+                Index = 3,
             };
 
-            courseCSharp.Id = 1;
-            courseCSharp.CoursesMaterials = csharpCoursesMaterials;
-            //context.Courses.Add(courseCSharp);
-            //context.SaveChanges();
+            var csharpCoursesMaterials = new List<CoursesMaterials>
+            {
+                coursesMaterials1, coursesMaterials2, coursesMaterials3
+            };
 
-            //context.Courses.Update(courseCSharp);
-            //context.SaveChanges();
+            courseCSharp.CoursesMaterials = csharpCoursesMaterials;
+
+            context.Courses.Add(courseCSharp);
+            context.SaveChanges();
         }
     }
 }

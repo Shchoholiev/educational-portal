@@ -114,6 +114,11 @@ namespace EducationalPortal.Infrastructure.Repository
             }
         }
 
+        public async Task<int> GetCountAsync()
+        {
+            return await this._table.CountAsync();
+        }
+
         private async Task SaveAsync()
         {
             await this._db.SaveChangesAsync();
