@@ -11,7 +11,7 @@ namespace EducationalPortal.Application.Repository
 
         Task DeleteAsync(User user);
 
-        Task<User> GetOneAsync(int id);
+        Task<User?> GetUserAsync(string email);
 
         Task<IEnumerable<User>> GetAllAsync();
 

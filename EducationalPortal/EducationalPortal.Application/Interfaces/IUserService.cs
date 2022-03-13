@@ -1,18 +1,19 @@
 ﻿using EducationalPortal.Application.Descriptions;
+using EducationalPortal.Application.DTO;
 using EducationalPortal.Core.Entities;
 
 namespace EducationalPortal.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<OperationDetails> Register(User user);
+        Task<OperationDetails> Register(UserDTO userDTO);
 
-        Task<OperationDetails> Login(User user);
+        Task<OperationDetails> Login(UserDTO userDTO);
 
-        Task Delete(int id);
+        Task Delete(string id);
 
-        Task<User> GetUser(int id);
+        Task<User> GetUser(string id);
 
-        Task<OperationDetails> UpdateUser(int id);
+        Task<OperationDetails> UpdateUser(string id);
     }
 }

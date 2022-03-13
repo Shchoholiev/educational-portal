@@ -18,6 +18,9 @@ namespace EducationalPortal.Infrastructure.FluentAPI
 
             builder.HasMany<MaterialsBase>(u => u.Materials)
                    .WithMany(m => m.Users);
+
+            builder.HasIndex(u => u.Email)
+                   .IsUnique();
         }
     } 
 }
