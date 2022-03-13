@@ -10,16 +10,17 @@
 <section class="d-flex flex-wrap">
     @foreach (var course in Model)
     {
-        <div class="card" style="width: 18rem;">
+        <div class="card m-1" style="width: 18rem;">
             <img src="@course.Thumbnail" class="card-img-top">
             <div class="card-body">
                 <h5 class="card-title">@course.Name</h5>
-                <p class="card-text" style="overflow: hidden; max-height: 50px;">@course.Description</p>
+                <p class="card-text">@course.ShortDescription</p>
                 <div class="d-flex flex-row justify-content-between">
                     <h5 class="text-primary">$@course.Price</h5>
-                    <a asp-action="" class="btn btn-primary">Add to cart</a>
+                    <a asp-action="" class="btn btn-primary" style="z-index:2">Add to cart</a>
                 </div>
             </div>
+            <a asp-action="Details" asp-route-id="@course.Id" class="stretched-link"></a>
         </div>   
     }
 </section>

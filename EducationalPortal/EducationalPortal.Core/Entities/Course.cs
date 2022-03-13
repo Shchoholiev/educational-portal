@@ -9,6 +9,8 @@ namespace EducationalPortal.Core.Entities
 
         public string Thumbnail { get; set; }
 
+        public string ShortDescription { get; set; }
+
         public string Description { get; set; }
 
         public double Price { get; set; }
