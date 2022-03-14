@@ -14,6 +14,8 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<User?> GetUserAsync(string email);
 
+        Task<User?> GetUserWithSkillsAsync(string email);
+
         Task<OperationDetails> UpdateUserAsync(string id);
     }
 }

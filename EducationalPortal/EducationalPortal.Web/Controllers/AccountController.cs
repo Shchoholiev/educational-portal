@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationalPortal.Web.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
@@ -20,9 +21,10 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Profile(string email)
         {
-            return View();
+            var user = await this._userService.GetUserWithSkillsAsync(email);
+            return View(user);
         }
 
         [HttpGet]

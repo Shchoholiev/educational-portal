@@ -41,6 +41,15 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this._table.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
+        public async Task<User?> GetUserWithSkillsAsync(string email)
+        {
+            return await this._table
+                             .Include(u => u.UsersSkills)
+                                .ThenInclude(us => us.Skill)
+                             .Where(u => u.Email == email)
+                             .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await this._table.ToListAsync();

@@ -13,6 +13,8 @@ namespace EducationalPortal.Application.Repository
 
         Task<User?> GetUserAsync(string email);
 
+        Task<User?> GetUserWithSkillsAsync(string email);
+
         Task<IEnumerable<User>> GetAllAsync();
 
         Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate);
