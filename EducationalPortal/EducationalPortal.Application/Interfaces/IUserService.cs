@@ -6,14 +6,14 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface IUserService
     {
-        Task<OperationDetails> Register(UserDTO userDTO);
+        Task<OperationDetails> RegisterAsync(UserDTO userDTO);
 
-        Task<OperationDetails> Login(UserDTO userDTO);
+        Task<OperationDetails> LoginAsync(UserDTO userDTO);
 
-        Task Delete(string id);
+        Task DeleteAsync(string id);
 
-        Task<User> GetUser(string id);
+        Task<User?> GetUserAsync(string email);
 
-        Task<OperationDetails> UpdateUser(string id);
+        Task<OperationDetails> UpdateUserAsync(string id);
     }
 }

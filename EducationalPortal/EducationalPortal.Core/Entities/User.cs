@@ -13,11 +13,9 @@ namespace EducationalPortal.Core.Entities
 
         public string Email { get; set; }
 
-        public string SecurityStamp { get; set; }
-
         public string PasswordHash { get; set; }
         
-        public Role Role { get; set; }
+        public Role? Role { get; set; }
 
         public List<MaterialsBase> Materials { get; set; }
 

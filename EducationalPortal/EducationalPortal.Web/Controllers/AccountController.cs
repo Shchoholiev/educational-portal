@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Infrastructure.Identity;
 using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,12 @@ namespace EducationalPortal.Web.Controllers
     {
         private readonly IUserService _userService;
 
-        public AccountController(IUserService userService)
+        private readonly IUserManager _userManager;
+
+        public AccountController(IUserService userService, IUserManager userManager)
         {
             this._userService = userService;
+            this._userManager = userManager;
         }
 
         [HttpGet]
@@ -36,11 +40,11 @@ namespace EducationalPortal.Web.Controllers
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Name = model.Name, Email = model.Email, Password = model.Password };
-                var result = await this._userService.Register(userDTO);
-
+                var result = await this._userService.RegisterAsync(userDTO);
+                
                 if (result.Succeeded)
                 {
-                    //this.SetCookies(userDTO.Name);
+                    await this._userManager.SignInAsync(this.HttpContext, userDTO, false);
                     return Redirect(model.ReturnUrl);
                 }
                 else
@@ -70,10 +74,13 @@ namespace EducationalPortal.Web.Controllers
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Email = model.Email, Password = model.Password };
-                var result = await this._userService.Login(userDTO);
+                var result = await this._userService.LoginAsync(userDTO);
 
                 if (result.Succeeded)
                 {
+                    var user = await this._userService.GetUserAsync(userDTO.Email);
+                    userDTO.Name = user.Name;
+                    await this._userManager.SignInAsync(this.HttpContext, userDTO, model.RememberMe);
                     return Redirect(model.ReturnUrl);
                 }
                 else
@@ -84,14 +91,16 @@ namespace EducationalPortal.Web.Controllers
                     }
                 }
             }
-
+            
             return View(model);
         }
 
-        //private void SetCookies(string userName)
-        //{
-        //    Response.Cookies.Append("userName", userName);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await this._userManager.SignOutAsync(this.HttpContext);
+            return RedirectToAction("Index", "Home");
+        }
 
         private string CheckReturnUrl(string returnUrl)
         {

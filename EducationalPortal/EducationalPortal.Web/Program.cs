@@ -1,6 +1,7 @@
 using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.DI;
 using EducationalPortal.Infrastructure.EF;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var context = new ApplicationContext();
 await DbInitializer.Initialize(context);
@@ -11,8 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructure();
 builder.Services.AddServices();
-
-//builder.Services.AddServices();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, (options) =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+    });
 
 var app = builder.Build();
 
@@ -26,6 +35,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseAuthentication();
 
 app.UseRouting();
 

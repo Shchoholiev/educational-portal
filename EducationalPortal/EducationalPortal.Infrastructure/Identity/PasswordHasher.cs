@@ -16,7 +16,7 @@ namespace EducationalPortal.Infrastructure.Identity
             _iterations = random.Next(100, 1000);
         }
 
-        public (string securityStamp, string passwordHash) Hash(string password)
+        public string Hash(string password)
         {
             using (var algorithm = new Rfc2898DeriveBytes(password, SaltSize, _iterations, 
                                                           HashAlgorithmName.SHA256))
@@ -24,22 +24,23 @@ namespace EducationalPortal.Infrastructure.Identity
                 var key = Convert.ToBase64String(algorithm.GetBytes(KeySize));
                 var salt = Convert.ToBase64String(algorithm.Salt);
 
-                return ($"{_iterations}.{salt}", key);
+                return $"{_iterations}.{salt}.{key}";
             }
         }
 
-        public bool Check(string password, string passwordHash, string securityStamp)
+        public bool Check(string password, string passwordHash)
         {
-            var parts = securityStamp.Split(".", 2);
+            var parts = passwordHash.Split(".", 3);
 
             var iterations = Convert.ToInt32(parts[0]);
             var salt = Convert.FromBase64String(parts[1]);
+            var userKey = parts[2];
 
             using (var algorithm = new Rfc2898DeriveBytes(password, salt, iterations,
                                                           HashAlgorithmName.SHA256))
             {
                 var key = Convert.ToBase64String(algorithm.GetBytes(KeySize));
-                return key == passwordHash;
+                return key == userKey;
             }
         }
     }

@@ -29,6 +29,33 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav">
+                        @{
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <input type="submit" value="Logout" class="btn btn-link text-decoration-none text-dark"/>
+                                    </form>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Account" asp-action="Index"
+                                    class="nav-link text-primary">@User.Identity.Name</a>                                    
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Register"
+                                       asp-route-returnUrl="@Context.Request.Path">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Login"
+                                       asp-route-returnUrl="@Context.Request.Path">Login</a>
+                                </li>
+                            }
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

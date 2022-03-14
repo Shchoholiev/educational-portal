@@ -19,8 +19,15 @@ namespace EducationalPortal.Infrastructure.Services
             this._passwordHasher = passwordHasher;
         }
 
-        public async Task<OperationDetails> Register(UserDTO userDTO)
+        public async Task<OperationDetails> RegisterAsync(UserDTO userDTO)
         {
+            var operationDetails = new OperationDetails();
+            if (await this._userRepository.GetUserAsync(userDTO.Email) != null)
+            {
+                operationDetails.AddError("This email is already used!");
+                return operationDetails;
+            }
+
             var user = new User
             {
                 Id = DateTime.Now.Ticks.ToString(),
@@ -28,11 +35,9 @@ namespace EducationalPortal.Infrastructure.Services
                 Email = userDTO.Email,
             };
 
-            var operationDetails = new OperationDetails();
-
             try
             {
-                (user.SecurityStamp, user.PasswordHash) = this._passwordHasher.Hash(userDTO.Password);
+                user.PasswordHash = this._passwordHasher.Hash(userDTO.Password);
                 await this._userRepository.AddAsync(user);
             }
             catch (Exception e)
@@ -43,7 +48,7 @@ namespace EducationalPortal.Infrastructure.Services
             return operationDetails;
         }
 
-        public async Task<OperationDetails> Login(UserDTO userDTO)
+        public async Task<OperationDetails> LoginAsync(UserDTO userDTO)
         {
             var user = await this._userRepository.GetUserAsync(userDTO.Email);
 
@@ -51,9 +56,10 @@ namespace EducationalPortal.Infrastructure.Services
             if (user == null)
             {
                 operationDetails.AddError("User with this email not found!");
+                return operationDetails;
             }
 
-            if (!this._passwordHasher.Check(userDTO.Password, user.PasswordHash, user.SecurityStamp))
+            if (!this._passwordHasher.Check(userDTO.Password, user.PasswordHash))
             {
                 operationDetails.AddError("Incorrect password!");
             }
@@ -61,17 +67,17 @@ namespace EducationalPortal.Infrastructure.Services
             return operationDetails;
         }
 
-        public Task<User> GetUser(string id)
+        public async Task<User?> GetUserAsync(string email)
+        {
+            return await this._userRepository.GetUserAsync(email);
+        }
+
+        public Task<OperationDetails> UpdateUserAsync(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationDetails> UpdateUser(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task Delete(string id)
+        public async Task DeleteAsync(string id)
         {
             var user = await this._userRepository.GetUserAsync(id); // ?
             await this._userRepository.DeleteAsync(user);
