@@ -152,7 +152,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 Id = "1234567890",
                 Name = "Default",
                 Email = "default@gmail.com",
-                Avatar = "https://firebasestorage.googleapis.com/v0/b/educational-portal-584a2.appspot.com/o/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg?alt=media&token=9ebce9c2-1b4c-46cd-8b29-60edc7610d9e",
+                Avatar = "https://educationalportal.blob.core.windows.net/avatars/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg",
                 PasswordHash = passwordHash,
             };
 

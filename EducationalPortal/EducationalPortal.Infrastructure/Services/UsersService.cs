@@ -77,9 +77,10 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._userRepository.GetUserWithSkillsAsync(email);
         }
 
-        public Task<OperationDetails> UpdateUserAsync(string id)
+        public async Task<OperationDetails> UpdateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            await this._userRepository.UpdateAsync(user);
+            return new OperationDetails();
         }
 
         public async Task DeleteAsync(string id)

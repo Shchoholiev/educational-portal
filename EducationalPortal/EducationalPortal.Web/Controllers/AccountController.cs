@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Core.Entities;
 using EducationalPortal.Infrastructure.Identity;
 using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,14 @@ namespace EducationalPortal.Web.Controllers
 
         private readonly IUserManager _userManager;
 
-        public AccountController(IUserService userService, IUserManager userManager)
+        private readonly ICloudStorageService _cloudStorageService;
+
+        public AccountController(IUserService userService, IUserManager userManager,
+                                 ICloudStorageService cloudStorageService)
         {
             this._userService = userService;
             this._userManager = userManager;
+            this._cloudStorageService = cloudStorageService;
         }
 
         [HttpGet]
@@ -25,6 +30,28 @@ namespace EducationalPortal.Web.Controllers
         {
             var user = await this._userService.GetUserWithSkillsAsync(email);
             return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(UserDTO userDTO, IFormFile avatar)
+        {
+            var user = await this._userService.GetUserAsync(userDTO.Email);
+            user.Name = userDTO.Name;
+            user.Email = userDTO.Email;
+
+            if (avatar != null)
+            {
+                using (var stream = avatar.OpenReadStream())
+                {
+                    var uri = await this._cloudStorageService.UploadAsync(stream, avatar.FileName, 
+                                                                          avatar.ContentType, "avatars");
+                    await this._cloudStorageService.DeleteAsync(user.Avatar, "avatars");
+                    user.Avatar = uri;
+                }
+            }
+            await this._userService.UpdateUserAsync(user);
+
+            return RedirectToAction("Profile", new { email = user.Email });
         }
 
         [HttpGet]
