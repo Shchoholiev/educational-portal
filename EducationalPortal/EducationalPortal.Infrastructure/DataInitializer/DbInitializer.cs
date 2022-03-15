@@ -186,6 +186,16 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 
             context.Users.Add(user);
             context.SaveChanges();
+
+            var usersCourses = new UsersCourses
+            {
+                Course = courseCSharp,
+                User = user,
+                Progress = 15,
+            };
+
+            context.UsersCourses.Add(usersCourses);
+            context.SaveChanges();
         }
     }
 }

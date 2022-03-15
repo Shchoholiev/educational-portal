@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -50,6 +51,26 @@ namespace EducationalPortal.Infrastructure.Repository
                              .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email,
+                                                                              int pageSize, int pageNumber)
+        {
+            var user = await this.GetUserAsync(email);
+            return await this._db.UsersCourses.AsNoTracking()
+                                              .Where(uc => uc.UserId == user.Id)
+                                              .Include(uc => uc.Course)
+                                              .Skip((pageNumber - 1) * pageSize)
+                                              .Take(pageSize)
+                                              .ToListAsync();
+        }
+
+        public async Task<int> GetUsersCoursesCountAsync(string email)
+        {
+            var user = await this.GetUserAsync(email);
+            return await this._db.UsersCourses
+                                 .Where(uc => uc.UserId == user.Id)
+                                 .CountAsync();
+        }
+
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await this._table.ToListAsync();
@@ -60,7 +81,7 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this._table.Where(predicate).ToListAsync();
         }
 
-        public async Task SaveAsync()
+        private async Task SaveAsync()
         {
             await this._db.SaveChangesAsync();
         }

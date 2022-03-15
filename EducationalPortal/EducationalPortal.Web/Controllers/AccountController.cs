@@ -1,7 +1,9 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.Identity;
+using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +54,17 @@ namespace EducationalPortal.Web.Controllers
             await this._userService.UpdateUserAsync(user);
 
             return RedirectToAction("Profile", new { email = user.Email });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyLearning(string email, PageParameters pageParameters)
+        {
+            var usersCourses = await this._userService.GetUsersCoursesPageAsync(email, 
+                                    pageParameters.PageSize, pageParameters.PageSize);
+            var totalCount = await this._userService.GetUsersCoursesCountAsync(email);
+            var pagedList = new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
+
+            return View(pagedList);
         }
 
         [HttpGet]

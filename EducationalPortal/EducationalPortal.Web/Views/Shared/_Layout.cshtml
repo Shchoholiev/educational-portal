@@ -31,32 +31,40 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        @{
-                            if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-item">
-                                    <form method="post" asp-controller="Account" asp-action="Logout">
-                                        <input type="submit" value="Logout" class="btn btn-link text-decoration-none text-dark"/>
-                                    </form>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Account" asp-action="Profile"
-                                       asp-route-email="@User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value"
-                                       class="nav-link text-primary">
-                                       @User.Identity.Name</a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Register"
-                                       asp-route-returnUrl="@Context.Request.Path">Register</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Account" asp-action="Login"
-                                       asp-route-returnUrl="@Context.Request.Path">Login</a>
-                                </li>
-                            }
+                        <li class="nav-item">
+                            <a asp-controller="ShoppingCart" asp-action="Index" class="nav-link">
+                                Shopping Cart
+                            </a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var user = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="MyLearning" asp-route-email="@user" 
+                                   class="nav-link"
+                                >My Learning</a>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-controller="Account" asp-action="Logout">
+                                    <input type="submit" value="Logout" class="btn btn-link text-decoration-none text-dark"/>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Profile" asp-route-email="@user"
+                                   class="nav-link text-primary"
+                                >@User.Identity.Name</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register"
+                                    asp-route-returnUrl="@Context.Request.Path">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login"
+                                   asp-route-returnUrl="@Context.Request.Path">Login</a>
+                            </li>
                         }
                     </ul>
                 </div>

@@ -3,6 +3,7 @@ using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.Identity;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -33,6 +34,7 @@ namespace EducationalPortal.Infrastructure.Services
                 Id = DateTime.Now.Ticks.ToString(),
                 Name = userDTO.Name,
                 Email = userDTO.Email,
+                Avatar = "https://educationalportal.blob.core.windows.net/avatars/profile_default.jpg",
             };
 
             try
@@ -77,15 +79,26 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._userRepository.GetUserWithSkillsAsync(email);
         }
 
+        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, 
+                                                                              int pageSize, int pageNumber)
+        {
+            return await this._userRepository.GetUsersCoursesPageAsync(email, pageSize, pageNumber);
+        }
+
+        public async Task<int> GetUsersCoursesCountAsync(string email)
+        {
+            return await this._userRepository.GetUsersCoursesCountAsync(email);
+        }
+
         public async Task<OperationDetails> UpdateUserAsync(User user)
         {
             await this._userRepository.UpdateAsync(user);
             return new OperationDetails();
         }
 
-        public async Task DeleteAsync(string id)
+        public async Task DeleteAsync(string email)
         {
-            var user = await this._userRepository.GetUserAsync(id); // ?
+            var user = await this._userRepository.GetUserAsync(email); // ?
             await this._userRepository.DeleteAsync(user);
         }
     }

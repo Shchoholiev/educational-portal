@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Repository
@@ -15,8 +16,12 @@ namespace EducationalPortal.Application.Repository
 
         Task<User?> GetUserWithSkillsAsync(string email);
 
-        Task<IEnumerable<User>> GetAllAsync();
+        Task<IEnumerable<User>> GetAllAsync(); // ?
 
-        Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate);
+        Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate); // ?
+
+        Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, int pageNumber);
+
+        Task<int> GetUsersCoursesCountAsync(string email);
     }
 }
