@@ -1,39 +1,89 @@
 ﻿using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.JoinEntities;
+using EducationalPortal.Infrastructure.EF;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Repository
 {
     public class UsersRepository : IUsersRepository
     {
-        public Task AddAsync(User user)
+        private readonly ApplicationContext _db;
+        private readonly DbSet<User> _table;
+
+        public UsersRepository()
         {
-            throw new NotImplementedException();
+            this._db = new ApplicationContext();
+            this._table = _db.Set<User>();
         }
 
-        public Task DeleteAsync(User user)
+        public async Task AddAsync(User user)
         {
-            throw new NotImplementedException();
+            await this._table.AddAsync(user);
+            await this.SaveAsync();
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public async Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            this._db.Attach(user);
+            this._table.Update(user);
+            await this.SaveAsync();
         }
 
-        public Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate)
+        public async Task DeleteAsync(User user)
         {
-            throw new NotImplementedException();
+            this._table.Remove(user);
+            await this.SaveAsync();
         }
 
-        public Task<User> GetOneAsync(int id)
+        public async Task<User?> GetUserAsync(string email)
         {
-            throw new NotImplementedException();
+            return await this._table.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
-        public Task UpdateAsync(User user)
+        public async Task<User?> GetUserWithSkillsAsync(string email)
         {
-            throw new NotImplementedException();
+            return await this._table
+                             .Include(u => u.UsersSkills)
+                                .ThenInclude(us => us.Skill)
+                             .Where(u => u.Email == email)
+                             .FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email,
+                                                                              int pageSize, int pageNumber)
+        {
+            var user = await this.GetUserAsync(email);
+            return await this._db.UsersCourses.AsNoTracking()
+                                              .Where(uc => uc.UserId == user.Id)
+                                              .Include(uc => uc.Course)
+                                              .Skip((pageNumber - 1) * pageSize)
+                                              .Take(pageSize)
+                                              .ToListAsync();
+        }
+
+        public async Task<int> GetUsersCoursesCountAsync(string email)
+        {
+            var user = await this.GetUserAsync(email);
+            return await this._db.UsersCourses
+                                 .Where(uc => uc.UserId == user.Id)
+                                 .CountAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await this._table.ToListAsync();
+        }
+
+        public async Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate)
+        {
+            return await this._table.Where(predicate).ToListAsync();
+        }
+
+        private async Task SaveAsync()
+        {
+            await this._db.SaveChangesAsync();
         }
     }
 }

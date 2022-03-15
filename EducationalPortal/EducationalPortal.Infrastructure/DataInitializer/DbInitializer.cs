@@ -3,7 +3,7 @@ using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
-using Microsoft.EntityFrameworkCore;
+using EducationalPortal.Infrastructure.Identity;
 
 namespace EducationalPortal.Infrastructure.DataInitializer
 {
@@ -78,11 +78,13 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             context.Articles.Add(csharpArticle);
             context.SaveChanges();
 
+            var csharpCyntax = new Skill { Name = "C# Syntax" };
+            var oop = new Skill { Name = "OOP" };
+            var linq = new Skill { Name = "LINQ" };
+
             var csharpSkills = new List<Skill>
             {
-                new Skill { Name = "C# Syntax" },
-                new Skill { Name = "OOP" },
-                new Skill { Name = "LINQ" },
+                csharpCyntax, oop, linq
             };
 
             foreach (var skill in csharpSkills)
@@ -140,6 +142,59 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             courseCSharp.CoursesMaterials = csharpCoursesMaterials;
 
             context.Courses.Add(courseCSharp);
+            context.SaveChanges();
+
+            var passwordHasher = new PasswordHasher();
+            var passwordHash = passwordHasher.Hash("111111");
+
+            var user = new User
+            {
+                Id = "1234567890",
+                Name = "Default",
+                Email = "default@gmail.com",
+                Avatar = "https://educationalportal.blob.core.windows.net/avatars/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg",
+                PasswordHash = passwordHash,
+            };
+
+            var usersSkills1 = new UsersSkills
+            {
+                User = user,
+                Skill = csharpCyntax,
+                Level = 4,
+            };
+
+            var usersSkills2 = new UsersSkills
+            {
+                User = user,
+                Skill = oop,
+                Level = 2,
+            };
+
+            var usersSkills3 = new UsersSkills
+            {
+                User = user,
+                Skill = linq,
+                Level = 8,
+            };
+
+            var usersSkills = new List<UsersSkills>
+            {
+                usersSkills1, usersSkills2, usersSkills3
+            };
+
+            user.UsersSkills = usersSkills;
+
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            var usersCourses = new UsersCourses
+            {
+                Course = courseCSharp,
+                User = user,
+                Progress = 15,
+            };
+
+            context.UsersCourses.Add(usersCourses);
             context.SaveChanges();
         }
     }

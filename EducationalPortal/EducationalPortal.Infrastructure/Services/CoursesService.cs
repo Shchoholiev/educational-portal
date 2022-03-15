@@ -52,14 +52,14 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._coursesRepository.GetPageAsync(pageSize, pageNumber, predicate);
         }
 
-        public Task<IEnumerable<Skill>> GetSkillsAsync()
-        {
-            return this._skillsRepository.GetAllAsync();
-        }
-
         public async Task<int> GetCountAsync()
         {
             return await this._coursesRepository.GetCountAsync();
+        }
+
+        public Task<IEnumerable<Skill>> GetSkillsAsync()
+        {
+            return this._skillsRepository.GetAllAsync();
         }
     }
 }

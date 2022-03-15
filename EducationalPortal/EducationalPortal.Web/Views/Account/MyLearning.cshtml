@@ -1,0 +1,53 @@
+﻿@using EducationalPortal.Web.Paging
+@using System.Security.Claims
+@model PagedList<EducationalPortal.Core.Entities.JoinEntities.UsersCourses>
+
+@{
+    ViewData["Title"] = "My Learning";
+}
+
+<section class="d-flex flex-wrap">
+    @foreach (var userCourse in Model)
+    {
+        <div class="card m-1" style="width: 18rem;">
+            <img src="@userCourse.Course.Thumbnail" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">@userCourse.Course.Name</h5>
+                <p class="card-text">@userCourse.Course.ShortDescription</p>
+                <div class="progress" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" style="width: @userCourse.Progress%;" 
+                         aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <p class="text-primary">@userCourse.Progress% Complete</p>
+            </div>
+            <a asp-action="Details" asp-route-id="@userCourse.CourseId" class="stretched-link"></a>
+        </div>
+    }
+</section>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+    var email = @User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+}
+
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a asp-action="MyLearning" asp-route-PageNumber="@(Model.PageNumber - 1)" class="page-link" 
+               asp-route-email="@email">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a asp-action="MyLearning" asp-route-PageNumber="@i" class="page-link"
+                   asp-route-email="@email">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a asp-action="MyLearning" asp-route-PageNumber="@(Model.PageNumber + 1)" class="page-link"
+               asp-route-email="@email">Next</a>
+        </li>
+    </ul>
+</nav>

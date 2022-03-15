@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -96,14 +97,9 @@ namespace EducationalPortal.Infrastructure.Repository
             return await courses.ToListAsync();
         }
 
-        public async Task<IEnumerable<Course>> GetUsersCoursesAsync(string userId)
+        public async Task<int> GetCountAsync()
         {
-            return await this._db.UsersCourses.AsNoTracking()
-                .Where(uc => uc.UserId == userId)
-                .Include(uc => uc.Course)
-                    .ThenInclude(c => c.UsersCourses)
-                .Select(uc => uc.Course)
-                .ToListAsync();
+            return await this._table.CountAsync();
         }
 
         public void Attach(params object[] obj)
@@ -114,90 +110,9 @@ namespace EducationalPortal.Infrastructure.Repository
             }
         }
 
-        public async Task<int> GetCountAsync()
-        {
-            return await this._table.CountAsync();
-        }
-
         private async Task SaveAsync()
         {
             await this._db.SaveChangesAsync();
         }
-
-        public async void GetOneAsync()
-        {
-            //var querry =
-            //    "SELECT " +
-            //    "Courses.Id AS [Id], " +
-            //    "Courses.[Name] AS [Name], " +
-            //    "Thumbnail, " +
-            //    "[Description], " +
-            //    "Price, " +
-            //    "Skills.[Id] AS SkillsId, " +
-            //    "Skills.[Name] AS Skills, " +
-            //    "Materials.[Id] AS MaterialId, " +
-            //    "Materials.[Name] AS MaterialName, " +
-            //    "Materials.[Link] AS Link, " +
-            //    "Videos.[Id] AS VideoId, " +
-            //    "Videos.[Duration] AS Duration, " +
-            //    "Qualities.[Id] AS QualityId, " +
-            //    "Qualities.[Name] AS QualityName, " +
-            //    "Books.[Id] AS BookId, " +
-            //    "Books.[PagesCount] AS PagesCount " +
-            //    "FROM dbo.[Courses] " +
-            //    "LEFT JOIN dbo.[CourseSkill] ON CourseSkill.CoursesId = Courses.Id " +
-            //    "LEFT JOIN dbo.[Skills] ON CourseSkill.SkillsId = Skills.Id " +
-            //    "LEFT JOIN dbo.[CoursesMaterials] ON CoursesMaterials.CourseId = Courses.Id " +
-            //    "LEFT JOIN dbo.[Materials] ON CoursesMaterials.MaterialId = Materials.Id " +
-            //    "LEFT JOIN dbo.[Articles] ON Materials.Id = Articles.Id " +
-            //    "LEFT JOIN dbo.[Resources] ON Courses.Id = Resources.Id " +
-            //    "LEFT JOIN dbo.[Books] ON Materials.Id = Books.Id " +
-            //    "LEFT JOIN dbo.[Extensions] ON Books.ExtensionId = Extensions.Id " +
-            //    "LEFT JOIN dbo.[AuthorBook] ON AuthorBook.BooksId = Books.Id " +
-            //    "LEFT JOIN dbo.[Authors] ON AuthorBook.AuthorsId = Authors.Id " +
-            //    "LEFT JOIN dbo.[Videos] ON Materials.Id = Videos.Id " +
-            //    "LEFT JOIN dbo.[Qualities] ON Videos.QualityId = Qualities.Id " +
-            //    $"WHERE Courses.Id = {id}";
-
-            //var course = new Course();
-
-            //using (this._db)
-            //{
-            //    try
-            //    {
-            //        await this._db.Database.OpenConnectionAsync();
-            //        var command = this._db.Database.GetDbConnection().CreateCommand();
-            //        command.CommandText = querry;
-
-            //        var reader = await command.ExecuteReaderAsync();
-
-            //        if (reader.HasRows)
-            //        {
-            //            while (await reader.ReadAsync())
-            //            {
-            //                course.Id = reader.GetInt32(0);
-            //                course.Name = reader["Name"].ToString();
-            //                course.Thumbnail = reader["Thumbnail"].ToString();
-            //                course.Description = reader["Description"].ToString();
-            //                course.Price = (int)reader["Price"];
-            //                var skill = new Skill
-            //                {
-            //                    Id = (int)reader["SkillId"],
-            //                    Name = reader["SkillName"].ToString()
-            //                };
-            //            }
-            //        }
-
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e.Message);
-            //    }
-            //    finally
-            //    {
-            //        await this._db.Database.CloseConnectionAsync();
-            //    }
-            //}
-        } // delete
     }
 }

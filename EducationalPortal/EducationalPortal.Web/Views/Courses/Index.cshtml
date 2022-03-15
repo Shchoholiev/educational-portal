@@ -21,15 +21,13 @@
                 </div>
             </div>
             <a asp-action="Details" asp-route-id="@course.Id" class="stretched-link"></a>
-        </div>   
+        </div>
     }
 </section>
 
 @{
     var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
-    //var previousPageNumber = Model.PageNumber - 1;
     var nextPage = (Model.HasNextPage) ? "" : "disabled";
-    //var nextPageNumber = Model.PageNumber + 1;
 }
 
 <nav class=mt-3>

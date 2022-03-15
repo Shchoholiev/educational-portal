@@ -1,0 +1,49 @@
+﻿@model EducationalPortal.Core.Entities.User
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h5>Profile</h5>
+
+<div class="row d-flex flex-row justify-content-between">
+    <section class="col-md-4">
+        <form method="post" asp-controller="Account" asp-action="Update" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="d-flex">
+                <img class="avatar" style="width:75px;height:75px;" src="@Model.Avatar"/>
+                <div class="mb-3 mx-3">
+                    <label for="formFile" class="form-label">Your avatar</label>
+                    <input name="avatar" class="form-control" type="file" id="formFile">
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Update" class="btn btn-primary"/>
+            </div>
+        </form>
+    </section>
+    <section class="col-md-4">
+        <div class="card my-1" style="width:300px">
+            <div class="card-header">Your Skills:</div>
+            <div class="card-body">
+                @foreach (var userSkill in Model.UsersSkills)
+                {
+                    <div class="d-flex flex-row justify-content-between">
+                        <h6>@userSkill.Skill.Name</h6>
+                        <p class="text-primary">@userSkill.Level lvl</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
