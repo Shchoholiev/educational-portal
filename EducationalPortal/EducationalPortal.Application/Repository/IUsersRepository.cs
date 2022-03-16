@@ -23,5 +23,7 @@ namespace EducationalPortal.Application.Repository
         Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, int pageNumber);
 
         Task<int> GetUsersCoursesCountAsync(string email);
+
+        Task AddUsersCourses(UsersCourses usersCourses);
     }
 }

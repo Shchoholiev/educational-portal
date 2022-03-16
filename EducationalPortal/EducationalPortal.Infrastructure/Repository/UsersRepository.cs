@@ -71,14 +71,21 @@ namespace EducationalPortal.Infrastructure.Repository
                                  .CountAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync() // ?
         {
             return await this._table.ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate)
+        public async Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate) // ?
         {
             return await this._table.Where(predicate).ToListAsync();
+        }
+
+        public async Task AddUsersCourses(UsersCourses usersCourses)
+        {
+            this._db.UsersCourses.Attach(usersCourses);
+            await this._db.UsersCourses.AddAsync(usersCourses);
+            await this.SaveAsync();
         }
 
         private async Task SaveAsync()

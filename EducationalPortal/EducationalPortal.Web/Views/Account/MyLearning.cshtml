@@ -20,7 +20,8 @@
                 </div>
                 <p class="text-primary">@userCourse.Progress% Complete</p>
             </div>
-            <a asp-action="Details" asp-route-id="@userCourse.CourseId" class="stretched-link"></a>
+            <a asp-controller="Courses" asp-action="Details" asp-route-id="@userCourse.CourseId" 
+               class="stretched-link"></a>
         </div>
     }
 </section>

@@ -1,4 +1,5 @@
 ﻿@using EducationalPortal.Core.Entities.EducationalMaterials
+@using System.Security.Claims
 @model EducationalPortal.Core.Entities.Course
 
 @{
@@ -91,7 +92,10 @@
                 <img src="@Model.Thumbnail" class="card-img-top">
                 <div class="card-body">
                     <h2 class="text-primary">$@Model.Price</h2>
-                    <a asp-action="" class="btn btn-primary my-2" style="width:100%">Add to cart</a>
+                    <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" 
+                          asp-route-courseId="@Model.Id" class="my-2 mb-3">
+                        <input type="submit" value="Add to cart" class="btn btn-primary" style="width:100%"/>
+                    </form>
                     <h6>You will acquire skills:</h6>
                     <ul>
                         @foreach (var skill in Model.Skills)

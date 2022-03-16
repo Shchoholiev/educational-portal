@@ -7,6 +7,7 @@ using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EducationalPortal.Web.Controllers
 {
@@ -15,21 +16,26 @@ namespace EducationalPortal.Web.Controllers
     {
         private readonly IUserService _userService;
 
+        private readonly IShoppingCartService _shoppingCartService;
+
         private readonly IUserManager _userManager;
 
         private readonly ICloudStorageService _cloudStorageService;
 
         public AccountController(IUserService userService, IUserManager userManager,
-                                 ICloudStorageService cloudStorageService)
+                                 ICloudStorageService cloudStorageService,
+                                 IShoppingCartService shoppingCartService)
         {
             this._userService = userService;
             this._userManager = userManager;
             this._cloudStorageService = cloudStorageService;
+            this._shoppingCartService = shoppingCartService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Profile(string email)
+        public async Task<IActionResult> Profile()
         {
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await this._userService.GetUserWithSkillsAsync(email);
             return View(user);
         }
@@ -57,10 +63,11 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyLearning(string email, PageParameters pageParameters)
+        public async Task<IActionResult> MyLearning(PageParameters pageParameters)
         {
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._userService.GetUsersCoursesPageAsync(email, 
-                                    pageParameters.PageSize, pageParameters.PageSize);
+                                    pageParameters.PageSize, pageParameters.PageNumber);
             var totalCount = await this._userService.GetUsersCoursesCountAsync(email);
             var pagedList = new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
 
@@ -78,7 +85,7 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
-        {
+            {
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Name = model.Name, Email = model.Email, Password = model.Password };
@@ -87,6 +94,7 @@ namespace EducationalPortal.Web.Controllers
                 if (result.Succeeded)
                 {
                     await this._userManager.SignInAsync(this.HttpContext, userDTO, false);
+                    await this.CheckShoppingCartCookies(userDTO.Email);
                     return Redirect(model.ReturnUrl);
                 }
                 else
@@ -142,6 +150,22 @@ namespace EducationalPortal.Web.Controllers
         {
             await this._userManager.SignOutAsync(this.HttpContext);
             return RedirectToAction("Index", "Home");
+        }
+
+        private async Task CheckShoppingCartCookies(string userEmail)
+        {
+            var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
+            if (cookies != null)
+            {
+                var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookies);
+                foreach (var cartItem in cartItems)
+                {
+                    cartItem.User = new User { Email = userEmail };
+                    await this._shoppingCartService.AddAsync(cartItem);
+                    var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(-1) };
+                    Response.Cookies.Append("EducationalPortal_ShoppingCart", "", cookieOptions);
+                }
+            }
         }
 
         private string CheckReturnUrl(string returnUrl)

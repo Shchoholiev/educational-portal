@@ -38,6 +38,7 @@ namespace EducationalPortal.Infrastructure.DI
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ICloudStorageService, CloudStorageService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
             return services;
         }
