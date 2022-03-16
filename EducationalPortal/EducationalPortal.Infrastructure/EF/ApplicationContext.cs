@@ -37,6 +37,8 @@ namespace EducationalPortal.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new VideoEntityConfiguration());
             modelBuilder.ApplyConfiguration(new BookEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ArticleEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new CartItemEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ShoppingHistoryEntityConfiguration());
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -62,5 +64,9 @@ namespace EducationalPortal.Infrastructure.EF
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
+
+        public DbSet<CartItem> CartItems { get; set; }
+
+        public DbSet<ShoppingHistory> ShoppingHistory { get; set; }
     }
 }

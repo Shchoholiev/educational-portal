@@ -27,5 +27,7 @@ namespace EducationalPortal.Application.Repository
 
         Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber, 
                                    params Expression<Func<TEntity, object>>[] includeProperties);
+
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

@@ -81,6 +81,11 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this.Include(query, includeProperties).ToListAsync();
         }
 
+        public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await this._table.Where(predicate).CountAsync();
+        }
+
         public void Attach(params object[] obj)
         {
             foreach (var o in obj)

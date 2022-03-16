@@ -38,9 +38,8 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            var user = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                             <li class="nav-item">
-                                <a asp-controller="Account" asp-action="MyLearning" asp-route-email="@user" 
+                                <a asp-controller="Account" asp-action="MyLearning"
                                    class="nav-link"
                                 >My Learning</a>
                             </li>
@@ -50,9 +49,8 @@
                                 </form>
                             </li>
                             <li class="nav-item">
-                                <a asp-controller="Account" asp-action="Profile" asp-route-email="@user"
-                                   class="nav-link text-primary"
-                                >@User.Identity.Name</a>
+                                <a asp-controller="Account" asp-action="Profile" class="nav-link text-primary">
+                                    @User.Identity.Name</a>
                             </li>
                         }
                         else
