@@ -21,3 +21,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.checkbox{
+    min-width: 16px;
+    max-width: 16px;
+}

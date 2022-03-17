@@ -1,0 +1,104 @@
+﻿@using EducationalPortal.Core.Entities.EducationalMaterials
+@model EducationalPortal.Core.Entities.Course
+
+@{
+    ViewData["Title"] = $"{Model.Name}";
+}
+
+<div class="row d-flex flex-wrap">
+    <section class="col-md-8">
+        @*<video controls width="500" preload="metadata">
+            <source src="https://educationalportal.blob.core.windows.net/videos/Describing%20An%20Object%20With%20Different%20Data%20Types.mp4"/>
+        </video>*@
+        @*<iframe
+            src="https://educationalportal.blob.core.windows.net/books/04.%20Village%20in%20India%20Myths%20and%20Realities%20author%20Vishwa%20Anand.pdf"
+            width="500" height="550"
+        ></iframe>*@
+    </section>
+    <section class="col-md-4">
+        <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
+            @foreach (var material in Model.Materials)
+            {
+                switch (material.GetType().Name)
+                {
+                    case "Video" :
+                        var video = (Video)material;
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row justify-content-between">
+                                <div class="d-flex flex-row">
+                                    <input class="form-check-input checkbox" type="checkbox" value="" id=""
+                                           style="margin-right:10px">
+                                    <img style="height:17px; margin-right:10px;" class="mt-1"
+                                    src="https://educationalportal.blob.core.windows.net/essentials/Video.svg"/>
+                                    <a asp-action="" style="margin-right:7px;">@video.Name</a>
+                                </div>
+                                <div class="d-flex flex-row">
+                                    <p class="text-primary mb-0" style="margin-right:20px">@video.Quality.Name</p>
+                                    <p class="text-secondary mb-0">@video.Duration.ToString("mm:ss")</p>
+                                </div>
+                            </div>
+                        </li>
+                        break;
+
+                    case "Book":
+                        var book = (Book)material;
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row">
+                                <input class="form-check-input checkbox" type="checkbox" value="" id=""
+                                               style="margin-right:10px;">
+                                <div style="width:100%">   
+                                    <div class="d-flex flex-row justify-content-between mb-2">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;" class="mt-1"
+                                            src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
+                                            <a asp-action="" style="margin-right:7px;">@book.Name</a>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <p class="text-primary mb-0" style="margin-right:20px">
+                                               @book.Extension.Name</p>
+                                            <p class="text-secondary mb-0" style="white-space: nowrap">
+                                               @book.PagesCount pages</p>
+                                        </div>
+                                    </div>
+                                    <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
+                                    @foreach (var author in book.Authors)
+                                    {
+                                        <span>@author.FullName</span>
+                                    }
+                                    </p>
+                                    <p class="mb-1 text-secondary"><strong>Publication year: </strong>
+                                       @book.PublicationYear</p>
+                                </div>
+                            </div>
+                        </li>
+                        break;
+
+                    case "Article":
+                        var article = (Article)material;
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row">
+                                <input class="form-check-input checkbox" type="checkbox" value="" id=""
+                                               style="margin-right:10px;">
+                                <div style="width:100%">   
+                                    <div class="d-flex flex-row justify-content-between mb-2">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;" class="mt-1"
+                                            src="https://educationalportal.blob.core.windows.net/essentials/Article.svg"/>
+                                            <a asp-action="" style="margin-right:7px;">@article.Name</a>
+                                        </div>
+                                        <p class="text-secondary mb-0">@article.PublicationDate.ToShortDateString()</p>
+                                    </div>
+                                    <p class="mb-1 text-secondary"><strong>Resource: </strong>
+                                       @article.Resource.Name</p>
+                                </div>
+                            </div>
+                        </li>
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        </ul>
+    </section>
+</div>

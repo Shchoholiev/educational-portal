@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Web.Paging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationalPortal.Web.Controllers
@@ -27,6 +28,14 @@ namespace EducationalPortal.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
+        {
+            var course = await this._coursesService.GetCourseAsync(id);
+            return View(course);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Learn(int id)
         {
             var course = await this._coursesService.GetCourseAsync(id);
             return View(course);
