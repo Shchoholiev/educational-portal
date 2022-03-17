@@ -68,10 +68,6 @@ namespace EducationalPortal.Infrastructure.Services
                     Price = cartItem.Course.Price,
                 };
 
-                this._shoppingHistoryRepository.Attach(shoppingHistory);
-                await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
-                await this._cartItemsRepository.DeleteAsync(cartItem);
-
                 var userCourse = new UsersCourses
                 {
                     Course = cartItem.Course,
@@ -80,6 +76,12 @@ namespace EducationalPortal.Infrastructure.Services
                 };
 
                 await this._usersRepository.AddUsersCourses(userCourse);
+
+                cartItem.Course = null;
+                await this._cartItemsRepository.DeleteAsync(cartItem);
+
+                this._shoppingHistoryRepository.Attach(shoppingHistory);
+                await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
             }
         }
 

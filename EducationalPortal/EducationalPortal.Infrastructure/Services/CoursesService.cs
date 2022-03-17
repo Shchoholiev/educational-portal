@@ -38,7 +38,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<Course> GetCourseAsync(int id)
         {
-            return await this._coursesRepository.GetCourseAsync(id);
+            return await this._coursesRepository.GetFullCourseAsync(id);
         }
 
         public async Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber)

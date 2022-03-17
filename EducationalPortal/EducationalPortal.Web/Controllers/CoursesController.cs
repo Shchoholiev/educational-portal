@@ -20,16 +20,6 @@ namespace EducationalPortal.Web.Controllers
             var courses = await this._coursesService
                                     .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber);
             var totalCount = await this._coursesService.GetCountAsync();
-
-            //
-            var list = courses.ToList();
-            list.AddRange(courses);
-            list.AddRange(courses);
-            list.AddRange(courses);
-            list.AddRange(courses);
-            courses = list;
-            //
-
             var pagedCourses = new PagedList<Course>(courses, pageParameters, totalCount);
 
             return View(pagedCourses);

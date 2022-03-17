@@ -162,9 +162,9 @@ namespace EducationalPortal.Web.Controllers
                 {
                     cartItem.User = new User { Email = userEmail };
                     await this._shoppingCartService.AddAsync(cartItem);
-                    var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(-1) };
-                    Response.Cookies.Append("EducationalPortal_ShoppingCart", "", cookieOptions);
                 }
+                var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(-1) };
+                Response.Cookies.Append("EducationalPortal_ShoppingCart", "", cookieOptions);
             }
         }
 

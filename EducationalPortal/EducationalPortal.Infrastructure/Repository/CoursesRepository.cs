@@ -37,8 +37,13 @@ namespace EducationalPortal.Infrastructure.Repository
             this._table.Remove(course);
             await this.SaveAsync();
         }
-        
-        public async Task<Course> GetCourseAsync(int id)
+
+        public async Task<Course?> GetCourseAsync(int id)
+        {
+            return await this._table.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Course> GetFullCourseAsync(int id)
         {
             var course = await this._table
                .AsNoTracking()
