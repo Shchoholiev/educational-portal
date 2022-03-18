@@ -18,40 +18,40 @@ namespace EducationalPortal.Infrastructure.Services
             this._resourcesRepository = resourcesRepository;
         }
 
-        public async Task Add(Article article)
+        public async Task AddAsync(Article article)
         {
             this._articlesRepository.Attach(article.Resource);
             await this._articlesRepository.AddAsync(article);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var article = await this._articlesRepository.GetOneAsync(id);
             await this._articlesRepository.DeleteAsync(article);
         }
 
-        public async Task<IEnumerable<Article>> GetAll()
+        public async Task<IEnumerable<Article>> GetAllAsync()
         {
             return await this._articlesRepository.GetAllAsync(b => b.Resource);
         }
 
-        public async Task<Article> GetOne(int id)
+        public async Task<Article> GetOneAsync(int id)
         {
             return await this._articlesRepository.GetOneAsync(id, b => b.Resource);
         }
 
-        public async Task<IEnumerable<Article>> GetPage(int pageSize, int pageNumber)
+        public async Task<IEnumerable<Article>> GetPageAsync(int pageSize, int pageNumber)
         {
             return await this._articlesRepository.GetPageAsync(pageSize, pageNumber, b => b.Resource);
         }
 
-        public async Task Update(Article article)
+        public async Task UpdateAsync(Article article)
         {
             this._articlesRepository.Attach(article.Resource);
             await this._articlesRepository.UpdateAsync(article);
         }
 
-        public async Task<IEnumerable<Resource>> GetResources()
+        public async Task<IEnumerable<Resource>> GetResourcesAsync()
         {
             return await this._resourcesRepository.GetAllAsync();
         }

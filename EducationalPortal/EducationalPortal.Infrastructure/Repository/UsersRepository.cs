@@ -51,6 +51,15 @@ namespace EducationalPortal.Infrastructure.Repository
                              .FirstOrDefaultAsync();
         }
 
+        public async Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email)
+        {
+            var user = await this.GetUserAsync(email);
+            return await this._db.UsersCourses
+                                 .Where(uc => uc.CourseId == courseId && uc.UserId == user.Id)
+                                 .FirstOrDefaultAsync();
+        }
+
+
         public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email,
                                                                               int pageSize, int pageNumber)
         {

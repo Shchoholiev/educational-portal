@@ -20,6 +20,8 @@ namespace EducationalPortal.Application.Repository
 
         Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate); // ?
 
+        Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email);
+
         Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, int pageNumber);
 
         Task<int> GetUsersCoursesCountAsync(string email);

@@ -1,4 +1,6 @@
 ﻿using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Interfaces
@@ -21,5 +23,7 @@ namespace EducationalPortal.Application.Interfaces
         Task<IEnumerable<Skill>> GetSkillsAsync();
 
         Task<int> GetCountAsync();
+
+        Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email);
     }
 }

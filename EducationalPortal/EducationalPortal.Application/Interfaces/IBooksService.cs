@@ -5,6 +5,6 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface IBooksService : IMaterialsService<Book>
     {
-        Task<IEnumerable<Author>> GetAuthors();
+        Task<IEnumerable<Author>> GetAuthorsAsync();
     }
 }

@@ -5,6 +5,6 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface IVideosService : IMaterialsService<Video>
     {
-        Task<IEnumerable<Quality>> GetQualities();
+        Task<IEnumerable<Quality>> GetQualitiesAsync();
     }
 }
