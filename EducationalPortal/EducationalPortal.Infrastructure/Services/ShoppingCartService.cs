@@ -72,10 +72,16 @@ namespace EducationalPortal.Infrastructure.Services
                 {
                     Course = cartItem.Course,
                     User = user,
-                    Progress = 0,
+                    MaterialsCount = await this._coursesRepository.GetMaterialsCountAsync(cartItem.Course.Id),
+                    LearnedMaterialsCount = await this._usersRepository.GetLearnedMaterialsCountAsync(
+                                                                        cartItem.Course.Id, user.Email),
                 };
 
-                await this._usersRepository.AddUsersCourses(userCourse);
+                //userCourse.MaterialsCount = await this._coursesRepository.GetMaterialsCountAsync(cartItem.Course.Id);
+                //userCourse.LearnedMaterialsCount = await this._usersRepository.GetLearnedMaterialsCountAsync(
+                //                                                        cartItem.Course.Id, user.Email);
+
+                await this._usersRepository.AddUsersCoursesAsync(userCourse);
 
                 cartItem.Course = null;
                 await this._cartItemsRepository.DeleteAsync(cartItem);

@@ -24,5 +24,7 @@ namespace EducationalPortal.Application.Repository
                                                Expression<Func<Course, bool>> predicate);
 
         Task<int> GetCountAsync();
+
+        Task<int> GetMaterialsCountAsync(int courseId);
     }
 }

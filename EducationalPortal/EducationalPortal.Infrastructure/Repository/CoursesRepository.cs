@@ -107,6 +107,14 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this._table.CountAsync();
         }
 
+        public async Task<int> GetMaterialsCountAsync(int courseId)
+        {
+            return await this._db.CoursesMaterials
+                                 .AsNoTracking()
+                                 .Where(cm => cm.CourseId == courseId)
+                                 .CountAsync();
+        }
+
         public void Attach(params object[] obj)
         {
             foreach (var o in obj)

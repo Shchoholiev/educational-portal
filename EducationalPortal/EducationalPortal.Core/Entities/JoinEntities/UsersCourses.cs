@@ -10,6 +10,8 @@
 
         public Course Course { get; set; }
 
-        public int Progress { get; set; }
+        public int MaterialsCount { get; set; }
+
+        public int LearnedMaterialsCount { get; set; }
     }
 }

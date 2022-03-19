@@ -1,8 +1,6 @@
 ﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
-using EducationalPortal.Core.Entities.EducationalMaterials;
-using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -13,15 +11,10 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<Skill> _skillsRepository;
 
-        private readonly IUsersRepository _usersRepository;
-
-        public CoursesService(ICoursesRepository coursesRepository, IUsersRepository usersRepository,
-                              IGenericRepository<Skill> skillsRepository,
-                              IVideosService videosService, IBooksService booksService,
-                              IArticlesService articlesService)
+        public CoursesService(ICoursesRepository coursesRepository,
+                              IGenericRepository<Skill> skillsRepository)
         {
             this._coursesRepository = coursesRepository;
-            this._usersRepository = usersRepository;
             this._skillsRepository = skillsRepository;
         }
 
@@ -67,11 +60,6 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<IEnumerable<Skill>> GetSkillsAsync()
         {
             return await this._skillsRepository.GetAllAsync();
-        }
-
-        public async Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email)
-        {
-            return await this._usersRepository.GetUsersCoursesAsync(courseId, email);
         }
     }
 }

@@ -16,6 +16,8 @@ namespace EducationalPortal.Application.Repository
 
         Task<User?> GetUserWithSkillsAsync(string email);
 
+        Task<User?> GetUserWithMaterialsAsync(string email);
+
         Task<IEnumerable<User>> GetAllAsync(); // ?
 
         Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate); // ?
@@ -26,6 +28,10 @@ namespace EducationalPortal.Application.Repository
 
         Task<int> GetUsersCoursesCountAsync(string email);
 
-        Task AddUsersCourses(UsersCourses usersCourses);
+        Task AddUsersCoursesAsync(UsersCourses usersCourses);
+
+        Task UpdateUsersCoursesAsync(UsersCourses usersCourses);
+
+        Task<int> GetLearnedMaterialsCountAsync(int courseId, string email);
     }
 }

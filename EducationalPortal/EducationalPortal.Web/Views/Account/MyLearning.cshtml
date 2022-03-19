@@ -8,16 +8,17 @@
 <section class="d-flex flex-wrap">
     @foreach (var userCourse in Model)
     {
+        var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
         <div class="card m-1" style="width: 18rem;">
             <img src="@userCourse.Course.Thumbnail" class="card-img-top">
             <div class="card-body">
                 <h5 class="card-title">@userCourse.Course.Name</h5>
                 <p class="card-text">@userCourse.Course.ShortDescription</p>
                 <div class="progress" style="height: 5px;">
-                    <div class="progress-bar" role="progressbar" style="width: @userCourse.Progress%;" 
+                    <div class="progress-bar" role="progressbar" style="width: @progress%;" 
                          aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
-                <p class="text-primary">@userCourse.Progress% Complete</p>
+                <p class="text-primary">@progress Complete</p>
             </div>
             <a asp-controller="Courses" asp-action="Learn" asp-route-id="@userCourse.CourseId" 
                class="stretched-link"></a>

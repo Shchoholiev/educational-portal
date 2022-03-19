@@ -188,7 +188,8 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             {
                 Course = courseCSharp,
                 User = user,
-                Progress = 15,
+                LearnedMaterialsCount = 0,
+                MaterialsCount = 3,
             };
 
             context.UsersCourses.Add(usersCourses);

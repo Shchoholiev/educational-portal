@@ -18,18 +18,20 @@
             </div>
             <p class="text-primary">@Model.Progress% Complete</p>
         </div>
-        <div onclick="Learned(@Model.Id)">CLICK!</div>
+        <div onclick="Learned(@Model.Materials.FirstOrDefault().Id, @Model.Id)">CLICK!</div> @*test*@
         <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
             @foreach (var material in Model.Materials)
             {
+                var action = (material.IsLearned) ? "Unlearned" : "Learned";
                 switch (material.GetType().Name)
                 {
                     case "VideoViewModel" :
                         var video = (VideoViewModel)material;
                         <li class="list-group-item">
                             <div class="d-flex flex-row">
-                                <input class="form-check-input checkbox" type="checkbox" value="" id=""
-                                       style="margin-right:10px; z-index:10;">
+                                <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
+                                       style="margin-right:10px; z-index:10;"
+                                       onclick="@(action + $"({Model.Materials.FirstOrDefault().Id})")">
                                 <div style="width:100%; cursor:pointer;" onclick="LoadVideo(@video.Id)"
                                      class="d-flex flex-row justify-content-between mb-2">
                                     <div class="d-flex flex-row">
@@ -50,8 +52,9 @@
                         var book = (BookViewModel)material;
                         <li class="list-group-item">
                             <div class="d-flex flex-row">
-                                <input class="form-check-input checkbox" type="checkbox" value="" id=""
-                                               style="margin-right:10px;">
+                                <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
+                                       style="margin-right:10px;"
+                                       onclick="@(action + $"({Model.Materials.FirstOrDefault().Id})")">
                                 <div style="width:100%; cursor:pointer;" onclick="LoadBook(@book.Id)">
                                     <div class="d-flex flex-row justify-content-between mb-2">
                                         <div class="d-flex flex-row">
@@ -83,8 +86,9 @@
                         var article = (ArticleViewModel)material;
                         <li class="list-group-item">
                             <div class="d-flex flex-row">
-                                <input class="form-check-input checkbox" type="checkbox" value="" id=""
-                                               style="margin-right:10px;">
+                                <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
+                                       style="margin-right:10px;"
+                                       onclick="@(action + $"({Model.Materials.FirstOrDefault().Id})")">
                                 <div style="width:100%">   
                                     <div class="d-flex flex-row justify-content-between mb-2">
                                         <div class="d-flex flex-row">
@@ -119,19 +123,29 @@
         $("#material").load(`/Courses/Book/${id}`);
     }
 
-    function Learned(id){
-            $.ajax({  
-                type: "POST",  
-                url: `/Courses/Book`,  
-                dataType: 'json',
-                data: {  id: id },
-                success: function () {  
-                    alert("gdfd");
-                } 
-            });  
-        }
+    function Learned(materialId){
+        $.ajax({  
+            type: "POST",  
+            url: '/Courses/Learned',
+            dataType: 'json',
+            data: {  materialId: materialId, courseId: @Model.Id },
+            success: function () {  
+                alert("gdfd");
+            } 
+        });
+        document.getElementById(materialId).setAttribute( "onClick", "Unlearned("+materialId+");" );
+    }
 
-    $(document).ready(
-        
-    )
+    function Unlearned(materialId){
+        $.ajax({  
+            type: "POST",  
+            url: '/Courses/Unlearned',
+            dataType: 'json',
+            data: {  materialId: materialId, courseId: @Model.Id },
+            success: function () {  
+                alert("gdfd");
+            } 
+        });
+        document.getElementById(materialId).setAttribute( "onClick", "Learned("+materialId+");" );
+    }
 </script>
