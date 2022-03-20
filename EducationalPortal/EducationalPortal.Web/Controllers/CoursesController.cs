@@ -85,7 +85,7 @@ namespace EducationalPortal.Web.Controllers
             return PartialView("_Book", book);
         }
 
-        public async Task Learned(int materialId, int courseId)
+        public async Task<PartialViewResult> Learned(int materialId, int courseId)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var userCourse = await this._usersRepository.GetUsersCoursesAsync(courseId, email);
@@ -95,9 +95,12 @@ namespace EducationalPortal.Web.Controllers
             var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
             user.Materials.Add(await this._materialsRepository.GetOneAsync(materialId));
             await this._usersRepository.UpdateAsync(user);
+
+            var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
+            return PartialView("_Progress", progress);
         }
 
-        public async Task Unlearned(int materialId, int courseId)
+        public async Task<PartialViewResult> Unlearned(int materialId, int courseId)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var userCourse = await this._usersRepository.GetUsersCoursesAsync(courseId, email);
@@ -107,6 +110,9 @@ namespace EducationalPortal.Web.Controllers
             var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
             user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
             await this._usersRepository.UpdateAsync(user);
+
+            var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
+            return PartialView("_Progress", progress);
         }
 
         private async Task<LearnCourseViewModel> MapCourse(Course course, string email)

@@ -1,7 +1,6 @@
 ﻿using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
-using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

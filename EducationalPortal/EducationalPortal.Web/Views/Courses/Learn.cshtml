@@ -11,12 +11,10 @@
 
     </section>
     <section class="col-md-4">
-        <div>
-            <div class="progress" style="height: 5px;">
-                <div class="progress-bar" role="progressbar" style="width: @Model.Progress%;" 
-                     aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-            <p class="text-primary">@Model.Progress% Complete</p>
+        <div id="progress">
+        @{
+            await Html.RenderPartialAsync("_Progress", Model.Progress); 
+        }
         </div>
         <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
             @foreach (var material in Model.Materials)
@@ -127,8 +125,10 @@
         $.ajax({  
             type: "POST",  
             url: '/Courses/Learned',
-            dataType: 'json',
-            data: {  materialId: materialId, courseId: @Model.Id }
+            data: {  materialId: materialId, courseId: @Model.Id },
+            success: function(progress){
+                $("#progress").html(progress);
+            }
         });
         document.getElementById(materialId).setAttribute( "onClick", "Unlearned("+materialId+");" );
     }
@@ -137,8 +137,10 @@
         $.ajax({  
             type: "POST",  
             url: '/Courses/Unlearned',
-            dataType: 'json',
-            data: {  materialId: materialId, courseId: @Model.Id }
+            data: {  materialId: materialId, courseId: @Model.Id },
+            success: function(progress){
+                $("#progress").html(progress);
+            }
         });
         document.getElementById(materialId).setAttribute( "onClick", "Learned("+materialId+");" );
     }
