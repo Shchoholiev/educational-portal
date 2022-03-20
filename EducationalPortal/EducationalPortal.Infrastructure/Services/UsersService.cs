@@ -82,7 +82,15 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, 
                                                                               int pageSize, int pageNumber)
         {
-            return await this._userRepository.GetUsersCoursesPageAsync(email, pageSize, pageNumber);
+            var usersCourses = await this._userRepository.GetUsersCoursesPageAsync(email, pageSize, pageNumber);
+            foreach (var uc in usersCourses)
+            {
+                uc.LearnedMaterialsCount = await this._userRepository
+                                                     .GetLearnedMaterialsCountAsync(uc.CourseId, email);
+                await this._userRepository.UpdateUsersCoursesAsync(uc);
+            }
+
+            return usersCourses;
         }
 
         public async Task<int> GetUsersCoursesCountAsync(string email)

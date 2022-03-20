@@ -18,11 +18,11 @@
             </div>
             <p class="text-primary">@Model.Progress% Complete</p>
         </div>
-        <div onclick="Learned(@Model.Materials.FirstOrDefault().Id, @Model.Id)">CLICK!</div> @*test*@
         <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
             @foreach (var material in Model.Materials)
             {
                 var action = (material.IsLearned) ? "Unlearned" : "Learned";
+                var checkbox = (material.IsLearned) ? "checked" : "";
                 switch (material.GetType().Name)
                 {
                     case "VideoViewModel" :
@@ -30,8 +30,8 @@
                         <li class="list-group-item">
                             <div class="d-flex flex-row">
                                 <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
-                                       style="margin-right:10px; z-index:10;"
-                                       onclick="@(action + $"({Model.Materials.FirstOrDefault().Id})")">
+                                       style="margin-right:10px;" @checkbox
+                                       onclick="@(action + $"({material.Id})")">
                                 <div style="width:100%; cursor:pointer;" onclick="LoadVideo(@video.Id)"
                                      class="d-flex flex-row justify-content-between mb-2">
                                     <div class="d-flex flex-row">
@@ -53,8 +53,8 @@
                         <li class="list-group-item">
                             <div class="d-flex flex-row">
                                 <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
-                                       style="margin-right:10px;"
-                                       onclick="@(action + $"({Model.Materials.FirstOrDefault().Id})")">
+                                       style="margin-right:10px;" @checkbox
+                                       onclick="@(action + $"({material.Id})")">
                                 <div style="width:100%; cursor:pointer;" onclick="LoadBook(@book.Id)">
                                     <div class="d-flex flex-row justify-content-between mb-2">
                                         <div class="d-flex flex-row">
@@ -87,8 +87,8 @@
                         <li class="list-group-item">
                             <div class="d-flex flex-row">
                                 <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
-                                       style="margin-right:10px;"
-                                       onclick="@(action + $"({Model.Materials.FirstOrDefault().Id})")">
+                                       style="margin-right:10px;" @checkbox
+                                       onclick="@(action + $"({material.Id})")">
                                 <div style="width:100%">   
                                     <div class="d-flex flex-row justify-content-between mb-2">
                                         <div class="d-flex flex-row">
@@ -128,10 +128,7 @@
             type: "POST",  
             url: '/Courses/Learned',
             dataType: 'json',
-            data: {  materialId: materialId, courseId: @Model.Id },
-            success: function () {  
-                alert("gdfd");
-            } 
+            data: {  materialId: materialId, courseId: @Model.Id }
         });
         document.getElementById(materialId).setAttribute( "onClick", "Unlearned("+materialId+");" );
     }
@@ -141,10 +138,7 @@
             type: "POST",  
             url: '/Courses/Unlearned',
             dataType: 'json',
-            data: {  materialId: materialId, courseId: @Model.Id },
-            success: function () {  
-                alert("gdfd");
-            } 
+            data: {  materialId: materialId, courseId: @Model.Id }
         });
         document.getElementById(materialId).setAttribute( "onClick", "Learned("+materialId+");" );
     }

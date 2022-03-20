@@ -119,7 +119,7 @@ namespace EducationalPortal.Infrastructure.Repository
             var count = 0;
             foreach (var cm in courseMaterials)
             {
-                if (user.Materials.Contains(cm.Material))
+                if (user.Materials.Any(m => m.Id == cm.MaterialId))
                 {
                     count++;
                 }

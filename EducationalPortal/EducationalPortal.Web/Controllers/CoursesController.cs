@@ -4,6 +4,7 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Web.Mapping;
 using EducationalPortal.Web.Paging;
+using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -64,8 +65,8 @@ namespace EducationalPortal.Web.Controllers
         public async Task<IActionResult> Learn(int id)
         {
             var course = await this._coursesService.GetCourseAsync(id);
-            var learnCourse = this._mapper.Map(course);
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var learnCourse = await this.MapCourse(course, email);
             var userCourse = await this._usersRepository.GetUsersCoursesAsync(course.Id, email);
             learnCourse.Progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
 
@@ -104,8 +105,51 @@ namespace EducationalPortal.Web.Controllers
             await this._usersRepository.UpdateUsersCoursesAsync(userCourse);
 
             var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
-            user.Materials.Remove(await this._materialsRepository.GetOneAsync(materialId));
+            user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
             await this._usersRepository.UpdateAsync(user);
+        }
+
+        private async Task<LearnCourseViewModel> MapCourse(Course course, string email)
+        {
+            var learnCourse = new LearnCourseViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                Materials = new List<MaterialsBaseViewModel>(),
+            };
+
+            var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
+            foreach (var material in course.Materials)
+            {
+                switch (material.GetType().Name)
+                {
+                    case "Video":
+                        var video = (Video)material;
+                        var videoViewModel = this._mapper.Map(video);
+                        videoViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
+                        learnCourse.Materials.Add(videoViewModel);
+                        break;
+
+                    case "Book":
+                        var book = (Book)material;
+                        var bookViewModel = this._mapper.Map(book);
+                        bookViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
+                        learnCourse.Materials.Add(bookViewModel);
+                        break;
+
+                    case "Article":
+                        var article = (Article)material;
+                        var articleViewModel = this._mapper.Map(article);
+                        articleViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
+                        learnCourse.Materials.Add(articleViewModel);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return learnCourse;
         }
     }
 }

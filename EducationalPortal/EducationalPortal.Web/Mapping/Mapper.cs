@@ -23,40 +23,19 @@ namespace EducationalPortal.Web.Mapping
 
         }).CreateMapper();
 
-        public LearnCourseViewModel Map(Course course)
+        public VideoViewModel Map(Video source)
         {
-            var learnCourse = new LearnCourseViewModel
-            {
-                Id = course.Id,
-                Name = course.Name,
-                Materials = new List<MaterialsBaseViewModel>(),
-            };
+            return this._mapper.Map<VideoViewModel>(source);
+        }
 
-            foreach (var material in course.Materials)
-            {
-                switch (material.GetType().Name)
-                {
-                    case "Video":
-                        var video = (Video)material;
-                        learnCourse.Materials.Add(this._mapper.Map<VideoViewModel>(video));
-                        break;
+        public BookViewModel Map(Book source)
+        {
+            return this._mapper.Map<BookViewModel>(source);
+        }
 
-                    case "Book":
-                        var book = (Book)material;
-                        learnCourse.Materials.Add(this._mapper.Map<BookViewModel>(book));
-                        break;
-
-                    case "Article":
-                        var article = (Article)material;
-                        learnCourse.Materials.Add(this._mapper.Map<ArticleViewModel>(article));
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-
-            return learnCourse;
+        public ArticleViewModel Map(Article source)
+        {
+            return this._mapper.Map<ArticleViewModel>(source);
         }
     }
 }

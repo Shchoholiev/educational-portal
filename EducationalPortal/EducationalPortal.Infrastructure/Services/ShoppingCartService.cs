@@ -77,10 +77,6 @@ namespace EducationalPortal.Infrastructure.Services
                                                                         cartItem.Course.Id, user.Email),
                 };
 
-                //userCourse.MaterialsCount = await this._coursesRepository.GetMaterialsCountAsync(cartItem.Course.Id);
-                //userCourse.LearnedMaterialsCount = await this._usersRepository.GetLearnedMaterialsCountAsync(
-                //                                                        cartItem.Course.Id, user.Email);
-
                 await this._usersRepository.AddUsersCoursesAsync(userCourse);
 
                 cartItem.Course = null;
