@@ -58,7 +58,17 @@ namespace EducationalPortal.Web.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var course = await this._coursesService.GetCourseAsync(id);
-            return View(course);
+            if (User.Identity.IsAuthenticated)
+            {
+                var courseViewModel = this._mapper.Map(course);
+                var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                courseViewModel.Materials = await this.MapMaterials(course.Materials, email);
+                return View("DetailsAuthorized", courseViewModel);
+            }
+            else
+            {
+                return View(course);
+            }
         }
 
         [HttpGet]
@@ -121,11 +131,18 @@ namespace EducationalPortal.Web.Controllers
             {
                 Id = course.Id,
                 Name = course.Name,
-                Materials = new List<MaterialsBaseViewModel>(),
+                Materials = await this.MapMaterials(course.Materials, email),
             };
 
+            return learnCourse;
+        }
+
+        private async Task<List<MaterialsBaseViewModel>> MapMaterials(List<MaterialsBase> materials, 
+                                                                      string email)
+        {
+            var materialsViewModel = new List<MaterialsBaseViewModel>();
             var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
-            foreach (var material in course.Materials)
+            foreach (var material in materials)
             {
                 switch (material.GetType().Name)
                 {
@@ -133,21 +150,21 @@ namespace EducationalPortal.Web.Controllers
                         var video = (Video)material;
                         var videoViewModel = this._mapper.Map(video);
                         videoViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
-                        learnCourse.Materials.Add(videoViewModel);
+                        materialsViewModel.Add(videoViewModel);
                         break;
 
                     case "Book":
                         var book = (Book)material;
                         var bookViewModel = this._mapper.Map(book);
                         bookViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
-                        learnCourse.Materials.Add(bookViewModel);
+                        materialsViewModel.Add(bookViewModel);
                         break;
 
                     case "Article":
                         var article = (Article)material;
                         var articleViewModel = this._mapper.Map(article);
                         articleViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
-                        learnCourse.Materials.Add(articleViewModel);
+                        materialsViewModel.Add(articleViewModel);
                         break;
 
                     default:
@@ -155,7 +172,7 @@ namespace EducationalPortal.Web.Controllers
                 }
             }
 
-            return learnCourse;
+            return materialsViewModel;
         }
     }
 }

@@ -21,6 +21,10 @@ namespace EducationalPortal.Web.Mapping
             .ForMember(dest => dest.Resource,
                 opt => opt.MapFrom(src => src.Resource.Name));
 
+            cfg.CreateMap<Course, CourseViewModel>()
+            .ForMember(dest => dest.Materials,
+                opt => opt.Ignore());
+
         }).CreateMapper();
 
         public VideoViewModel Map(Video source)
@@ -36,6 +40,11 @@ namespace EducationalPortal.Web.Mapping
         public ArticleViewModel Map(Article source)
         {
             return this._mapper.Map<ArticleViewModel>(source);
+        }
+
+        public CourseViewModel Map(Course source)
+        {
+            return this._mapper.Map<CourseViewModel>(source);
         }
     }
 }
