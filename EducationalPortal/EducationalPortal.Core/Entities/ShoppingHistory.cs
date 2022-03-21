@@ -6,7 +6,7 @@
 
         public Course Course { get; set; }
 
-        public double Price { get; set; }
+        public int Price { get; set; }
 
         public DateTime Date { get; set; }
     }

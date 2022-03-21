@@ -106,7 +106,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "of Windows programming. The focus at first is on simple Console applications. This course " +
                               "works with Visual Studio 2013, or Visual Studio 2015. You'll learn in a detailed and " +
                               "deliberate way so you can set a foundation and move from basic to more advanced concepts easily.",
-                Price = 89.99,
+                Price = 80,
                 Skills = csharpSkills,
             };
 
@@ -148,6 +148,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             {
                 Id = "1234567890",
                 Name = "Default",
+                Position = "Senior .NET Developer",
                 Email = "default@gmail.com",
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg",
                 PasswordHash = passwordHash,
@@ -314,7 +315,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "brand new content. This is the only course you need to learn web development. " +
                               "There are a lot of options for online developer training, but this course is " +
                               "without a doubt the most comprehensive and effective on the market.",
-                Price = 149.99,
+                Price = 150,
                 Skills = webSkills,
             };
 
@@ -355,7 +356,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                                 "And unlike other courses, this one actually contains beginner, intermediate, " +
                                 "advanced, and even expert topics, so you don't have to buy any other course " +
                                 "in order to master JavaScript from the ground up!",
-                Price = 109.99,
+                Price = 110,
                 Skills = jsSkills,
             };
 

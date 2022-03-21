@@ -11,6 +11,8 @@ namespace EducationalPortal.Core.Entities
 
         public string Name { get; set; }
 
+        public string? Position { get; set; }
+
         public string Avatar { get; set; }
 
         public string Email { get; set; }
@@ -24,5 +26,7 @@ namespace EducationalPortal.Core.Entities
         public List<UsersSkills> UsersSkills { get; set; }
 
         public List<UsersCourses> UsersCourses { get; set; }
+
+        public List<Course?> CreatedCourses { get; set; }
     }
 }
