@@ -4,7 +4,6 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Web.Mapping;
 using EducationalPortal.Web.Paging;
-using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -22,7 +21,7 @@ namespace EducationalPortal.Web.Controllers
 
         private readonly IArticlesService _articlesService;
 
-        private readonly IUsersRepository _usersRepository;
+        private readonly IUsersService _usersService;
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
 
@@ -30,14 +29,14 @@ namespace EducationalPortal.Web.Controllers
 
         public CoursesController(ICoursesService coursesService, IVideosService videosService, 
                                  IBooksService booksService, IArticlesService articlesService,
-                                 IUsersRepository usersRepository,
+                                 IUsersService usersService,
                                  IGenericRepository<MaterialsBase> materialsRepository)
         {
             this._coursesService = coursesService;
             this._videosService = videosService;
             this._booksService = booksService;
             this._articlesService = articlesService;
-            this._usersRepository = usersRepository;
+            this._usersService = usersService;
             this._materialsRepository = materialsRepository;
         }
 
@@ -60,9 +59,9 @@ namespace EducationalPortal.Web.Controllers
             var course = await this._coursesService.GetCourseAsync(id);
             if (User.Identity.IsAuthenticated)
             {
-                var courseViewModel = this._mapper.Map(course);
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                courseViewModel.Materials = await this.MapMaterials(course.Materials, email);
+                var user = await this._usersService.GetUserWithMaterialsAsync(email);
+                var courseViewModel = this._mapper.Map(course, user.Materials);
                 return View("DetailsAuthorized", courseViewModel);
             }
             else
@@ -76,8 +75,9 @@ namespace EducationalPortal.Web.Controllers
         {
             var course = await this._coursesService.GetCourseAsync(id);
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var learnCourse = await this.MapCourse(course, email);
-            var userCourse = await this._usersRepository.GetUsersCoursesAsync(course.Id, email);
+            var user = await this._usersService.GetUserWithMaterialsAsync(email);
+            var learnCourse = this._mapper.MapLearnCourse(course, user.Materials);
+            var userCourse = await this._usersService.GetUsersCoursesAsync(course.Id, email);
             learnCourse.Progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
 
             return View(learnCourse);
@@ -98,81 +98,35 @@ namespace EducationalPortal.Web.Controllers
         public async Task<PartialViewResult> Learned(int materialId, int courseId)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var userCourse = await this._usersRepository.GetUsersCoursesAsync(courseId, email);
+            var userCourse = await this._usersService.GetUsersCoursesAsync(courseId, email);
             userCourse.LearnedMaterialsCount++;
-            await this._usersRepository.UpdateUsersCoursesAsync(userCourse);
+            await this._usersService.UpdateUsersCoursesAsync(userCourse);
 
-            var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
+            var user = await this._usersService.GetUserWithMaterialsAsync(email);
             user.Materials.Add(await this._materialsRepository.GetOneAsync(materialId));
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersService.UpdateUserAsync(user);
 
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
+            if (progress == 100)
+            {
+                await this._usersService.AddAcquiredSkills(courseId, email);
+            }
             return PartialView("_Progress", progress);
         }
 
         public async Task<PartialViewResult> Unlearned(int materialId, int courseId)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var userCourse = await this._usersRepository.GetUsersCoursesAsync(courseId, email);
+            var userCourse = await this._usersService.GetUsersCoursesAsync(courseId, email);
             userCourse.LearnedMaterialsCount--;
-            await this._usersRepository.UpdateUsersCoursesAsync(userCourse);
+            await this._usersService.UpdateUsersCoursesAsync(userCourse);
 
-            var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
+            var user = await this._usersService.GetUserWithMaterialsAsync(email);
             user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersService.UpdateUserAsync(user);
 
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             return PartialView("_Progress", progress);
-        }
-
-        private async Task<LearnCourseViewModel> MapCourse(Course course, string email)
-        {
-            var learnCourse = new LearnCourseViewModel
-            {
-                Id = course.Id,
-                Name = course.Name,
-                Materials = await this.MapMaterials(course.Materials, email),
-            };
-
-            return learnCourse;
-        }
-
-        private async Task<List<MaterialsBaseViewModel>> MapMaterials(List<MaterialsBase> materials, 
-                                                                      string email)
-        {
-            var materialsViewModel = new List<MaterialsBaseViewModel>();
-            var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
-            foreach (var material in materials)
-            {
-                switch (material.GetType().Name)
-                {
-                    case "Video":
-                        var video = (Video)material;
-                        var videoViewModel = this._mapper.Map(video);
-                        videoViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
-                        materialsViewModel.Add(videoViewModel);
-                        break;
-
-                    case "Book":
-                        var book = (Book)material;
-                        var bookViewModel = this._mapper.Map(book);
-                        bookViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
-                        materialsViewModel.Add(bookViewModel);
-                        break;
-
-                    case "Article":
-                        var article = (Article)material;
-                        var articleViewModel = this._mapper.Map(article);
-                        articleViewModel.IsLearned = user.Materials.Any(m => m.Id == material.Id);
-                        materialsViewModel.Add(articleViewModel);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            return materialsViewModel;
         }
     }
 }

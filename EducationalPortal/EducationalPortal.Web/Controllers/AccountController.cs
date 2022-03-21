@@ -14,7 +14,7 @@ namespace EducationalPortal.Web.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUsersService _usersService;
 
         private readonly IShoppingCartService _shoppingCartService;
 
@@ -22,11 +22,11 @@ namespace EducationalPortal.Web.Controllers
 
         private readonly ICloudStorageService _cloudStorageService;
 
-        public AccountController(IUserService userService, IUserManager userManager,
+        public AccountController(IUsersService usersService, IUserManager userManager,
                                  ICloudStorageService cloudStorageService,
                                  IShoppingCartService shoppingCartService)
         {
-            this._userService = userService;
+            this._usersService = usersService;
             this._userManager = userManager;
             this._cloudStorageService = cloudStorageService;
             this._shoppingCartService = shoppingCartService;
@@ -36,14 +36,14 @@ namespace EducationalPortal.Web.Controllers
         public async Task<IActionResult> Profile()
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var user = await this._userService.GetUserWithSkillsAsync(email);
+            var user = await this._usersService.GetUserWithSkillsAsync(email);
             return View(user);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(UserDTO userDTO, IFormFile avatar)
         {
-            var user = await this._userService.GetUserAsync(userDTO.Email);
+            var user = await this._usersService.GetUserAsync(userDTO.Email);
             user.Name = userDTO.Name;
             user.Email = userDTO.Email;
 
@@ -57,7 +57,7 @@ namespace EducationalPortal.Web.Controllers
                     user.Avatar = uri;
                 }
             }
-            await this._userService.UpdateUserAsync(user);
+            await this._usersService.UpdateUserAsync(user);
 
             return RedirectToAction("Profile", new { email = user.Email });
         }
@@ -66,9 +66,9 @@ namespace EducationalPortal.Web.Controllers
         public async Task<IActionResult> MyLearning(PageParameters pageParameters)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var usersCourses = await this._userService.GetUsersCoursesPageAsync(email, 
+            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, 
                                     pageParameters.PageSize, pageParameters.PageNumber);
-            var totalCount = await this._userService.GetUsersCoursesCountAsync(email);
+            var totalCount = await this._usersService.GetUsersCoursesCountAsync(email);
             var pagedList = new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
 
             return View(pagedList);
@@ -89,7 +89,7 @@ namespace EducationalPortal.Web.Controllers
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Name = model.Name, Email = model.Email, Password = model.Password };
-                var result = await this._userService.RegisterAsync(userDTO);
+                var result = await this._usersService.RegisterAsync(userDTO);
                 
                 if (result.Succeeded)
                 {
@@ -124,11 +124,11 @@ namespace EducationalPortal.Web.Controllers
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Email = model.Email, Password = model.Password };
-                var result = await this._userService.LoginAsync(userDTO);
+                var result = await this._usersService.LoginAsync(userDTO);
 
                 if (result.Succeeded)
                 {
-                    var user = await this._userService.GetUserAsync(userDTO.Email);
+                    var user = await this._usersService.GetUserAsync(userDTO.Email);
                     userDTO.Name = user.Name;
                     await this._userManager.SignInAsync(this.HttpContext, userDTO, model.RememberMe);
                     return Redirect(model.ReturnUrl);

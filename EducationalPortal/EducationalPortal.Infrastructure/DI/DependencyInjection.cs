@@ -34,7 +34,7 @@ namespace EducationalPortal.Infrastructure.DI
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<IVideosService, VideosService>();
             services.AddScoped<ICoursesService, CoursesService>();
-            services.AddScoped<IUserService, UsersService>();
+            services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ICloudStorageService, CloudStorageService>();

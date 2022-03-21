@@ -66,9 +66,8 @@ namespace EducationalPortal.Infrastructure.Repository
         public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email,
                                                                               int pageSize, int pageNumber)
         {
-            var user = await this.GetUserAsync(email);
             return await this._db.UsersCourses.AsNoTracking()
-                                              .Where(uc => uc.UserId == user.Id)
+                                              .Where(uc => uc.User.Email == email)
                                               .Include(uc => uc.Course)
                                               .Skip((pageNumber - 1) * pageSize)
                                               .Take(pageSize)
@@ -77,9 +76,8 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<int> GetUsersCoursesCountAsync(string email)
         {
-            var user = await this.GetUserAsync(email);
             return await this._db.UsersCourses
-                                 .Where(uc => uc.UserId == user.Id)
+                                 .Where(uc => uc.User.Email == email)
                                  .CountAsync();
         }
 

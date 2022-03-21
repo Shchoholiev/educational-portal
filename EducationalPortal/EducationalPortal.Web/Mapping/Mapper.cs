@@ -27,24 +27,60 @@ namespace EducationalPortal.Web.Mapping
 
         }).CreateMapper();
 
-        public VideoViewModel Map(Video source)
+        public CourseViewModel Map(Course course, List<MaterialsBase> learnedMaterials)
         {
-            return this._mapper.Map<VideoViewModel>(source);
+            var courseViewModel = this._mapper.Map<CourseViewModel>(course);
+            courseViewModel.Materials = this.MapMaterials(course.Materials, learnedMaterials);
+            return courseViewModel;
         }
 
-        public BookViewModel Map(Book source)
+        public LearnCourseViewModel MapLearnCourse(Course course, List<MaterialsBase> learnedMaterials)
         {
-            return this._mapper.Map<BookViewModel>(source);
+            var learnCourse = new LearnCourseViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+            };
+            learnCourse.Materials = this.MapMaterials(course.Materials, learnedMaterials);
+
+            return learnCourse;
         }
 
-        public ArticleViewModel Map(Article source)
+        private List<MaterialsBaseViewModel> MapMaterials(List<MaterialsBase> materials, 
+                                                         List<MaterialsBase> learnedMaterials)
         {
-            return this._mapper.Map<ArticleViewModel>(source);
-        }
+            var materialsViewModel = new List<MaterialsBaseViewModel>();
+            foreach (var material in materials)
+            {
+                switch (material.GetType().Name)
+                {
+                    case "Video":
+                        var video = (Video)material;
+                        var videoViewModel = this._mapper.Map<VideoViewModel>(video);
+                        videoViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
+                        materialsViewModel.Add(videoViewModel);
+                        break;
 
-        public CourseViewModel Map(Course source)
-        {
-            return this._mapper.Map<CourseViewModel>(source);
+                    case "Book":
+                        var book = (Book)material;
+                        var bookViewModel = this._mapper.Map<BookViewModel>(book);
+                        bookViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
+                        materialsViewModel.Add(bookViewModel);
+                        break;
+
+                    case "Article":
+                        var article = (Article)material;
+                        var articleViewModel = this._mapper.Map<ArticleViewModel>(article);
+                        articleViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
+                        materialsViewModel.Add(articleViewModel);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return materialsViewModel;
         }
     }
 }
