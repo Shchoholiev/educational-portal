@@ -40,12 +40,22 @@ namespace EducationalPortal.Web.Controllers
             return View(user);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Author(string email)
+        {
+            var user = await this._usersService.GetAuthorAsync(email);
+            return View(user);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Update(UserDTO userDTO, IFormFile avatar)
         {
-            var user = await this._usersService.GetUserAsync(userDTO.Email);
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var user = await this._usersService.GetUserAsync(email);
             user.Name = userDTO.Name;
             user.Email = userDTO.Email;
+            user.Position = userDTO.Position;
 
             if (avatar != null)
             {

@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="card-body">
-                        <h5 class="text-primary">$@cartItem.Course.Price</h5>
+                        <h5 class="text-primary">@cartItem.Course.Price points</h5>
                         <form method="post" asp-action="Delete" asp-route-cartItemId="@cartItem.Id">
                             <input type="submit" value="Delete" class="btn btn-danger"/>
                         </form>
@@ -40,7 +40,7 @@
     </div>
     <div class="col-md-2">
         <h6 class="text-secondary">Total:</h6>
-        <h2 class="text-primary">$@total</h2>
+        <h2 class="text-primary">@total points</h2>
         <form method="post" asp-action="Buy">
             <input type="submit" value="Checkout" class="btn btn-primary" style="width:100%"/>
         </form>

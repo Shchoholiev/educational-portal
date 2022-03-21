@@ -73,19 +73,24 @@ namespace EducationalPortal.Infrastructure.Services
             return operationDetails;
         }
 
+        public async Task<User?> GetUserAsync(string email)
+        {
+            return await this._usersRepository.GetUserAsync(email);
+        }
+
         public async Task<User?> GetUserWithSkillsAsync(string email)
         {
             return await this._usersRepository.GetUserWithSkillsAsync(email);
         }
 
-        public Task<User?> GetUserWithMaterialsAsync(string email)
+        public async Task<User?> GetUserWithMaterialsAsync(string email)
         {
-            return this._usersRepository.GetUserWithMaterialsAsync(email);
+            return await this._usersRepository.GetUserWithMaterialsAsync(email);
         }
 
-        public async Task<User?> GetUserAsync(string email)
+        public async Task<User?> GetAuthorAsync(string email)
         {
-            return await this._usersRepository.GetUserAsync(email);
+            return await this._usersRepository.GetAuthorAsync(email);
         }
 
         public async Task<OperationDetails> UpdateUserAsync(User user)

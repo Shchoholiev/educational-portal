@@ -48,7 +48,7 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await this._table.ToListAsync();
+            return await this._table.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includeProperties)

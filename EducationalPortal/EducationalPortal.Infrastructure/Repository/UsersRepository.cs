@@ -57,6 +57,15 @@ namespace EducationalPortal.Infrastructure.Repository
                              .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<User?> GetAuthorAsync(string email)
+        {
+            return await this._table
+                             .Include(u => u.CreatedCourses)
+                             .Include(u => u.UsersSkills)
+                                .ThenInclude(us => us.Skill)
+                             .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email)
         {
             return await this._db.UsersCourses

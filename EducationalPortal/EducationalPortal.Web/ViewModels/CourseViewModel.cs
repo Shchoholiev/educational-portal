@@ -14,7 +14,9 @@ namespace EducationalPortal.Web.ViewModels
 
         public string Description { get; set; }
 
-        public double Price { get; set; }
+        public int Price { get; set; }
+
+        public User Author { get; set; }
 
         public List<Skill> Skills { get; set; }
 
