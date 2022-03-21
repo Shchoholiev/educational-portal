@@ -1,0 +1,147 @@
+﻿@using EducationalPortal.Core.Entities.EducationalMaterials
+@using EducationalPortal.Web.ViewModels
+@model EducationalPortal.Web.ViewModels.LearnCourseViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Name}";
+}
+
+<div class="row d-flex flex-wrap">
+    <section class="col-md-8" id="material">
+
+    </section>
+    <section class="col-md-4">
+        <div id="progress">
+        @{
+            await Html.RenderPartialAsync("_Progress", Model.Progress); 
+        }
+        </div>
+        <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
+            @foreach (var material in Model.Materials)
+            {
+                var action = (material.IsLearned) ? "Unlearned" : "Learned";
+                var checkbox = (material.IsLearned) ? "checked" : "";
+                switch (material.GetType().Name)
+                {
+                    case "VideoViewModel" :
+                        var video = (VideoViewModel)material;
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row">
+                                <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
+                                       style="margin-right:10px;" @checkbox
+                                       onclick="@(action + $"({material.Id})")">
+                                <div style="width:100%; cursor:pointer;" onclick="LoadVideo(@video.Id)"
+                                     class="d-flex flex-row justify-content-between mb-2">
+                                    <div class="d-flex flex-row">
+                                        <img style="height:17px; margin-right:10px;" class="mt-1"
+                                             src="https://educationalportal.blob.core.windows.net/essentials/Video.svg"/>
+                                        <p class="mb-0" style="margin-right:7px;">@video.Name</p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p class="text-primary mb-0" style="margin-right:20px">@video.Quality</p>
+                                        <p class="text-secondary mb-0">@video.Duration.ToString("mm:ss")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        break;
+
+                    case "BookViewModel":
+                        var book = (BookViewModel)material;
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row">
+                                <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
+                                       style="margin-right:10px;" @checkbox
+                                       onclick="@(action + $"({material.Id})")">
+                                <div style="width:100%; cursor:pointer;" onclick="LoadBook(@book.Id)">
+                                    <div class="d-flex flex-row justify-content-between mb-2">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;" class="mt-1"
+                                            src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
+                                            <p class="mb-0" style="margin-right:7px;">@book.Name</p>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <p class="text-primary mb-0" style="margin-right:20px">
+                                               @book.Extension</p>
+                                            <p class="text-secondary mb-0" style="white-space: nowrap">
+                                               @book.PagesCount pages</p>
+                                        </div>
+                                    </div>
+                                    <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
+                                    @foreach (var author in book.Authors)
+                                    {
+                                        <span>@author.FullName</span>
+                                    }
+                                    </p>
+                                    <p class="mb-1 text-secondary"><strong>Publication year: </strong>
+                                       @book.PublicationYear</p>
+                                </div>
+                            </div>
+                        </li>
+                        break;
+
+                    case "ArticleViewModel":
+                        var article = (ArticleViewModel)material;
+                        <li class="list-group-item">
+                            <div class="d-flex flex-row">
+                                <input class="form-check-input checkbox" type="checkbox" id="@material.Id"
+                                       style="margin-right:10px;" @checkbox
+                                       onclick="@(action + $"({material.Id})")">
+                                <div style="width:100%">   
+                                    <div class="d-flex flex-row justify-content-between mb-2">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;" class="mt-1"
+                                            src="https://educationalportal.blob.core.windows.net/essentials/Article.svg"/>
+                                            <a href="@article.Link" target="_blank" style="margin-right:7px;"
+                                               >@article.Name</a>
+                                        </div>
+                                        <p class="text-secondary mb-0">@article.PublicationDate.ToShortDateString()</p>
+                                    </div>
+                                    <p class="mb-1 text-secondary"><strong>Resource: </strong>
+                                       @article.Resource</p>
+                                </div>
+                            </div>
+                        </li>
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        </ul>
+    </section>
+</div>
+
+<script>
+    function LoadVideo(id){
+        $("#material").load(`/Courses/Video/${id}`);
+    }
+
+    function LoadBook(id){
+        $("#material").load(`/Courses/Book/${id}`);
+    }
+
+    function Learned(materialId){
+        $.ajax({  
+            type: "POST",  
+            url: '/Courses/Learned',
+            data: {  materialId: materialId, courseId: @Model.Id },
+            success: function(progress){
+                $("#progress").html(progress);
+            }
+        });
+        document.getElementById(materialId).setAttribute( "onClick", "Unlearned("+materialId+");" );
+    }
+
+    function Unlearned(materialId){
+        $.ajax({  
+            type: "POST",  
+            url: '/Courses/Unlearned',
+            data: {  materialId: materialId, courseId: @Model.Id },
+            success: function(progress){
+                $("#progress").html(progress);
+            }
+        });
+        document.getElementById(materialId).setAttribute( "onClick", "Learned("+materialId+");" );
+    }
+</script>

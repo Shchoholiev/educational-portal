@@ -38,7 +38,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<Course> GetCourseAsync(int id)
         {
-            return await this._coursesRepository.GetCourseAsync(id);
+            return await this._coursesRepository.GetFullCourseAsync(id);
         }
 
         public async Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber)
@@ -57,9 +57,9 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._coursesRepository.GetCountAsync();
         }
 
-        public Task<IEnumerable<Skill>> GetSkillsAsync()
+        public async Task<IEnumerable<Skill>> GetSkillsAsync()
         {
-            return this._skillsRepository.GetAllAsync();
+            return await this._skillsRepository.GetAllAsync();
         }
     }
 }

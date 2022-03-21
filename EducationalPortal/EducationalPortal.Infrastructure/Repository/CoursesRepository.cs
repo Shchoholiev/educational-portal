@@ -1,7 +1,6 @@
 ﻿using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
-using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -37,8 +36,13 @@ namespace EducationalPortal.Infrastructure.Repository
             this._table.Remove(course);
             await this.SaveAsync();
         }
-        
-        public async Task<Course> GetCourseAsync(int id)
+
+        public async Task<Course?> GetCourseAsync(int id)
+        {
+            return await this._table.FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Course> GetFullCourseAsync(int id)
         {
             var course = await this._table
                .AsNoTracking()
@@ -100,6 +104,14 @@ namespace EducationalPortal.Infrastructure.Repository
         public async Task<int> GetCountAsync()
         {
             return await this._table.CountAsync();
+        }
+
+        public async Task<int> GetMaterialsCountAsync(int courseId)
+        {
+            return await this._db.CoursesMaterials
+                                 .AsNoTracking()
+                                 .Where(cm => cm.CourseId == courseId)
+                                 .CountAsync();
         }
 
         public void Attach(params object[] obj)

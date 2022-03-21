@@ -39,7 +39,7 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<User?> GetUserAsync(string email)
         {
-            return await this._table.Where(u => u.Email == email).FirstOrDefaultAsync();
+            return await this._table.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserWithSkillsAsync(string email)
@@ -47,16 +47,27 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this._table
                              .Include(u => u.UsersSkills)
                                 .ThenInclude(us => us.Skill)
-                             .Where(u => u.Email == email)
-                             .FirstOrDefaultAsync();
+                             .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> GetUserWithMaterialsAsync(string email)
+        {
+            return await this._table
+                             .Include(u => u.Materials)
+                             .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email)
+        {
+            return await this._db.UsersCourses
+                                 .FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.User.Email == email);
         }
 
         public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email,
                                                                               int pageSize, int pageNumber)
         {
-            var user = await this.GetUserAsync(email);
             return await this._db.UsersCourses.AsNoTracking()
-                                              .Where(uc => uc.UserId == user.Id)
+                                              .Where(uc => uc.User.Email == email)
                                               .Include(uc => uc.Course)
                                               .Skip((pageNumber - 1) * pageSize)
                                               .Take(pageSize)
@@ -65,9 +76,8 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<int> GetUsersCoursesCountAsync(string email)
         {
-            var user = await this.GetUserAsync(email);
             return await this._db.UsersCourses
-                                 .Where(uc => uc.UserId == user.Id)
+                                 .Where(uc => uc.User.Email == email)
                                  .CountAsync();
         }
 
@@ -81,11 +91,39 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this._table.Where(predicate).ToListAsync();
         }
 
-        public async Task AddUsersCourses(UsersCourses usersCourses)
+        public async Task AddUsersCoursesAsync(UsersCourses usersCourses)
         {
             this._db.UsersCourses.Attach(usersCourses);
             await this._db.UsersCourses.AddAsync(usersCourses);
             await this.SaveAsync();
+        }
+
+        public async Task UpdateUsersCoursesAsync(UsersCourses usersCourses)
+        {
+            this._db.Attach(usersCourses);
+            this._db.UsersCourses.Update(usersCourses);
+            await this.SaveAsync();
+        }
+
+        public async Task<int> GetLearnedMaterialsCountAsync(int courseId, string email)
+        {
+            var user = await this._table.Include(u => u.Materials)
+                                        .FirstOrDefaultAsync(u => u.Email == email);
+
+            var courseMaterials = this._db.CoursesMaterials
+                                          .AsNoTracking()
+                                          .Include(cm => cm.Material)
+                                          .Where(cm => cm.CourseId == courseId);
+            var count = 0;
+            foreach (var cm in courseMaterials)
+            {
+                if (user.Materials.Any(m => m.Id == cm.MaterialId))
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         private async Task SaveAsync()

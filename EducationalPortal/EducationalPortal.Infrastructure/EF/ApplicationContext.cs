@@ -45,6 +45,8 @@ namespace EducationalPortal.Infrastructure.EF
 
         public DbSet<UsersCourses> UsersCourses { get; set; }
 
+        public DbSet<CoursesMaterials> CoursesMaterials { get; set; }
+
         public DbSet<Video> Videos { get; set; }
 
         public DbSet<Quality> Qualities { get; set; }

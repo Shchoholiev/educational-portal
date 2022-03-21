@@ -66,7 +66,6 @@ namespace EducationalPortal.Web.Controllers
             else
             {
                 var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-
                 if (cookies == null || !cookies.Contains($"{courseId}"))
                 {
                     cookies += $"-{courseId}";
@@ -96,7 +95,6 @@ namespace EducationalPortal.Web.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         public async Task<IActionResult> Buy()
         {

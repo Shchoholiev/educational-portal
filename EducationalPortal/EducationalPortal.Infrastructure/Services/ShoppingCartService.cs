@@ -12,23 +12,23 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<ShoppingHistory> _shoppingHistoryRepository;
 
-        private readonly IUsersRepository _usersRepository;
+        private readonly IUsersService _usersService;
 
         private readonly ICoursesRepository _coursesRepository;
 
         public ShoppingCartService(IGenericRepository<CartItem> cartItemsRepository,
                                    IGenericRepository<ShoppingHistory> shoppingHistoryRepository,
-                                   IUsersRepository usersRepository, ICoursesRepository coursesRepository)
+                                   IUsersService usersService, ICoursesRepository coursesRepository)
         {
             this._cartItemsRepository = cartItemsRepository;
             this._shoppingHistoryRepository = shoppingHistoryRepository;
-            this._usersRepository = usersRepository;
+            this._usersService = usersService;
             this._coursesRepository = coursesRepository;
         }
 
         public async Task AddAsync(CartItem cartItem)
         {
-            var user = await this._usersRepository.GetUserAsync(cartItem.User.Email);
+            var user = await this._usersService.GetUserAsync(cartItem.User.Email);
             cartItem.Id = 0;
             cartItem.User = user;
             this._cartItemsRepository.Attach(cartItem);
@@ -53,7 +53,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task BuyAsync(string userEmail)
         {
-            var user = await this._usersRepository.GetUserAsync(userEmail);
+            var user = await this._usersService.GetUserAsync(userEmail);
             var cartItems = await this._cartItemsRepository.GetAllAsync(ci => ci.User.Id == user.Id,
                                                                         c => c.Course);
             var date = DateTime.Now;
@@ -68,18 +68,27 @@ namespace EducationalPortal.Infrastructure.Services
                     Price = cartItem.Course.Price,
                 };
 
-                this._shoppingHistoryRepository.Attach(shoppingHistory);
-                await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
-                await this._cartItemsRepository.DeleteAsync(cartItem);
-
                 var userCourse = new UsersCourses
                 {
                     Course = cartItem.Course,
                     User = user,
-                    Progress = 0,
+                    MaterialsCount = await this._coursesRepository.GetMaterialsCountAsync(cartItem.Course.Id),
+                    LearnedMaterialsCount = await this._usersService.GetLearnedMaterialsCountAsync(
+                                                                        cartItem.Course.Id, user.Email),
                 };
 
-                await this._usersRepository.AddUsersCourses(userCourse);
+                if (userCourse.MaterialsCount == userCourse.LearnedMaterialsCount)
+                {
+                    await this._usersService.AddAcquiredSkills(cartItem.Course.Id, userEmail);
+                }
+
+                await this._usersService.AddUsersCoursesAsync(userCourse);
+
+                cartItem.Course = null;
+                await this._cartItemsRepository.DeleteAsync(cartItem);
+
+                this._shoppingHistoryRepository.Attach(shoppingHistory);
+                await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
             }
         }
 

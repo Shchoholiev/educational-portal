@@ -18,40 +18,40 @@ namespace EducationalPortal.Infrastructure.Services
             this._qualitiesRepository = qualitiesRepository;
         }
 
-        public async Task Add(Video video)
+        public async Task AddAsync(Video video)
         {
             this._videosRepository.Attach(video.Quality);
             await this._videosRepository.AddAsync(video);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var video = await this._videosRepository.GetOneAsync(id);
             await this._videosRepository.DeleteAsync(video);
         }
 
-        public async Task<IEnumerable<Video>> GetAll()
+        public async Task<IEnumerable<Video>> GetAllAsync()
         {
             return await this._videosRepository.GetAllAsync(v => v.Quality);
         }
 
-        public async Task<Video> GetOne(int id)
+        public async Task<Video> GetOneAsync(int id)
         {
             return await this._videosRepository.GetOneAsync(id, v => v.Quality);
         }
 
-        public async Task<IEnumerable<Video>> GetPage(int pageSize, int pageNumber)
+        public async Task<IEnumerable<Video>> GetPageAsync(int pageSize, int pageNumber)
         {
             return await this._videosRepository.GetPageAsync(pageSize, pageNumber, v => v.Quality);
         }
 
-        public async Task Update(Video video)
+        public async Task UpdateAsync(Video video)
         {
             this._videosRepository.Attach(video.Quality);
             await this._videosRepository.UpdateAsync(video);
         }
 
-        public async Task<IEnumerable<Quality>> GetQualities()
+        public async Task<IEnumerable<Quality>> GetQualitiesAsync()
         {
             return await this._qualitiesRepository.GetAllAsync();
         }

@@ -18,40 +18,40 @@ namespace EducationalPortal.Infrastructure.Services
             this._authorsRepository = authorsRepository;
         }
 
-        public async Task Add(Book book)
+        public async Task AddAsync(Book book)
         {
             this._booksRepository.Attach(book.Authors);
             await this._booksRepository.AddAsync(book);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var book = await this._booksRepository.GetOneAsync(id);
             await this._booksRepository.DeleteAsync(book);
         }
 
-        public async Task<IEnumerable<Book>> GetAll()
+        public async Task<IEnumerable<Book>> GetAllAsync()
         {
             return await this._booksRepository.GetAllAsync(b => b.Authors);
         }
 
-        public async Task<Book> GetOne(int id)
+        public async Task<Book> GetOneAsync(int id)
         {
             return await this._booksRepository.GetOneAsync(id, b => b.Authors);
         }
 
-        public async Task<IEnumerable<Book>> GetPage(int pageSize, int pageNumber)
+        public async Task<IEnumerable<Book>> GetPageAsync(int pageSize, int pageNumber)
         {
             return await this._booksRepository.GetPageAsync(pageSize, pageNumber, b => b.Authors);
         }
 
-        public async Task Update(Book book)
+        public async Task UpdateAsync(Book book)
         {
             this._booksRepository.Attach(book.Authors);
             await this._booksRepository.UpdateAsync(book);
         }
 
-        public async Task<IEnumerable<Author>> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthorsAsync()
         {
             return await this._authorsRepository.GetAllAsync();
         }

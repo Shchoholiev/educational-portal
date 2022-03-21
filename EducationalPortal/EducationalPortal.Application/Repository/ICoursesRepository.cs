@@ -14,7 +14,9 @@ namespace EducationalPortal.Application.Repository
 
         void Attach(params object[] obj);
 
-        Task<Course> GetCourseAsync(int id);
+        Task<Course?> GetCourseAsync(int id);
+
+        Task<Course> GetFullCourseAsync(int id);
 
         Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber);
 
@@ -22,5 +24,7 @@ namespace EducationalPortal.Application.Repository
                                                Expression<Func<Course, bool>> predicate);
 
         Task<int> GetCountAsync();
+
+        Task<int> GetMaterialsCountAsync(int courseId);
     }
 }

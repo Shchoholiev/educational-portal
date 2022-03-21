@@ -5,6 +5,6 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface IArticlesService : IMaterialsService<Article>
     {
-        Task<IEnumerable<Resource>> GetResources();
+        Task<IEnumerable<Resource>> GetResourcesAsync();
     }
 }
