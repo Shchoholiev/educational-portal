@@ -13,11 +13,13 @@ namespace EducationalPortal.Core.Entities
 
         public string Description { get; set; }
 
-        public double Price { get; set; }
+        public int Price { get; set; }
 
         public List<Skill> Skills { get; set; }
 
         public List<MaterialsBase> Materials { get; set; }
+
+        public User Author { get; set; }
 
         public List<CoursesMaterials> CoursesMaterials { get; set; }
 

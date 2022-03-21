@@ -90,57 +90,6 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             context.Skills.AddRange(csharpSkills);
             context.SaveChanges();
 
-            var courseCSharp = new Course
-            {
-                Name = "CSharp",
-                Thumbnail = "https://educationalportal.blob.core.windows.net/thumbnails/csharp.jpg",
-                ShortDescription = "Learning to code C#? We have provided HD video lectures, " +
-                                   "live coding sessions, and nearly 100 exercises to learn on!",
-                Description = "My name is Tom Owsiak. I'm the author of \"Beginning C# Hands-On-The Core Language\" " +
-                              "from Packt Publishing. Let's take a look at every this course has to offer. I have an " +
-                              "updated version of a  similar course with Visual Studio 2017. Please search \"Learn C# " +
-                              "with Visual Studio 2017 and Console Programs\" Update 8/24/2020: Added several new " +
-                              "lessons on the bottom on concepts related to try/catch/finally and using blocks with " +
-                              "C# 8.0. This comprehensive C# course is designed for beginner programmers, as you won't " +
-                              "be rushing through code. It focuses on the C# language rather than the graphical aspects " +
-                              "of Windows programming. The focus at first is on simple Console applications. This course " +
-                              "works with Visual Studio 2013, or Visual Studio 2015. You'll learn in a detailed and " +
-                              "deliberate way so you can set a foundation and move from basic to more advanced concepts easily.",
-                Price = 89.99,
-                Skills = csharpSkills,
-            };
-
-            var coursesMaterials1 = new CoursesMaterials
-            {
-                Material = csharpVideo1,
-                Course = courseCSharp,
-                Index = 1,
-            };
-
-            var coursesMaterials2 = new CoursesMaterials
-            {
-                Material = csharpBook,
-                Course = courseCSharp,
-                Index = 2,
-            };
-
-            var coursesMaterials3 = new CoursesMaterials
-            {
-                Material = csharpArticle,
-                Course = courseCSharp,
-                Index = 3,
-            };
-
-            var csharpCoursesMaterials = new List<CoursesMaterials>
-            {
-                coursesMaterials1, coursesMaterials2, coursesMaterials3
-            };
-
-            courseCSharp.CoursesMaterials = csharpCoursesMaterials;
-
-            context.Courses.Add(courseCSharp);
-            context.SaveChanges();
-
             var passwordHasher = new PasswordHasher();
             var passwordHash = passwordHasher.Hash("111111");
 
@@ -148,6 +97,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             {
                 Id = "1234567890",
                 Name = "Default",
+                Position = "Senior .NET Developer",
                 Email = "default@gmail.com",
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg",
                 PasswordHash = passwordHash,
@@ -182,6 +132,58 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             user.UsersSkills = usersSkills;
 
             context.Users.Add(user);
+            context.SaveChanges();
+
+            var courseCSharp = new Course
+            {
+                Name = "CSharp",
+                Thumbnail = "https://educationalportal.blob.core.windows.net/thumbnails/csharp.jpg",
+                ShortDescription = "Learning to code C#? We have provided HD video lectures, " +
+                                   "live coding sessions, and nearly 100 exercises to learn on!",
+                Description = "My name is Tom Owsiak. I'm the author of \"Beginning C# Hands-On-The Core Language\" " +
+                              "from Packt Publishing. Let's take a look at every this course has to offer. I have an " +
+                              "updated version of a  similar course with Visual Studio 2017. Please search \"Learn C# " +
+                              "with Visual Studio 2017 and Console Programs\" Update 8/24/2020: Added several new " +
+                              "lessons on the bottom on concepts related to try/catch/finally and using blocks with " +
+                              "C# 8.0. This comprehensive C# course is designed for beginner programmers, as you won't " +
+                              "be rushing through code. It focuses on the C# language rather than the graphical aspects " +
+                              "of Windows programming. The focus at first is on simple Console applications. This course " +
+                              "works with Visual Studio 2013, or Visual Studio 2015. You'll learn in a detailed and " +
+                              "deliberate way so you can set a foundation and move from basic to more advanced concepts easily.",
+                Price = 80,
+                Skills = csharpSkills,
+                Author = user,
+            };
+
+            var coursesMaterials1 = new CoursesMaterials
+            {
+                Material = csharpVideo1,
+                Course = courseCSharp,
+                Index = 1,
+            };
+
+            var coursesMaterials2 = new CoursesMaterials
+            {
+                Material = csharpBook,
+                Course = courseCSharp,
+                Index = 2,
+            };
+
+            var coursesMaterials3 = new CoursesMaterials
+            {
+                Material = csharpArticle,
+                Course = courseCSharp,
+                Index = 3,
+            };
+
+            var csharpCoursesMaterials = new List<CoursesMaterials>
+            {
+                coursesMaterials1, coursesMaterials2, coursesMaterials3
+            };
+
+            courseCSharp.CoursesMaterials = csharpCoursesMaterials;
+
+            context.Courses.Add(courseCSharp);
             context.SaveChanges();
 
             var usersCourses = new UsersCourses
@@ -314,8 +316,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "brand new content. This is the only course you need to learn web development. " +
                               "There are a lot of options for online developer training, but this course is " +
                               "without a doubt the most comprehensive and effective on the market.",
-                Price = 149.99,
+                Price = 150,
                 Skills = webSkills,
+                Author = user,
             };
 
             var webMaterials = new List<CoursesMaterials>
@@ -355,8 +358,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                                 "And unlike other courses, this one actually contains beginner, intermediate, " +
                                 "advanced, and even expert topics, so you don't have to buy any other course " +
                                 "in order to master JavaScript from the ground up!",
-                Price = 109.99,
+                Price = 110,
                 Skills = jsSkills,
+                Author = user,
             };
 
             var jsMaterials = new List<CoursesMaterials>

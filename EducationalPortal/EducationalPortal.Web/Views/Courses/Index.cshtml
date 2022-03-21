@@ -17,7 +17,7 @@
                 <h5 class="card-title">@course.Name</h5>
                 <p class="card-text">@course.ShortDescription</p>
                 <div class="d-flex flex-row justify-content-between">
-                    <h5 class="text-primary">$@course.Price</h5>
+                    <h5 class="text-primary">@course.Price points</h5>
                     <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" 
                           asp-route-courseId="@course.Id" style="z-index:5">
                         <input type="submit" value="Add to cart" class="btn btn-primary"/>

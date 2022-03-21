@@ -55,11 +55,12 @@ namespace EducationalPortal.Infrastructure.Services
         {
             var user = await this._usersService.GetUserAsync(userEmail);
             var cartItems = await this._cartItemsRepository.GetAllAsync(ci => ci.User.Id == user.Id,
-                                                                        c => c.Course);
+                                                                        ci => ci.Course);
             var date = DateTime.Now;
 
             foreach (var cartItem in cartItems)
             {
+                user.Balance -= cartItem.Course.Price;
                 var shoppingHistory = new ShoppingHistory
                 {
                     Date = date,
@@ -90,6 +91,8 @@ namespace EducationalPortal.Infrastructure.Services
                 this._shoppingHistoryRepository.Attach(shoppingHistory);
                 await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
             }
+
+            await this._usersService.UpdateUserAsync(user);
         }
 
         public async Task<IEnumerable<CartItem>> GetDeserialisedAsync(string cookies)

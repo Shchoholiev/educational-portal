@@ -21,6 +21,8 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<User?> GetUserWithMaterialsAsync(string email);
 
+        Task<User?> GetAuthorAsync(string email);
+
         Task AddUsersCoursesAsync(UsersCourses usersCourses);
 
         Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email);

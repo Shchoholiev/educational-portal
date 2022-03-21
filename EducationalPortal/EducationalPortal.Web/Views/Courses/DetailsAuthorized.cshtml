@@ -10,6 +10,8 @@
         <section>
             <h2>@Model.Name</h2>
             <h5>@Model.ShortDescription</h5>
+            <a asp-action="Author" asp-controller="Account" asp-route-email="@Model.Author.Email" 
+                class="text-secondary">@Model.Author.Name - @Model.Author.Position</a>
             <hr />
             <article class="card my-1">
                 <div class="card-body">
@@ -103,7 +105,7 @@
             <div class="card m-1" style="width: 18rem;">
                 <img src="@Model.Thumbnail" class="card-img-top">
                 <div class="card-body">
-                    <h2 class="text-primary">$@Model.Price</h2>
+                    <h2 class="text-primary">@Model.Price points</h2>
                     <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" 
                           asp-route-courseId="@Model.Id" class="my-2 mb-3">
                         <input type="submit" value="Add to cart" class="btn btn-primary" style="width:100%"/>

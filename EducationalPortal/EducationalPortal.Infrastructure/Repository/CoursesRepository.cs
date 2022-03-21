@@ -47,6 +47,7 @@ namespace EducationalPortal.Infrastructure.Repository
             var course = await this._table
                .AsNoTracking()
                .Include(c => c.Skills)
+               .Include(c => c.Author)
                .Include(c => c.CoursesMaterials)
                    .ThenInclude(cm => cm.Material)
                .FirstOrDefaultAsync(c => c.Id == id);
