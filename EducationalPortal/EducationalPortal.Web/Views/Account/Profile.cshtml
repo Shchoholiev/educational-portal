@@ -37,6 +37,19 @@
             </div>
         </form>
         <h6 class="my-2">Balance: @Model.Balance points</h6>
+        @if (User.IsInRole("Creator"))
+        {
+            <form method="get" asp-action="CreateCourse" asp-controller="Courses">
+                <input type="submit" value="Create Course" class="btn btn-primary my-2"/>
+            </form>
+        }
+        else
+        {
+            <form method="post" asp-action="BecameCreator">
+                <input type="submit" value="Became Creator" class="btn btn-primary my-2"/>
+            </form>  
+        }
+
     </section>
     <section class="col-md-4">
         <div class="card my-1" style="width:300px">

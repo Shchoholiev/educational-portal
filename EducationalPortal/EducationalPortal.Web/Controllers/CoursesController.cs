@@ -128,5 +128,12 @@ namespace EducationalPortal.Web.Controllers
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             return PartialView("_Progress", progress);
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Creator")]
+        public IActionResult CreateCourse()
+        {
+            return View();
+        }
     }
 }
