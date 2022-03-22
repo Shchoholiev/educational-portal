@@ -127,5 +127,10 @@ namespace EducationalPortal.Infrastructure.Repository
         {
             await this._db.SaveChangesAsync();
         }
+
+        public async Task<User> GetCourseAuthor(int courseId)
+        {
+            return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId));
+        }
     }
 }

@@ -26,5 +26,7 @@ namespace EducationalPortal.Application.Repository
         Task<int> GetCountAsync();
 
         Task<int> GetMaterialsCountAsync(int courseId);
+
+        Task<User> GetCourseAuthor(int courseId);
     }
 }
