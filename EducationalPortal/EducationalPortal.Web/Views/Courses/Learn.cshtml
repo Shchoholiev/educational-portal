@@ -123,7 +123,7 @@
 
     function Learned(materialId){
         $.ajax({  
-            type: "POST",  
+            type: "POST",
             url: '/Courses/Learned',
             data: {  materialId: materialId, courseId: @Model.Id },
             success: function(progress){

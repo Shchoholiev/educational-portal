@@ -1,0 +1,13 @@
+﻿@model IEnumerable<EducationalPortal.Core.Entities.Skill>
+
+<section class="flex-wrap">
+    @foreach (var skill in Model)
+    {
+        <div class="card">
+            <div class="card-body flex-row">
+                <input type="checkbox" class="form-check-input checkbox" style="margin-right:10px;"/>
+                <p class="mb-0">@skill.Name</p>
+            </div>
+        </div>
+    }
+</section>

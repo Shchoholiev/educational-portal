@@ -100,7 +100,7 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
-            {
+        {
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Name = model.Name, Email = model.Email, Password = model.Password };

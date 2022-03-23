@@ -1,0 +1,13 @@
+﻿@model EducationalPortal.Core.Entities.Skill
+
+<div class="form-group mb-2"> 
+    <form method="post" asp-action="Create" id="createSkill">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row">
+            <p style="margin:auto 0;">Name</p>
+            <input asp-for="Name" class="form-control mx-3" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <input type="button" value="Create Skill" class="btn btn-primary" onclick="CreateSkill()"/>
+        </div>
+    </form>
+</div>

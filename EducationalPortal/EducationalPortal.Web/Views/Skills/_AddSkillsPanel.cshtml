@@ -1,0 +1,85 @@
+﻿@using EducationalPortal.Core.Entities
+@using EducationalPortal.Web.Paging
+@model PagedList<EducationalPortal.Core.Entities.Skill>
+
+<section class="d-flex flex-wrap">
+    @foreach (var skill in Model)
+    {
+        <div class="card m-1">
+            <div class="card-body d-flex flex-row">
+                <input type="checkbox" class="form-check-input checkbox" style="margin-right:10px;"
+                       onclick="AddSkill(@skill.Id)"/>
+                <p class="mb-0">@skill.Name</p>
+            </div>
+        </div>
+    }
+</section>
+
+<div id="skill" class="mt-2">
+    @await Html.PartialAsync("_CreateSkill", new Skill())
+</div>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+}
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a onclick="ChangePage(@(Model.PageNumber - 1), 'Skills')" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a onclick="ChangePage(@i, 'Skills')" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a onclick="ChangePage(@(Model.PageNumber + 1), 'Skills')" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    function ChangePage(pageNumber, url){
+        $.ajax({  
+            type: "GET",  
+            url: `/${url}/Index`,
+            data: { PageNumber: pageNumber },
+            success: function(data){
+                $("#addPanel").html(data);
+            }
+        });
+    }
+
+    function CreateSkill(){
+        var model = $("#createSkill").serialize();
+        $.ajax({  
+            type: "POST",  
+            url: '/Skills/Create',
+            data: model,
+            success: function(data){
+                if(data.success){
+                    ChangePage(@Model.PageNumber, "Skills");
+                }
+                else{
+                    $("#skill").html(data);
+                }
+            }
+        });
+    }
+
+    function AddSkill(id){
+        var list = $("#skills").serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/Skills/Add`,
+            data: list + '&skillId=' + id,
+            success: function(data){
+                $("#skills").html(data);
+            }
+        });
+    }
+</script>
+

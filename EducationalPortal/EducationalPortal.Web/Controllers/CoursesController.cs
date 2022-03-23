@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.DTO;
+using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
@@ -42,7 +43,7 @@ namespace EducationalPortal.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Index(PageParameters pageParameters )
+        public async Task<IActionResult> Index(PageParameters pageParameters)
         {
             var courses = await this._coursesService
                                     .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber);
@@ -131,8 +132,18 @@ namespace EducationalPortal.Web.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Creator")]
-        public IActionResult CreateCourse()
+        public IActionResult Create()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Create(CourseDTO course)
+        {
+            //var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            //course.Author = await _usersService.GetUserAsync(email);
+
             return View();
         }
     }

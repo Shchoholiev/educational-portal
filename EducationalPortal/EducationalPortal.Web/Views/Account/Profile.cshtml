@@ -39,7 +39,7 @@
         <h6 class="my-2">Balance: @Model.Balance points</h6>
         @if (User.IsInRole("Creator"))
         {
-            <form method="get" asp-action="CreateCourse" asp-controller="Courses">
+            <form method="get" asp-action="Create" asp-controller="Courses">
                 <input type="submit" value="Create Course" class="btn btn-primary my-2"/>
             </form>
         }

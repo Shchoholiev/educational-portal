@@ -1,0 +1,18 @@
+﻿@model IEnumerable<EducationalPortal.Core.Entities.Skill>
+
+<section class="d-flex flex-wrap">
+    @{
+        var i = 0; 
+    }
+    @foreach (var skill in Model)
+    {
+        <div class="card m-1">
+            <div class="card-body d-flex flex-row">
+                <input type="text" name="@($"[{i}].Id")" value="@skill.Id" class="paragraph" hidden/>
+                <input type="text" name="@($"[{i}].Name")" value="@skill.Name" class="paragraph" hidden/>
+                <p class="mb-0">@skill.Name</p>
+            </div>
+        </div>
+        i++;
+    }
+</section>
