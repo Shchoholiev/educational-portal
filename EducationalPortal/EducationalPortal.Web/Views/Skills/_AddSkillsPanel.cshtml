@@ -1,21 +1,25 @@
 ﻿@using EducationalPortal.Core.Entities
 @using EducationalPortal.Web.Paging
-@model PagedList<EducationalPortal.Core.Entities.Skill>
+@model PagedList<EducationalPortal.Web.ViewModels.SkillViewModel>
 
 <section class="d-flex flex-wrap">
     @foreach (var skill in Model)
     {
+        var action = (skill.IsChosen) ? "Remove" : "Add";
+        var checkbox = (skill.IsChosen) ? "checked" : "";
         <div class="card m-1">
             <div class="card-body d-flex flex-row">
                 <input type="checkbox" class="form-check-input checkbox" style="margin-right:10px;"
-                       onclick="AddSkill(@skill.Id)"/>
-                <p class="mb-0">@skill.Name</p>
+                       id="@($"Skills{skill.Id}")" onclick="@(action + $"({skill.Id}, 'Skills')")" @checkbox/>
+                <p class="mb-0" style="margin-right:10px;">@skill.Name</p>
+                <input class="btn btn-danger btn-sm" type="button" value="del" 
+                       onclick="Delete(@skill.Id, 'Skills', @Model.PageNumber)"/>
             </div>
         </div>
     }
 </section>
 
-<div id="skill" class="mt-2">
+<div class="mt-2">
     @await Html.PartialAsync("_CreateSkill", new Skill())
 </div>
 
@@ -42,44 +46,8 @@
 </nav>
 
 <script>
-    function ChangePage(pageNumber, url){
-        $.ajax({  
-            type: "GET",  
-            url: `/${url}/Index`,
-            data: { PageNumber: pageNumber },
-            success: function(data){
-                $("#addPanel").html(data);
-            }
-        });
-    }
-
     function CreateSkill(){
-        var model = $("#createSkill").serialize();
-        $.ajax({  
-            type: "POST",  
-            url: '/Skills/Create',
-            data: model,
-            success: function(data){
-                if(data.success){
-                    ChangePage(@Model.PageNumber, "Skills");
-                }
-                else{
-                    $("#skill").html(data);
-                }
-            }
-        });
-    }
-
-    function AddSkill(id){
-        var list = $("#skills").serialize();
-        $.ajax({  
-            type: "POST",  
-            url: `/Skills/Add`,
-            data: list + '&skillId=' + id,
-            success: function(data){
-                $("#skills").html(data);
-            }
-        });
+        Create('Skills', @Model.PageNumber);
     }
 </script>
 

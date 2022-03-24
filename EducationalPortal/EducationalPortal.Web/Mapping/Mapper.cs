@@ -25,7 +25,23 @@ namespace EducationalPortal.Web.Mapping
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore());
 
+            cfg.CreateMap<Skill, SkillViewModel>();
+
         }).CreateMapper();
+
+        public IEnumerable<SkillViewModel> Map(IEnumerable<Skill> skills, IEnumerable<Skill> chosenSkills)
+        {
+            var skillsViewModels = this._mapper.Map<IEnumerable<SkillViewModel>>(skills);
+            foreach (var skill in skillsViewModels)
+            {
+                if (chosenSkills.Any(s => s.Id == skill.Id))
+                {
+                    skillsViewModels.FirstOrDefault(s => s.Id == skill.Id).IsChosen = true;
+                }
+            }
+
+            return skillsViewModels;
+        }
 
         public CourseViewModel Map(Course course, List<MaterialsBase> learnedMaterials)
         {

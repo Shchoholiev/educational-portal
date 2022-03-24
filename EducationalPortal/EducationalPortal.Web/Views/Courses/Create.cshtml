@@ -41,7 +41,7 @@
         </form>
             <div class="form-group mb-2">
                 <h6>Skills:</h6>
-                <form id="skills"></form>
+                <form id="Skills"></form>
                 <input type="button" value="Add Skills" class="btn btn-primary" onclick="LoadAddSkills()"/>
             </div>
     </div>
@@ -50,6 +50,77 @@
 
 <script>
     function LoadAddSkills(){
-        $("#addPanel").load(`/Skills/Index`);
+        ChangePage(1, 'Skills')
+    }
+
+    function ChangePage(pageNumber, url){
+        var list = $(`#${url}`).serialize();
+        $.ajax({  
+            type: "GET",  
+            url: `/${url}/Index`,
+            data: list + '&PageNumber=' + pageNumber,
+            success: function(data){
+                $("#addPanel").html(data);
+            }
+        });
+    }
+
+    function Create(url, pageNumber){
+        var model = $(`#create${url}`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Create`,
+            data: model,
+            success: function(data){
+                if(data.success){
+                    ChangePage(pageNumber, url);
+                }
+                else{
+                    $(`#create${url}`).html(data);
+                }
+            }
+        });
+    }
+
+    function Add(id, url){
+        var list = $(`#${url}`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Add`,
+            data: list + `&id${url}=` + id,
+            success: function(data){
+                $(`#${url}`).html(data);
+                document.getElementById(`${url}${id}`).setAttribute( "onClick", `Remove(${id}, '${url}');` );
+            }
+        });
+    }
+
+    function Remove(id, url){
+        var list = $("#Skills").serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Remove`,
+            data: list + `&id${url}=` + id,
+            success: function(data){
+                $(`#${url}`).html(data);
+                document.getElementById(`${url}${id}`).setAttribute( "onClick", `Add(${id}, '${url}');` );
+            }
+        });
+    }
+
+    function Delete(id, url, pageNumber){
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Delete/`,
+            data: `&id${url}=` + id,
+            success: function(data){
+                if(data.success){
+                    ChangePage(pageNumber, url);
+                    Remove(id, url);
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
     }
 </script>
