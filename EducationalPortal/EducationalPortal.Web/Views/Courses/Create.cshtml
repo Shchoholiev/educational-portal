@@ -48,6 +48,7 @@
                 <h6>Materials:</h6>
                 <form id="materials"></form>
                 <input type="button" value="Add Videos" class="btn btn-primary" onclick="LoadAddVideos()"/>
+                <input type="button" value="Add Books" class="btn btn-primary" onclick="LoadAddBooks()"/>
             </div>
     </div>
     <div class="col-md-8" id="addPanel"></div>
@@ -60,6 +61,10 @@
 
     function LoadAddVideos(){
         ChangeMaterialsPage(1, 'Videos')
+    }
+
+    function LoadAddBooks(){
+        ChangeMaterialsPage(1, 'Books')
     }
 
     function ChangePage(pageNumber, url){

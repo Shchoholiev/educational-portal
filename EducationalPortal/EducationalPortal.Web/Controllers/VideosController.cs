@@ -6,10 +6,12 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Web.Mapping;
 using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationalPortal.Web.Controllers
 {
+    [Authorize(Roles = "Creator")]
     public class VideosController : Controller
     {
         private readonly IGenericRepository<Video> _videosRepository;
@@ -68,7 +70,7 @@ namespace EducationalPortal.Web.Controllers
                                                                         videoDTO.File.ContentType, "videos");
                 }
                 video.Duration = DateTime.MinValue.AddSeconds(videoDTO.Duration);
-                video.Quality = new Quality { Id = videoDTO.Quality.Id, Name = videoDTO.Quality.Name };
+                video.Quality = new Quality { Id = videoDTO.Quality.Id, Name = videoDTO.Quality.Name ?? null };
                 this._videosRepository.Attach(video);
                 await this._videosRepository.AddAsync(video);
                 return Json(new { success = true });

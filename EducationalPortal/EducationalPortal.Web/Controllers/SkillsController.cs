@@ -2,7 +2,6 @@
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Web.Mapping;
 using EducationalPortal.Web.Paging;
-using EducationalPortal.Web.ViewModels;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

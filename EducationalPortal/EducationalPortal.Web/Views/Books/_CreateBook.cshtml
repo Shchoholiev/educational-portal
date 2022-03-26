@@ -1,0 +1,45 @@
+﻿@model EducationalPortal.Application.DTO.BookDTO
+
+<div class="form-group mb-2"> 
+    <form method="post" asp-action="Create" id="createBooks" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row mb-3">
+            <div class="form-group" style="margin-right:10px"> 
+                <label asp-for="Name" class="control-label"></label> 
+                <input asp-for="Name" class="form-control" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" type="file">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px" hidden>
+                <label asp-for="PagesCount" class="control-label"></label>
+                <input asp-for="PagesCount" class="form-control">
+                <span asp-validation-for="PagesCount" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px" hidden>
+                <label asp-for="PublicationYear" class="control-label"></label>
+                <input asp-for="PublicationYear" class="form-control">
+                <span asp-validation-for="PublicationYear" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px" id="authors">
+                
+            </div>
+        </div>
+        <input type="button" value="Create Book" class="btn btn-primary" onclick="CreateBook()"/>
+    </form>
+</div>
+
+@*<script>
+    $(document).ready(function(){
+        $.ajax({  
+            type: "GET",  
+            url: `/Videos/GetQualities`,
+            success: function(data){
+                $("#qualities").html(data);
+            }
+        });
+    });
+</script>*@

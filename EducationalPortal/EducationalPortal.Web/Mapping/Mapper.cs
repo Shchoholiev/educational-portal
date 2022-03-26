@@ -30,6 +30,8 @@ namespace EducationalPortal.Web.Mapping
 
             cfg.CreateMap<Video, VideoCreateModel>();
 
+            cfg.CreateMap<Book, BookCreateModel>();
+
         }).CreateMapper();
 
         public IEnumerable<SkillCreateModel> Map(IEnumerable<Skill> skills, IEnumerable<Skill> chosenSkills)
@@ -58,6 +60,20 @@ namespace EducationalPortal.Web.Mapping
             }
 
             return videosCreateModels;
+        }
+
+        public IEnumerable<BookCreateModel> Map(IEnumerable<Book> books, IEnumerable<Book> chosenBooks)
+        {
+            var booksCreateModels = this._mapper.Map<IEnumerable<BookCreateModel>>(books);
+            foreach (var book in chosenBooks)
+            {
+                if (booksCreateModels.Any(b => b.Id == book.Id))
+                {
+                    booksCreateModels.FirstOrDefault(b => b.Id == book.Id).IsChosen = true;
+                }
+            }
+
+            return booksCreateModels;
         }
 
         public CourseViewModel Map(Course course, List<MaterialsBase> learnedMaterials)
