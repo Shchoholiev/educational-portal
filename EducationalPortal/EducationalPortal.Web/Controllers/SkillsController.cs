@@ -3,6 +3,7 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Web.Mapping;
 using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels;
+using EducationalPortal.Web.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,9 +26,9 @@ namespace EducationalPortal.Web.Controllers
         {
             var skills = await this._skillsRepository
                                    .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber);
-            var skillViewModels = this._mapper.Map(skills, chosenSkills);
+            var skillCreateModels = this._mapper.Map(skills, chosenSkills);
             var totalCount = await this._skillsRepository.GetCountAsync(s => true);
-            var pagedSkills = new PagedList<SkillViewModel>(skillViewModels, pageParameters, totalCount);
+            var pagedSkills = new PagedList<SkillCreateModel>(skillCreateModels, pageParameters, totalCount);
 
             return PartialView("_AddSkillsPanel", pagedSkills);
         }

@@ -1,0 +1,8 @@
+﻿@using EducationalPortal.Core.Entities.EducationalMaterials.Properties
+@model IEnumerable<EducationalPortal.Core.Entities.EducationalMaterials.Properties.Quality>
+
+<label class="control-label">Quality</label>
+<select name="QualityId" class="form-select" 
+        asp-items="@(new SelectList(Model, nameof(Quality.Id), nameof(Quality.Name)))">
+    <option>Please select one</option>
+</select>

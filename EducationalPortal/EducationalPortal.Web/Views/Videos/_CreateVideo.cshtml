@@ -1,0 +1,40 @@
+﻿@model EducationalPortal.Application.DTO.VideoDTO
+
+<div class="form-group mb-2"> 
+    <form method="post" asp-action="Create" id="createVideos" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row mb-3">
+            <div class="form-group" style="margin-right:10px"> 
+                <label asp-for="Name" class="control-label"></label> 
+                <input asp-for="Name" class="form-control" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" type="file" onchange="handleChange(event)">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px" hidden>
+                <label asp-for="Duration" class="control-label"></label>
+                <input asp-for="Duration" class="form-control">
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px" id="qualities">
+                
+            </div>
+        </div>
+        <input type="button" value="Create Video" class="btn btn-primary" onclick="CreateMaterial('Videos')"/>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $.ajax({  
+            type: "GET",  
+            url: `/Videos/GetQualities`,
+            success: function(data){
+                $("#qualities").html(data);
+            }
+        });
+    });
+</script>

@@ -44,6 +44,11 @@
                 <form id="Skills"></form>
                 <input type="button" value="Add Skills" class="btn btn-primary" onclick="LoadAddSkills()"/>
             </div>
+            <div class="form-group mb-2">
+                <h6>Materials:</h6>
+                <form id="materials"></form>
+                <input type="button" value="Add Videos" class="btn btn-primary" onclick="LoadAddVideos()"/>
+            </div>
     </div>
     <div class="col-md-8" id="addPanel"></div>
 </div>
@@ -53,8 +58,24 @@
         ChangePage(1, 'Skills')
     }
 
+    function LoadAddVideos(){
+        ChangeMaterialsPage(1, 'Videos')
+    }
+
     function ChangePage(pageNumber, url){
         var list = $(`#${url}`).serialize();
+        $.ajax({  
+            type: "GET",  
+            url: `/${url}/Index`,
+            data: list + '&PageNumber=' + pageNumber,
+            success: function(data){
+                $("#addPanel").html(data);
+            }
+        });
+    }
+
+    function ChangeMaterialsPage(pageNumber, url){
+        var list = $(`#materials`).serialize();
         $.ajax({  
             type: "GET",  
             url: `/${url}/Index`,
@@ -95,8 +116,21 @@
         });
     }
 
+    function AddMaterial(id, url){
+        var list = $(`#materials`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Add`,
+            data: list + `&id${url}=` + id,
+            success: function(data){
+                $(`#materials`).html(data);
+                document.getElementById(`${url}${id}`).setAttribute( "onClick", `RemoveMaterial(${id}, '${url}');` );
+            }
+        });
+    }
+
     function Remove(id, url){
-        var list = $("#Skills").serialize();
+        var list = $(`#${url}`).serialize();
         $.ajax({  
             type: "POST",  
             url: `/${url}/Remove`,
@@ -104,6 +138,19 @@
             success: function(data){
                 $(`#${url}`).html(data);
                 document.getElementById(`${url}${id}`).setAttribute( "onClick", `Add(${id}, '${url}');` );
+            }
+        });
+    }
+
+    function RemoveMaterial(id, url){
+        var list = $(`#materials`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Remove`,
+            data: list + `&id${url}=` + id,
+            success: function(data){
+                $(`#materials`).html(data);
+                document.getElementById(`${url}${id}`).setAttribute( "onClick", `AddMaterial(${id}, '${url}');` );
             }
         });
     }
@@ -123,4 +170,36 @@
             }
         });
     }
+
+    function DeleteMaterial(id, url, pageNumber){
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Delete/`,
+            data: `&id${url}=` + id,
+            success: function(data){
+                if(data.success){
+                    ChangeMaterialsPage(pageNumber, url);
+                    RemoveMaterial(id, url);
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+    const getVideoDuration = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const media = new Audio(reader.result);
+          media.onloadedmetadata = () => resolve(media.duration);
+        };
+        reader.readAsDataURL(file);
+        reader.onerror = (error) => reject(error);
+      });
+
+    const handleChange = async (e) => {
+      const duration = await getVideoDuration(e.target.files[0]);
+      document.getElementById("Duration").value = parseInt(duration);
+    };
 </script>
