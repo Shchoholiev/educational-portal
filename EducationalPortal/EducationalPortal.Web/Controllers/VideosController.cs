@@ -68,7 +68,7 @@ namespace EducationalPortal.Web.Controllers
                                                                         videoDTO.File.ContentType, "videos");
                 }
                 video.Duration = DateTime.MinValue.AddSeconds(videoDTO.Duration);
-                video.Quality = new Quality { Id = videoDTO.QualityId };
+                video.Quality = new Quality { Id = videoDTO.Quality.Id, Name = videoDTO.Quality.Name };
                 this._videosRepository.Attach(video);
                 await this._videosRepository.AddAsync(video);
                 return Json(new { success = true });

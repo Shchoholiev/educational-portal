@@ -4,7 +4,7 @@ namespace EducationalPortal.Application.DTO
 {
     public class VideoDTO : MaterialBaseDTO
     {
-        public int QualityId { get; set; }
+        public Quality Quality { get; set; }
 
         public int Duration { get; set; }
     }

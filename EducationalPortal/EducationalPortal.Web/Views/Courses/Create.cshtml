@@ -187,6 +187,29 @@
         });
     }
 
+    function CreateMaterial(url, pageNumber){
+        var form = document.getElementById(`create${url}`);
+        var formData = new FormData(form);
+        var files = $('#File').prop("files");
+        formData.append("File", files[0]);
+
+        $.ajax({  
+            type: "POST",  
+            url: `/${url}/Create`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.success){
+                    ChangeMaterialsPage(pageNumber, `${url}`);
+                }
+                else{
+                    $(`#create${url}`).html(data);
+                }
+            }
+        });
+    }
+
     const getVideoDuration = (file) =>
       new Promise((resolve, reject) => {
         const reader = new FileReader();

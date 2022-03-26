@@ -2,7 +2,50 @@
 @model IEnumerable<EducationalPortal.Core.Entities.EducationalMaterials.Properties.Quality>
 
 <label class="control-label">Quality</label>
-<select name="QualityId" class="form-select" 
-        asp-items="@(new SelectList(Model, nameof(Quality.Id), nameof(Quality.Name)))">
-    <option>Please select one</option>
-</select>
+<div>
+    <select name="Quality.Id" class="form-select" id="quality"
+            asp-items="@(new SelectList(Model, nameof(Quality.Id), nameof(Quality.Name)))">
+        <option class="editable" value="0"></option>
+        <option selected>Select an option</option>
+    </select>
+    <input name="Quality.Name" class="editOption" style="display:none;">
+</div>
+
+<style>
+    #quality{
+        width: 100%;
+    }
+    option {
+        line-height: 30px;
+    }
+
+    .editOption{
+        width: 80%;
+        position: relative;
+        top: -29px;
+        background: #E0F5FF;
+        border: 0;
+        padding-left: 5px;
+    }
+</style>
+
+<script>
+    $('#quality').change(function(){
+    var selected = $('option:selected', this).attr('class');
+    var optionText = $('.editable').text();
+
+    if(selected == "editable"){
+      $('.editOption').show();
+
+
+      $('.editOption').keyup(function(){
+          var editText = $('.editOption').val();
+          $('.editable').val(editText);
+          $('.editable').html(editText);
+      });
+
+    } else {
+      $('.editOption').hide();
+    }
+    });
+</script>

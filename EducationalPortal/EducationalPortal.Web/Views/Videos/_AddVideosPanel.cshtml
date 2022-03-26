@@ -58,27 +58,7 @@
 </nav>
 
 <script>
-    function CreateMaterial(url){
-        var form = document.getElementById(`create${url}`);
-        var formData = new FormData(form);
-        var files = $('#File').prop("files");
-        formData.append("File", files[0]);
-
-        $.ajax({  
-            type: "POST",  
-            url: `/${url}/Create`,
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function(data){
-                if(data.success){
-                    ChangeMaterialsPage(@Model.PageNumber, `${url}`);
-                }
-                else{
-                    $(`#create${url}`).html(data);
-                }
-            }
-        });
+    function CreateVideo(){
+        CreateMaterial('Videos', @Model.PageNumber);
     }
 </script>
-
