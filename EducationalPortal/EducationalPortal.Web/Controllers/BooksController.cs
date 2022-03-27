@@ -32,11 +32,10 @@ namespace EducationalPortal.Web.Controllers
             this._cloudStorageService = cloudStorageService;
         }
 
-
         [HttpGet]
         public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Book> chosenBooks)
         {
-            pageParameters.PageSize = 8;
+            pageParameters.PageSize = 6;
             var books = await this._booksRepository
                                   .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber,
                                                 b => b.Authors, b => b.Extension);
@@ -61,7 +60,6 @@ namespace EducationalPortal.Web.Controllers
                 var extensionName = regex.Split(bookDTO.File.ContentType);
                 var extension = (await this._extensionsRepository.GetAllAsync(e => e.Name == extensionName[1]))
                                                                  .FirstOrDefault();
-                
                 var book = new Book 
                 { 
                     Name = bookDTO.Name, 

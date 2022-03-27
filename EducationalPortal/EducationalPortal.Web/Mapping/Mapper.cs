@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Web.ViewModels;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 
@@ -32,6 +33,8 @@ namespace EducationalPortal.Web.Mapping
 
             cfg.CreateMap<Book, BookCreateModel>();
 
+            cfg.CreateMap<Author, AuthorCreateModel>();
+
         }).CreateMapper();
 
         public IEnumerable<SkillCreateModel> Map(IEnumerable<Skill> skills, IEnumerable<Skill> chosenSkills)
@@ -46,6 +49,20 @@ namespace EducationalPortal.Web.Mapping
             }
 
             return skillsCreateModels;
+        }
+
+        public IEnumerable<AuthorCreateModel> Map(IEnumerable<Author> authors, IEnumerable<Author> chosenAuthors)
+        {
+            var authorCreateModels = this._mapper.Map<IEnumerable<AuthorCreateModel>>(authors);
+            foreach (var author in chosenAuthors)
+            {
+                if (authorCreateModels.Any(s => s.Id == author.Id))
+                {
+                    authorCreateModels.FirstOrDefault(a => a.Id == author.Id).IsChosen = true;
+                }
+            }
+
+            return authorCreateModels;
         }
 
         public IEnumerable<VideoCreateModel> Map(IEnumerable<Video> videos, IEnumerable<Video> chosenVideos)

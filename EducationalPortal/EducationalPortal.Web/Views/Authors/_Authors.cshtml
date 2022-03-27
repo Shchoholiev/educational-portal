@@ -1,0 +1,18 @@
+﻿@model IEnumerable<EducationalPortal.Core.Entities.EducationalMaterials.Properties.Author>
+
+<section class="d-flex flex-wrap">
+    @{
+        var i = 0; 
+    }
+    @foreach (var author in Model)
+    {
+        <div class="card m-1">
+            <div class="card-body d-flex flex-row">
+                <input type="text" name="@($"[{i}].Id")" value="@author.Id" hidden/>
+                <input type="text" name="@($"[{i}].FullName")" value="@author.FullName" hidden/>
+                <p class="mb-0">@author.FullName</p>
+            </div>
+        </div>
+        i++;
+    }
+</section>

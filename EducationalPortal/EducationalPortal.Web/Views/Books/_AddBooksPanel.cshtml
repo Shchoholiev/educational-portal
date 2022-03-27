@@ -11,15 +11,15 @@
             <div class="card-body d-flex flex-row">
                 <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;"
                        id="@($"Books{book.Id}")" onclick="@(action + $"({book.Id}, 'Books')")" @checkbox>
-                <div style="width:100%; cursor:pointer;" onclick="LoadBook(@book.Id)">
+                <div style="width:100%">
                     <div class="d-flex flex-row justify-content-between mb-2">
                         <div class="d-flex flex-row">
                             <img style="height:17px; margin-right:10px;" class="mt-1"
                                  src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
-                            <p class="mb-0" style="margin-right:7px;">@book.Name</p>
+                            <a href="@book.Link" target="_blank"><p class="mb-0" style="margin-right:7px;">@book.Name</p></a>
                         </div>
                         <div class="d-flex flex-row">
-                            <p class="text-primary mb-0" style="margin-right:20px">@book.Extension</p>
+                            <p class="text-primary mb-0" style="margin-right:20px">@book.Extension.Name</p>
                             <p class="text-secondary mb-0" style="white-space: nowrap">@book.PagesCount pages</p>
                         </div>
                     </div>
@@ -40,6 +40,12 @@
 
 <div class="mt-2">
     @await Html.PartialAsync("_CreateBook", new BookDTO())
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="mt-2" id="addAuthors"></div>
+    </div>
 </div>
 
 @{
@@ -65,7 +71,40 @@
 </nav>
 
 <script>
+    $(document).ready(function(){
+        $.ajax({  
+            type: "GET",  
+            url: `/Authors/Index`,
+            success: function(data){
+                $("#addAuthors").html(data);
+            }
+        });
+    });
+
     function CreateBook(){
-        CreateMaterial('Books', @Model.PageNumber);
+        var form = document.getElementById(`createBooks`);
+        var formData = new FormData(form);
+        var files = $('#File').prop("files");
+        formData.append("File", files[0]);
+        var authors = $("#Authors").serializeArray();
+        authors.forEach(function(fields){
+            formData.append(`Authors${fields.name}`, fields.value);
+        });
+
+        $.ajax({  
+            type: "POST",  
+            url: `/Books/Create`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.success){
+                    ChangeMaterialsPage(pageNumber, `Books`);
+                }
+                else{
+                    $(`#createBooks`).html(data);
+                }
+            }
+        });
     }
 </script>

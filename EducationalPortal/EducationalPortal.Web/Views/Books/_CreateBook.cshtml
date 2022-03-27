@@ -14,32 +14,19 @@
                 <input asp-for="File" class="form-control" type="file">
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group" style="margin-right:10px" hidden>
-                <label asp-for="PagesCount" class="control-label"></label>
-                <input asp-for="PagesCount" class="form-control">
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="PagesCount" class="control-label">Pages Count</label>
+                <input asp-for="PagesCount" class="form-control" style="width:105px">
                 <span asp-validation-for="PagesCount" class="text-danger"></span>
             </div>
-            <div class="form-group" style="margin-right:10px" hidden>
-                <label asp-for="PublicationYear" class="control-label"></label>
-                <input asp-for="PublicationYear" class="form-control">
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="PublicationYear" class="control-label">Publication Year</label>
+                <input asp-for="PublicationYear" class="form-control" style="width:130px">
                 <span asp-validation-for="PublicationYear" class="text-danger"></span>
-            </div>
-            <div class="form-group" style="margin-right:10px" id="authors">
-                
             </div>
         </div>
         <input type="button" value="Create Book" class="btn btn-primary" onclick="CreateBook()"/>
     </form>
+    <h6 class="mt-2">Authors:</h6>
+    <form class="d-flex flex-wrap" style="margin-right:10px" id="Authors"></form>
 </div>
-
-@*<script>
-    $(document).ready(function(){
-        $.ajax({  
-            type: "GET",  
-            url: `/Videos/GetQualities`,
-            success: function(data){
-                $("#qualities").html(data);
-            }
-        });
-    });
-</script>*@
