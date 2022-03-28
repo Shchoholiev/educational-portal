@@ -42,6 +42,10 @@ namespace EducationalPortal.Web.Mapping
 
             cfg.CreateMap<Resource, ResourceCreateModel>();
 
+            cfg.CreateMap<CourseDTO, Course>()
+            .ForMember(dest => dest.Materials,
+                opt => opt.Ignore());
+
         }).CreateMapper();
 
         public IEnumerable<SkillCreateModel> Map(IEnumerable<Skill> skills, IEnumerable<Skill> chosenSkills)
@@ -183,8 +187,12 @@ namespace EducationalPortal.Web.Mapping
 
         public Article Map(ArticleDTO articleDTO)
         {
-            var article = this._mapper.Map<Article>(articleDTO);
-            return article;
+            return this._mapper.Map<Article>(articleDTO);
+        }
+
+        public Course Map(CourseDTO courseDTO)
+        {
+            return this._mapper.Map<Course>(courseDTO);
         }
     }
 }

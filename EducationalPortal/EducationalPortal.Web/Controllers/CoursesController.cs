@@ -3,6 +3,7 @@ using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Web.Mapping;
 using EducationalPortal.Web.Paging;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,8 @@ namespace EducationalPortal.Web.Controllers
 
         private readonly IUsersService _usersService;
 
+        private readonly ICloudStorageService _cloudStorageService;
+
         private readonly IGenericRepository<Video> _videosRepository;
 
         private readonly IGenericRepository<Book> _booksRepository;
@@ -27,12 +30,14 @@ namespace EducationalPortal.Web.Controllers
         private readonly Mapper _mapper = new();
 
         public CoursesController(ICoursesService coursesService, IUsersService usersService,
+                                 ICloudStorageService cloudStorageService,
                                  IGenericRepository<MaterialsBase> materialsRepository,
                                  IGenericRepository<Video> videosRepository,
                                  IGenericRepository<Book> booksRepository)
         {
             this._coursesService = coursesService;
             this._usersService = usersService;
+            this._cloudStorageService = cloudStorageService;
             this._materialsRepository = materialsRepository;
             this._videosRepository = videosRepository;
             this._booksRepository = booksRepository;
@@ -136,12 +141,39 @@ namespace EducationalPortal.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> Create(CourseDTO course)
+        public async Task<IActionResult> Create(CourseDTO courseDTO)
         {
-            //var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            //course.Author = await _usersService.GetUserAsync(email);
+            if ((await this._coursesService.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                return View();
+            }
+            else
+            {
+                var course = this._mapper.Map(courseDTO);
+                var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                course.Author = await _usersService.GetUserAsync(email);
 
-            return View();
+                using (var stream = courseDTO.Thumbnail.OpenReadStream())
+                {
+                    course.Thumbnail = await this._cloudStorageService.UploadAsync(stream, courseDTO.Thumbnail.FileName,
+                                                                    courseDTO.Thumbnail.ContentType, "thumbnails");
+                }
+
+                course.CoursesMaterials = new List<CoursesMaterials>();
+                for (int i = 0; i < courseDTO.Materials.Count; i++)
+                {
+                    var courseMaterial = new CoursesMaterials
+                    {
+                        Material = courseDTO.Materials[i],
+                        Index = i + 1,
+                    };
+                    course.CoursesMaterials.Add(courseMaterial);
+                }
+                await this._coursesService.AddCourseAsync(course);
+
+                return Json(new { success = true });
+            }
         }
     }
 }
