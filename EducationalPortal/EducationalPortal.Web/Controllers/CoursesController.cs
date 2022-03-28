@@ -16,29 +16,26 @@ namespace EducationalPortal.Web.Controllers
     {
         private readonly ICoursesService _coursesService;
 
-        private readonly IVideosService _videosService;
-
-        private readonly IBooksService _booksService;
-
-        private readonly IArticlesService _articlesService;
-
         private readonly IUsersService _usersService;
+
+        private readonly IGenericRepository<Video> _videosRepository;
+
+        private readonly IGenericRepository<Book> _booksRepository;
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
 
         private readonly Mapper _mapper = new();
 
-        public CoursesController(ICoursesService coursesService, IVideosService videosService, 
-                                 IBooksService booksService, IArticlesService articlesService,
-                                 IUsersService usersService,
-                                 IGenericRepository<MaterialsBase> materialsRepository)
+        public CoursesController(ICoursesService coursesService, IUsersService usersService,
+                                 IGenericRepository<MaterialsBase> materialsRepository,
+                                 IGenericRepository<Video> videosRepository,
+                                 IGenericRepository<Book> booksRepository)
         {
             this._coursesService = coursesService;
-            this._videosService = videosService;
-            this._booksService = booksService;
-            this._articlesService = articlesService;
             this._usersService = usersService;
             this._materialsRepository = materialsRepository;
+            this._videosRepository = videosRepository;
+            this._booksRepository = booksRepository;
         }
 
         [HttpGet]
@@ -86,13 +83,13 @@ namespace EducationalPortal.Web.Controllers
 
         public async Task<PartialViewResult> Video(int id)
         {
-            var video = await this._videosService.GetOneAsync(id);
+            var video = await this._videosRepository.GetOneAsync(id, v => v.Quality);
             return PartialView("_Video", video);
         }
 
         public async Task<PartialViewResult> Book(int id)
         {
-            var book = await this._booksService.GetOneAsync(id);
+            var book = await this._booksRepository.GetOneAsync(id, b => b.Extension, b => b.Authors);
             return PartialView("_Book", book);
         }
 
