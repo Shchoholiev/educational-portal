@@ -1,0 +1,53 @@
+﻿@using EducationalPortal.Core.Entities
+@using EducationalPortal.Web.Paging
+@model PagedList<EducationalPortal.Web.ViewModels.CreateViewModels.SkillCreateModel>
+
+<section class="d-flex flex-wrap">
+    @foreach (var skill in Model)
+    {
+        var action = (skill.IsChosen) ? "Remove" : "Add";
+        var checkbox = (skill.IsChosen) ? "checked" : "";
+        <div class="card m-1">
+            <div class="card-body d-flex flex-row">
+                <input type="checkbox" class="form-check-input checkbox" style="margin-right:10px;"
+                       id="@($"Skills{skill.Id}")" onclick="@(action + $"({skill.Id}, 'Skills')")" @checkbox/>
+                <p class="mb-0" style="margin-right:10px;">@skill.Name</p>
+                <input class="btn btn-danger btn-sm" type="button" value="del" 
+                       onclick="Delete(@skill.Id, 'Skills', @Model.PageNumber)"/>
+            </div>
+        </div>
+    }
+</section>
+
+<div class="mt-2">
+    @await Html.PartialAsync("_CreateSkill", new Skill())
+</div>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+}
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a onclick="ChangePage(@(Model.PageNumber - 1), 'Skills')" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a onclick="ChangePage(@i, 'Skills')" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a onclick="ChangePage(@(Model.PageNumber + 1), 'Skills')" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    function CreateSkill(){
+        Create('Skills', @Model.PageNumber);
+    }
+</script>
+

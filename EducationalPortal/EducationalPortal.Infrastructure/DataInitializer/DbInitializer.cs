@@ -373,6 +373,13 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 
             context.Courses.Add(jsCourse);
             context.SaveChanges();
+
+            var roleCreator = new Role { Name = "Creator" };
+            var roleAdmin = new Role { Name = "Admin" };
+
+            context.Roles.Add(roleCreator);
+            context.Roles.Add(roleAdmin);
+            context.SaveChanges();
         }
     }
 }

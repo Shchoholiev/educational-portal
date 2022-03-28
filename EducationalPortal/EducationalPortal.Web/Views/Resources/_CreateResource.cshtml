@@ -1,0 +1,13 @@
+﻿@model EducationalPortal.Application.DTO.ResourceDTO
+
+<div class="form-group mb-2"> 
+    <form id="createResources">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row">
+            <p style="margin:auto 0;">Name</p>
+            <input name="Name" asp-for="Domain" class="form-control mx-3" />
+            <span asp-validation-for="Domain" class="text-danger"></span>
+            <input type="button" value="Create Resource" class="btn btn-primary" onclick="CreateResource()"/>
+        </div>
+    </form>
+</div>

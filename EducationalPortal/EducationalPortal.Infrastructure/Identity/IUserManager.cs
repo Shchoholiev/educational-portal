@@ -8,5 +8,7 @@ namespace EducationalPortal.Infrastructure.Identity
         Task SignInAsync(HttpContext httpContext, UserDTO user, bool isPersistent);
 
         Task SignOutAsync(HttpContext httpContext);
+
+        Task AddToRoleAsync(HttpContext httpContext, string role);
     }
 }

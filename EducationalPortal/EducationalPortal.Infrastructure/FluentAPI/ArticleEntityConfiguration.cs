@@ -9,7 +9,8 @@ namespace EducationalPortal.Infrastructure.FluentAPI
     {
         public void Configure(EntityTypeBuilder<Article> builder)
         {
-            builder.HasOne<Resource>(a => a.Resource);
+            builder.HasOne<Resource>(a => a.Resource)
+                   .WithMany(r => r.Articles);
             builder.ToTable("Articles");
         }
     }

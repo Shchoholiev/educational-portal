@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.Identity;
@@ -22,14 +23,18 @@ namespace EducationalPortal.Web.Controllers
 
         private readonly ICloudStorageService _cloudStorageService;
 
+        private readonly IGenericRepository<Role> _rolesRepository;
+
         public AccountController(IUsersService usersService, IUserManager userManager,
                                  ICloudStorageService cloudStorageService,
-                                 IShoppingCartService shoppingCartService)
+                                 IShoppingCartService shoppingCartService,
+                                 IGenericRepository<Role> rolesRepository)
         {
             this._usersService = usersService;
             this._userManager = userManager;
             this._cloudStorageService = cloudStorageService;
             this._shoppingCartService = shoppingCartService;
+            this._rolesRepository = rolesRepository;
         }
 
         [HttpGet]
@@ -95,7 +100,7 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
-            {
+        {
             if (ModelState.IsValid)
             {
                 var userDTO = new UserDTO { Name = model.Name, Email = model.Email, Password = model.Password };
@@ -160,6 +165,25 @@ namespace EducationalPortal.Web.Controllers
         {
             await this._userManager.SignOutAsync(this.HttpContext);
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BecameCreator()
+        {
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            await this.AddToRole("Creator", email);
+
+            return RedirectToAction("Profile");
+        }
+
+        private async Task AddToRole(string roleName, string email)
+        {
+            await this._userManager.AddToRoleAsync(HttpContext, roleName);
+
+            var role = (await this._rolesRepository.GetAllAsync(r => r.Name == roleName)).FirstOrDefault();
+            var user = await this._usersService.GetUserAsync(email);
+            user.Role = role;
+            await this._usersService.UpdateUserAsync(user);
         }
 
         private async Task CheckShoppingCartCookies(string userEmail)

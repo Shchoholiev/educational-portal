@@ -8,6 +8,27 @@ namespace EducationalPortal.Infrastructure.Identity
 {
     public class UserManager : IUserManager
     {
+        public async Task AddToRoleAsync(HttpContext httpContext, string role) // Changes needed
+        {
+            var claims = httpContext.User.Claims.ToList();
+            claims.Add(new Claim(ClaimTypes.Role, role));
+
+            await this.SignOutAsync(httpContext);
+
+            var authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            var claimsIdentity = new ClaimsIdentity(claims, authenticationScheme);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            var properties = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+            };
+
+            await httpContext.SignInAsync(authenticationScheme, claimsPrincipal, properties);
+        }
+
         public async Task SignInAsync(HttpContext httpContext, UserDTO user, bool isPersistent = false)
         {
             var authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;

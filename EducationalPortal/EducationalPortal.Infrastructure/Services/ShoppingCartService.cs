@@ -85,6 +85,10 @@ namespace EducationalPortal.Infrastructure.Services
 
                 await this._usersService.AddUsersCoursesAsync(userCourse);
 
+                var author = await this._coursesRepository.GetCourseAuthor(cartItem.Course.Id);
+                author.Balance += cartItem.Course.Price;
+                await this._usersService.UpdateUserAsync(author);
+
                 cartItem.Course = null;
                 await this._cartItemsRepository.DeleteAsync(cartItem);
 

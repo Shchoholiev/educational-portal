@@ -1,0 +1,94 @@
+﻿@using EducationalPortal.Core.Entities.EducationalMaterials.Properties
+@using EducationalPortal.Web.Paging
+@model PagedList<EducationalPortal.Web.ViewModels.CreateViewModels.AuthorCreateModel>
+
+<section class="d-flex flex-wrap">
+    @foreach (var author in Model)
+    {
+        var action = (author.IsChosen) ? "Remove" : "Add";
+        var checkbox = (author.IsChosen) ? "checked" : "";
+        <div class="card m-1">
+            <div class="card-body d-flex flex-row">
+                <input type="checkbox" class="form-check-input checkbox" style="margin-right:10px;"
+                       id="@($"Authors{author.Id}")" onclick="@(action + $"({author.Id}, 'Authors')")" @checkbox/>
+                <p class="mb-0" style="margin-right:10px;">@author.FullName</p>
+                <input class="btn btn-danger btn-sm" type="button" value="del" 
+                       onclick="DeleteAuthor(@author.Id)"/>
+            </div>
+        </div>
+    }
+</section>
+
+<div class="mt-2">
+    @await Html.PartialAsync("_CreateAuthor", new Author())
+</div>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+}
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a onclick="ChangeAuthorsPage(@(Model.PageNumber - 1))" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a onclick="ChangeAuthorsPage(@i)" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a onclick="ChangeAuthorsPage(@(Model.PageNumber + 1))" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    function CreateAuthor(){
+        var model = $(`#createAuthors`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/Authors/Create`,
+            data: model,
+            success: function(data){
+                if(data.success){
+                    ChangeAuthorsPage(@Model.PageNumber);
+                }
+                else{
+                    $(`#createAuthors`).html(data);
+                }
+            }
+        });
+    }
+
+    function ChangeAuthorsPage(pageNumber){
+        var list = $(`#Authors`).serialize();
+        $.ajax({  
+            type: "GET",  
+            url: `/Authors/Index`,
+            data: list + '&PageNumber=' + pageNumber,
+            success: function(data){
+                $("#addAuthors").html(data);
+            }
+        });
+    }
+
+    function DeleteAuthor(id){
+        $.ajax({  
+            type: "POST",  
+            url: `/Authors/Delete/`,
+            data: `&idAuthors=` + id,
+            success: function(data){
+                if(data.success){
+                    ChangeAuthorsPage(@Model.PageNumber);
+                    Remove(id, 'Authors');
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    }
+</script>
+

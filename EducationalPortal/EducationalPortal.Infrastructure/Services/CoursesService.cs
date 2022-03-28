@@ -20,7 +20,6 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task AddCourseAsync(Course course)
         {
-            this._coursesRepository.Attach(course);
             await this._coursesRepository.AddAsync(course);
         }
 

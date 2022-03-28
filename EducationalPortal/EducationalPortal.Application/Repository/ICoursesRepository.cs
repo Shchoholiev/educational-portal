@@ -1,5 +1,4 @@
 ﻿using EducationalPortal.Core.Entities;
-using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Repository
@@ -26,5 +25,7 @@ namespace EducationalPortal.Application.Repository
         Task<int> GetCountAsync();
 
         Task<int> GetMaterialsCountAsync(int courseId);
+
+        Task<User> GetCourseAuthor(int courseId);
     }
 }

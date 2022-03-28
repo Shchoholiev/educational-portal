@@ -30,9 +30,6 @@ namespace EducationalPortal.Infrastructure.DI
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IArticlesService, ArticlesService>();
-            services.AddScoped<IBooksService, BooksService>();
-            services.AddScoped<IVideosService, VideosService>();
             services.AddScoped<ICoursesService, CoursesService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
