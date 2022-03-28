@@ -49,6 +49,7 @@
                 <form id="materials"></form>
                 <input type="button" value="Add Videos" class="btn btn-primary" onclick="LoadAddVideos()"/>
                 <input type="button" value="Add Books" class="btn btn-primary" onclick="LoadAddBooks()"/>
+                <input type="button" value="Add Articles" class="btn btn-primary" onclick="LoadAddArticles()"/>
             </div>
     </div>
     <div class="col-md-8" id="addPanel"></div>
@@ -61,6 +62,10 @@
 
     function LoadAddVideos(){
         ChangeMaterialsPage(1, 'Videos')
+    }
+
+    function LoadAddArticles(){
+        ChangeMaterialsPage(1, 'Articles')
     }
 
     function LoadAddBooks(){

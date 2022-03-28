@@ -26,7 +26,7 @@
                         <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
                             @foreach (var author in book.Authors)
                             {
-                                <span>@author.FullName</span>
+                                <span>@author.FullName, </span>
                             }
                         </p>
                         <p class="mb-1 text-secondary"><strong>Publication year: </strong>@book.PublicationYear</p>
@@ -99,7 +99,7 @@
             processData: false,
             success: function(data){
                 if(data.success){
-                    ChangeMaterialsPage(pageNumber, `Books`);
+                    ChangeMaterialsPage(@Model.PageNumber, `Books`);
                 }
                 else{
                     $(`#createBooks`).html(data);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EducationalPortal.Application.DTO;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
@@ -34,6 +35,12 @@ namespace EducationalPortal.Web.Mapping
             cfg.CreateMap<Book, BookCreateModel>();
 
             cfg.CreateMap<Author, AuthorCreateModel>();
+
+            cfg.CreateMap<Article, ArticleCreateModel>();
+
+            cfg.CreateMap<ArticleDTO, Article>();
+
+            cfg.CreateMap<Resource, ResourceCreateModel>();
 
         }).CreateMapper();
 
@@ -77,6 +84,31 @@ namespace EducationalPortal.Web.Mapping
             }
 
             return videosCreateModels;
+        }
+
+        public IEnumerable<ArticleCreateModel> Map(IEnumerable<Article> articles, IEnumerable<Article> chosenArticles)
+        {
+            var articlesCreateModels = this._mapper.Map<IEnumerable<ArticleCreateModel>>(articles);
+            foreach (var article in chosenArticles)
+            {
+                if (articlesCreateModels.Any(a => a.Id == article.Id))
+                {
+                    articlesCreateModels.FirstOrDefault(v => v.Id == article.Id).IsChosen = true;
+                }
+            }
+
+            return articlesCreateModels;
+        }
+
+        public IEnumerable<ResourceCreateModel> Map(IEnumerable<Resource> resources, Resource chosenResource)
+        {
+            var resourcesCreateModels = this._mapper.Map<IEnumerable<ResourceCreateModel>>(resources);
+            if (resources.Any(r => r.Id == chosenResource.Id))
+            {
+                resourcesCreateModels.FirstOrDefault(r => r.Id == chosenResource.Id).IsChosen = true;
+            }
+
+            return resourcesCreateModels;
         }
 
         public IEnumerable<BookCreateModel> Map(IEnumerable<Book> books, IEnumerable<Book> chosenBooks)
@@ -147,6 +179,12 @@ namespace EducationalPortal.Web.Mapping
             }
 
             return materialsViewModel;
+        }
+
+        public Article Map(ArticleDTO articleDTO)
+        {
+            var article = this._mapper.Map<Article>(articleDTO);
+            return article;
         }
     }
 }
