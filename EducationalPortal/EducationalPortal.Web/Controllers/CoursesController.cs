@@ -132,6 +132,14 @@ namespace EducationalPortal.Web.Controllers
             return PartialView("_Progress", progress);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> GetThumbnail(IFormFile file)
+        {
+            var link = await this.FileToLink(file, "thumbnails");
+            return PartialView("_Thumbnail", link);
+        }
+
         [HttpGet]
         [Authorize(Roles = "Creator")]
         public IActionResult Create()
@@ -154,12 +162,6 @@ namespace EducationalPortal.Web.Controllers
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 course.Author = await _usersService.GetUserAsync(email);
 
-                using (var stream = courseDTO.Thumbnail.OpenReadStream())
-                {
-                    course.Thumbnail = await this._cloudStorageService.UploadAsync(stream, courseDTO.Thumbnail.FileName,
-                                                                    courseDTO.Thumbnail.ContentType, "thumbnails");
-                }
-
                 course.CoursesMaterials = new List<CoursesMaterials>();
                 for (int i = 0; i < courseDTO.Materials.Count; i++)
                 {
@@ -174,6 +176,27 @@ namespace EducationalPortal.Web.Controllers
 
                 return Json(new { success = true });
             }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var course = await this._coursesService.GetCourseAsync(id);
+            return View(course);
+        }
+
+        private async Task<string> FileToLink(IFormFile file, string blobContainer)
+        {
+            var link = String.Empty;
+
+            using (var stream = file.OpenReadStream())
+            {
+                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
+                                                                   blobContainer);
+            }
+
+            return link;
         }
     }
 }

@@ -7,11 +7,11 @@
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span> 
     </div>
-    <div class="d-flex mb-2">
-        @*<img style="height:75px;" src="@Model.Thumbnail"/>*@
+    <div class="d-flex mb-2 flex-column">
+        <div id="thumbnailImage"></div>
         <div class="">
-            <label asp-for="Thumbnail" class="control-label"></label>
-            <input asp-for="Thumbnail" class="form-control" type="file">
+            <label class="control-label">Thumbnail</label>
+            <input id="thumbnailFile" class="form-control" type="file" onchange="FileToLink()">
         </div>
     </div>
     <div class="form-group mb-2"> 
@@ -30,3 +30,22 @@
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 </form>
+
+<script>
+    function FileToLink(){
+        var formData = new FormData();
+        var files = $('#thumbnailFile').prop("files");
+        formData.append("file", files[0]);
+
+        $.ajax({  
+            type: "POST",  
+            url: `/Courses/GetThumbnail`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                $(`#thumbnailImage`).html(data);
+            }
+        });
+    }
+</script>

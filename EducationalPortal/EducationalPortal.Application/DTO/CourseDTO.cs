@@ -8,7 +8,7 @@ namespace EducationalPortal.Application.DTO
     {
         public string Name { get; set; }
 
-        public IFormFile Thumbnail { get; set; }
+        public string Thumbnail { get; set; }
 
         public string ShortDescription { get; set; }
 
