@@ -146,7 +146,7 @@ namespace EducationalPortal.Web.Controllers
             if ((await this._coursesService.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
             {
                 ModelState.AddModelError(string.Empty, "Course with this name already exists!");
-                return View();
+                return PartialView("_CreateCourse", courseDTO);
             }
             else
             {
