@@ -65,7 +65,7 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int idSkills)
         {
-            if ((await this._skillsRepository.GetCountAsync(s => s.Courses.Any(c => c.Skills.Any(s => s.Id == idSkills)))) == 0)
+            if ((await this._skillsRepository.GetCountAsync(s => s.CoursesSkills.Any(cs => cs.SkillId == idSkills))) == 0)
             {
                 var skill = await this._skillsRepository.GetOneAsync(idSkills);
                 await this._skillsRepository.DeleteAsync(skill);

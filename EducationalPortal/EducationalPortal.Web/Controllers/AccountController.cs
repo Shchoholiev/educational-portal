@@ -41,7 +41,7 @@ namespace EducationalPortal.Web.Controllers
         public async Task<IActionResult> Profile()
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var user = await this._usersService.GetUserWithSkillsAsync(email);
+            var user = await this._usersService.GetAuthorAsync(email);
             return View(user);
         }
 

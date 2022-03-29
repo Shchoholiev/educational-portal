@@ -23,6 +23,8 @@ namespace EducationalPortal.Core.Entities
 
         public List<CoursesMaterials> CoursesMaterials { get; set; }
 
+        public List<CoursesSkills> CoursesSkills { get; set; }
+
         public List<UsersCourses> UsersCourses { get; set; }
     }
 }

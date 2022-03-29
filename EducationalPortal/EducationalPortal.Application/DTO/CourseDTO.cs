@@ -1,11 +1,12 @@
 ﻿using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
-using Microsoft.AspNetCore.Http;
 
 namespace EducationalPortal.Application.DTO
 {
     public class CourseDTO
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Thumbnail { get; set; }

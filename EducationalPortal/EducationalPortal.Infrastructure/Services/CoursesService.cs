@@ -23,10 +23,9 @@ namespace EducationalPortal.Infrastructure.Services
             await this._coursesRepository.AddAsync(course);
         }
 
-        public async Task UpdateCourseAsync(Course course)
+        public async Task UpdateCourseAsync(Course Course)
         {
-            this._coursesRepository.Attach(course);
-            await this._coursesRepository.UpdateAsync(course);
+            await this._coursesRepository.UpdateAsync(Course);
         }
 
         public async Task DeleteCourseAsync(int id)

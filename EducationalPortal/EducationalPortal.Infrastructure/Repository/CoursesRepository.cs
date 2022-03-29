@@ -27,7 +27,21 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task UpdateAsync(Course course)
         {
-            this._table.Update(course);
+            var coursesMaterials = this._db.CoursesMaterials.Where(cm => cm.CourseId == course.Id);
+            this._db.CoursesMaterials.RemoveRange(coursesMaterials);
+            var coursesSkills = this._db.CoursesSkills.Where(cs => cs.CourseId == course.Id);
+            this._db.CoursesSkills.RemoveRange(coursesSkills);
+
+            try
+            {
+                this._table.Update(course);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
             await this.SaveAsync();
         }
 
@@ -46,10 +60,11 @@ namespace EducationalPortal.Infrastructure.Repository
         {
             var course = await this._table
                .AsNoTracking()
-               .Include(c => c.Skills)
                .Include(c => c.Author)
                .Include(c => c.CoursesMaterials)
-                   .ThenInclude(cm => cm.Material)
+                  .ThenInclude(cm => cm.Material)
+               .Include(c => c.CoursesSkills)
+                  .ThenInclude(cs => cs.Skill)
                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null)
@@ -80,6 +95,13 @@ namespace EducationalPortal.Infrastructure.Repository
             }
             course.Materials = materials;
             course.CoursesMaterials = null;
+
+            course.Skills = new List<Skill>();
+            foreach (var cs in course.CoursesSkills)
+            {
+                course.Skills.Add(cs.Skill);
+            }
+            course.CoursesSkills = null;
 
             return course;
         }
@@ -125,7 +147,14 @@ namespace EducationalPortal.Infrastructure.Repository
 
         private async Task SaveAsync()
         {
-            await this._db.SaveChangesAsync();
+            try
+            {
+                await this._db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                var m = e.Message;
+            }
         }
 
         public async Task<User> GetCourseAuthor(int courseId)

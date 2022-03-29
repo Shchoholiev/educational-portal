@@ -161,17 +161,6 @@ namespace EducationalPortal.Web.Controllers
                 var course = this._mapper.Map(courseDTO);
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 course.Author = await _usersService.GetUserAsync(email);
-
-                course.CoursesMaterials = new List<CoursesMaterials>();
-                for (int i = 0; i < courseDTO.Materials.Count; i++)
-                {
-                    var courseMaterial = new CoursesMaterials
-                    {
-                        Material = courseDTO.Materials[i],
-                        Index = i + 1,
-                    };
-                    course.CoursesMaterials.Add(courseMaterial);
-                }
                 await this._coursesService.AddCourseAsync(course);
 
                 return Json(new { success = true });
@@ -183,7 +172,35 @@ namespace EducationalPortal.Web.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var course = await this._coursesService.GetCourseAsync(id);
-            return View(course);
+            var courseDTO = this._mapper.Map(course);
+            return View(courseDTO);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Edit(CourseDTO courseDTO)
+        {
+            if ((await this._coursesService.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                return PartialView("_EditCourse", courseDTO);
+            }
+            else
+            {
+                var mappedCourse = this._mapper.Map(courseDTO);
+                var course = await this._coursesService.GetCourseAsync(courseDTO.Id);
+
+                course.Name = mappedCourse.Name;
+                course.ShortDescription = mappedCourse.ShortDescription;
+                course.Description = mappedCourse.Description;
+                course.Price = mappedCourse.Price;
+                course.Thumbnail = mappedCourse.Thumbnail;
+                course.CoursesMaterials = mappedCourse.CoursesMaterials;
+                course.CoursesSkills = mappedCourse.CoursesSkills;
+
+                await this._coursesService.UpdateCourseAsync(course);
+                return Json(new { success = true });
+            }
         }
 
         private async Task<string> FileToLink(IFormFile file, string blobContainer)
