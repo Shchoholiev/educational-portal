@@ -132,14 +132,6 @@ namespace EducationalPortal.Web.Controllers
             return PartialView("_Progress", progress);
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> GetThumbnail(IFormFile file)
-        {
-            var link = await this.FileToLink(file, "thumbnails");
-            return PartialView("_Thumbnail", link);
-        }
-
         [HttpGet]
         [Authorize(Roles = "Creator")]
         public IActionResult Create()
@@ -165,6 +157,20 @@ namespace EducationalPortal.Web.Controllers
 
                 return Json(new { success = true });
             }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> GetThumbnail(IFormFile file)
+        {
+            var link = String.Empty;
+            using (var stream = file.OpenReadStream())
+            {
+                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
+                                                                   "thumbnails");
+            }
+
+            return PartialView("_Thumbnail", link);
         }
 
         [HttpGet]
@@ -204,17 +210,13 @@ namespace EducationalPortal.Web.Controllers
             }
         }
 
-        private async Task<string> FileToLink(IFormFile file, string blobContainer)
+        [HttpGet]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var link = String.Empty;
-
-            using (var stream = file.OpenReadStream())
-            {
-                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
-                                                                   blobContainer);
-            }
-
-            return link;
+            var course = await this._coursesRepository.GetFullCourseAsync(id);
+            await this._coursesRepository.DeleteAsync(course);
+            return RedirectToAction("Profile", "Account");
         }
     }
 }
