@@ -3,6 +3,7 @@ using EducationalPortal.Application.DTO;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Web.ViewModels;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 
@@ -44,7 +45,11 @@ namespace EducationalPortal.Web.Mapping
 
             cfg.CreateMap<CourseDTO, Course>()
             .ForMember(dest => dest.Materials,
+                opt => opt.Ignore())
+            .ForMember(dest => dest.Skills,
                 opt => opt.Ignore());
+
+            cfg.CreateMap<Course, CourseDTO>();
 
         }).CreateMapper();
 
@@ -133,6 +138,7 @@ namespace EducationalPortal.Web.Mapping
         {
             var courseViewModel = this._mapper.Map<CourseViewModel>(course);
             courseViewModel.Materials = this.MapMaterials(course.Materials, learnedMaterials);
+
             return courseViewModel;
         }
 
@@ -148,7 +154,42 @@ namespace EducationalPortal.Web.Mapping
             return learnCourse;
         }
 
-        private List<MaterialsBaseViewModel> MapMaterials(List<MaterialsBase> materials, 
+        public Article Map(ArticleDTO articleDTO)
+        {
+            return this._mapper.Map<Article>(articleDTO);
+        }
+
+        public CourseDTO Map(Course course)
+        {
+            var courseDTO = this._mapper.Map<CourseDTO>(course);
+            return courseDTO;
+        }
+
+        public Course Map(CourseDTO courseDTO)
+        {
+            var course = this._mapper.Map<Course>(courseDTO);
+            
+            course.CoursesMaterials = new List<CoursesMaterials>();
+            for (int i = 0; i < courseDTO.Materials.Count; i++)
+            {
+                var courseMaterial = new CoursesMaterials
+                {
+                    Material = courseDTO.Materials[i],
+                    Index = i + 1,
+                };
+                course.CoursesMaterials.Add(courseMaterial);
+            }
+
+            course.CoursesSkills = new List<CoursesSkills>();
+            foreach (var skill in courseDTO.Skills)
+            {
+                course.CoursesSkills.Add(new CoursesSkills { Skill = skill });
+            }
+
+            return course;
+        }
+
+        private List<MaterialsBaseViewModel> MapMaterials(List<MaterialsBase> materials,
                                                          List<MaterialsBase> learnedMaterials)
         {
             var materialsViewModel = new List<MaterialsBaseViewModel>();
@@ -183,16 +224,6 @@ namespace EducationalPortal.Web.Mapping
             }
 
             return materialsViewModel;
-        }
-
-        public Article Map(ArticleDTO articleDTO)
-        {
-            return this._mapper.Map<Article>(articleDTO);
-        }
-
-        public Course Map(CourseDTO courseDTO)
-        {
-            return this._mapper.Map<Course>(courseDTO);
         }
     }
 }

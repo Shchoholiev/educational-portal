@@ -27,6 +27,11 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task UpdateAsync(Course course)
         {
+            var coursesMaterials = this._db.CoursesMaterials.Where(cm => cm.CourseId == course.Id);
+            this._db.CoursesMaterials.RemoveRange(coursesMaterials);
+            var coursesSkills = this._db.CoursesSkills.Where(cs => cs.CourseId == course.Id);
+            this._db.CoursesSkills.RemoveRange(coursesSkills);
+
             this._table.Update(course);
             await this.SaveAsync();
         }
@@ -46,10 +51,11 @@ namespace EducationalPortal.Infrastructure.Repository
         {
             var course = await this._table
                .AsNoTracking()
-               .Include(c => c.Skills)
                .Include(c => c.Author)
                .Include(c => c.CoursesMaterials)
-                   .ThenInclude(cm => cm.Material)
+                  .ThenInclude(cm => cm.Material)
+               .Include(c => c.CoursesSkills)
+                  .ThenInclude(cs => cs.Skill)
                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null)
@@ -80,6 +86,13 @@ namespace EducationalPortal.Infrastructure.Repository
             }
             course.Materials = materials;
             course.CoursesMaterials = null;
+
+            course.Skills = new List<Skill>();
+            foreach (var cs in course.CoursesSkills)
+            {
+                course.Skills.Add(cs.Skill);
+            }
+            course.CoursesSkills = null;
 
             return course;
         }
@@ -115,22 +128,14 @@ namespace EducationalPortal.Infrastructure.Repository
                                  .CountAsync();
         }
 
-        public void Attach(params object[] obj)
+        public async Task<User> GetCourseAuthor(int courseId)
         {
-            foreach (var o in obj)
-            {
-                this._db.Attach(o);
-            }
+            return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId));
         }
 
         private async Task SaveAsync()
         {
             await this._db.SaveChangesAsync();
-        }
-
-        public async Task<User> GetCourseAuthor(int courseId)
-        {
-            return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId));
         }
     }
 }

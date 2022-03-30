@@ -74,6 +74,19 @@
     });
 
     function CreateArticle(){
-        Create('Articles', @Model.PageNumber)
+        var model = $(`#createArticles`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/Articles/Create`,
+            data: model,
+            success: function(data){
+                if(data.success){
+                    ChangeMaterialsPage(@Model.PageNumber, 'Articles');
+                }
+                else{
+                    $(`#createArticles`).html(data);
+                }
+            }
+        });
     }
 </script>

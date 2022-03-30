@@ -37,18 +37,6 @@
             </div>
         </form>
         <h6 class="my-2">Balance: @Model.Balance points</h6>
-        @if (User.IsInRole("Creator"))
-        {
-            <form method="get" asp-action="Create" asp-controller="Courses">
-                <input type="submit" value="Create Course" class="btn btn-primary my-2"/>
-            </form>
-        }
-        else
-        {
-            <form method="post" asp-action="BecameCreator">
-                <input type="submit" value="Became Creator" class="btn btn-primary my-2"/>
-            </form>  
-        }
 
     </section>
     <section class="col-md-4">
@@ -66,3 +54,34 @@
         </div>
     </section>
 </div>
+
+@if (User.IsInRole("Creator"))
+{
+    <form method="get" asp-action="Create" asp-controller="Courses">
+        <input type="submit" value="Create Course" class="btn btn-primary my-2"/>
+    </form>
+    <article class="mt-3" style="width:100%">
+        <h4>Created Courses:</h4>
+        <div class="d-flex flex-wrap">
+            @foreach (var course in Model.CreatedCourses)
+            {
+                <div class="card m-1" style="width: 18rem;">
+                    <img src="@course.Thumbnail" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">@course.Name</h5>
+                        <p class="card-text">@course.ShortDescription</p>
+                    </div>
+                    <a asp-action="Details" asp-controller="Courses" asp-route-id="@course.Id" class="stretched-link"></a>
+                    <a asp-controller="Courses"  asp-action="Edit" asp-route-id="@course.Id"
+                                class="btn btn-primary my-2" style="z-index:1000">Edit</a>
+                </div>
+                    }
+        </div>
+    </article>
+}
+else
+{
+    <form method="post" asp-action="BecameCreator">
+        <input type="submit" value="Became Creator" class="btn btn-primary my-2"/>
+    </form>  
+}

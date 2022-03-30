@@ -1,0 +1,70 @@
+﻿@model EducationalPortal.Application.DTO.CourseDTO
+
+@{
+    ViewData["Title"] = "Edit Course";
+}
+
+<h1>Edit Course</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div id="editCourse">
+            @await Html.PartialAsync("_EditCourse", Model)
+        </div>
+        <div class="form-group mb-2">
+            <h6>Skills:</h6>
+            <form id="Skills">
+                @await Html.PartialAsync("~/Views/Skills/_Skills.cshtml", Model.Skills)
+            </form>
+            <input type="button" value="Add Skills" class="btn btn-primary" onclick="LoadAddSkills()"/>
+        </div>
+        <div class="form-group mb-2">
+            <h6>Materials:</h6>
+            <form id="materials">
+                @await Html.PartialAsync("_Materials", Model.Materials)
+            </form>
+            <input type="button" value="Add Videos" class="btn btn-primary" onclick="LoadAddVideos()"/>
+            <input type="button" value="Add Books" class="btn btn-primary" onclick="LoadAddBooks()"/>
+            <input type="button" value="Add Articles" class="btn btn-primary" onclick="LoadAddArticles()"/>
+        </div>
+        <input type="button" value="Edit" class="btn btn-success my-2" onclick="EditCourse()"/>
+        <a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id" 
+           class="btn btn-danger my-2">Cancel</a>
+    </div>
+    <div class="col-md-8" id="addPanel"></div>
+</div>
+
+<script>
+    function EditCourse(){
+        var form = document.getElementById(`course`);
+        var formData = new FormData(form);
+
+        var skills = $("#Skills").serializeArray();
+        skills.forEach(function(fields){
+            formData.append(`Skills${fields.name}`, fields.value);
+        });
+
+        var materials = $("#materials").serializeArray();
+        materials.forEach(function(fields){
+            formData.append(`Materials${fields.name}`, fields.value);
+        });
+
+        var id = formData.get("Id");
+
+        $.ajax({  
+            type: "POST",  
+            url: `/Courses/Edit`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.success){
+                    window.location.href = `/Courses/Details/${id}`;
+                }
+                else{
+                    $(`#editCourse`).html(data);
+                }
+            }
+        });
+    }
+</script>

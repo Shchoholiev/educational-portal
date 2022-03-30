@@ -32,8 +32,6 @@
     function CreateCourse(){
         var form = document.getElementById(`course`);
         var formData = new FormData(form);
-        var files = $('#Thumbnail').prop("files");
-        formData.append("Thumbnail", files[0]);
 
         var skills = $("#Skills").serializeArray();
         skills.forEach(function(fields){

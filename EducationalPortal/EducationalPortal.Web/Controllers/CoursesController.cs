@@ -15,11 +15,11 @@ namespace EducationalPortal.Web.Controllers
     [Authorize]
     public class CoursesController : Controller
     {
-        private readonly ICoursesService _coursesService;
-
         private readonly IUsersService _usersService;
 
         private readonly ICloudStorageService _cloudStorageService;
+
+        private readonly ICoursesRepository _coursesRepository;
 
         private readonly IGenericRepository<Video> _videosRepository;
 
@@ -29,13 +29,13 @@ namespace EducationalPortal.Web.Controllers
 
         private readonly Mapper _mapper = new();
 
-        public CoursesController(ICoursesService coursesService, IUsersService usersService,
-                                 ICloudStorageService cloudStorageService,
+        public CoursesController(IUsersService usersService, ICloudStorageService cloudStorageService,
+                                 ICoursesRepository coursesRepository,
                                  IGenericRepository<MaterialsBase> materialsRepository,
                                  IGenericRepository<Video> videosRepository,
                                  IGenericRepository<Book> booksRepository)
         {
-            this._coursesService = coursesService;
+            this._coursesRepository = coursesRepository;
             this._usersService = usersService;
             this._cloudStorageService = cloudStorageService;
             this._materialsRepository = materialsRepository;
@@ -47,9 +47,9 @@ namespace EducationalPortal.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(PageParameters pageParameters)
         {
-            var courses = await this._coursesService
+            var courses = await this._coursesRepository
                                     .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber);
-            var totalCount = await this._coursesService.GetCountAsync();
+            var totalCount = await this._coursesRepository.GetCountAsync();
             var pagedCourses = new PagedList<Course>(courses, pageParameters, totalCount);
 
             return View(pagedCourses);
@@ -59,7 +59,7 @@ namespace EducationalPortal.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
-            var course = await this._coursesService.GetCourseAsync(id);
+            var course = await this._coursesRepository.GetFullCourseAsync(id);
             if (User.Identity.IsAuthenticated)
             {
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -76,7 +76,7 @@ namespace EducationalPortal.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Learn(int id)
         {
-            var course = await this._coursesService.GetCourseAsync(id);
+            var course = await this._coursesRepository.GetFullCourseAsync(id);
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await this._usersService.GetUserWithMaterialsAsync(email);
             var learnCourse = this._mapper.MapLearnCourse(course, user.Materials);
@@ -132,6 +132,14 @@ namespace EducationalPortal.Web.Controllers
             return PartialView("_Progress", progress);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> GetThumbnail(IFormFile file)
+        {
+            var link = await this.FileToLink(file, "thumbnails");
+            return PartialView("_Thumbnail", link);
+        }
+
         [HttpGet]
         [Authorize(Roles = "Creator")]
         public IActionResult Create()
@@ -143,37 +151,70 @@ namespace EducationalPortal.Web.Controllers
         [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Create(CourseDTO courseDTO)
         {
-            if ((await this._coursesService.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
+            if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
             {
                 ModelState.AddModelError(string.Empty, "Course with this name already exists!");
-                return View();
+                return PartialView("_CreateCourse", courseDTO);
             }
             else
             {
                 var course = this._mapper.Map(courseDTO);
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 course.Author = await _usersService.GetUserAsync(email);
-
-                using (var stream = courseDTO.Thumbnail.OpenReadStream())
-                {
-                    course.Thumbnail = await this._cloudStorageService.UploadAsync(stream, courseDTO.Thumbnail.FileName,
-                                                                    courseDTO.Thumbnail.ContentType, "thumbnails");
-                }
-
-                course.CoursesMaterials = new List<CoursesMaterials>();
-                for (int i = 0; i < courseDTO.Materials.Count; i++)
-                {
-                    var courseMaterial = new CoursesMaterials
-                    {
-                        Material = courseDTO.Materials[i],
-                        Index = i + 1,
-                    };
-                    course.CoursesMaterials.Add(courseMaterial);
-                }
-                await this._coursesService.AddCourseAsync(course);
+                await this._coursesRepository.AddAsync(course);
 
                 return Json(new { success = true });
             }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var course = await this._coursesRepository.GetFullCourseAsync(id);
+            var courseDTO = this._mapper.Map(course);
+            return View(courseDTO);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Edit(CourseDTO courseDTO)
+        {
+            if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name 
+                                                            && c.Id != courseDTO.Id)).Count() > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                return PartialView("_EditCourse", courseDTO);
+            }
+            else
+            {
+                var mappedCourse = this._mapper.Map(courseDTO);
+                var course = await this._coursesRepository.GetCourseAsync(courseDTO.Id);
+
+                course.Name = mappedCourse.Name;
+                course.ShortDescription = mappedCourse.ShortDescription;
+                course.Description = mappedCourse.Description;
+                course.Price = mappedCourse.Price;
+                course.Thumbnail = mappedCourse.Thumbnail;
+                course.CoursesMaterials = mappedCourse.CoursesMaterials;
+                course.CoursesSkills = mappedCourse.CoursesSkills;
+
+                await this._coursesRepository.UpdateAsync(course);
+                return Json(new { success = true });
+            }
+        }
+
+        private async Task<string> FileToLink(IFormFile file, string blobContainer)
+        {
+            var link = String.Empty;
+
+            using (var stream = file.OpenReadStream())
+            {
+                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
+                                                                   blobContainer);
+            }
+
+            return link;
         }
     }
 }

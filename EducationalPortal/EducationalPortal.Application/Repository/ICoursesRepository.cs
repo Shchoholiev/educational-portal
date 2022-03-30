@@ -7,11 +7,9 @@ namespace EducationalPortal.Application.Repository
     {
         Task AddAsync(Course course);
 
-        Task UpdateAsync(Course course);
+        Task UpdateAsync(Course newCourse);
 
         Task DeleteAsync(Course course);
-
-        void Attach(params object[] obj);
 
         Task<Course?> GetCourseAsync(int id);
 

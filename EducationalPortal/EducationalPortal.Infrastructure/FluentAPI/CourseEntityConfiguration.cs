@@ -9,8 +9,8 @@ namespace EducationalPortal.Infrastructure.FluentAPI
     {
         public void Configure(EntityTypeBuilder<Course> builder)
         {
-            builder.HasMany<Skill>(c => c.Skills)
-                   .WithMany(s => s.Courses);
+            builder.HasMany<CoursesSkills>(c => c.CoursesSkills)
+                   .WithOne(cs => cs.Course);
 
             builder.HasMany<CoursesMaterials>(c => c.CoursesMaterials)
                    .WithOne(cm => cm.Course);
@@ -19,6 +19,8 @@ namespace EducationalPortal.Infrastructure.FluentAPI
                    .WithOne(uc => uc.Course);
 
             builder.Ignore(c => c.Materials);
+
+            builder.Ignore(c => c.Skills);
         } 
     }
 }
