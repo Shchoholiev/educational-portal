@@ -11,8 +11,6 @@ namespace EducationalPortal.Application.Repository
 
         Task DeleteAsync(Course course);
 
-        void Attach(params object[] obj);
-
         Task<Course?> GetCourseAsync(int id);
 
         Task<Course> GetFullCourseAsync(int id);

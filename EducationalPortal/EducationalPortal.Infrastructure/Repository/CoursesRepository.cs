@@ -32,16 +32,7 @@ namespace EducationalPortal.Infrastructure.Repository
             var coursesSkills = this._db.CoursesSkills.Where(cs => cs.CourseId == course.Id);
             this._db.CoursesSkills.RemoveRange(coursesSkills);
 
-            try
-            {
-                this._table.Update(course);
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            
+            this._table.Update(course);
             await this.SaveAsync();
         }
 
@@ -137,29 +128,14 @@ namespace EducationalPortal.Infrastructure.Repository
                                  .CountAsync();
         }
 
-        public void Attach(params object[] obj)
+        public async Task<User> GetCourseAuthor(int courseId)
         {
-            foreach (var o in obj)
-            {
-                this._db.Attach(o);
-            }
+            return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId));
         }
 
         private async Task SaveAsync()
         {
-            try
-            {
-                await this._db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                var m = e.Message;
-            }
-        }
-
-        public async Task<User> GetCourseAuthor(int courseId)
-        {
-            return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId));
+            await this._db.SaveChangesAsync();
         }
     }
 }

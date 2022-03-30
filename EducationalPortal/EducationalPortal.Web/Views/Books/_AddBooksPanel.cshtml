@@ -90,7 +90,6 @@
         authors.forEach(function(fields){
             formData.append(`Authors${fields.name}`, fields.value);
         });
-        alert(formData);
 
         $.ajax({  
             type: "POST",  
