@@ -3,7 +3,6 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Repository
 {
@@ -20,6 +19,7 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task AddAsync(User user)
         {
+            this._db.Attach(user);
             await this._table.AddAsync(user);
             await this.SaveAsync();
         }
@@ -39,7 +39,7 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<User?> GetUserAsync(string email)
         {
-            return await this._table.FirstOrDefaultAsync(u => u.Email == email);
+            return await this._table.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserWithSkillsAsync(string email)
@@ -88,16 +88,6 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this._db.UsersCourses
                                  .Where(uc => uc.User.Email == email)
                                  .CountAsync();
-        }
-
-        public async Task<IEnumerable<User>> GetAllAsync() // ?
-        {
-            return await this._table.ToListAsync();
-        }
-
-        public async Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate) // ?
-        {
-            return await this._table.Where(predicate).ToListAsync();
         }
 
         public async Task AddUsersCoursesAsync(UsersCourses usersCourses)

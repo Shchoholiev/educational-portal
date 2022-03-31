@@ -111,5 +111,12 @@ namespace EducationalPortal.Web.Controllers
                 return Json(new { success = false, message = "This book is used in other courses!" });
             }
         }
+
+        [Authorize(Roles = "Student")]
+        public async Task<PartialViewResult> Book(int id)
+        {
+            var book = await this._booksRepository.GetOneAsync(id, b => b.Extension, b => b.Authors);
+            return PartialView("_Book", book);
+        }
     }
 }

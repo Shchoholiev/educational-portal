@@ -56,6 +56,7 @@ namespace EducationalPortal.Infrastructure.Identity
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.Name));
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim(ClaimTypes.Role, "Student"));
 
             return claims;
         }

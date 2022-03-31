@@ -39,6 +39,7 @@ namespace EducationalPortal.Infrastructure.Services
                 Name = userDTO.Name,
                 Email = userDTO.Email,
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/profile_default.jpg",
+                Roles = new List<Role> { new Role { Id = 1 } },
             };
 
             try
