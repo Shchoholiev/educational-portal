@@ -90,6 +90,15 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             context.Skills.AddRange(csharpSkills);
             context.SaveChanges();
 
+            var roleStudent = new Role { Name = "Student" };
+            var roleCreator = new Role { Name = "Creator" };
+            var roleAdmin = new Role { Name = "Admin" };
+
+            context.Roles.Add(roleStudent);
+            context.Roles.Add(roleCreator);
+            context.Roles.Add(roleAdmin);
+            context.SaveChanges();
+
             var passwordHasher = new PasswordHasher();
             var passwordHash = passwordHasher.Hash("111111");
 
@@ -101,6 +110,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 Email = "default@gmail.com",
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg",
                 PasswordHash = passwordHash,
+                Roles = new List<Role> { roleStudent },
             };
 
             var usersSkills1 = new UsersSkills
@@ -394,13 +404,6 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             jsCourse.CoursesMaterials = jsMaterials;
 
             context.Courses.Add(jsCourse);
-            context.SaveChanges();
-
-            var roleCreator = new Role { Name = "Creator" };
-            var roleAdmin = new Role { Name = "Admin" };
-
-            context.Roles.Add(roleCreator);
-            context.Roles.Add(roleAdmin);
             context.SaveChanges();
         }
     }

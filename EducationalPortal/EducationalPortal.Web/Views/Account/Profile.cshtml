@@ -70,12 +70,17 @@
                     <div class="card-body">
                         <h5 class="card-title">@course.Name</h5>
                         <p class="card-text">@course.ShortDescription</p>
+                        <div class="d-flex flex-row">
+                            <a asp-controller="Courses"  asp-action="Edit" asp-route-id="@course.Id"
+                                class="btn btn-primary mx-2" style="z-index:1000">Edit</a>
+                            <a asp-controller="Courses"  asp-action="Delete" asp-route-id="@course.Id"
+                                class="btn btn-danger mx-2" style="z-index:1000">Delete</a>
+                        </div>
                     </div>
-                    <a asp-action="Details" asp-controller="Courses" asp-route-id="@course.Id" class="stretched-link"></a>
-                    <a asp-controller="Courses"  asp-action="Edit" asp-route-id="@course.Id"
-                                class="btn btn-primary my-2" style="z-index:1000">Edit</a>
+                    <a asp-action="Details" asp-controller="Courses" asp-route-id="@course.Id" 
+                       class="stretched-link"></a>
                 </div>
-                    }
+            }
         </div>
     </article>
 }

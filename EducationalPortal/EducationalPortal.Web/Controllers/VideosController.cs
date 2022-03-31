@@ -107,5 +107,12 @@ namespace EducationalPortal.Web.Controllers
                 return Json(new { success = false, message = "This video is used in other courses!" });
             }
         }
+
+        [Authorize(Roles = "Student")]
+        public async Task<PartialViewResult> Video(int id)
+        {
+            var video = await this._videosRepository.GetOneAsync(id, v => v.Quality);
+            return PartialView("_Video", video);
+        }
     }
 }

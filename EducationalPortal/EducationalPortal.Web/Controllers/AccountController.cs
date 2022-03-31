@@ -182,7 +182,7 @@ namespace EducationalPortal.Web.Controllers
 
             var role = (await this._rolesRepository.GetAllAsync(r => r.Name == roleName)).FirstOrDefault();
             var user = await this._usersService.GetUserAsync(email);
-            user.Role = role;
+            user.Roles.Add(role);
             await this._usersService.UpdateUserAsync(user);
         }
 
