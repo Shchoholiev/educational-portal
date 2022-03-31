@@ -36,16 +36,20 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Author author)
         {
-            if ((await this._authorsRepository.GetAllAsync(a => a.FullName == author.FullName)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Author already exists!");
-                return PartialView("_CreateAuthor", author);
+                if ((await this._authorsRepository.GetAllAsync(a => a.FullName == author.FullName)).Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Author already exists!");
+                }
+                else
+                {
+                    await this._authorsRepository.AddAsync(author);
+                    return Json(new { success = true });
+                }
             }
-            else
-            {
-                await this._authorsRepository.AddAsync(author);
-                return Json(new { success = true });
-            }
+
+            return PartialView("_CreateAuthor", author);
         }
 
         [HttpPost]

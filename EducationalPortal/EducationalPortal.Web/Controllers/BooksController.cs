@@ -49,36 +49,40 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(BookDTO bookDTO)
         {
-            if ((await this._booksRepository.GetAllAsync(b => b.Name == bookDTO.Name)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Video with this name already exists!");
-                return PartialView("_CreateBook", bookDTO);
-            }
-            else
-            {
-                var regex = new Regex("[a-b0-9]*/");
-                var extensionName = regex.Split(bookDTO.File.ContentType);
-                var extension = (await this._extensionsRepository.GetAllAsync(e => e.Name == extensionName[1]))
-                                                                 .FirstOrDefault();
-                var book = new Book 
-                { 
-                    Name = bookDTO.Name, 
-                    PagesCount = bookDTO.PagesCount, 
-                    PublicationYear = bookDTO.PublicationYear,
-                    Authors = bookDTO.Authors,
-                    Extension = extension ?? new Extension { Name = extensionName[1] }
-                };
-
-                using (var stream = bookDTO.File.OpenReadStream())
+                if ((await this._booksRepository.GetAllAsync(b => b.Name == bookDTO.Name)).Count() > 0)
                 {
-                    book.Link = await this._cloudStorageService.UploadAsync(stream, bookDTO.File.FileName,
-                                                                        bookDTO.File.ContentType, "books");
+                    ModelState.AddModelError(string.Empty, "Video with this name already exists!");
                 }
+                else
+                {
+                    var regex = new Regex("[a-b0-9]*/");
+                    var extensionName = regex.Split(bookDTO.File.ContentType);
+                    var extension = (await this._extensionsRepository.GetAllAsync(e => e.Name == extensionName[1]))
+                                                                     .FirstOrDefault();
+                    var book = new Book
+                    {
+                        Name = bookDTO.Name,
+                        PagesCount = bookDTO.PagesCount,
+                        PublicationYear = bookDTO.PublicationYear,
+                        Authors = bookDTO.Authors,
+                        Extension = extension ?? new Extension { Name = extensionName[1] }
+                    };
 
-                this._booksRepository.Attach(book);
-                await this._booksRepository.AddAsync(book);
-                return Json(new { success = true });
+                    using (var stream = bookDTO.File.OpenReadStream())
+                    {
+                        book.Link = await this._cloudStorageService.UploadAsync(stream, bookDTO.File.FileName,
+                                                                            bookDTO.File.ContentType, "books");
+                    }
+
+                    this._booksRepository.Attach(book);
+                    await this._booksRepository.AddAsync(book);
+                    return Json(new { success = true });
+                }
             }
+
+            return PartialView("_CreateBook", bookDTO);
         }
 
         [HttpPost]

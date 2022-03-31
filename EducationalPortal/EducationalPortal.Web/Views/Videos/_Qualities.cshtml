@@ -6,7 +6,7 @@
     <select name="Quality.Id" class="form-select" id="quality"
             asp-items="@(new SelectList(Model, nameof(Quality.Id), nameof(Quality.Name)))">
         <option class="editable" value="0"></option>
-        <option selected>Select an option</option>
+        <option value="" selected>Select an option</option>
     </select>
     <input name="Quality.Name" class="editOption" style="display:none;">
 </div>

@@ -30,7 +30,7 @@
     }
 </section>
 
-<div class="mt-2">
+<div class="mt-2" id="createArticles">
     @await Html.PartialAsync("_CreateArticle", new ArticleDTO())
 </div>
 
@@ -74,7 +74,7 @@
     });
 
     function CreateArticle(){
-        var model = $(`#createArticles`).serialize();
+        var model = $(`#formArticles`).serialize();
         $.ajax({  
             type: "POST",  
             url: `/Articles/Create`,

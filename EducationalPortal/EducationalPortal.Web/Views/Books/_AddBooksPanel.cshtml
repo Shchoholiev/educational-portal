@@ -38,7 +38,7 @@
     }
 </section>
 
-<div class="mt-2">
+<div class="mt-2" id="createBooks">
     @await Html.PartialAsync("_CreateBook", new BookDTO())
 </div>
 
@@ -82,7 +82,7 @@
     });
 
     function CreateBook(){
-        var form = document.getElementById(`createBooks`);
+        var form = document.getElementById(`formBooks`);
         var formData = new FormData(form);
         var files = $('#File').prop("files");
         formData.append("File", files[0]);
