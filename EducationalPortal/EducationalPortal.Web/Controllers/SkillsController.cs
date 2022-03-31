@@ -35,16 +35,20 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Skill skill)
         {
-            if ((await this._skillsRepository.GetAllAsync(s => s.Name == skill.Name)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Skill already exists!");
-                return PartialView("_CreateSkill", skill);
+                if ((await this._skillsRepository.GetAllAsync(s => s.Name == skill.Name)).Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Skill already exists!");
+                }
+                else
+                {
+                    await this._skillsRepository.AddAsync(skill);
+                    return Json(new { success = true });
+                }
             }
-            else
-            {
-                await this._skillsRepository.AddAsync(skill);
-                return Json(new { success = true });
-            }
+
+            return PartialView("_CreateSkill", skill);
         }
 
         [HttpPost]

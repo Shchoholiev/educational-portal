@@ -74,7 +74,7 @@ namespace EducationalPortal.Web.Controllers
             }
             await this._usersService.UpdateUserAsync(user);
 
-            return RedirectToAction("Profile", new { email = user.Email });
+            return RedirectToAction("Profile");
         }
 
         [HttpGet]

@@ -122,20 +122,24 @@ namespace EducationalPortal.Web.Controllers
         [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Create(CourseDTO courseDTO)
         {
-            if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Course with this name already exists!");
-                return PartialView("_CreateCourse", courseDTO);
-            }
-            else
-            {
-                var course = this._mapper.Map(courseDTO);
-                var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                course.Author = await _usersService.GetUserAsync(email);
-                await this._coursesRepository.AddAsync(course);
+                if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                }
+                else
+                {
+                    var course = this._mapper.Map(courseDTO);
+                    var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                    course.Author = await _usersService.GetUserAsync(email);
+                    await this._coursesRepository.AddAsync(course);
 
-                return Json(new { success = true });
+                    return Json(new { success = true });
+                }
             }
+
+            return PartialView("_CreateCourse", courseDTO);
         }
 
         [HttpPost]
@@ -165,28 +169,32 @@ namespace EducationalPortal.Web.Controllers
         [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Edit(CourseDTO courseDTO)
         {
-            if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name 
+            if (ModelState.IsValid)
+            {
+                if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name
                                                             && c.Id != courseDTO.Id)).Count() > 0)
-            {
-                ModelState.AddModelError(string.Empty, "Course with this name already exists!");
-                return PartialView("_EditCourse", courseDTO);
-            }
-            else
-            {
-                var mappedCourse = this._mapper.Map(courseDTO);
-                var course = await this._coursesRepository.GetCourseAsync(courseDTO.Id);
+                {
+                    ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                }
+                else
+                {
+                    var mappedCourse = this._mapper.Map(courseDTO);
+                    var course = await this._coursesRepository.GetCourseAsync(courseDTO.Id);
 
-                course.Name = mappedCourse.Name;
-                course.ShortDescription = mappedCourse.ShortDescription;
-                course.Description = mappedCourse.Description;
-                course.Price = mappedCourse.Price;
-                course.Thumbnail = mappedCourse.Thumbnail;
-                course.CoursesMaterials = mappedCourse.CoursesMaterials;
-                course.CoursesSkills = mappedCourse.CoursesSkills;
+                    course.Name = mappedCourse.Name;
+                    course.ShortDescription = mappedCourse.ShortDescription;
+                    course.Description = mappedCourse.Description;
+                    course.Price = mappedCourse.Price;
+                    course.Thumbnail = mappedCourse.Thumbnail;
+                    course.CoursesMaterials = mappedCourse.CoursesMaterials;
+                    course.CoursesSkills = mappedCourse.CoursesSkills;
 
-                await this._coursesRepository.UpdateAsync(course);
-                return Json(new { success = true });
+                    await this._coursesRepository.UpdateAsync(course);
+                    return Json(new { success = true });
+                }
             }
+
+            return PartialView("_EditCourse", courseDTO);
         }
 
         [HttpGet]

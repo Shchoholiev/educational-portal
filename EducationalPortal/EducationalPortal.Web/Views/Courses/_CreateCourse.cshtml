@@ -12,6 +12,7 @@
         <div class="">
             <label class="control-label">Thumbnail</label>
             <input id="thumbnailFile" class="form-control" type="file" onchange="FileToLink()">
+            <span asp-validation-for="Thumbnail" class="text-danger"></span> 
         </div>
     </div>
     <div class="form-group mb-2"> 
@@ -30,6 +31,30 @@
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 </form>
+<div class="form-group mb-2">
+    <h6>Skills:</h6>
+    <form id="Skills">
+        @if (Model?.Skills != null)
+        {
+            @await Html.PartialAsync("~/Views/Skills/_Skills.cshtml", Model.Skills)
+        }
+    </form>
+    <span asp-validation-for="Skills" class="text-danger"></span>
+    <input type="button" value="Add Skills" class="btn btn-primary" onclick="LoadAddSkills()"/>
+</div>
+<div class="form-group mb-2">
+    <h6>Materials:</h6>
+    <form id="materials">
+        @if (Model?.Materials != null)
+        {
+            @await Html.PartialAsync("_Materials", Model.Materials)
+        }
+    </form>
+    <span asp-validation-for="Materials" class="text-danger"></span>
+    <input type="button" value="Add Videos" class="btn btn-primary" onclick="LoadAddVideos()"/>
+    <input type="button" value="Add Books" class="btn btn-primary" onclick="LoadAddBooks()"/>
+    <input type="button" value="Add Articles" class="btn btn-primary" onclick="LoadAddArticles()"/>
+</div>
 
 <script>
     function FileToLink() {
