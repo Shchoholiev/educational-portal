@@ -3,6 +3,7 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Repository
 {
@@ -72,21 +73,23 @@ namespace EducationalPortal.Infrastructure.Repository
                                  .FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.User.Email == email);
         }
 
-        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email,
-                                                                              int pageSize, int pageNumber)
+        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, 
+                                            int pageNumber, Expression<Func<UsersCourses, bool>> predicate)
         {
             return await this._db.UsersCourses.AsNoTracking()
                                               .Where(uc => uc.User.Email == email)
+                                              .Where(predicate)
                                               .Include(uc => uc.Course)
                                               .Skip((pageNumber - 1) * pageSize)
                                               .Take(pageSize)
                                               .ToListAsync();
         }
 
-        public async Task<int> GetUsersCoursesCountAsync(string email)
+        public async Task<int> GetUsersCoursesCountAsync(string email, Expression<Func<UsersCourses, bool>> predicate)
         {
             return await this._db.UsersCourses
                                  .Where(uc => uc.User.Email == email)
+                                 .Where(predicate)
                                  .CountAsync();
         }
 

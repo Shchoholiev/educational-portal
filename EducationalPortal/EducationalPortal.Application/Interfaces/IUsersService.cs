@@ -2,6 +2,7 @@
 using EducationalPortal.Application.DTO;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Interfaces
 {
@@ -17,8 +18,6 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<User?> GetUserAsync(string email);
 
-        Task<User?> GetUserWithSkillsAsync(string email);
-
         Task<User?> GetUserWithMaterialsAsync(string email);
 
         Task<User?> GetAuthorAsync(string email);
@@ -27,11 +26,12 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email);
 
-        Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, int pageNumber);
+        Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, int pageNumber,
+                                                                 Expression<Func<UsersCourses, bool>> predicate);
 
         Task UpdateUsersCoursesAsync(UsersCourses usersCourses);
 
-        Task<int> GetUsersCoursesCountAsync(string email);
+        Task<int> GetUsersCoursesCountAsync(string email, Expression<Func<UsersCourses, bool>> predicate);
 
         Task AddAcquiredSkills(int courseId, string email);
 

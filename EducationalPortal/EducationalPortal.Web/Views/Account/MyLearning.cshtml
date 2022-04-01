@@ -5,6 +5,20 @@
     ViewData["Title"] = "My Learning";
 }
 
+<nav class="navbar navbar-light">
+    <ul class="navbar-nav d-flex flex-row" style="margin: 0 auto">
+        <li class="nav-link nav-item mx-5 fs-5">
+            <a asp-action="MyLearning">All</a>
+        </li>
+        <li class="nav-link nav-item mx-5 fs-5">
+            <a asp-action="CoursesInProgress">In progress</a>
+        </li>
+        <li class="nav-link nav-item mx-5 fs-5">
+            <a asp-action="LearnedCourses">Learned</a>
+        </li>
+    </ul>
+</nav>
+
 <section class="d-flex flex-wrap">
     @foreach (var userCourse in Model)
     {

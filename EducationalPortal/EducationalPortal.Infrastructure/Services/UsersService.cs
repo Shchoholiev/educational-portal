@@ -5,6 +5,7 @@ using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.Identity;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Services
 {
@@ -116,10 +117,11 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._usersRepository.GetUsersCoursesAsync(courseId, email);
         }
 
-        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, 
-                                                                              int pageSize, int pageNumber)
+        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, 
+                                            int pageNumber, Expression<Func<UsersCourses, bool>> predicate)
         {
-            var usersCourses = await this._usersRepository.GetUsersCoursesPageAsync(email, pageSize, pageNumber);
+            var usersCourses = await this._usersRepository
+                                         .GetUsersCoursesPageAsync(email, pageSize, pageNumber, predicate);
             foreach (var uc in usersCourses)
             {
                 var learnedMaterialsCount = uc.LearnedMaterialsCount;
@@ -136,9 +138,9 @@ namespace EducationalPortal.Infrastructure.Services
             return usersCourses;
         }
 
-        public async Task<int> GetUsersCoursesCountAsync(string email)
+        public async Task<int> GetUsersCoursesCountAsync(string email, Expression<Func<UsersCourses, bool>> predicate)
         {
-            return await this._usersRepository.GetUsersCoursesCountAsync(email);
+            return await this._usersRepository.GetUsersCoursesCountAsync(email, predicate);
         }
 
         public async Task UpdateUsersCoursesAsync(UsersCourses usersCourses)

@@ -8,6 +8,7 @@ using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace EducationalPortal.Web.Controllers
@@ -80,13 +81,24 @@ namespace EducationalPortal.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MyLearning(PageParameters pageParameters)
         {
-            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, 
-                                    pageParameters.PageSize, pageParameters.PageNumber);
-            var totalCount = await this._usersService.GetUsersCoursesCountAsync(email);
-            var pagedList = new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
-
+            var pagedList = await this.GetPagedUsersCoursesAsync(pageParameters, uc => true);
             return View(pagedList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CoursesInProgress(PageParameters pageParameters)
+        {
+            var pagedList = await this.GetPagedUsersCoursesAsync(pageParameters,
+                    uc => uc.MaterialsCount > uc.LearnedMaterialsCount && uc.LearnedMaterialsCount > 0);
+            return View("MyLearning", pagedList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LearnedCourses(PageParameters pageParameters)
+        {
+            var pagedList = await this.GetPagedUsersCoursesAsync(pageParameters, 
+                                       uc => uc.MaterialsCount == uc.LearnedMaterialsCount);
+            return View("MyLearning", pagedList);
         }
 
         [HttpGet]
@@ -174,6 +186,16 @@ namespace EducationalPortal.Web.Controllers
             await this.AddToRole("Creator", email);
 
             return RedirectToAction("Profile");
+        }
+
+        private async Task<PagedList<UsersCourses>> GetPagedUsersCoursesAsync(PageParameters pageParameters,
+                                                    Expression<Func<UsersCourses, bool>> predicate)
+        {
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email,
+                                    pageParameters.PageSize, pageParameters.PageNumber, predicate);
+            var totalCount = await this._usersService.GetUsersCoursesCountAsync(email, predicate);
+            return new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
         }
 
         private async Task AddToRole(string roleName, string email)
