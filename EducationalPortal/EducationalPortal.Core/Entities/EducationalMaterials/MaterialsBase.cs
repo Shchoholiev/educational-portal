@@ -8,8 +8,8 @@ namespace EducationalPortal.Core.Entities.EducationalMaterials
 
         public string Link { get; set; }
 
-        public List<CoursesMaterials> CoursesMaterials { get; set; }
+        public List<CoursesMaterials?> CoursesMaterials { get; set; }
          
-        public List<User> Users { get; set; }
+        public List<User?> Users { get; set; }
     }
 }

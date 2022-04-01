@@ -1,6 +1,7 @@
 using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.DI;
 using EducationalPortal.Infrastructure.EF;
+using EducationalPortal.Web.DI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var context = new ApplicationContext();
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructure();
 builder.Services.AddServices();
+builder.Services.AddFluentValidators();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;

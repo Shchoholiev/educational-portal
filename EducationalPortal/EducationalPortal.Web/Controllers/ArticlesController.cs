@@ -38,18 +38,22 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ArticleDTO articleDTO)
         {
-            if ((await this._articlesRepository.GetAllAsync(a => a.Link == articleDTO.Link)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Article with this link already exists!");
-                return PartialView("_CreateArticle", articleDTO);
+                if ((await this._articlesRepository.GetAllAsync(a => a.Link == articleDTO.Link)).Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Article with this link already exists!");
+                }
+                else
+                {
+                    var article = this._mapper.Map(articleDTO);
+                    this._articlesRepository.Attach(article);
+                    await this._articlesRepository.AddAsync(article);
+                    return Json(new { success = true });
+                }
             }
-            else
-            {
-                var article = this._mapper.Map(articleDTO); 
-                this._articlesRepository.Attach(article);
-                await this._articlesRepository.AddAsync(article);
-                return Json(new { success = true });
-            }
+
+            return PartialView("_CreateArticle", articleDTO);
         }
 
         [HttpPost]

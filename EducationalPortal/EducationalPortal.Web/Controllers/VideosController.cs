@@ -56,25 +56,29 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(VideoDTO videoDTO)
         {
-            if ((await this._videosRepository.GetAllAsync(v => v.Name == videoDTO.Name)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Video with this name already exists!");
-                return PartialView("_CreateVideo", videoDTO);
-            }
-            else
-            {
-                var video = new Video { Name = videoDTO.Name };
-                using (var stream = videoDTO.File.OpenReadStream())
+                if ((await this._videosRepository.GetAllAsync(v => v.Name == videoDTO.Name)).Count() > 0)
                 {
-                    video.Link = await this._cloudStorageService.UploadAsync(stream, videoDTO.File.FileName,
-                                                                        videoDTO.File.ContentType, "videos");
+                    ModelState.AddModelError(string.Empty, "Video with this name already exists!");
                 }
-                video.Duration = DateTime.MinValue.AddSeconds(videoDTO.Duration);
-                video.Quality = new Quality { Id = videoDTO.Quality.Id, Name = videoDTO.Quality.Name ?? null };
-                this._videosRepository.Attach(video);
-                await this._videosRepository.AddAsync(video);
-                return Json(new { success = true });
+                else
+                {
+                    var video = new Video { Name = videoDTO.Name };
+                    using (var stream = videoDTO.File.OpenReadStream())
+                    {
+                        video.Link = await this._cloudStorageService.UploadAsync(stream, videoDTO.File.FileName,
+                                                                            videoDTO.File.ContentType, "videos");
+                    }
+                    video.Duration = DateTime.MinValue.AddSeconds(videoDTO.Duration);
+                    video.Quality = new Quality { Id = videoDTO.Quality.Id, Name = videoDTO.Quality.Name ?? null };
+                    this._videosRepository.Attach(video);
+                    await this._videosRepository.AddAsync(video);
+                    return Json(new { success = true });
+                }
             }
+
+            return PartialView("_CreateVideo", videoDTO);
         }
 
         [HttpPost]

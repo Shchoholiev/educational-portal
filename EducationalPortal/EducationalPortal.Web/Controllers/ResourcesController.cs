@@ -36,16 +36,20 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Resource resource)
         {
-            if ((await this._resourcesRepository.GetAllAsync(r => r.Name == resource.Name)).Count() > 0)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Resource already exists!");
-                return PartialView("_CreateResource", resource);
+                if ((await this._resourcesRepository.GetAllAsync(r => r.Name == resource.Name)).Count() > 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Resource already exists!");
+                }
+                else
+                {
+                    await this._resourcesRepository.AddAsync(resource);
+                    return Json(new { success = true });
+                }
             }
-            else
-            {
-                await this._resourcesRepository.AddAsync(resource);
-                return Json(new { success = true });
-            }
+
+            return PartialView("_CreateResource", resource);
         }
 
         [HttpGet]

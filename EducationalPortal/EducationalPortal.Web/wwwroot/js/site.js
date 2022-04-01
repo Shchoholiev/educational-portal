@@ -1,8 +1,6 @@
 ﻿function CreateCourse() {
     var form = document.getElementById(`course`);
     var formData = new FormData(form);
-    var files = $('#Thumbnail').prop("files");
-    formData.append("Thumbnail", files[0]);
 
     var skills = $("#Skills").serializeArray();
     skills.forEach(function (fields) {
@@ -173,7 +171,7 @@ function DeleteMaterial(id, url, pageNumber) {
 }
 
 function CreateMaterial(url, pageNumber) {
-    var form = document.getElementById(`create${url}`);
+    var form = document.getElementById(`form${url}`);
     var formData = new FormData(form);
     var files = $('#File').prop("files");
     formData.append("File", files[0]);

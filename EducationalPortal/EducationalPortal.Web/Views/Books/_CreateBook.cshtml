@@ -1,7 +1,7 @@
 ﻿@model EducationalPortal.Application.DTO.BookDTO
 
 <div class="form-group mb-2"> 
-    <form method="post" asp-action="Create" id="createBooks" enctype="multipart/form-data">
+    <form id="formBooks" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="d-flex flex-row mb-3">
             <div class="form-group" style="margin-right:10px"> 
@@ -28,5 +28,8 @@
     </form>
     <h6 class="mt-2">Authors:</h6>
     <form class="d-flex flex-wrap" style="margin-right:10px" id="Authors"></form>
+    <div>
+        <span asp-validation-for="Authors" class="text-danger"></span>
+    </div>
     <input type="button" value="Create Book" class="btn btn-primary" onclick="CreateBook()"/>
 </div>

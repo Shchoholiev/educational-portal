@@ -100,7 +100,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             context.SaveChanges();
 
             var passwordHasher = new PasswordHasher();
-            var passwordHash = passwordHasher.Hash("111111");
+            var passwordHash = passwordHasher.Hash("12345Yuiop-");
 
             var user = new User
             {
