@@ -1,7 +1,7 @@
-﻿using EducationalPortal.Application.Repository;
+﻿using EducationalPortal.Application.Paging;
+using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Web.Mapping;
-using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +24,9 @@ namespace EducationalPortal.Web.Controllers
         public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Author> chosenAuthors)
         {
             pageParameters.PageSize = 3;
-            var authors = await this._authorsRepository
-                                    .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber);
+            var authors = await this._authorsRepository.GetPageAsync(pageParameters);
             var skillCreateModels = this._mapper.Map(authors, chosenAuthors);
-            var totalCount = await this._authorsRepository.GetCountAsync(s => true);
+            var totalCount = await this._authorsRepository.GetCountAsync(a => true);
             var pagedAuthors = new PagedList<AuthorCreateModel>(skillCreateModels, pageParameters, totalCount);
 
             return PartialView("_AddAuthors", pagedAuthors);
@@ -38,7 +37,7 @@ namespace EducationalPortal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if ((await this._authorsRepository.GetAllAsync(a => a.FullName == author.FullName)).Count() > 0)
+                if (await this._authorsRepository.Exists(a => a.FullName == author.FullName))
                 {
                     ModelState.AddModelError(string.Empty, "Author already exists!");
                 }
@@ -70,15 +69,15 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int idAuthors)
         {
-            if (await this._authorsRepository.GetCountAsync(a => a.Books.Any(b => b.Authors.Any(a => a.Id == idAuthors))) == 0)
+            if (await this._authorsRepository.Exists(a => a.Books.Any(b => b.Authors.Any(a => a.Id == idAuthors))))
+            {
+                return Json(new { success = false, message = "This author is used in other books!" });
+            }
+            else
             {
                 var author = await this._authorsRepository.GetOneAsync(idAuthors);
                 await this._authorsRepository.DeleteAsync(author);
                 return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false, message = "This author is used in other books!" });
             }
         }
     }

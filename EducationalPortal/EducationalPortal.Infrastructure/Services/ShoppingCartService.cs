@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
@@ -41,9 +42,11 @@ namespace EducationalPortal.Infrastructure.Services
             await this._cartItemsRepository.DeleteAsync(cartItem);
         }
 
-        public async Task<IEnumerable<CartItem>> GetPageAsync(string userId, int pageSize, int pageNumber)
+        public async Task<PagedList<CartItem>> GetPageAsync(string userId, PageParameters pageParameters)
         {
-            return await this._cartItemsRepository.GetPageAsync(pageSize, pageNumber, ci => ci.Course);
+            var cartItems = await this._cartItemsRepository.GetPageAsync(pageParameters, ci => ci.Course);
+            var totalCount = await this._cartItemsRepository.GetCountAsync(c => true);
+            return new PagedList<CartItem>(cartItems, pageParameters, totalCount);
         }
 
         public async Task<int> GetCountAsync(string userEmail)
@@ -122,10 +125,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<bool> Exists(int courseId, string userEmail)
         {
-            var cartItems = (await this._cartItemsRepository
-                              .GetAllAsync(ci => ci.Course.Id == courseId
-                                           && ci.User.Email == userEmail));
-            return cartItems.Count() > 0;
+            return await this._cartItemsRepository.Exists(ci => ci.Course.Id == courseId && ci.User.Email == userEmail);
         }
     }
 }

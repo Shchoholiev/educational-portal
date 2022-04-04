@@ -1,8 +1,8 @@
 ﻿using EducationalPortal.Application.DTO;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Web.Mapping;
-using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +25,7 @@ namespace EducationalPortal.Web.Controllers
         public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Article> chosenArticles)
         {
             pageParameters.PageSize = 8;
-            var articles = await this._articlesRepository
-                                     .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber,
-                                                   a => a.Resource);
+            var articles = await this._articlesRepository.GetPageAsync(pageParameters, a => a.Resource);
             var articlesCreateModels = this._mapper.Map(articles, chosenArticles);
             var totalCount = await this._articlesRepository.GetCountAsync(a => true);
             var pagedArticles = new PagedList<ArticleCreateModel>(articlesCreateModels, pageParameters, totalCount);
@@ -40,7 +38,7 @@ namespace EducationalPortal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if ((await this._articlesRepository.GetAllAsync(a => a.Link == articleDTO.Link)).Count() > 0)
+                if (await this._articlesRepository.Exists(a => a.Link == articleDTO.Link))
                 {
                     ModelState.AddModelError(string.Empty, "Article with this link already exists!");
                 }
@@ -74,16 +72,15 @@ namespace EducationalPortal.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int idArticles)
         {
-            if ((await this._articlesRepository.GetCountAsync(a => a.CoursesMaterials
-                                                              .Any(cm => cm.MaterialId == idArticles))) == 0)
+            if (await this._articlesRepository.Exists(a => a.CoursesMaterials.Any(cm => cm.MaterialId == idArticles)))
+            {
+                return Json(new { success = false, message = "This article is used in other courses!" });
+            }
+            else
             {
                 var article = await this._articlesRepository.GetOneAsync(idArticles);
                 await this._articlesRepository.DeleteAsync(article);
                 return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false, message = "This article is used in other courses!" });
             }
         }
     }

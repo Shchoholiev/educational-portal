@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Core.Entities;
+﻿using EducationalPortal.Application.Paging;
+using EducationalPortal.Core.Entities;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Repository
@@ -15,15 +16,15 @@ namespace EducationalPortal.Application.Repository
 
         Task<Course> GetFullCourseAsync(int id);
 
-        Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber);
+        Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters);
 
-        Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber, 
-                                               Expression<Func<Course, bool>> predicate);
-
-        Task<int> GetCountAsync();
+        Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, 
+                                             Expression<Func<Course, bool>> predicate);
 
         Task<int> GetMaterialsCountAsync(int courseId);
 
         Task<User> GetCourseAuthor(int courseId);
+
+        Task<bool> Exists(Expression<Func<Course, bool>> predicate);
     }
 }

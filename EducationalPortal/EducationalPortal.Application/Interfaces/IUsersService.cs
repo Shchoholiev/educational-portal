@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.Descriptions;
 using EducationalPortal.Application.DTO;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
@@ -26,12 +27,10 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email);
 
-        Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, int pageNumber,
-                                                                 Expression<Func<UsersCourses, bool>> predicate);
+        Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters,
+                                                               Expression<Func<UsersCourses, bool>> predicate);
 
         Task UpdateUsersCoursesAsync(UsersCourses usersCourses);
-
-        Task<int> GetUsersCoursesCountAsync(string email, Expression<Func<UsersCourses, bool>> predicate);
 
         Task AddAcquiredSkills(int courseId, string email);
 

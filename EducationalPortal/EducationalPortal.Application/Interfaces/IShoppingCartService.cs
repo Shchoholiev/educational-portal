@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Core.Entities;
+﻿using EducationalPortal.Application.Paging;
+using EducationalPortal.Core.Entities;
 
 namespace EducationalPortal.Application.Interfaces
 {
@@ -10,7 +11,7 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<IEnumerable<CartItem>> GetDeserialisedAsync(string cookies);
 
-        Task<IEnumerable<CartItem>> GetPageAsync(string userEmail, int pageSize, int pageNumber);
+        Task<PagedList<CartItem>> GetPageAsync(string userEmail, PageParameters pageParameters);
 
         Task<int> GetCountAsync(string userEmail);
 

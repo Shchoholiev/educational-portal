@@ -1,10 +1,9 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
-using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Web.Mapping;
-using EducationalPortal.Web.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -38,12 +37,8 @@ namespace EducationalPortal.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(PageParameters pageParameters)
         {
-            var courses = await this._coursesRepository
-                                    .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber);
-            var totalCount = await this._coursesRepository.GetCountAsync();
-            var pagedCourses = new PagedList<Course>(courses, pageParameters, totalCount);
-
-            return View(pagedCourses);
+            var courses = await this._coursesRepository.GetPageAsync(pageParameters);
+            return View(courses);
         }
 
         [HttpGet]
@@ -124,7 +119,7 @@ namespace EducationalPortal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name)).Count() > 0)
+                if (await this._coursesRepository.Exists(c => c.Name == courseDTO.Name))
                 {
                     ModelState.AddModelError(string.Empty, "Course with this name already exists!");
                 }
@@ -171,8 +166,7 @@ namespace EducationalPortal.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if ((await this._coursesRepository.GetPageAsync(1, 1, c => c.Name == courseDTO.Name
-                                                            && c.Id != courseDTO.Id)).Count() > 0)
+                if (await this._coursesRepository.Exists(c => c.Name == courseDTO.Name && c.Id != courseDTO.Id))
                 {
                     ModelState.AddModelError(string.Empty, "Course with this name already exists!");
                 }

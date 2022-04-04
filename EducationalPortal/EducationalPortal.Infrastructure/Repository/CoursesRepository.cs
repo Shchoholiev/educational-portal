@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Application.Repository;
+﻿using EducationalPortal.Application.Paging;
+using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Infrastructure.EF;
@@ -97,27 +98,28 @@ namespace EducationalPortal.Infrastructure.Repository
             return course;
         }
 
-        public async Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber)
+        public async Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters)
         {
-            var courses = this._table.AsNoTracking()
-                                     .Skip((pageNumber - 1) * pageSize)
-                                     .Take(pageSize);
-            return await courses.ToListAsync();
+            var courses = await this._table.AsNoTracking()
+                                           .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                           .Take(pageParameters.PageSize)
+                                           .ToListAsync();
+            var totalCount = await this._table.CountAsync();
+
+            return new PagedList<Course>(courses, pageParameters, totalCount);
         }
 
-        public async Task<IEnumerable<Course>> GetPageAsync(int pageSize, int pageNumber, 
-                                                      Expression<Func<Course, bool>> predicate)
+        public async Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, 
+                                                          Expression<Func<Course, bool>> predicate)
         {
-            var courses = this._table.AsNoTracking()
-                                     .Where(predicate)
-                                     .Skip((pageNumber - 1) * pageSize)
-                                     .Take(pageSize);
-            return await courses.ToListAsync();
-        }
+            var courses = await this._table.AsNoTracking()
+                                           .Where(predicate)
+                                           .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                           .Take(pageParameters.PageSize)
+                                           .ToListAsync();
+            var totalCount = await this._table.Where(predicate).CountAsync();
 
-        public async Task<int> GetCountAsync()
-        {
-            return await this._table.CountAsync();
+            return new PagedList<Course>(courses, pageParameters, totalCount);
         }
 
         public async Task<int> GetMaterialsCountAsync(int courseId)
@@ -131,6 +133,11 @@ namespace EducationalPortal.Infrastructure.Repository
         public async Task<User> GetCourseAuthor(int courseId)
         {
             return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId));
+        }
+
+        public async Task<bool> Exists(Expression<Func<Course, bool>> predicate)
+        {
+            return await this._table.AnyAsync(predicate);
         }
 
         private async Task SaveAsync()

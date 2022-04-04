@@ -1,10 +1,10 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Web.Mapping;
-using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 
 namespace EducationalPortal.Web.Controllers
 {
-    [Authorize(Roles = "Creator")]
     public class BooksController : Controller
     {
         private readonly IGenericRepository<Book> _booksRepository;
@@ -33,12 +32,11 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Creator")]
         public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Book> chosenBooks)
         {
             pageParameters.PageSize = 6;
-            var books = await this._booksRepository
-                                  .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber,
-                                                b => b.Authors, b => b.Extension);
+            var books = await this._booksRepository.GetPageAsync(pageParameters, b => b.Authors, b => b.Extension);
             var booksViewModels = this._mapper.Map(books, chosenBooks);
             var totalCount = await this._booksRepository.GetCountAsync(v => true);
             var pagedVideos = new PagedList<BookCreateModel>(booksViewModels, pageParameters, totalCount);
@@ -47,11 +45,12 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Create(BookDTO bookDTO)
         {
             if (ModelState.IsValid)
             {
-                if ((await this._booksRepository.GetAllAsync(b => b.Name == bookDTO.Name)).Count() > 0)
+                if (await this._booksRepository.Exists(b => b.Name == bookDTO.Name))
                 {
                     ModelState.AddModelError(string.Empty, "Video with this name already exists!");
                 }
@@ -86,6 +85,7 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Add(int idBooks, List<MaterialsBase> materials)
         {
             var book = await this._booksRepository.GetOneAsync(idBooks);
@@ -94,6 +94,7 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public IActionResult Remove(int idBooks, List<MaterialsBase> materials)
         {
             materials.Remove(materials.FirstOrDefault(m => m.Id == idBooks));
@@ -101,18 +102,18 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Delete(int idBooks)
         {
-            if ((await this._booksRepository.GetCountAsync(b => b.CoursesMaterials
-                                                           .Any(cm => cm.MaterialId == idBooks))) == 0)
+            if (await this._booksRepository.Exists(b => b.CoursesMaterials.Any(cm => cm.MaterialId == idBooks)))
+            {
+                return Json(new { success = false, message = "This book is used in other courses!" });
+            }
+            else
             {
                 var book = await this._booksRepository.GetOneAsync(idBooks);
                 await this._booksRepository.DeleteAsync(book);
                 return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false, message = "This book is used in other courses!" });
             }
         }
 

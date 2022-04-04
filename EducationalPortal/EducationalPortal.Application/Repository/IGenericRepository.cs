@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using EducationalPortal.Application.Paging;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Repository
 {
@@ -23,11 +24,13 @@ namespace EducationalPortal.Application.Repository
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                    params Expression<Func<TEntity, object>>[] includeProperties); 
 
-        Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber);
+        Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters);
 
-        Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber, 
+        Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters, 
                                    params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate);
+
+        Task<bool> Exists(Expression<Func<TEntity, bool>> predicate);
     }
 }

@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Application.Repository;
+﻿using EducationalPortal.Application.Paging;
+using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
@@ -73,24 +74,22 @@ namespace EducationalPortal.Infrastructure.Repository
                                  .FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.User.Email == email);
         }
 
-        public async Task<IEnumerable<UsersCourses>> GetUsersCoursesPageAsync(string email, int pageSize, 
-                                            int pageNumber, Expression<Func<UsersCourses, bool>> predicate)
+        public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters, 
+                                                                            Expression<Func<UsersCourses, bool>> predicate)
         {
-            return await this._db.UsersCourses.AsNoTracking()
+            var usersCourses =  await this._db.UsersCourses.AsNoTracking()
                                               .Where(uc => uc.User.Email == email)
                                               .Where(predicate)
                                               .Include(uc => uc.Course)
-                                              .Skip((pageNumber - 1) * pageSize)
-                                              .Take(pageSize)
+                                              .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                              .Take(pageParameters.PageSize)
                                               .ToListAsync();
-        }
+            var totalCount = await this._db.UsersCourses
+                                           .Where(uc => uc.User.Email == email)
+                                           .Where(predicate)
+                                           .CountAsync();
 
-        public async Task<int> GetUsersCoursesCountAsync(string email, Expression<Func<UsersCourses, bool>> predicate)
-        {
-            return await this._db.UsersCourses
-                                 .Where(uc => uc.User.Email == email)
-                                 .Where(predicate)
-                                 .CountAsync();
+            return new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
         }
 
         public async Task AddUsersCoursesAsync(UsersCourses usersCourses)

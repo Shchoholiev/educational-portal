@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Infrastructure.EF;
@@ -64,20 +65,20 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this.Include(query, includeProperties).ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber)
+        public async Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters)
         {
-            IQueryable<TEntity> query = this._table.AsNoTracking()
-                                                 .Skip((pageNumber - 1) * pageSize)
-                                                 .Take(pageSize);
-            return await this.Include(query).ToListAsync();
+            return await this._table.AsNoTracking()
+                                    .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                    .Take(pageParameters.PageSize)
+                                    .ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetPageAsync(int pageSize, int pageNumber,
-                                                       params Expression<Func<TEntity, object>>[] includeProperties)
+        public async Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters,
+                                                    params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = this._table.AsNoTracking()
-                                                 .Skip((pageNumber - 1) * pageSize)
-                                                 .Take(pageSize);
+                                                   .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                                   .Take(pageParameters.PageSize);
             return await this.Include(query, includeProperties).ToListAsync();
         }
 
@@ -92,6 +93,11 @@ namespace EducationalPortal.Infrastructure.Repository
             {
                 this._db.Attach(o);
             }
+        }
+
+        public async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await this._table.AnyAsync(predicate);
         }
 
         private IQueryable<TEntity> Include(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includeProperties)

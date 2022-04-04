@@ -1,6 +1,6 @@
 ﻿using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
-using EducationalPortal.Web.Paging;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -19,15 +19,12 @@ namespace EducationalPortal.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(PageParameters pageParameters)
         {
-            IEnumerable<CartItem> cartItems = new List<CartItem>();
-            var totalCount = new Int32();
+            var pagedCart = new PagedList<CartItem>();
 
             if (User.Identity.IsAuthenticated)
             {
                 var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                cartItems = (await this._shoppingCartService.GetPageAsync(userEmail,
-                             pageParameters.PageSize, pageParameters.PageNumber));
-                totalCount = await this._shoppingCartService.GetCountAsync(userEmail);
+                pagedCart = await this._shoppingCartService.GetPageAsync(userEmail, pageParameters);
             }
             else
             {
@@ -35,14 +32,14 @@ namespace EducationalPortal.Web.Controllers
                 if (cookies != null)
                 {
                     var deserialised = (await this._shoppingCartService.GetDeserialisedAsync(cookies));
-                    cartItems = deserialised.Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                            .Take(pageParameters.PageSize);
-                    totalCount = deserialised.Count();
+                    var cartItems = deserialised.Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                                .Take(pageParameters.PageSize);
+                    var totalCount = deserialised.Count();
+                    pagedCart = new PagedList<CartItem>(cartItems, pageParameters, totalCount);
                 }
             }
 
-            var pagedList = new PagedList<CartItem>(cartItems, pageParameters, totalCount);
-            return View(pagedList);
+            return View(pagedCart);
         }
 
         [HttpPost]

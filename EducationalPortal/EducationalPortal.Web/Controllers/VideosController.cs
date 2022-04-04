@@ -1,17 +1,16 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Web.Mapping;
-using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationalPortal.Web.Controllers
 {
-    [Authorize(Roles = "Creator")]
     public class VideosController : Controller
     {
         private readonly IGenericRepository<Video> _videosRepository;
@@ -33,12 +32,11 @@ namespace EducationalPortal.Web.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Creator")]
         public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Video> chosenVideos)
         {
             pageParameters.PageSize = 8;
-            var videos = await this._videosRepository
-                                   .GetPageAsync(pageParameters.PageSize, pageParameters.PageNumber,
-                                                 v => v.Quality);
+            var videos = await this._videosRepository.GetPageAsync(pageParameters, v => v.Quality);
             var videoViewModels = this._mapper.Map(videos, chosenVideos);
             var totalCount = await this._videosRepository.GetCountAsync(v => true);
             var pagedVideos = new PagedList<VideoCreateModel>(videoViewModels, pageParameters, totalCount);
@@ -47,6 +45,7 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Creator")]
         public async Task<PartialViewResult> GetQualities()
         {
             var qualities = await this._qualitiesRepository.GetAllAsync();
@@ -54,11 +53,12 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Create(VideoDTO videoDTO)
         {
             if (ModelState.IsValid)
             {
-                if ((await this._videosRepository.GetAllAsync(v => v.Name == videoDTO.Name)).Count() > 0)
+                if (await this._videosRepository.Exists(v => v.Name == videoDTO.Name))
                 {
                     ModelState.AddModelError(string.Empty, "Video with this name already exists!");
                 }
@@ -82,6 +82,7 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Add(int idVideos, List<MaterialsBase> materials)
         {
             var video = await this._videosRepository.GetOneAsync(idVideos);
@@ -90,6 +91,7 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public IActionResult Remove(int idVideos, List<MaterialsBase> materials)
         {
             materials.Remove(materials.FirstOrDefault(s => s.Id == idVideos));
@@ -97,18 +99,18 @@ namespace EducationalPortal.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> Delete(int idVideos)
         {
-            if ((await this._videosRepository.GetCountAsync(v => v.CoursesMaterials
-                                                            .Any(cm => cm.MaterialId == idVideos))) == 0)
+            if (await this._videosRepository.Exists(v => v.CoursesMaterials.Any(cm => cm.MaterialId == idVideos)))
+            {
+                return Json(new { success = false, message = "This video is used in other courses!" });
+            }
+            else
             {
                 var video = await this._videosRepository.GetOneAsync(idVideos);
                 await this._videosRepository.DeleteAsync(video);
                 return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false, message = "This video is used in other courses!" });
             }
         }
 

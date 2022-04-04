@@ -1,4 +1,4 @@
-﻿namespace EducationalPortal.Web.Paging
+﻿namespace EducationalPortal.Application.Paging
 {
     public class PageParameters
     {

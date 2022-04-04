@@ -1,10 +1,10 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.Identity;
-using EducationalPortal.Web.Paging;
 using EducationalPortal.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -81,24 +81,27 @@ namespace EducationalPortal.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MyLearning(PageParameters pageParameters)
         {
-            var pagedList = await this.GetPagedUsersCoursesAsync(pageParameters, uc => true);
-            return View(pagedList);
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, uc => true);
+            return View(usersCourses);
         }
 
         [HttpGet]
         public async Task<IActionResult> CoursesInProgress(PageParameters pageParameters)
         {
-            var pagedList = await this.GetPagedUsersCoursesAsync(pageParameters,
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                     uc => uc.MaterialsCount > uc.LearnedMaterialsCount && uc.LearnedMaterialsCount > 0);
-            return View("MyLearning", pagedList);
+            return View("MyLearning", usersCourses);
         }
 
         [HttpGet]
         public async Task<IActionResult> LearnedCourses(PageParameters pageParameters)
         {
-            var pagedList = await this.GetPagedUsersCoursesAsync(pageParameters, 
-                                       uc => uc.MaterialsCount == uc.LearnedMaterialsCount);
-            return View("MyLearning", pagedList);
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
+                                                    uc => uc.MaterialsCount == uc.LearnedMaterialsCount);
+            return View("MyLearning", usersCourses);
         }
 
         [HttpGet]
@@ -186,16 +189,6 @@ namespace EducationalPortal.Web.Controllers
             await this.AddToRole("Creator", email);
 
             return RedirectToAction("Profile");
-        }
-
-        private async Task<PagedList<UsersCourses>> GetPagedUsersCoursesAsync(PageParameters pageParameters,
-                                                    Expression<Func<UsersCourses, bool>> predicate)
-        {
-            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email,
-                                    pageParameters.PageSize, pageParameters.PageNumber, predicate);
-            var totalCount = await this._usersService.GetUsersCoursesCountAsync(email, predicate);
-            return new PagedList<UsersCourses>(usersCourses, pageParameters, totalCount);
         }
 
         private async Task AddToRole(string roleName, string email)
