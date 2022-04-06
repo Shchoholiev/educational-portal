@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace EducationalPortal.Application.DTO
+﻿namespace EducationalPortal.Application.DTO
 {
-    public class MaterialBaseDTO
+    public class MaterialBaseDTO : EntityBaseDTO
     {
         public string Name { get; set; }
 
-        public IFormFile File { get; set; }
+        public string Link { get; set; }
     }
 }

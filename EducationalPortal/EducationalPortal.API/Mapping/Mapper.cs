@@ -6,6 +6,7 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.API.ViewModels;
 using EducationalPortal.API.ViewModels.CreateViewModels;
+using EducationalPortal.Application.DTO.EducationalMaterials;
 
 namespace EducationalPortal.API.Mapping
 {
@@ -19,7 +20,9 @@ namespace EducationalPortal.API.Mapping
 
             cfg.CreateMap<Book, BookViewModel>()
             .ForMember(dest => dest.Extension,
-                opt => opt.MapFrom(src => src.Extension.Name));
+                opt => opt.MapFrom(src => src.Extension.Name))
+            .ForMember(dest => dest.Authors,
+                opt => opt.MapFrom(src => src.Authors.Select(a => a.FullName)));
 
             cfg.CreateMap<Article, ArticleViewModel>()
             .ForMember(dest => dest.Resource,
@@ -47,9 +50,17 @@ namespace EducationalPortal.API.Mapping
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore())
             .ForMember(dest => dest.Skills,
+                opt => opt.Ignore())
+            .ForMember(dest => dest.Id,
                 opt => opt.Ignore());
 
             cfg.CreateMap<Course, CourseDTO>();
+
+            cfg.CreateMap<Skill, SkillDTO>();
+
+            cfg.CreateMap<MaterialsBase, MaterialBaseDTO>();
+
+            cfg.CreateMap<User, UserDTO>();
 
         }).CreateMapper();
 
@@ -168,13 +179,29 @@ namespace EducationalPortal.API.Mapping
         public Course Map(CourseDTO courseDTO)
         {
             var course = this._mapper.Map<Course>(courseDTO);
-            
+            course = this.MapCourseJoinEntities(course, courseDTO);
+
+            return course;
+        }
+
+        public Course Map(Course course, CourseDTO courseDTO)
+        {
+            course = this._mapper.Map(courseDTO, course);
+            course = this.MapCourseJoinEntities(course, courseDTO);
+            course.Materials = null;
+            course.Skills = null;
+
+            return course;
+        }
+
+        private Course MapCourseJoinEntities(Course course, CourseDTO courseDTO)
+        {
             course.CoursesMaterials = new List<CoursesMaterials>();
             for (int i = 0; i < courseDTO.Materials.Count; i++)
             {
                 var courseMaterial = new CoursesMaterials
                 {
-                    Material = courseDTO.Materials[i],
+                    MaterialId = courseDTO.Materials[i].Id,
                     Index = i + 1,
                 };
                 course.CoursesMaterials.Add(courseMaterial);
@@ -183,7 +210,7 @@ namespace EducationalPortal.API.Mapping
             course.CoursesSkills = new List<CoursesSkills>();
             foreach (var skill in courseDTO.Skills)
             {
-                course.CoursesSkills.Add(new CoursesSkills { Skill = skill });
+                course.CoursesSkills.Add(new CoursesSkills { SkillId = skill.Id });
             }
 
             return course;

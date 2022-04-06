@@ -1,12 +1,12 @@
 using EducationalPortal.API.DI;
 using EducationalPortal.Infrastructure.DI;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddControllers().AddNewtonsoftJson(options => 
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("allowMyOrigin",

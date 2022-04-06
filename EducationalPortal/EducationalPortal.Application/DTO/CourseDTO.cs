@@ -1,7 +1,4 @@
-﻿using EducationalPortal.Core.Entities;
-using EducationalPortal.Core.Entities.EducationalMaterials;
-
-namespace EducationalPortal.Application.DTO
+﻿namespace EducationalPortal.Application.DTO
 {
     public class CourseDTO
     {
@@ -17,8 +14,8 @@ namespace EducationalPortal.Application.DTO
 
         public int Price { get; set; }
 
-        public List<Skill> Skills { get; set; }
+        public List<SkillDTO> Skills { get; set; }
 
-        public List<MaterialsBase> Materials { get; set; }
+        public List<MaterialBaseDTO> Materials { get; set; }
     }
 }

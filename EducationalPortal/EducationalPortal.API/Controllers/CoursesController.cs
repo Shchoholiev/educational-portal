@@ -13,7 +13,7 @@ using EducationalPortal.API.ViewModels;
 
 namespace EducationalPortal.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/courses")]
     public class CoursesController : Controller
@@ -59,7 +59,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<Course>> GetCourse(int id)
+        public async Task<ActionResult<CourseViewModel>> GetCourse(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             if (course == null)
@@ -72,11 +72,12 @@ namespace EducationalPortal.API.Controllers
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 var user = await this._usersService.GetUserWithMaterialsAsync(email);
                 var courseViewModel = this._mapper.Map(course, user.Materials);
-                return Ok(courseViewModel);
+                return courseViewModel;
             }
             else
             {
-                return course;
+                var courseViewModel = this._mapper.Map(course, new List<MaterialsBase>());
+                return courseViewModel;
             }
         }
 
@@ -93,8 +94,79 @@ namespace EducationalPortal.API.Controllers
             return learnCourse;
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Create([FromBody] CourseDTO courseDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await this._coursesRepository.Exists(c => c.Name == courseDTO.Name))
+                {
+                    ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                }
+                else
+                {
+                    var course = this._mapper.Map(courseDTO);
+                    var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                    course.Author = await _usersService.GetUserAsync(email);
+                    await this._coursesRepository.AddAsync(course);
+                    var createdCourse = this._mapper.Map(course, new List<MaterialsBase>());
+
+                    return CreatedAtAction("GetCourse", new { id = course.Id }, createdCourse);
+                }
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpGet("edit/{id}")]
+        [Authorize(Roles = "Creator")]
+        public async Task<ActionResult<CourseDTO>> Edit(int id)
+        {
+            var course = await this._coursesRepository.GetFullCourseAsync(id);
+            var courseDTO = this._mapper.Map(course);
+            return courseDTO;
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Edit(int id, [FromBody] CourseDTO courseDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await this._coursesRepository.Exists(c => c.Name == courseDTO.Name && c.Id != id))
+                {
+                    ModelState.AddModelError(string.Empty, "Course with this name already exists!");
+                }
+                else
+                {
+
+                    var course = await this._coursesRepository.GetFullCourseAsync(id);
+                    this._mapper.Map(course, courseDTO);
+                    await this._coursesRepository.UpdateAsync(course);
+                    return NoContent();
+                }
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Creator")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var course = await this._coursesRepository.GetFullCourseAsync(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            await this._coursesRepository.DeleteAsync(course);
+
+            return NoContent();
+        }
+
         [HttpPut("learned")]
-        public async Task<IActionResult> Learned([FromQuery]int materialId, [FromQuery]int courseId)
+        public async Task<ActionResult<int>> Learned([FromQuery]int materialId, [FromQuery]int courseId)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var userCourse = await this._usersService.GetUsersCoursesAsync(courseId, email);
@@ -111,116 +183,38 @@ namespace EducationalPortal.API.Controllers
                 await this._usersService.AddAcquiredSkills(courseId, email);
             }
 
-            return Ok();
+            return progress;
         }
 
-        //public async Task<PartialViewResult> Unlearned(int materialId, int courseId)
-        //{
-        //    var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        //    var userCourse = await this._usersService.GetUsersCoursesAsync(courseId, email);
-        //    userCourse.LearnedMaterialsCount--;
-        //    await this._usersService.UpdateUsersCoursesAsync(userCourse);
+        [HttpPut("unlearned")]
+        public async Task<ActionResult<int>> Unlearned([FromQuery]int materialId, [FromQuery]int courseId)
+        {
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var userCourse = await this._usersService.GetUsersCoursesAsync(courseId, email);
+            userCourse.LearnedMaterialsCount--;
+            await this._usersService.UpdateUsersCoursesAsync(userCourse);
 
-        //    var user = await this._usersService.GetUserWithMaterialsAsync(email);
-        //    user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
-        //    await this._usersService.UpdateUserAsync(user);
+            var user = await this._usersService.GetUserWithMaterialsAsync(email);
+            user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
+            await this._usersService.UpdateUserAsync(user);
 
-        //    var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
-        //    return PartialView("_Progress", progress);
-        //}
+            var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
 
-        //[HttpGet]
-        //[Authorize(Roles = "Creator")]
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+            return progress;
+        }
 
-        //[HttpPost]
-        //[Authorize(Roles = "Creator")]
-        //public async Task<IActionResult> Create(CourseDTO courseDTO)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (await this._coursesRepository.Exists(c => c.Name == courseDTO.Name))
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Course with this name already exists!");
-        //        }
-        //        else
-        //        {
-        //            var course = this._mapper.Map(courseDTO);
-        //            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        //            course.Author = await _usersService.GetUserAsync(email);
-        //            await this._coursesRepository.AddAsync(course);
+        [HttpPost("fileToLink/{blobContainer}")]
+        [Authorize(Roles = "Creator")]
+        public async Task<ActionResult<string>> FileToLink(string blobContainer, IFormFile file)
+        {
+            var link = String.Empty;
+            using (var stream = file.OpenReadStream())
+            {
+                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
+                                                                   blobContainer);
+            }
 
-        //            return Json(new { success = true });
-        //        }
-        //    }
-
-        //    return PartialView("_CreateCourse", courseDTO);
-        //}
-
-        //[HttpPost]
-        //[Authorize(Roles = "Creator")]
-        //public async Task<IActionResult> GetThumbnail(IFormFile file)
-        //{
-        //    var link = String.Empty;
-        //    using (var stream = file.OpenReadStream())
-        //    {
-        //        link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
-        //                                                           "thumbnails");
-        //    }
-
-        //    return PartialView("_Thumbnail", link);
-        //}
-
-        //[HttpGet]
-        //[Authorize(Roles = "Creator")]
-        //public async Task<IActionResult> Edit(int id)
-        //{
-        //    var course = await this._coursesRepository.GetFullCourseAsync(id);
-        //    var courseDTO = this._mapper.Map(course);
-        //    return View(courseDTO);
-        //}
-
-        //[HttpPost]
-        //[Authorize(Roles = "Creator")]
-        //public async Task<IActionResult> Edit(CourseDTO courseDTO)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (await this._coursesRepository.Exists(c => c.Name == courseDTO.Name && c.Id != courseDTO.Id))
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Course with this name already exists!");
-        //        }
-        //        else
-        //        {
-        //            var mappedCourse = this._mapper.Map(courseDTO);
-        //            var course = await this._coursesRepository.GetCourseAsync(courseDTO.Id);
-
-        //            course.Name = mappedCourse.Name;
-        //            course.ShortDescription = mappedCourse.ShortDescription;
-        //            course.Description = mappedCourse.Description;
-        //            course.Price = mappedCourse.Price;
-        //            course.Thumbnail = mappedCourse.Thumbnail;
-        //            course.CoursesMaterials = mappedCourse.CoursesMaterials;
-        //            course.CoursesSkills = mappedCourse.CoursesSkills;
-
-        //            await this._coursesRepository.UpdateAsync(course);
-        //            return Json(new { success = true });
-        //        }
-        //    }
-
-        //    return PartialView("_EditCourse", courseDTO);
-        //}
-
-        //[HttpGet]
-        //[Authorize(Roles = "Creator")]
-        //public async Task<IActionResult> Delete(int id)
-        //{
-        //    var course = await this._coursesRepository.GetFullCourseAsync(id);
-        //    await this._coursesRepository.DeleteAsync(course);
-        //    return RedirectToAction("Profile", "Account");
-        //}
+            return link;
+        }
     }
 }

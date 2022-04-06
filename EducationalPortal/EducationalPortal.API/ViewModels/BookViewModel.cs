@@ -1,6 +1,4 @@
-﻿using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
-
-namespace EducationalPortal.API.ViewModels
+﻿namespace EducationalPortal.API.ViewModels
 {
     public class BookViewModel : MaterialsBaseViewModel
     {
@@ -10,6 +8,6 @@ namespace EducationalPortal.API.ViewModels
 
         public int PublicationYear { get; set; }
 
-        public List<Author> Authors { get; set; }
+        public List<string> Authors { get; set; }
     }
 }

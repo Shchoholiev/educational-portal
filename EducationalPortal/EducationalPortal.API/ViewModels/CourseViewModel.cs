@@ -1,4 +1,4 @@
-﻿using EducationalPortal.Core.Entities;
+﻿using EducationalPortal.Application.DTO;
 
 namespace EducationalPortal.API.ViewModels
 {
@@ -16,9 +16,9 @@ namespace EducationalPortal.API.ViewModels
 
         public int Price { get; set; }
 
-        public User Author { get; set; }
+        public UserDTO Author { get; set; }
 
-        public List<Skill> Skills { get; set; }
+        public List<SkillDTO> Skills { get; set; }
 
         public List<MaterialsBaseViewModel> Materials { get; set; }
     }

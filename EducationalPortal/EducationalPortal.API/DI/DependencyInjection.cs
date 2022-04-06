@@ -5,6 +5,7 @@ using EducationalPortal.API.FluentValidation;
 using EducationalPortal.API.ViewModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using EducationalPortal.Application.DTO.EducationalMaterials;
 
 namespace EducationalPortal.API.DI
 {

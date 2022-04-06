@@ -1,11 +1,11 @@
-﻿using EducationalPortal.Application.DTO;
-using EducationalPortal.Application.Paging;
+﻿using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.API.Mapping;
 using EducationalPortal.API.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EducationalPortal.Application.DTO.EducationalMaterials;
 
 namespace EducationalPortal.API.Controllers
 {

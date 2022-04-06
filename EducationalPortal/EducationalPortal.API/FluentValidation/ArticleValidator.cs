@@ -1,4 +1,4 @@
-﻿using EducationalPortal.Application.DTO;
+﻿using EducationalPortal.Application.DTO.EducationalMaterials;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
