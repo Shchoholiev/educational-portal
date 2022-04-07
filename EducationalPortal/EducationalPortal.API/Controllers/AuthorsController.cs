@@ -4,6 +4,7 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
+using Newtonsoft.Json;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -20,9 +21,20 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<Author>>> GetAuthors([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors([FromQuery]PageParameters pageParameters)
         {
             var authors = await this._authorsRepository.GetPageAsync(pageParameters);
+            var metadata = new
+            {
+                authors.TotalItems,
+                authors.PageSize,
+                authors.PageNumber,
+                authors.TotalPages,
+                authors.HasNextPage,
+                authors.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
             return authors;
         }
 

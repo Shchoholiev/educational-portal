@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using EducationalPortal.Application.DTO.EducationalMaterials;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -34,9 +35,20 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedList<Book>>> GetBooks([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks([FromQuery]PageParameters pageParameters)
         {
             var books = await this._booksRepository.GetPageAsync(pageParameters, b => b.Authors, b => b.Extension);
+            var metadata = new
+            {
+                books.TotalItems,
+                books.PageSize,
+                books.PageNumber,
+                books.TotalPages,
+                books.HasNextPage,
+                books.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
             return books;
         }
 
