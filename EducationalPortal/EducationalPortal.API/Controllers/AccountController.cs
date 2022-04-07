@@ -13,7 +13,7 @@ using EducationalPortal.Core.Entities.JoinEntities;
 
 namespace EducationalPortal.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/account")]
     public class AccountController : Controller

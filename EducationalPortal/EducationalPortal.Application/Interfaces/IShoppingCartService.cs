@@ -13,8 +13,6 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<PagedList<CartItem>> GetPageAsync(string userEmail, PageParameters pageParameters);
 
-        Task<int> GetCountAsync(string userEmail);
-
         Task BuyAsync(string userEmail);
 
         Task<bool> Exists(int courseId, string userEmail);

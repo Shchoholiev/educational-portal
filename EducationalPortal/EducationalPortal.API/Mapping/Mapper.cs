@@ -62,6 +62,8 @@ namespace EducationalPortal.API.Mapping
 
             cfg.CreateMap<User, UserDTO>();
 
+            cfg.CreateMap<UserDTO, User>();
+
             cfg.CreateMap<Role, RoleDTO>();
 
         }).CreateMapper();
