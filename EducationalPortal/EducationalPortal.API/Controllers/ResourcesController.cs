@@ -1,19 +1,19 @@
 ﻿using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
-using EducationalPortal.API.Mapping;
-using EducationalPortal.API.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.Controllers
 {
     [Authorize(Roles = "Creator")]
+    [ApiController]
+    [Route("api/resources")]
     public class ResourcesController : Controller
     {
         private readonly IGenericRepository<Resource> _resourcesRepository;
-
-        private readonly Mapper _mapper = new();
 
         public ResourcesController(IGenericRepository<Resource> resourcesRepository)
         {
@@ -21,55 +21,60 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<PartialViewResult> Index(PageParameters pageParameters, Resource chosenResource)
+        public async Task<ActionResult<IEnumerable<Resource>>> GetResources([FromQuery]PageParameters pageParameters)
         {
-            pageParameters.PageSize = 3;
             var resources = await this._resourcesRepository.GetPageAsync(pageParameters);
-            var resourceCreateModels = this._mapper.Map(resources, chosenResource);
-            var totalCount = await this._resourcesRepository.GetCountAsync(s => true);
-            var pagedResources = new PagedList<ResourceCreateModel>(resourceCreateModels, pageParameters, totalCount);
+            var metadata = new
+            {
+                resources.TotalItems,
+                resources.PageSize,
+                resources.PageNumber,
+                resources.TotalPages,
+                resources.HasNextPage,
+                resources.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-            return PartialView("_AddResources", pagedResources);
+            return resources;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Resource resource)
+        public async Task<IActionResult> Create([FromBody]ResourceDTO resourceDTO)
         {
             if (ModelState.IsValid)
             {
-                if (await this._resourcesRepository.Exists(r => r.Name == resource.Name))
+                if (await this._resourcesRepository.Exists(r => r.Name == resourceDTO.Name))
                 {
                     ModelState.AddModelError(string.Empty, "Resource already exists!");
                 }
                 else
                 {
+                    var resource = new Resource { Id = resourceDTO.Id, Name = resourceDTO.Name };
                     await this._resourcesRepository.AddAsync(resource);
-                    return Json(new { success = true });
+                    return StatusCode(201);
                 }
             }
 
-            return PartialView("_CreateResource", resource);
+            return BadRequest(ModelState);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Choose(int id)
-        {
-            var resource = await this._resourcesRepository.GetOneAsync(id);
-            return PartialView("_Resource", resource);
-        }
-
-        [HttpPost]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             if (await this._resourcesRepository.Exists(r => r.Articles.Any(a => a.Resource.Id == id)))
             {
-                return Json(new { success = false, message = "This resource is used in other courses!" });
+                return BadRequest("This resource is used in other courses!");
             }
             else
             {
                 var resource = await this._resourcesRepository.GetOneAsync(id);
+                if (resource == null)
+                {
+                    return NotFound();
+                }
+
                 await this._resourcesRepository.DeleteAsync(resource);
-                return Json(new { success = true });
+                return NoContent();
             }
         }
     }

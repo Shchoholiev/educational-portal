@@ -2,7 +2,6 @@
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.API.Mapping;
-using EducationalPortal.API.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Application.DTO.EducationalMaterials;
@@ -10,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace EducationalPortal.API.Controllers
 {
-    //[Authorize(Roles = "Creator")]
+    [Authorize(Roles = "Creator")]
     [ApiController]
     [Route("api/articles")]
     public class ArticlesController : Controller
@@ -43,7 +42,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ArticleDTO articleDTO)
+        public async Task<IActionResult> Create([FromBody]ArticleDTO articleDTO)
         {
             if (ModelState.IsValid)
             {

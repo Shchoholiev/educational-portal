@@ -2,6 +2,6 @@
 {
     public class ResourceDTO : EntityBaseDTO
     {
-        public string Domain { get; set; }
+        public string Name { get; set; }
     }
 }
