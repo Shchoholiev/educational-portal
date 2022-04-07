@@ -65,6 +65,7 @@ namespace EducationalPortal.Infrastructure.Repository
                              .Include(u => u.CreatedCourses)
                              .Include(u => u.UsersSkills)
                                 .ThenInclude(us => us.Skill)
+                             .Include(u => u.Roles)
                              .FirstOrDefaultAsync(u => u.Email == email);
         }
 

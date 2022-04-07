@@ -62,6 +62,8 @@ namespace EducationalPortal.API.Mapping
 
             cfg.CreateMap<User, UserDTO>();
 
+            cfg.CreateMap<Role, RoleDTO>();
+
         }).CreateMapper();
 
         public IEnumerable<SkillCreateModel> Map(IEnumerable<Skill> skills, IEnumerable<Skill> chosenSkills)
@@ -163,6 +165,11 @@ namespace EducationalPortal.API.Mapping
             learnCourse.Materials = this.MapMaterials(course.Materials, learnedMaterials);
 
             return learnCourse;
+        }
+
+        public User Map(User user, UserDTO userDTO)
+        {
+            return this._mapper.Map(userDTO, user);
         }
 
         public Article Map(ArticleDTO articleDTO)

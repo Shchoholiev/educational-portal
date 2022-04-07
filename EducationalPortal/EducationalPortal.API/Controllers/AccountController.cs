@@ -8,10 +8,14 @@ using EducationalPortal.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using EducationalPortal.API.Mapping;
+using EducationalPortal.Core.Entities.JoinEntities;
 
 namespace EducationalPortal.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
+    [ApiController]
+    [Route("api/account")]
     public class AccountController : Controller
     {
         private readonly IUsersService _usersService;
@@ -20,97 +24,88 @@ namespace EducationalPortal.API.Controllers
 
         private readonly IUserManager _userManager;
 
-        private readonly ICloudStorageService _cloudStorageService;
-
         private readonly IGenericRepository<Role> _rolesRepository;
 
+        private readonly Mapper _mapper = new();
+
         public AccountController(IUsersService usersService, IUserManager userManager,
-                                 ICloudStorageService cloudStorageService,
                                  IShoppingCartService shoppingCartService,
                                  IGenericRepository<Role> rolesRepository)
         {
             this._usersService = usersService;
             this._userManager = userManager;
-            this._cloudStorageService = cloudStorageService;
             this._shoppingCartService = shoppingCartService;
             this._rolesRepository = rolesRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Profile()
+        public async Task<ActionResult<User>> Profile()
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await this._usersService.GetAuthorAsync(email);
-            return View(user);
+            return user;
         }
 
-        [HttpGet]
+        [HttpGet("author/{email}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Author(string email)
+        public async Task<ActionResult<User>> Author(string email)
         {
             var user = await this._usersService.GetAuthorAsync(email);
-            return View(user);
+            if (user == null || !user.Roles.Any(r => r.Name == "Creator"))
+            {
+                return NotFound();
+            }
+            return user;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Update(UserDTO userDTO, IFormFile avatar)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody]UserDTO userDTO)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await this._usersService.GetUserAsync(email);
-            user.Name = userDTO.Name;
-            user.Email = userDTO.Email;
-            user.Position = userDTO.Position;
-
-            if (avatar != null)
+            if (user == null)
             {
-                using (var stream = avatar.OpenReadStream())
-                {
-                    var uri = await this._cloudStorageService.UploadAsync(stream, avatar.FileName, 
-                                                                          avatar.ContentType, "avatars");
-                    await this._cloudStorageService.DeleteAsync(user.Avatar, "avatars");
-                    user.Avatar = uri;
-                }
+                return NotFound();
             }
+
+            if (email != userDTO.Email && await this._usersService.GetUserAsync(email) != null)
+            {
+                return BadRequest("User with this email already exists");
+            }
+
+            this._mapper.Map(user, userDTO);
             await this._usersService.UpdateUserAsync(user);
 
-            return RedirectToAction("Profile");
+            return NoContent();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> MyLearning(PageParameters pageParameters)
+        [HttpGet("my-learning")]
+        public async Task<ActionResult<IEnumerable<UsersCourses>>> MyLearning([FromQuery]PageParameters pageParameters)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, uc => true);
-            return View(usersCourses);
+            return usersCourses;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CoursesInProgress(PageParameters pageParameters)
+        [HttpGet("courses-in-progress")]
+        public async Task<IEnumerable<UsersCourses>> CoursesInProgress([FromQuery]PageParameters pageParameters)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                     uc => uc.MaterialsCount > uc.LearnedMaterialsCount && uc.LearnedMaterialsCount > 0);
-            return View("MyLearning", usersCourses);
+            return usersCourses;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> LearnedCourses(PageParameters pageParameters)
+        [HttpGet("learned-courses")]
+        public async Task<IEnumerable<UsersCourses>> LearnedCourses([FromQuery]PageParameters pageParameters)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                                                     uc => uc.MaterialsCount == uc.LearnedMaterialsCount);
-            return View("MyLearning", usersCourses);
+            return usersCourses;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register(string returnUrl)
-        {
-            returnUrl = this.CheckReturnUrl(returnUrl);
-            return View(new RegisterViewModel { ReturnUrl = returnUrl });
-        }
-
-        [HttpPost]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -123,29 +118,18 @@ namespace EducationalPortal.API.Controllers
                 {
                     await this._userManager.SignInAsync(this.HttpContext, userDTO, false);
                     await this.CheckShoppingCartCookies(userDTO.Email);
-                    return Redirect(model.ReturnUrl);
+                    return StatusCode(201);
                 }
                 else
                 {
-                    foreach (var error in result.Messages)
-                    {
-                        ModelState.AddModelError(string.Empty, error);
-                    }
+                    return BadRequest(result.Messages);
                 }
             }
 
-            return View(model);
+            return BadRequest();
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
-        {
-            returnUrl = this.CheckReturnUrl(returnUrl);
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
-        }
-
-        [HttpPost]
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -159,34 +143,31 @@ namespace EducationalPortal.API.Controllers
                     var user = await this._usersService.GetUserAsync(userDTO.Email);
                     userDTO.Name = user.Name;
                     await this._userManager.SignInAsync(this.HttpContext, userDTO, model.RememberMe);
-                    return Redirect(model.ReturnUrl);
+                    return Ok();
                 }
                 else
                 {
-                    foreach (var error in result.Messages)
-                    {
-                        ModelState.AddModelError(string.Empty, error);
-                    }
+                    return BadRequest(result.Messages);
                 }
             }
-            
-            return View(model);
+
+            return BadRequest();
         }
 
-        [HttpPost]
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             await this._userManager.SignOutAsync(this.HttpContext);
-            return RedirectToAction("Index", "Home");
+            return Ok();
         }
 
-        [HttpPost]
+        [HttpPut("became-creator")]
         public async Task<IActionResult> BecameCreator()
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             await this.AddToRole("Creator", email);
 
-            return RedirectToAction("Profile");
+            return Ok();
         }
 
         private async Task AddToRole(string roleName, string email)
