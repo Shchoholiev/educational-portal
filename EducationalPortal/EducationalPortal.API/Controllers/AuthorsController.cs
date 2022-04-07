@@ -1,19 +1,18 @@
 ﻿using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
-using EducationalPortal.API.Mapping;
-using EducationalPortal.API.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.Controllers
 {
     [Authorize(Roles = "Creator")]
+    [ApiController]
+    [Route("api/authors")]
     public class AuthorsController : Controller
     {
         private readonly IGenericRepository<Author> _authorsRepository;
-
-        private readonly Mapper _mapper = new();
 
         public AuthorsController(IGenericRepository<Author> authorsRepository)
         {
@@ -21,63 +20,49 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Author> chosenAuthors)
+        public async Task<ActionResult<PagedList<Author>>> GetAuthors([FromQuery]PageParameters pageParameters)
         {
-            pageParameters.PageSize = 3;
             var authors = await this._authorsRepository.GetPageAsync(pageParameters);
-            var skillCreateModels = this._mapper.Map(authors, chosenAuthors);
-            var totalCount = await this._authorsRepository.GetCountAsync(a => true);
-            var pagedAuthors = new PagedList<AuthorCreateModel>(skillCreateModels, pageParameters, totalCount);
-
-            return PartialView("_AddAuthors", pagedAuthors);
+            return authors;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Author author)
+        public async Task<IActionResult> Create([FromBody]AuthorDTO authorDTO)
         {
             if (ModelState.IsValid)
             {
-                if (await this._authorsRepository.Exists(a => a.FullName == author.FullName))
+                if (await this._authorsRepository.Exists(a => a.FullName == authorDTO.FullName))
                 {
                     ModelState.AddModelError(string.Empty, "Author already exists!");
                 }
                 else
                 {
+                    var author = new Author { FullName = authorDTO.FullName };
                     await this._authorsRepository.AddAsync(author);
-                    return Json(new { success = true });
+                    return StatusCode(201);
                 }
             }
 
-            return PartialView("_CreateAuthor", author);
+            return BadRequest(ModelState);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(int idAuthors, List<Author> authors)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var author = await this._authorsRepository.GetOneAsync(idAuthors);
-            authors.Add(author);
-            return PartialView("_Authors", authors);
-        }
-
-        [HttpPost]
-        public IActionResult Remove(int idAuthors, List<Author> authors)
-        {
-            authors.Remove(authors.FirstOrDefault(s => s.Id == idAuthors));
-            return PartialView("_Authors", authors);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int idAuthors)
-        {
-            if (await this._authorsRepository.Exists(a => a.Books.Any(b => b.Authors.Any(a => a.Id == idAuthors))))
+            if (await this._authorsRepository.Exists(a => a.Books.Any(b => b.Authors.Any(a => a.Id == id))))
             {
-                return Json(new { success = false, message = "This author is used in other books!" });
+                return BadRequest("This author is used in other books!");
             }
             else
             {
-                var author = await this._authorsRepository.GetOneAsync(idAuthors);
+                var author = await this._authorsRepository.GetOneAsync(id);
+                if (author == null)
+                {
+                    return NotFound();
+                }
+
                 await this._authorsRepository.DeleteAsync(author);
-                return Json(new { success = true });
+                return NoContent();
             }
         }
     }
