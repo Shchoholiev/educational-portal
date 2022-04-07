@@ -6,10 +6,13 @@ using EducationalPortal.API.ViewModels.CreateViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Application.DTO.EducationalMaterials;
+using Newtonsoft.Json;
 
 namespace EducationalPortal.API.Controllers
 {
-    [Authorize(Roles = "Creator")]
+    //[Authorize(Roles = "Creator")]
+    [ApiController]
+    [Route("api/articles")]
     public class ArticlesController : Controller
     {
         private readonly IGenericRepository<Article> _articlesRepository;
@@ -22,15 +25,21 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<PartialViewResult> Index(PageParameters pageParameters, List<Article> chosenArticles)
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticles([FromQuery]PageParameters pageParameters)
         {
-            pageParameters.PageSize = 8;
             var articles = await this._articlesRepository.GetPageAsync(pageParameters, a => a.Resource);
-            var articlesCreateModels = this._mapper.Map(articles, chosenArticles);
-            var totalCount = await this._articlesRepository.GetCountAsync(a => true);
-            var pagedArticles = new PagedList<ArticleCreateModel>(articlesCreateModels, pageParameters, totalCount);
+            var metadata = new
+            {
+                articles.TotalItems,
+                articles.PageSize,
+                articles.PageNumber,
+                articles.TotalPages,
+                articles.HasNextPage,
+                articles.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-            return PartialView("_AddArticlesPanel", pagedArticles);
+            return articles;
         }
 
         [HttpPost]
@@ -47,40 +56,30 @@ namespace EducationalPortal.API.Controllers
                     var article = this._mapper.Map(articleDTO);
                     this._articlesRepository.Attach(article);
                     await this._articlesRepository.AddAsync(article);
-                    return Json(new { success = true });
+                    return StatusCode(201);
                 }
             }
 
-            return PartialView("_CreateArticle", articleDTO);
+            return BadRequest(ModelState);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(int idArticles, List<MaterialsBase> materials)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var article = await this._articlesRepository.GetOneAsync(idArticles);
-            materials.Add(article);
-            return PartialView("_Materials", materials);
-        }
-
-        [HttpPost]
-        public IActionResult Remove(int idArticles, List<MaterialsBase> materials)
-        {
-            materials.Remove(materials.FirstOrDefault(m => m.Id == idArticles));
-            return PartialView("_Materials", materials);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int idArticles)
-        {
-            if (await this._articlesRepository.Exists(a => a.CoursesMaterials.Any(cm => cm.MaterialId == idArticles)))
+            if (await this._articlesRepository.Exists(a => a.CoursesMaterials.Any(cm => cm.MaterialId == id)))
             {
-                return Json(new { success = false, message = "This article is used in other courses!" });
+                return BadRequest("This article is used in other courses!");
             }
             else
             {
-                var article = await this._articlesRepository.GetOneAsync(idArticles);
+                var article = await this._articlesRepository.GetOneAsync(id);
+                if (article == null)
+                {
+                    return NotFound();
+                }
+
                 await this._articlesRepository.DeleteAsync(article);
-                return Json(new { success = true });
+                return NoContent();
             }
         }
     }
