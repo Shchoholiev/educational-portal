@@ -7,6 +7,7 @@ using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.API.ViewModels;
 using EducationalPortal.API.ViewModels.CreateViewModels;
 using EducationalPortal.Application.DTO.EducationalMaterials;
+using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.Mapping
 {
@@ -65,6 +66,10 @@ namespace EducationalPortal.API.Mapping
             cfg.CreateMap<UserDTO, User>();
 
             cfg.CreateMap<Role, RoleDTO>();
+
+            cfg.CreateMap<BookDTO, Book>();
+
+            cfg.CreateMap<AuthorDTO, Author>();
 
         }).CreateMapper();
 
@@ -177,6 +182,11 @@ namespace EducationalPortal.API.Mapping
         public Article Map(ArticleDTO articleDTO)
         {
             return this._mapper.Map<Article>(articleDTO);
+        }
+
+        public Book Map(BookDTO bookDTO)
+        {
+            return this._mapper.Map<Book>(bookDTO);
         }
 
         public CourseDTO Map(Course course)
