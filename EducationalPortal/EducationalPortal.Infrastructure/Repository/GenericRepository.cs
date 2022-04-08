@@ -65,21 +65,28 @@ namespace EducationalPortal.Infrastructure.Repository
             return await this.Include(query, includeProperties).ToListAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters)
         {
-            return await this._table.AsNoTracking()
-                                    .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                    .Take(pageParameters.PageSize)
-                                    .ToListAsync();
+            var entities = await this._table
+                                     .AsNoTracking()
+                                     .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                     .Take(pageParameters.PageSize)
+                                     .ToListAsync();
+            var totalCount = await this._table.CountAsync();
+
+            return new PagedList<TEntity>(entities, pageParameters, totalCount);
         }
 
-        public async Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters,
+        public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
                                                     params Expression<Func<TEntity, object>>[] includeProperties)
         {
             IQueryable<TEntity> query = this._table.AsNoTracking()
                                                    .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                                    .Take(pageParameters.PageSize);
-            return await this.Include(query, includeProperties).ToListAsync();
+            var entities = await this.Include(query, includeProperties).ToListAsync();
+            var totalCount = await this._table.CountAsync();
+
+            return new PagedList<TEntity>(entities, pageParameters, totalCount);
         }
 
         public async Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate)

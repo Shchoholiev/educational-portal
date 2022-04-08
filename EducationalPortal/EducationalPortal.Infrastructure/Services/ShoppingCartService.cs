@@ -44,14 +44,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<PagedList<CartItem>> GetPageAsync(string userId, PageParameters pageParameters)
         {
-            var cartItems = await this._cartItemsRepository.GetPageAsync(pageParameters, ci => ci.Course);
-            var totalCount = await this._cartItemsRepository.GetCountAsync(c => true);
-            return new PagedList<CartItem>(cartItems, pageParameters, totalCount);
-        }
-
-        public async Task<int> GetCountAsync(string userEmail)
-        {
-            return await this._cartItemsRepository.GetCountAsync(ci => ci.User.Email == userEmail);
+            return await this._cartItemsRepository.GetPageAsync(pageParameters, ci => ci.Course);
         }
 
         public async Task BuyAsync(string userEmail)

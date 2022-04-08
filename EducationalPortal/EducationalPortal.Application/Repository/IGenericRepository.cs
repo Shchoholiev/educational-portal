@@ -24,9 +24,9 @@ namespace EducationalPortal.Application.Repository
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                    params Expression<Func<TEntity, object>>[] includeProperties); 
 
-        Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters);
+        Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters);
 
-        Task<IEnumerable<TEntity>> GetPageAsync(PageParameters pageParameters, 
+        Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, 
                                    params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate);

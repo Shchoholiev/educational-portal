@@ -1,6 +1,8 @@
-﻿namespace EducationalPortal.Application.DTO
+﻿using EducationalPortal.Application.DTO;
+
+namespace EducationalPortal.API.ViewModels
 {
-    public class CourseDTO
+    public class CourseViewModel
     {
         public int Id { get; set; }
 
@@ -14,8 +16,10 @@
 
         public int Price { get; set; }
 
+        public UserDTO Author { get; set; }
+
         public List<SkillDTO> Skills { get; set; }
 
-        public List<MaterialBaseDTO> Materials { get; set; }
+        public List<MaterialsBaseViewModel> Materials { get; set; }
     }
 }
