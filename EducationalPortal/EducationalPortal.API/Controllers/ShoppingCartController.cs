@@ -2,11 +2,14 @@
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
 namespace EducationalPortal.API.Controllers
 {
+    [ApiController]
+    [Route("api/shopping-cart")]
     public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartService _shoppingCartService;
@@ -17,7 +20,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery]PageParameters pageParameters)
         {
             var pagedCart = new PagedList<CartItem>();
 
@@ -39,16 +42,26 @@ namespace EducationalPortal.API.Controllers
                 }
             }
 
-            return View(pagedCart);
+            var metadata = new
+            {
+                pagedCart.TotalItems,
+                pagedCart.PageSize,
+                pagedCart.PageNumber,
+                pagedCart.TotalPages,
+                pagedCart.HasNextPage,
+                pagedCart.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+            return pagedCart;
         }
 
-        [HttpPost]
+        [HttpPut("add-to-cart/{courseId}")]
         public async Task<IActionResult> AddToCart(int courseId)
         {
-            var userEmail = String.Empty;
             if (User.Identity.IsAuthenticated)
             {
-                userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 if (!await this._shoppingCartService.Exists(courseId, userEmail))
                 {
                     var cartItem = new CartItem
@@ -70,40 +83,41 @@ namespace EducationalPortal.API.Controllers
                 }
             }
 
-            return RedirectToAction("Index");
+            return Ok();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(int cartItemId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            var userEmail = String.Empty;
             if (User.Identity.IsAuthenticated)
             {
-                userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                await this._shoppingCartService.DeleteAsync(cartItemId);
+                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                await this._shoppingCartService.DeleteAsync(id);
             }
             else
             {
                 var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-                var matchRegex = new Regex(string.Format($"(-)?{cartItemId}"));
+                var matchRegex = new Regex(string.Format($"(-)?{id}"));
                 var newCookies = matchRegex.Replace(cookies, string.Empty);
                 this.SaveCookies(newCookies);
             }
 
-            return RedirectToAction("Index");
+            return NoContent();
         }
 
+        [HttpPut("buy")]
         public async Task<IActionResult> Buy()
         {
             if (User.Identity.IsAuthenticated)
             {
                 var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 await this._shoppingCartService.BuyAsync(userEmail);
-                return RedirectToAction("MyLearning", "Account");
+                Response.Redirect("/api/account/my-learning");
+                return Ok();
             }
             else
             {
-                return RedirectToAction("Register", "Account", new { returnUrl = "/ShoppingCart/Buy" });
+                return StatusCode(302, new { uri = "/api/account/register" });
             }
         }
 
