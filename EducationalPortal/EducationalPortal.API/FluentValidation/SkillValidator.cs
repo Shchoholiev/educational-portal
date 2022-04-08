@@ -1,9 +1,9 @@
-﻿using EducationalPortal.Core.Entities;
+﻿using EducationalPortal.Application.DTO;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class SkillValidator : AbstractValidator<Skill>
+    public class SkillValidator : AbstractValidator<SkillDTO>
     {
         public SkillValidator()
         {

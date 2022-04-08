@@ -1,11 +1,10 @@
 ﻿using EducationalPortal.Application.DTO;
-using EducationalPortal.Core.Entities;
-using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.API.FluentValidation;
 using EducationalPortal.API.ViewModels;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using EducationalPortal.Application.DTO.EducationalMaterials;
+using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.DI
 {
@@ -21,12 +20,12 @@ namespace EducationalPortal.API.DI
             services.AddTransient<IValidator<LoginViewModel>, LoginValidator>();
             services.AddTransient<IValidator<RegisterViewModel>, RegisterValidator>();
             services.AddTransient<IValidator<CourseDTO>, CourseValidator>();
-            services.AddTransient<IValidator<Skill>, SkillValidator>();
+            services.AddTransient<IValidator<SkillDTO>, SkillValidator>();
             services.AddTransient<IValidator<BookDTO>, BookValidator>();
             services.AddTransient<IValidator<ArticleDTO>, ArticleValidator>();
             services.AddTransient<IValidator<VideoDTO>, VideoValidator>();
-            services.AddTransient<IValidator<Author>, AuthorValidator>();
-            services.AddTransient<IValidator<Resource>, ResourceValidator>();
+            services.AddTransient<IValidator<AuthorDTO>, AuthorValidator>();
+            services.AddTransient<IValidator<ResourceDTO>, ResourceValidator>();
 
             return services;
         }

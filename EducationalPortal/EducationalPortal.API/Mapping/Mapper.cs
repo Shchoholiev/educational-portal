@@ -5,7 +5,6 @@ using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.API.ViewModels;
-using EducationalPortal.API.ViewModels.CreateViewModels;
 using EducationalPortal.Application.DTO.EducationalMaterials;
 using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
 
@@ -33,19 +32,7 @@ namespace EducationalPortal.API.Mapping
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore());
 
-            cfg.CreateMap<Skill, SkillCreateModel>();
-
-            cfg.CreateMap<Video, VideoCreateModel>();
-
-            cfg.CreateMap<Book, BookCreateModel>();
-
-            cfg.CreateMap<Author, AuthorCreateModel>();
-
-            cfg.CreateMap<Article, ArticleCreateModel>();
-
             cfg.CreateMap<ArticleDTO, Article>();
-
-            cfg.CreateMap<Resource, ResourceCreateModel>();
 
             cfg.CreateMap<CourseDTO, Course>()
             .ForMember(dest => dest.Materials,
@@ -72,87 +59,6 @@ namespace EducationalPortal.API.Mapping
             cfg.CreateMap<AuthorDTO, Author>();
 
         }).CreateMapper();
-
-        public IEnumerable<SkillCreateModel> Map(IEnumerable<Skill> skills, IEnumerable<Skill> chosenSkills)
-        {
-            var skillsCreateModels = this._mapper.Map<IEnumerable<SkillCreateModel>>(skills);
-            foreach (var skill in chosenSkills)
-            {
-                if (skillsCreateModels.Any(s => s.Id == skill.Id))
-                {
-                    skillsCreateModels.FirstOrDefault(s => s.Id == skill.Id).IsChosen = true;
-                }
-            }
-
-            return skillsCreateModels;
-        }
-
-        public IEnumerable<AuthorCreateModel> Map(IEnumerable<Author> authors, IEnumerable<Author> chosenAuthors)
-        {
-            var authorCreateModels = this._mapper.Map<IEnumerable<AuthorCreateModel>>(authors);
-            foreach (var author in chosenAuthors)
-            {
-                if (authorCreateModels.Any(s => s.Id == author.Id))
-                {
-                    authorCreateModels.FirstOrDefault(a => a.Id == author.Id).IsChosen = true;
-                }
-            }
-
-            return authorCreateModels;
-        }
-
-        public IEnumerable<VideoCreateModel> Map(IEnumerable<Video> videos, IEnumerable<Video> chosenVideos)
-        {
-            var videosCreateModels = this._mapper.Map<IEnumerable<VideoCreateModel>>(videos);
-            foreach (var video in chosenVideos)
-            {
-                if (videosCreateModels.Any(v => v.Id == video.Id))
-                {
-                    videosCreateModels.FirstOrDefault(v => v.Id == video.Id).IsChosen = true;
-                }
-            }
-
-            return videosCreateModels;
-        }
-
-        public IEnumerable<ArticleCreateModel> Map(IEnumerable<Article> articles, IEnumerable<Article> chosenArticles)
-        {
-            var articlesCreateModels = this._mapper.Map<IEnumerable<ArticleCreateModel>>(articles);
-            foreach (var article in chosenArticles)
-            {
-                if (articlesCreateModels.Any(a => a.Id == article.Id))
-                {
-                    articlesCreateModels.FirstOrDefault(v => v.Id == article.Id).IsChosen = true;
-                }
-            }
-
-            return articlesCreateModels;
-        }
-
-        public IEnumerable<ResourceCreateModel> Map(IEnumerable<Resource> resources, Resource chosenResource)
-        {
-            var resourcesCreateModels = this._mapper.Map<IEnumerable<ResourceCreateModel>>(resources);
-            if (resources.Any(r => r.Id == chosenResource.Id))
-            {
-                resourcesCreateModels.FirstOrDefault(r => r.Id == chosenResource.Id).IsChosen = true;
-            }
-
-            return resourcesCreateModels;
-        }
-
-        public IEnumerable<BookCreateModel> Map(IEnumerable<Book> books, IEnumerable<Book> chosenBooks)
-        {
-            var booksCreateModels = this._mapper.Map<IEnumerable<BookCreateModel>>(books);
-            foreach (var book in chosenBooks)
-            {
-                if (booksCreateModels.Any(b => b.Id == book.Id))
-                {
-                    booksCreateModels.FirstOrDefault(b => b.Id == book.Id).IsChosen = true;
-                }
-            }
-
-            return booksCreateModels;
-        }
 
         public CourseViewModel Map(Course course, List<MaterialsBase> learnedMaterials)
         {
