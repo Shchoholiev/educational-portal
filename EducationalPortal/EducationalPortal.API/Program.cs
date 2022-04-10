@@ -14,7 +14,8 @@ builder.Services.AddCors(options =>
     {
         builder.WithOrigins("http://localhost:4200")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .WithExposedHeaders("X-Pagination");
     });
 });
 builder.Services.AddInfrastructure();
@@ -27,8 +28,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 }).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, (options) =>
 {
-    options.LoginPath = "api/account/login";
-    options.LogoutPath = "api/account/logout";
+    options.LoginPath = "/api/account/login";
+    options.LogoutPath = "/api/account/logout";
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
