@@ -7,6 +7,8 @@ import { CoursesComponent } from './courses/courses/courses.component';
 import { CourseComponent } from './courses/courses/course/course.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PaginationComponent } from './pagination/pagination.component';
+import { AppRoutingModule } from './app-routing.module';
+import { CourseDetailsComponent } from './courses/course-details/course-details.component';
 
 @NgModule({
   declarations: [
@@ -14,11 +16,13 @@ import { PaginationComponent } from './pagination/pagination.component';
     NavigationBarComponent,
     CoursesComponent,
     CourseComponent,
-    PaginationComponent
+    PaginationComponent,
+    CourseDetailsComponent
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

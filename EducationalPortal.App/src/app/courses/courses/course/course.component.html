@@ -7,8 +7,8 @@
         </div>
         <div class="d-flex flex-row justify-content-between">
             <h5 class="text-primary">{{course.price}} points</h5>
-            <input type="button" value="Add to cart" class="btn btn-primary"/>
+            <a class="btn btn-primary">Add to cart</a>
         </div>
     </div>
-    <a class="stretched-link"></a>
+    <a routerLink="/courses/{{course.id}}" class="stretched-link"></a>
 </div>
