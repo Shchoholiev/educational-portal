@@ -8,7 +8,7 @@ namespace EducationalPortal.Infrastructure.Identity
 {
     public class UserManager : IUserManager
     {
-        public async Task AddToRoleAsync(HttpContext httpContext, string role) // Changes needed
+        public async Task<IEnumerable<Claim>> AddToRoleAsync(HttpContext httpContext, string role) // Changes needed
         {
             var claims = httpContext.User.Claims.ToList();
             claims.Add(new Claim(ClaimTypes.Role, role));
@@ -27,9 +27,10 @@ namespace EducationalPortal.Infrastructure.Identity
             };
 
             await httpContext.SignInAsync(authenticationScheme, claimsPrincipal, properties);
+            return claims;
         }
 
-        public async Task SignInAsync(HttpContext httpContext, UserDTO user, bool isPersistent = false)
+        public async Task<IEnumerable<Claim>> SignInAsync(HttpContext httpContext, UserDTO user, bool isPersistent = false)
         {
             var authenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             var claims = this.GetUserClaims(user);
@@ -44,6 +45,7 @@ namespace EducationalPortal.Infrastructure.Identity
             };
 
             await httpContext.SignInAsync(authenticationScheme, claimsPrincipal, properties);
+            return claims;
         }
 
         public async Task SignOutAsync(HttpContext httpContext)

@@ -1,14 +1,15 @@
 ﻿using EducationalPortal.Application.DTO;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace EducationalPortal.Infrastructure.Identity
 {
     public interface IUserManager
     {
-        Task SignInAsync(HttpContext httpContext, UserDTO user, bool isPersistent);
+        Task<IEnumerable<Claim>> SignInAsync(HttpContext httpContext, UserDTO user, bool isPersistent);
 
         Task SignOutAsync(HttpContext httpContext);
 
-        Task AddToRoleAsync(HttpContext httpContext, string role);
+        Task<IEnumerable<Claim>> AddToRoleAsync(HttpContext httpContext, string role);
     }
 }

@@ -107,7 +107,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -116,9 +116,9 @@ namespace EducationalPortal.API.Controllers
                 
                 if (result.Succeeded)
                 {
-                    await this._userManager.SignInAsync(this.HttpContext, userDTO, false);
+                    var claims = await this._userManager.SignInAsync(this.HttpContext, userDTO, false);
                     await this.CheckShoppingCartCookies(userDTO.Email);
-                    return StatusCode(201);
+                    return Ok(claims);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -142,8 +142,8 @@ namespace EducationalPortal.API.Controllers
                 {
                     var user = await this._usersService.GetUserAsync(userDTO.Email);
                     userDTO.Name = user.Name;
-                    await this._userManager.SignInAsync(this.HttpContext, userDTO, model.RememberMe);
-                    return Ok();
+                    var claims = await this._userManager.SignInAsync(this.HttpContext, userDTO, model.RememberMe);
+                    return Ok(claims);
                 }
                 else
                 {

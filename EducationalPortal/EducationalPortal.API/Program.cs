@@ -1,7 +1,12 @@
 using EducationalPortal.API.DI;
+using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.DI;
+using EducationalPortal.Infrastructure.EF;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
+
+var context = new ApplicationContext();
+await DbInitializer.Initialize(context);
 
 var builder = WebApplication.CreateBuilder(args);
 

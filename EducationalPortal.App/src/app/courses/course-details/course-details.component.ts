@@ -14,7 +14,7 @@ export class CourseDetailsComponent implements OnInit {
 
   public course: Course;
 
-  constructor(private route: ActivatedRoute, public service: CoursesService) { }
+  constructor(private route: ActivatedRoute, private service: CoursesService) { }
 
   setCourse(id: number){
     this.service.getCourse(id).subscribe(
