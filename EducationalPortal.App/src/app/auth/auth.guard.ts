@@ -7,15 +7,14 @@ import { AuthService } from './auth.service';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router){}
+  constructor(private _authService: AuthService, private _router: Router){}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
-    // if (this.authService.isAuthenticated) {
+    if (this._authService.isAuthenticated) {
       return true;
-    // }
+    }
 
-    // alert('dg');
-    // return this.router.navigate(['/account/register'], { queryParams: { returnUrl: state.url }});
+    return this._router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
   }
   
 }

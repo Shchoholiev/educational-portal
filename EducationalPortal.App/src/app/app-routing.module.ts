@@ -6,12 +6,14 @@ import { CourseDetailsComponent } from './courses/course-details/course-details.
 import { RegisterComponent } from './account/register/register.component';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './account/login/login.component';
+import { ProfileComponent } from './account/profile/profile.component';
 
 const routes: Routes = [
   { path: 'courses', component: CoursesComponent },
   { path: 'courses/:id', component: CourseDetailsComponent },
   { path: 'account/register', component: RegisterComponent },
-  { path: 'account/login', component: LoginComponent }
+  { path: 'account/login', component: LoginComponent },
+  { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

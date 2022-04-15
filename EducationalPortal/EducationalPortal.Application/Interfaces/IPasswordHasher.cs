@@ -1,4 +1,4 @@
-﻿namespace EducationalPortal.Infrastructure.Identity
+﻿namespace EducationalPortal.Application.Interfaces
 {
     public interface IPasswordHasher
     {

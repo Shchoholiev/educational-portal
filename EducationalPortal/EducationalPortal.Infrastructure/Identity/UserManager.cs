@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using EducationalPortal.Application.Interfaces;
 
 namespace EducationalPortal.Infrastructure.Identity
 {

@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using EducationalPortal.Application.Interfaces;
+using System.Security.Cryptography;
 
 namespace EducationalPortal.Infrastructure.Identity
 {

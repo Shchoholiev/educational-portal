@@ -5,7 +5,6 @@ using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Repository;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
-using EducationalPortal.Infrastructure.Identity;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -79,11 +78,6 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<User?> GetUserAsync(string email)
         {
             return await this._usersRepository.GetUserAsync(email);
-        }
-
-        public async Task<User?> GetUserWithSkillsAsync(string email)
-        {
-            return await this._usersRepository.GetUserWithSkillsAsync(email);
         }
 
         public async Task<User?> GetUserWithMaterialsAsync(string email)

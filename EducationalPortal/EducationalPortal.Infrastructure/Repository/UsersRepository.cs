@@ -41,7 +41,9 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<User?> GetUserAsync(string email)
         {
-            return await this._table.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Email == email);
+            return await this._table.Include(u => u.UserToken)
+                                    .Include(u => u.Roles)
+                                    .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserWithSkillsAsync(string email)

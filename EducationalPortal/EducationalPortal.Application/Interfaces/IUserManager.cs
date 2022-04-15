@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace EducationalPortal.Infrastructure.Identity
+namespace EducationalPortal.Application.Interfaces
 {
     public interface IUserManager
     {

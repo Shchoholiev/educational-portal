@@ -2,13 +2,14 @@ using EducationalPortal.API.DI;
 using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.DI;
 using EducationalPortal.Infrastructure.EF;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
 
 var context = new ApplicationContext();
 await DbInitializer.Initialize(context);
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddJWTTokenServices(builder.Configuration);
 
 builder.Services.AddControllers().AddNewtonsoftJson(options => 
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -26,16 +27,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddInfrastructure();
 builder.Services.AddServices();
 builder.Services.AddFluentValidators();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, (options) =>
-{
-    options.LoginPath = "/api/account/login";
-    options.LogoutPath = "/api/account/logout";
-});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

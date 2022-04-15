@@ -5,13 +5,20 @@ import { AppComponent } from './app.component';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { CoursesComponent } from './courses/courses/courses.component';
 import { CourseComponent } from './courses/courses/course/course.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { PaginationComponent } from './pagination/pagination.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CourseDetailsComponent } from './courses/course-details/course-details.component';
 import { RegisterComponent } from './account/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './account/login/login.component';
+import { ProfileComponent } from './account/profile/profile.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { AuthInterceptor } from './auth-interceptor';
+
+export function tokenGetter() {
+  return localStorage.getItem("jwt");
+}
 
 @NgModule({
   declarations: [
@@ -22,15 +29,25 @@ import { LoginComponent } from './account/login/login.component';
     PaginationComponent,
     CourseDetailsComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:7016"],
+        disallowedRoutes: []
+      }
+    })
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

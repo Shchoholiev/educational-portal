@@ -21,6 +21,8 @@ namespace EducationalPortal.Core.Entities
 
         public int Balance { get; set; }
 
+        public UserToken? UserToken { get; set; }
+
         public List<Role> Roles { get; set; }
 
         public List<MaterialsBase> Materials { get; set; }

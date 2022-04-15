@@ -22,6 +22,8 @@ namespace EducationalPortal.Infrastructure.FluentAPI
 
             builder.HasIndex(u => u.Email)
                    .IsUnique();
+
+            builder.HasOne<UserToken>(u => u.UserToken);
         }
     } 
 }
