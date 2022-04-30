@@ -10,7 +10,7 @@ import { CoursesService } from '../courses.service';
 })
 export class CourseDetailsComponent implements OnInit {
 
-  private id: number;
+  private id: number = 0;
 
   public course: Course;
 

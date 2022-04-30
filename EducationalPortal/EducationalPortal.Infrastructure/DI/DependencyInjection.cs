@@ -14,7 +14,7 @@ namespace EducationalPortal.Infrastructure.DI
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             //
-            var connectionString = @"server=(LocalDb)\MSSQLLocalDB;database=Store;integrated security=True;
+            var connectionString = @"server=(LocalDb)\MSSQLLocalDB;database=EducationalPortal;integrated security=True;
                     MultipleActiveResultSets=True;App=EntityFramework;";
 
             services.AddDbContext<ApplicationContext>(options =>

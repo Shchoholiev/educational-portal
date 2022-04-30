@@ -1,4 +1,5 @@
 import { Course } from "./course.model";
+import { UsersSkills } from "./user-skills.model";
 
 export class User {
     id: number = 0;
@@ -7,5 +8,6 @@ export class User {
     avatar: string = "";
     email: string = "";
     balance: string = "";
+    usersSkills: UsersSkills[] = [];
     createdCourses: Course[] = [];
 }

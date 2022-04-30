@@ -74,7 +74,7 @@ namespace EducationalPortal.API.Controllers
                 return NotFound();
             }
 
-            if (email != userDTO.Email && await this._usersService.GetUserAsync(email) != null)
+            if (email != userDTO.Email && await this._usersService.GetUserAsync(userDTO.Email) != null)
             {
                 return BadRequest("User with this email already exists");
             }

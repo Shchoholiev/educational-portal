@@ -8,18 +8,22 @@ import { User } from '../shared/user.model';
 })
 export class CoursesService {
 
-  readonly baseURL = 'https://localhost:7106/api/courses';
+  private readonly baseURL = 'https://localhost:7106/api/courses';
 
-  constructor(private http: HttpClient) { }
+  constructor(private _http: HttpClient) { }
 
-  getCoursesPage(pageSize: number, pageNumber: number){
-    return this.http.get(this.baseURL, { params: { 
+  public getCoursesPage(pageSize: number, pageNumber: number){
+    return this._http.get(this.baseURL, { params: { 
                                           pageSize: pageSize, 
                                           pageNumber: pageNumber
                                         }, observe: 'response' });
   }
 
-  getCourse(id: number){
-    return this.http.get<Course>(`${this.baseURL}/${id}`);
+  public getCourse(id: number){
+    return this._http.get<Course>(`${this.baseURL}/${id}`);
+  }
+
+  public delete(id: number){
+    return this._http.delete(`${this.baseURL}/${id}`);
   }
 }

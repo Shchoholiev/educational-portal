@@ -1,19 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Role } from '../shared/role.model';
-import { AppUser } from './app-user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private user: AppUser = new AppUser();
-
   constructor(private _http: HttpClient, private _jwtHelper: JwtHelperService) { }
 
-  get name(){
+  public get name(){
     var token = localStorage.getItem("jwt");
     if (token != null) {
       var decodedToken = this._jwtHelper.decodeToken(token);
@@ -21,20 +17,26 @@ export class AuthService {
     }
   }
 
-  get isAuthenticated(){
+  public get isAuthenticated(){
     var token = localStorage.getItem("jwt");
     return token && !this._jwtHelper.isTokenExpired(token);
   }
 
-  isInRole(role: string){
-    return this.user.roles.includes(new Role(role));
+  public isInRole(role: string){
+    var token = localStorage.getItem("jwt");
+    if (token != null) {
+      var decodedToken = this._jwtHelper.decodeToken(token);
+      var roles: Array<string> = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return roles.includes(role);
+    }
+    return false;
   }
 
-  login(token: string){
+  public login(token: string){
     localStorage.setItem('jwt', token);
   }
 
-  logout(){
+  public logout(){
     localStorage.removeItem('jwt');
   }
 }

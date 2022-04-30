@@ -17,7 +17,7 @@ namespace EducationalPortal.Application.Repository
 
         Task<TEntity> GetOneAsync(int id, params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(); //???
 
         Task<IEnumerable<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includeProperties);
 
@@ -29,7 +29,7 @@ namespace EducationalPortal.Application.Repository
         Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, 
                                    params Expression<Func<TEntity, object>>[] includeProperties);
 
-        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<int> GetCountAsync(Expression<Func<TEntity, bool>> predicate); //???
 
         Task<bool> Exists(Expression<Func<TEntity, bool>> predicate);
     }

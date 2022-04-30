@@ -1,22 +1,22 @@
 <div class="d-flex flex-row">
     <section style="width: 100%;">
-        <h2>{{course.name}}</h2>
-        <h5>{{course.shortDescription}}</h5>
-        <a class="text-secondary">{{course.author.name}} - {{course.author.position}}</a>
+        <h2>{{course?.name}}</h2>
+        <h5>{{course?.shortDescription}}</h5>
+        <a class="text-secondary">{{course?.author?.name}} - {{course?.author?.position}}</a>
         <hr />
         <article class="card my-1">
             <div class="card-body">
                 <h3>About this course</h3>
-                <p>{{course.description}}</p>
+                <p>{{course?.description}}</p>
             </div>
         </article>
         <article class="my-3">
             <h3>Course content</h3>
             <div class="card my-1">
                 <div class="card-header">
-                    Materials count: {{course.materials.length}}
+                    Materials count: {{course?.materials?.length}}
                 </div>
-                <ul class="list-group list-group-flush" *ngFor="let material of course.materials">
+                <ul class="list-group list-group-flush" *ngFor="let material of course?.materials">
                     <li class="list-group-item d-flex flex-row justify-content-between"
                             *ngIf="material.hasOwnProperty('quality')">
                         <div class="d-flex flex-row">
@@ -62,13 +62,13 @@
 
     <section style="margin-left: 20px">
         <div class="card m-1" style="width: 18rem;">
-            <img src="{{course.thumbnail}}" class="card-img-top">
+            <img src="{{course?.thumbnail}}" class="card-img-top">
             <div class="card-body">
-                <h2 class="text-primary">{{course.price}} points</h2>
+                <h2 class="text-primary">{{course?.price}} points</h2>
                 <a class="btn btn-primary mb-3" style="width:100%">Add to cart</a>
                 <h6>You will acquire skills:</h6>
                 <ul>
-                    <li *ngFor="let skill of course.skills">{{skill.name}}</li>
+                    <li *ngFor="let skill of course?.skills">{{skill.name}}</li>
                 </ul>
             </div>
         </div>

@@ -9,7 +9,7 @@ import { AuthService } from '../auth/auth.service';
 })
 export class NavigationBarComponent implements OnInit {
 
-  constructor(public authService: AuthService, public accountService: AccountService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
   }

@@ -20,8 +20,6 @@ namespace EducationalPortal.API.Controllers
     {
         private readonly IUsersService _usersService;
 
-        private readonly ICloudStorageService _cloudStorageService;
-
         private readonly ICoursesRepository _coursesRepository;
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
@@ -34,7 +32,6 @@ namespace EducationalPortal.API.Controllers
         {
             this._coursesRepository = coursesRepository;
             this._usersService = usersService;
-            this._cloudStorageService = cloudStorageService;
             this._materialsRepository = materialsRepository;
         }
 
@@ -71,7 +68,7 @@ namespace EducationalPortal.API.Controllers
             {
                 var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                 var user = await this._usersService.GetUserWithMaterialsAsync(email);
-                var courseViewModel = this._mapper.Map(course, user.Materials);
+                var courseViewModel = this._mapper.Map(course, user?.Materials ?? new List<MaterialsBase>());
                 return courseViewModel;
             }
             else
@@ -201,20 +198,6 @@ namespace EducationalPortal.API.Controllers
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
 
             return progress;
-        }
-
-        [HttpPost("fileToLink/{blobContainer}")]
-        [Authorize(Roles = "Creator")]
-        public async Task<ActionResult<string>> FileToLink(string blobContainer, IFormFile file)
-        {
-            var link = String.Empty;
-            using (var stream = file.OpenReadStream())
-            {
-                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
-                                                                   blobContainer);
-            }
-
-            return link;
         }
     }
 }

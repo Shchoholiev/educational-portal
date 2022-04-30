@@ -110,7 +110,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                 Email = "default@gmail.com",
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/cute-monster-face-square-avatar-vector-stock-cute-monster-face-square-avatar-114650081.jpg",
                 PasswordHash = passwordHash,
-                Roles = new List<Role> { roleStudent },
+                Roles = new List<Role> { roleStudent, roleCreator },
             };
 
             var usersSkills1 = new UsersSkills
