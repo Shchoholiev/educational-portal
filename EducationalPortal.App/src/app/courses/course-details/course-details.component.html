@@ -2,7 +2,8 @@
     <section style="width: 100%;">
         <h2>{{course?.name}}</h2>
         <h5>{{course?.shortDescription}}</h5>
-        <a class="text-secondary">{{course?.author?.name}} - {{course?.author?.position}}</a>
+        <a routerLink="/account/author/{{course?.author?.email}}" class="text-secondary">
+            {{course?.author?.name}} - {{course?.author?.position}}</a>
         <hr />
         <article class="card my-1">
             <div class="card-body">

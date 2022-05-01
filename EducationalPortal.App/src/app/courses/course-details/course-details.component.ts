@@ -18,9 +18,7 @@ export class CourseDetailsComponent implements OnInit {
 
   setCourse(id: number){
     this.service.getCourse(id).subscribe(
-      data => {
-        this.course = data;
-      }
+      data => this.course = data
     );
   }
 

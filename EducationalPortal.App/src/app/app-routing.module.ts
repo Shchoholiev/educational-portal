@@ -7,13 +7,15 @@ import { RegisterComponent } from './account/register/register.component';
 import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './account/login/login.component';
 import { ProfileComponent } from './account/profile/profile.component';
+import { AuthorComponent } from './account/author/author.component';
 
 const routes: Routes = [
   { path: 'courses', component: CoursesComponent },
   { path: 'courses/:id', component: CourseDetailsComponent },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
-  { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuard] }
+  { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'account/author/:email', component: AuthorComponent }
 ];
 
 @NgModule({

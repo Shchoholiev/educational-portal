@@ -11,6 +11,8 @@ export class CourseComponent implements OnInit {
 
   @Input() course: Course;
 
+  @Input() width: number = 18;
+
   constructor() { }
   
   ngOnInit(): void {

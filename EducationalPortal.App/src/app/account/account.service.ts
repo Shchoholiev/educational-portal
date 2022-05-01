@@ -19,6 +19,10 @@ export class AccountService {
     return this.http.get<User>(this.baseURL);
   }
 
+  public getAuthor(email: string){
+    return this.http.get<User>(`${this.baseURL}/author/${email}`);
+  }
+
   public update(user: User){
     var userDTO = new UserDTO(user.name, user.position, user.email, user.avatar);
     return this.http.put(this.baseURL, userDTO);
