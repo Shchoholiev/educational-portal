@@ -4,9 +4,6 @@ using EducationalPortal.Infrastructure.DI;
 using EducationalPortal.Infrastructure.EF;
 using Newtonsoft.Json;
 
-var context = new ApplicationContext();
-await DbInitializer.Initialize(context);
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddJWTTokenServices(builder.Configuration);
@@ -24,7 +21,7 @@ builder.Services.AddCors(options =>
                .WithExposedHeaders("X-Pagination");
     });
 });
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddFluentValidators();
 
@@ -33,6 +30,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+//var scope = app.Services.CreateScope();
+//var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+//await DbInitializer.Initialize(context);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

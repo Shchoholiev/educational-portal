@@ -5,17 +5,16 @@ using EducationalPortal.Infrastructure.Identity;
 using EducationalPortal.Infrastructure.Repository;
 using EducationalPortal.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EducationalPortal.Infrastructure.DI
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            //
-            var connectionString = @"server=(LocalDb)\MSSQLLocalDB;database=EducationalPortal;integrated security=True;
-                    MultipleActiveResultSets=True;App=EntityFramework;";
+            var connectionString = configuration.GetConnectionString("SQLDataBase");
 
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connectionString)

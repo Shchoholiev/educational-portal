@@ -13,9 +13,9 @@ namespace EducationalPortal.Infrastructure.Repository
         private readonly ApplicationContext _db;
         private readonly DbSet<User> _table;
 
-        public UsersRepository()
+        public UsersRepository(ApplicationContext context)
         {
-            this._db = new ApplicationContext();
+            this._db = context;
             this._table = _db.Set<User>();
         }
 
