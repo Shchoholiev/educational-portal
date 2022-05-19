@@ -20,14 +20,15 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<Course>>> GetCart([FromQuery]PageParameters pageParameters)
         {
-            var pagedCart = new PagedList<CartItem>();
+            var pagedCart = new PagedList<Course>();
 
             if (User.Identity.IsAuthenticated)
             {
-                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                pagedCart = await this._shoppingCartService.GetPageAsync(userEmail, pageParameters);
+                var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                var cartItems = await this._shoppingCartService.GetPageAsync(email, pageParameters);
+                pagedCart = new PagedList<Course>(cartItems.Select(ci => ci.Course), pageParameters, cartItems.TotalItems);
             }
             else
             {
@@ -37,8 +38,8 @@ namespace EducationalPortal.API.Controllers
                     var deserialised = (await this._shoppingCartService.GetDeserialisedAsync(cookies));
                     var cartItems = deserialised.Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                                 .Take(pageParameters.PageSize);
-                    var totalCount = deserialised.Count();
-                    pagedCart = new PagedList<CartItem>(cartItems, pageParameters, totalCount);
+                    var totalItems = deserialised.Count();
+                    pagedCart = new PagedList<Course>(cartItems.Select(ci => ci.Course), pageParameters, totalItems);
                 }
             }
 
@@ -55,6 +56,28 @@ namespace EducationalPortal.API.Controllers
 
             return pagedCart;
         }
+
+        [HttpGet("total-price")]
+        public async Task<ActionResult<int>> GetTotalPrice()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+                return await this._shoppingCartService.GetTotalPrice(email);
+            }
+            else
+            {
+                var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
+                if (cookies != null)
+                {
+                    var deserialised = (await this._shoppingCartService.GetDeserialisedAsync(cookies));
+                    return deserialised.Sum(ci => ci.Course.Price);
+                }
+            }
+
+            return 0;
+        }
+
 
         [HttpPut("add-to-cart/{courseId}")]
         public async Task<IActionResult> AddToCart(int courseId)

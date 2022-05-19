@@ -16,6 +16,7 @@ import { ProfileComponent } from './account/profile/profile.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthInterceptor } from './auth-interceptor';
 import { AuthorComponent } from './account/author/author.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart/shopping-cart.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -32,7 +33,8 @@ export function tokenGetter() {
     RegisterComponent,
     LoginComponent,
     ProfileComponent,
-    AuthorComponent
+    AuthorComponent,
+    ShoppingCartComponent
   ],
   imports: [
     BrowserModule,

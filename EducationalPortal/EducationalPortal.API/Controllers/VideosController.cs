@@ -100,7 +100,7 @@ namespace EducationalPortal.API.Controllers
         [HttpGet("get-qualities")]
         public async Task<ActionResult<IEnumerable<Quality>>> GetQualities()
         {
-            var qualities = (await this._qualitiesRepository.GetAllAsync()).ToList();
+            var qualities = await this._qualitiesRepository.GetPageAsync(new PageParameters());
             return qualities;
         }
     }

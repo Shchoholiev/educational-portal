@@ -8,6 +8,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './account/login/login.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { AuthorComponent } from './account/author/author.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart/shopping-cart.component';
 
 const routes: Routes = [
   { path: 'courses', component: CoursesComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'account/author/:email', component: AuthorComponent }
+  { path: 'account/author/:email', component: AuthorComponent },
+  { path: 'shopping-cart', component: ShoppingCartComponent },
 ];
 
 @NgModule({

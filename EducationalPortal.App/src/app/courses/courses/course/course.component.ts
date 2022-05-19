@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
 import { Course } from '../../../shared/course.model';
 
 @Component({
@@ -13,7 +14,7 @@ export class CourseComponent implements OnInit {
 
   @Input() width: number = 18;
 
-  constructor() { }
+  constructor(public shoppingCartService: ShoppingCartService) { }
   
   ngOnInit(): void {
   }

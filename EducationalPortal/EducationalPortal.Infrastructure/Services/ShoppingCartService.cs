@@ -42,9 +42,16 @@ namespace EducationalPortal.Infrastructure.Services
             await this._cartItemsRepository.DeleteAsync(cartItem);
         }
 
-        public async Task<PagedList<CartItem>> GetPageAsync(string userId, PageParameters pageParameters)
+        public async Task<PagedList<CartItem>> GetPageAsync(string email, PageParameters pageParameters)
         {
-            return await this._cartItemsRepository.GetPageAsync(pageParameters, ci => ci.Course);
+            return await this._cartItemsRepository.GetPageAsync(pageParameters, 
+                                                   ci => ci.User.Email == email, ci => ci.Course);
+        }
+
+        public async Task<int> GetTotalPrice(string email)
+        {
+            var cartItems = await this._cartItemsRepository.GetAllAsync(ci => ci.User.Email == email);
+            return cartItems.Sum(ci => ci.Course.Price);
         }
 
         public async Task BuyAsync(string userEmail)

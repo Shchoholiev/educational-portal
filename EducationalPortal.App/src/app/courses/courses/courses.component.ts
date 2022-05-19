@@ -10,7 +10,9 @@ import { CoursesService } from '../courses.service';
 export class CoursesComponent implements OnInit {
 
   public list: Course[];
+
   public metadata: string | null;
+  
   public pageSize = 3;
 
   constructor(public service: CoursesService) { 

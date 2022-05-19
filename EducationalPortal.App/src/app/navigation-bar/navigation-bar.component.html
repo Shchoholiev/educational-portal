@@ -13,6 +13,9 @@
 
         <ul class="navbar-nav" *ngIf="authService.isAuthenticated">
           <li class="nav-item">
+            <a class="nav-link" routerLink="/shopping-cart"><i class="fa-solid fa-cart-shopping"></i></a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link">My Learning</a>
           </li>
           <li class="nav-item">
@@ -24,6 +27,9 @@
         </ul>
 
         <ul class="navbar-nav" *ngIf="!authService.isAuthenticated">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/shopping-cart"><i class="fa-solid fa-cart-shopping"></i></a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/account/register">Register</a>
           </li>
