@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Course } from '../../shared/course.model';
 import { CoursesService } from '../courses.service';
 
@@ -14,7 +15,8 @@ export class CourseDetailsComponent implements OnInit {
 
   public course: Course;
 
-  constructor(private _route: ActivatedRoute, private _service: CoursesService) { }
+  constructor(private _route: ActivatedRoute, private _service: CoursesService, 
+              public authService: AuthService) { }
 
   setCourse(id: number){
     this._service.getCourse(id).subscribe(

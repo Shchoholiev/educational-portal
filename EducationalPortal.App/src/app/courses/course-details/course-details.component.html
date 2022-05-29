@@ -15,7 +15,11 @@
             <h3>Course content</h3>
             <div class="card my-1">
                 <div class="card-header">
-                    Materials count: {{course?.materials?.length}}
+                    <div class="d-flex flex-row justify-content-between">
+                        <p class="mb-0">Materials count: {{course?.materials?.length}}</p>
+                        <p class="mb-0 text-secondary" style="font-size:14px" 
+                            *ngIf="authService.isAuthenticated">Learned</p>
+                    </div>
                 </div>
                 <ul class="list-group list-group-flush" *ngFor="let material of course?.materials">
                     <li class="list-group-item d-flex flex-row justify-content-between"
@@ -28,6 +32,8 @@
                         <div class="d-flex flex-row">
                             <p class="text-primary mb-0" style="margin-right:20px">{{$any(material).quality}}</p>
                             <p class="text-secondary mb-0">{{$any(material).duration.split('T')[1]}}</p>
+                            <input type="checkbox" class="form-check-input ms-4 me-3" disabled 
+                                   *ngIf="authService.isAuthenticated" [checked]="material.isLearned" />
                         </div>
                     </li>
                     <li class="list-group-item d-flex flex-row justify-content-between"
@@ -42,6 +48,8 @@
                                 {{$any(material).authors[0]}}
                             </p>
                             <p class="text-secondary mb-0">{{$any(material).pagesCount}} pages</p>
+                            <input type="checkbox" class="form-check-input ms-4 me-3" disabled 
+                                   *ngIf="authService.isAuthenticated" [checked]="material.isLearned" />
                         </div>
                     </li>
                     <li class="list-group-item d-flex flex-row justify-content-between"
@@ -54,6 +62,8 @@
                         <div class="d-flex flex-row">
                             <p class="text-primary mb-0" style="margin-right:20px">{{$any(material).resource}}</p>
                             <p class="text-secondary mb-0">{{$any(material).publicationDate.split('T')[0]}}</p>
+                            <input type="checkbox" class="form-check-input ms-4 me-3" disabled 
+                                   *ngIf="authService.isAuthenticated" [checked]="material.isLearned" />
                         </div>
                     </li>
                 </ul>
