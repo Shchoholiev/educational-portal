@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
+import { CartItem } from 'src/app/shared/cart-item.model';
 import { Course } from 'src/app/shared/course.model';
 import { ShoppingCartService } from '../shopping-cart.service';
 
@@ -9,7 +11,7 @@ import { ShoppingCartService } from '../shopping-cart.service';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  public courses: Course[] = [];
+  public cartItems: CartItem[] = [];
 
   public totalPrice: number = 0;
 
@@ -17,7 +19,7 @@ export class ShoppingCartComponent implements OnInit {
 
   public metadata: string | null;
 
-  constructor(private _shoppingCartService: ShoppingCartService) { }
+  constructor(public _shoppingCartService: ShoppingCartService, private _authService: AuthService) { }
 
   ngOnInit(): void {
     this.refresh();
@@ -25,19 +27,43 @@ export class ShoppingCartComponent implements OnInit {
 
   public refresh(){
     this.setPage(1);
-    this._shoppingCartService.getTotalPrice().subscribe(
+    this.refreshTotalPrice();
+  }
+
+  public refreshTotalPrice(){
+    this._shoppingCartService.getTotalPriceAuthorized().subscribe(
       response => this.totalPrice = response
     )
   }
 
   public setPage(pageNumber: number){
-    this._shoppingCartService.getPage(this.pageSize, pageNumber).subscribe(
+    this._shoppingCartService.getPageAuthorized(this.pageSize, pageNumber).subscribe(
       response => {
         if (response.body) {
-          this.courses = response.body;
+          this.cartItems = response.body;
           this.metadata = response.headers.get('x-pagination');
         }
       }
     );
+  }
+
+  public delete(id: number){
+    if (this._authService.isAuthenticated) {
+      this._shoppingCartService.deleteAuthorized(id).subscribe(
+        () => {
+          var index = this.cartItems.findIndex(ci => ci.id == id);
+          this.cartItems.splice(index, 1);
+          this.refreshTotalPrice();
+        }
+      );
+    }
+  }
+
+  public buy(){
+    if (this._authService.isAuthenticated) {
+      this._shoppingCartService.buyAuthorized().subscribe(
+        () => this.refresh()
+      );
+    }
   }
 }

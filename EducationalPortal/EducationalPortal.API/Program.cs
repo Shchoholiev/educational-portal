@@ -31,9 +31,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-//var scope = app.Services.CreateScope();
-//var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-//await DbInitializer.Initialize(context);
+var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+await DbInitializer.Initialize(context);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

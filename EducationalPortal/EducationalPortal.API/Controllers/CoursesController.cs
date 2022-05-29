@@ -137,7 +137,6 @@ namespace EducationalPortal.API.Controllers
                 }
                 else
                 {
-
                     var course = await this._coursesRepository.GetFullCourseAsync(id);
                     this._mapper.Map(course, courseDTO);
                     await this._coursesRepository.UpdateAsync(course);

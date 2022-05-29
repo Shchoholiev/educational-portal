@@ -1,23 +1,23 @@
 <section class="d-flex flex-wrap">
-    <div *ngIf="!courses.length" class="col-9">
+    <div *ngIf="!cartItems.length" class="col-9">
         <h5 class="text-secondary">Shopping Cart is Empty</h5>
     </div>
-    <div *ngIf="courses.length" class="col-9">
-        <div *ngFor="let c of courses" class="card mb-3">
+    <div *ngIf="cartItems.length" class="col-9 pe-3">
+        <div *ngFor="let ci of cartItems" class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <img src="{{c.thumbnail}}" class="img-fluid rounded-start">
+                    <img src="{{ci.course.thumbnail}}" class="w-100 h-100 rounded-start" style="object-fit: cover;">
                 </div>
                 <div class="col-md-6">
                     <div class="card-body">
-                        <h5 class="card-title">{{c.name}}</h5>
-                        <p class="card-text">{{c.shortDescription}}</p>
+                        <h5 class="card-title">{{ci.course.name}}</h5>
+                        <p class="card-text">{{ci.course.shortDescription}}</p>
                     </div>
                 </div>
                 <div class="col-md-2">
                     <div class="card-body">
-                        <h5 class="text-primary">{{c.price}} points</h5>
-                        <button class="btn btn-danger">
+                        <h5 class="text-primary">{{ci.course.price}} points</h5>
+                        <button class="btn btn-danger" (click)="delete(ci.id)">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
@@ -26,14 +26,15 @@
         </div>
         <app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>
     </div>
-    <div class="col-3 bg-primary text-white d-flex justify-content-between mt-1 px-3 py-3"
-        style="border-radius: 12px;">
-        <div class="text-start">
-            <p class="small m-0">Total price:</p>
-            <h4 class="m-0">{{this.totalPrice}} points</h4>
+    <div class="col-3">
+        <div class="bg-primary text-white flex-row d-flex justify-content-between mt-1 px-3 py-3" style="border-radius: 12px;">
+            <div class="text-start">
+                <p class="small m-0">Total price:</p>
+                <h4 class="m-0">{{this.totalPrice}} points</h4>
+            </div>
+            <button class="btn btn-pay text-white my-auto py-2" (click)="buy()" [disabled]="!cartItems.length">
+                <b>Buy</b>
+            </button>
         </div>
-        <button class="btn btn-pay text-white my-auto py-2" [disabled]="!courses.length">
-            <i class="fa-solid fa-lg fa-arrow-right"></i>
-        </button>
     </div>
 </section>

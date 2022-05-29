@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
 import { Course } from '../../shared/course.model';
 import { CoursesService } from '../courses.service';
 
@@ -15,7 +16,9 @@ export class CoursesComponent implements OnInit {
   
   public pageSize = 3;
 
-  constructor(public service: CoursesService) { 
+  constructor(public service: CoursesService, public shoppingCartService: ShoppingCartService) { }
+  
+  ngOnInit(): void {
     this.setPage(1);
   }
 
@@ -27,8 +30,4 @@ export class CoursesComponent implements OnInit {
       }
     )
   }
-
-  ngOnInit(): void {
-  }
-
 }
