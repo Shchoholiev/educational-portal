@@ -4,9 +4,9 @@
         <h5 class="card-title">{{userCourse.course.name}}</h5>
         <p class="card-text">{{userCourse.course.shortDescription}}</p>
         <div class="progress" style="height: 5px;">
-            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': progress }"></div>
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width.%': progress }"></div>
         </div>
         <p class="text-primary">{{progress}}% Complete</p>
     </div>
-    <a class="stretched-link"></a>
+    <a class="stretched-link" routerLink="/courses/learn/{{userCourse.course.id}}"></a>
 </div>

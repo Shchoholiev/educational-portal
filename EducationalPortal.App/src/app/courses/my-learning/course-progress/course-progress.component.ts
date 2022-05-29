@@ -16,7 +16,7 @@ export class CourseProgressComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.userCourse.learnedMaterialsCount) {
-      this.progress = Math.ceil(this.userCourse.materialsCount * 100 / this.userCourse.learnedMaterialsCount);
+      this.progress = Math.ceil(this.userCourse.learnedMaterialsCount * 100 / this.userCourse.materialsCount);
     }
   }
 

@@ -19,6 +19,11 @@ import { AuthorComponent } from './account/author/author.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart/shopping-cart.component';
 import { MyLearningComponent } from './courses/my-learning/my-learning.component';
 import { CourseProgressComponent } from './courses/my-learning/course-progress/course-progress.component';
+import { CourseLearnComponent } from './courses/course-learn/course-learn.component';
+import { ProgressBarComponent } from './courses/course-learn/progress-bar/progress-bar.component';
+import { VideoSideComponent } from './courses/course-learn/materials/video-side/video-side.component';
+import { BookSideComponent } from './courses/course-learn/materials/book-side/book-side.component';
+import { ArticleSideComponent } from './courses/course-learn/materials/article-side/article-side.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -38,7 +43,12 @@ export function tokenGetter() {
     AuthorComponent,
     ShoppingCartComponent,
     MyLearningComponent,
-    CourseProgressComponent
+    CourseProgressComponent,
+    CourseLearnComponent,
+    ProgressBarComponent,
+    VideoSideComponent,
+    BookSideComponent,
+    ArticleSideComponent
   ],
   imports: [
     BrowserModule,

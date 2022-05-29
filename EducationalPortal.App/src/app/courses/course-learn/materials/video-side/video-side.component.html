@@ -1,0 +1,15 @@
+<div class="d-flex flex-row">
+    <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;" (click)="click()"
+        [checked]="video.isLearned">
+    <div style="width:100%; cursor:pointer;" onclick="" class="d-flex flex-row justify-content-between mb-2">
+        <div class="d-flex flex-row">
+            <img style="height:17px; margin-right:10px;" class="mt-1"
+                 src="https://educationalportal.blob.core.windows.net/essentials/Video.svg"/>
+            <p class="mb-0" style="margin-right:7px;">{{video.name}}</p>
+        </div>
+        <div class="d-flex flex-row">
+            <p class="text-primary mb-0" style="margin-right:20px">{{video.quality}}</p>
+            <p class="text-secondary mb-0">{{getTime()}}</p>
+        </div>
+    </div>
+</div>
