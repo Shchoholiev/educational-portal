@@ -14,16 +14,18 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   private returnUrl: string = '';
 
-  constructor(private route: ActivatedRoute, private router: Router, 
-              private accountService: AccountService) { }
+  constructor(private _route: ActivatedRoute, private _router: Router, 
+              private _accountService: AccountService) { }
 
   onSubmit(){
-    this.accountService.register(this.user);
-    this.router.navigate([this.returnUrl]);
+    this.user.shoppingCart = localStorage.getItem("cart") || "";
+    localStorage.removeItem("cart");
+    this._accountService.register(this.user);
+    this._router.navigate([this.returnUrl]);
   }
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   ngOnDestroy(): void {

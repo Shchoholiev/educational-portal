@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 
-namespace EducationalPortal.Infrastructure.Repository
+namespace EducationalPortal.Infrastructure.IRepositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : EntityBase
     {

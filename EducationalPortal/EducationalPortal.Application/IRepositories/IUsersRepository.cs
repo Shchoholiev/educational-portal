@@ -3,7 +3,7 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 
-namespace EducationalPortal.Application.Repository
+namespace EducationalPortal.Application.IRepositories
 {
     public interface IUsersRepository
     {

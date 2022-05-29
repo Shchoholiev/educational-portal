@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CartItem } from 'src/app/shared/cart-item.model';
 import { Course } from 'src/app/shared/course.model';
@@ -19,7 +20,8 @@ export class ShoppingCartComponent implements OnInit {
 
   public metadata: string | null;
 
-  constructor(public _shoppingCartService: ShoppingCartService, private _authService: AuthService) { }
+  constructor(public _shoppingCartService: ShoppingCartService, private _authService: AuthService,
+              private _router: Router) { }
 
   ngOnInit(): void {
     this.refresh();
@@ -31,20 +33,39 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   public refreshTotalPrice(){
-    this._shoppingCartService.getTotalPriceAuthorized().subscribe(
-      response => this.totalPrice = response
-    )
+    if (this._authService.isAuthenticated) {
+      this._shoppingCartService.getTotalPriceAuthorized().subscribe(
+        response => this.totalPrice = response
+      )
+    }
+    else {
+      this._shoppingCartService.getTotalPrice().subscribe(
+        response => this.totalPrice = response.body || 0
+      )
+    }
   }
 
   public setPage(pageNumber: number){
-    this._shoppingCartService.getPageAuthorized(this.pageSize, pageNumber).subscribe(
-      response => {
-        if (response.body) {
-          this.cartItems = response.body;
-          this.metadata = response.headers.get('x-pagination');
+    if (this._authService.isAuthenticated) {
+      this._shoppingCartService.getPageAuthorized(this.pageSize, pageNumber).subscribe(
+        response => {
+          if (response.body) {
+            this.cartItems = response.body;
+            this.metadata = response.headers.get('x-pagination');
+          }
         }
-      }
-    );
+      );
+    }
+    else {
+      this._shoppingCartService.getPage(this.pageSize, pageNumber).subscribe(
+        response => {
+          if (response.body) {
+            this.cartItems = response.body;
+            this.metadata = response.headers.get('x-pagination');
+          }
+        }
+      );
+    }
   }
 
   public delete(id: number){
@@ -57,6 +78,12 @@ export class ShoppingCartComponent implements OnInit {
         }
       );
     }
+    else {
+      this._shoppingCartService.delete(id);
+      var index = this.cartItems.findIndex(ci => ci.id == id);
+      this.cartItems.splice(index, 1);
+      this.refreshTotalPrice();
+    }
   }
 
   public buy(){
@@ -64,6 +91,9 @@ export class ShoppingCartComponent implements OnInit {
       this._shoppingCartService.buyAuthorized().subscribe(
         () => this.refresh()
       );
+    }
+    else {
+      this._router.navigate(["/account/login"]);
     }
   }
 }

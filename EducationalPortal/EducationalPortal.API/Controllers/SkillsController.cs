@@ -1,5 +1,5 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

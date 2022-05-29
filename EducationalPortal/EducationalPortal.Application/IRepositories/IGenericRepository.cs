@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.Paging;
 using System.Linq.Expressions;
 
-namespace EducationalPortal.Application.Repository
+namespace EducationalPortal.Application.IRepositories
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {

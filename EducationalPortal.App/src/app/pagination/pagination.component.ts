@@ -13,8 +13,6 @@ export class PaginationComponent implements OnInit {
 
   public pageNumber: number;
 
-  public totalItems: number;
-
   public totalPages: number;
 
   public hasNextPage: boolean;
@@ -37,7 +35,6 @@ export class PaginationComponent implements OnInit {
   ngOnInit(): void {
     if (this.metadata != null) {
       var object = JSON.parse(this.metadata);
-      this.totalItems = Number(object.TotalItems);
       this.totalPages = Number(object.TotalPages);
       this.pageNumber = Number(object.PageNumber);
       this.hasNextPage = Boolean(object.HasNextPage);

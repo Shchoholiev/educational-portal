@@ -28,5 +28,9 @@ export class CourseComponent implements OnInit {
         () => this._router.navigate(["/shopping-cart"])
       );
     }
+    else {
+      this._shoppingCartService.addToCart(id);
+      this._router.navigate(["/shopping-cart"]);
+    }
   }
 }

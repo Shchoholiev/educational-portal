@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.API.Mapping;
 using Microsoft.AspNetCore.Authorization;

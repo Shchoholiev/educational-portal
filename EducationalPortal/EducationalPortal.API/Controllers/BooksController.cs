@@ -1,6 +1,6 @@
 ﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.API.Mapping;

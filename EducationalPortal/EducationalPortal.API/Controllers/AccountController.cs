@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -122,7 +122,7 @@ namespace EducationalPortal.API.Controllers
                 if (result.Succeeded)
                 {
                     var user = await this._usersService.GetUserAsync(userDTO.Email);
-                    await this.CheckShoppingCartCookies(userDTO.Email);
+                    await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
                     var tokens = await this.UpdateUserTokens(user);
                     return Ok(tokens);
                 }
@@ -147,6 +147,7 @@ namespace EducationalPortal.API.Controllers
                 if (result.Succeeded)
                 {
                     var user = await this._usersService.GetUserAsync(userDTO.Email);
+                    await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
                     var tokens = await this.UpdateUserTokens(user);
                     return Ok(tokens);
                 }
@@ -214,19 +215,19 @@ namespace EducationalPortal.API.Controllers
             return claims;
         }
 
-        private async Task CheckShoppingCartCookies(string userEmail)
+        private async Task CheckShoppingCartCookies(string email, string cookies)
         {
-            var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-            if (cookies != null)
+            if (!string.IsNullOrEmpty(cookies))
             {
                 var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookies);
                 foreach (var cartItem in cartItems)
                 {
-                    cartItem.User = new User { Email = userEmail };
-                    await this._shoppingCartService.AddAsync(cartItem);
+                    if (!await this._shoppingCartService.Exists(cartItem.Course.Id, email))
+                    {
+                        cartItem.User = new User { Email = email };
+                        await this._shoppingCartService.AddAsync(cartItem);
+                    }
                 }
-                var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(-1) };
-                Response.Cookies.Append("EducationalPortal_ShoppingCart", "", cookieOptions);
             }
         }
     }

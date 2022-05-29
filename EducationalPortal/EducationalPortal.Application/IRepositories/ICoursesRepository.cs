@@ -2,7 +2,7 @@
 using EducationalPortal.Core.Entities;
 using System.Linq.Expressions;
 
-namespace EducationalPortal.Application.Repository
+namespace EducationalPortal.Application.IRepositories
 {
     public interface ICoursesRepository
     {

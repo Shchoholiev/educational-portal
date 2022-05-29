@@ -8,6 +8,8 @@
 
         public bool RememberMe { get; set; } = false;
 
+        public string? ShoppingCart { get; set; }
+
         public string RefreshToken { get; set; }
 
         public DateTime RefreshTokenExpiryTime { get; set; }

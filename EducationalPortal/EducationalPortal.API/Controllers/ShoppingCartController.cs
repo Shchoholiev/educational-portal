@@ -26,10 +26,8 @@ namespace EducationalPortal.API.Controllers
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var cartItems = await this._shoppingCartService.GetPageAsync(email, pageParameters);
-            
             var metadata = new
             {
-                cartItems.TotalItems,
                 cartItems.PageSize,
                 cartItems.PageNumber,
                 cartItems.TotalPages,
@@ -41,11 +39,41 @@ namespace EducationalPortal.API.Controllers
             return cartItems;
         }
 
+        [AllowAnonymous]
+        [HttpGet("page-from-cookie")]
+        public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery] string cookie,
+                                                        [FromQuery] PageParameters pageParameters)
+        {
+            var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookie);
+            var totalPages = (int)Math.Ceiling(cartItems.Count() / (double)pageParameters.PageSize);
+            var metadata = new
+            {
+                PageSize = pageParameters.PageSize,
+                PageNumber = pageParameters.PageNumber,
+                TotalPages = totalPages,
+                HasPreviousPage = pageParameters.PageNumber > 1,
+                HasNextPage = pageParameters.PageNumber < totalPages
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            var page = cartItems.Skip(pageParameters.PageSize * (pageParameters.PageNumber - 1))
+                                .Take(pageParameters.PageSize);
+
+            return Ok(page);
+        }
+
         [HttpGet("total-price")]
         public async Task<ActionResult<int>> GetTotalPrice()
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             return await this._shoppingCartService.GetTotalPrice(email);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("total-price-from-cookie")]
+        public async Task<ActionResult<int>> GetTotalPrice([FromQuery] string cookie)
+        {
+            var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookie);
+            return cartItems.Sum(ci => ci.Course.Price);
         }
 
 

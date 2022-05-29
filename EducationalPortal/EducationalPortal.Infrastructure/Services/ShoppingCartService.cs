@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.Exceptions;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Text.RegularExpressions;
