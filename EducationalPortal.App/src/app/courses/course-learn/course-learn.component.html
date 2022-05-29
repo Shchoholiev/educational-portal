@@ -1,17 +1,18 @@
 <div class="row d-flex flex-wrap">
     <section class="col-md-8">
-
+        <app-book-learn *ngIf="bookLink" [link]="bookLink"></app-book-learn>
+        <app-video-learn *ngIf="videoLink" [link]="videoLink"></app-video-learn>
     </section>
     <section class="col-md-4">
         <app-progress-bar [progress]="course.progress"></app-progress-bar>
         <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
             <li *ngFor="let material of course.materials" class="list-group-item">
-                <app-video-side *ngIf="material.hasOwnProperty('duration')" [video]="$any(material)"
-                    (changeProgress)="changeProgress($event)" [courseId]="course.id"></app-video-side>
-                <app-book-side *ngIf="material.hasOwnProperty('authors')" [book]="$any(material)"
-                    (changeProgress)="changeProgress($event)" [courseId]="course.id"></app-book-side>
+                <app-video-side *ngIf="material.hasOwnProperty('duration')" [video]="$any(material)" [courseId]="course.id"
+                    (click)="setVideo(material.link)" (changeProgress)="changeProgress($event)"></app-video-side>
+                <app-book-side *ngIf="material.hasOwnProperty('authors')" [book]="$any(material)" [courseId]="course.id"
+                    (click)="setBook(material.link)" (changeProgress)="changeProgress($event)"></app-book-side>
                 <app-article-side *ngIf="material.hasOwnProperty('resource')" [article]="$any(material)"
-                (changeProgress)="changeProgress($event)" [courseId]="course.id"></app-article-side>
+                    (changeProgress)="changeProgress($event)" [courseId]="course.id"></app-article-side>
             </li>
         </ul>
     </section>

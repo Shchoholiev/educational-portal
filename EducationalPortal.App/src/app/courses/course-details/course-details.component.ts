@@ -14,16 +14,16 @@ export class CourseDetailsComponent implements OnInit {
 
   public course: Course;
 
-  constructor(private route: ActivatedRoute, private service: CoursesService) { }
+  constructor(private _route: ActivatedRoute, private _service: CoursesService) { }
 
   setCourse(id: number){
-    this.service.getCourse(id).subscribe(
+    this._service.getCourse(id).subscribe(
       data => this.course = data
     );
   }
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id')) || 0;
+    this.id = Number(this._route.snapshot.paramMap.get('id')) || 0;
     this.setCourse(this.id);
   }
 

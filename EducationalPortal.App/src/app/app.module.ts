@@ -24,6 +24,9 @@ import { ProgressBarComponent } from './courses/course-learn/progress-bar/progre
 import { VideoSideComponent } from './courses/course-learn/materials/video-side/video-side.component';
 import { BookSideComponent } from './courses/course-learn/materials/book-side/book-side.component';
 import { ArticleSideComponent } from './courses/course-learn/materials/article-side/article-side.component';
+import { BookLearnComponent } from './courses/course-learn/materials/book-learn/book-learn.component';
+import { SafePipe } from './safe.pipe';
+import { VideoLearnComponent } from './courses/course-learn/materials/video-learn/video-learn.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -48,7 +51,10 @@ export function tokenGetter() {
     ProgressBarComponent,
     VideoSideComponent,
     BookSideComponent,
-    ArticleSideComponent
+    ArticleSideComponent,
+    BookLearnComponent,
+    SafePipe,
+    VideoLearnComponent
   ],
   imports: [
     BrowserModule,

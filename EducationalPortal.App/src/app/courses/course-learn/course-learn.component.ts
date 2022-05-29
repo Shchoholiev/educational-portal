@@ -12,6 +12,10 @@ export class CourseLearnComponent implements OnInit {
 
   public course: LearnCourse = new LearnCourse();
 
+  public bookLink = "";
+
+  public videoLink = "";
+
   constructor(private _route: ActivatedRoute, private _coursesService: CoursesService) { }
 
   setCourse(id: number){
@@ -27,5 +31,15 @@ export class CourseLearnComponent implements OnInit {
 
   public changeProgress(number: number){
     this.course.progress = number;
+  }
+
+  public setBook(link: string){
+    this.videoLink = "";
+    this.bookLink = link;
+  }
+
+  public setVideo(link: string){
+    this.bookLink = "";
+    this.videoLink = link;
   }
 }
