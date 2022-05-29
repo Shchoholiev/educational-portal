@@ -1,0 +1,17 @@
+<nav class="navbar navbar-light">
+    <ul class="navbar-nav d-flex flex-row" style="margin: 0 auto">
+        <li class="nav-link nav-item mx-5 fs-5">
+            <a (click)="navToMyLearning()">All</a>
+        </li>
+        <li class="nav-link nav-item mx-5 fs-5">
+            <a (click)="navToCoursesInProgress()">In progress</a>
+        </li>
+        <li class="nav-link nav-item mx-5 fs-5">
+            <a (click)="navToLearnedCourses()">Learned</a>
+        </li>
+    </ul>
+</nav>
+<section class="d-flex flex-wrap">
+    <app-course-progress *ngFor="let uc of usersCourses" [userCourse]="uc"></app-course-progress>
+</section>
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="delegate($event)"></app-pagination>

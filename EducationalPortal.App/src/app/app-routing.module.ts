@@ -9,6 +9,7 @@ import { LoginComponent } from './account/login/login.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { AuthorComponent } from './account/author/author.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart/shopping-cart.component';
+import { MyLearningComponent } from './courses/my-learning/my-learning.component';
 
 const routes: Routes = [
   { path: 'courses', component: CoursesComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'account/author/:email', component: AuthorComponent },
   { path: 'shopping-cart', component: ShoppingCartComponent },
+  { path: 'my-learning', component: MyLearningComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

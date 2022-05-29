@@ -10,6 +10,7 @@ using System.Security.Claims;
 using EducationalPortal.API.Mapping;
 using EducationalPortal.Core.Entities.JoinEntities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -89,6 +90,7 @@ namespace EducationalPortal.API.Controllers
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, uc => true);
+            this.SetPagingMetadata(usersCourses);
             return usersCourses;
         }
 
@@ -98,6 +100,7 @@ namespace EducationalPortal.API.Controllers
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                     uc => uc.MaterialsCount > uc.LearnedMaterialsCount && uc.LearnedMaterialsCount > 0);
+            this.SetPagingMetadata(usersCourses);
             return usersCourses;
         }
 
@@ -107,6 +110,7 @@ namespace EducationalPortal.API.Controllers
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                                                     uc => uc.MaterialsCount == uc.LearnedMaterialsCount);
+            this.SetPagingMetadata(usersCourses);
             return usersCourses;
         }
 
@@ -229,6 +233,19 @@ namespace EducationalPortal.API.Controllers
                     }
                 }
             }
+        }
+
+        private void SetPagingMetadata(IPagedList pagedList)
+        {
+            var metadata = new
+            {
+                pagedList.PageSize,
+                pagedList.PageNumber,
+                pagedList.TotalPages,
+                pagedList.HasNextPage,
+                pagedList.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
         }
     }
 }
