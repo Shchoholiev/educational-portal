@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
+import { Tokens } from '../auth/tokens.model';
 import { User } from '../shared/user.model';
 import { UsersCourses } from '../shared/users-courses.model';
 import { Login } from './login/login.model';
@@ -30,17 +31,17 @@ export class AccountService {
   }
 
   public register(form: Register){
-    this._http.post<any>(this.baseURL + '/register', form).subscribe(
+    this._http.post<Tokens>(this.baseURL + '/register', form).subscribe(
       response => {
-        this.authService.login(response.token);
+        this.authService.login(response);
       }
     );
   }
 
   public login(form: Login){
-    this._http.post<any>(this.baseURL + '/login', form).subscribe(
+    this._http.post<Tokens>(this.baseURL + '/login', form).subscribe(
       response => {
-        this.authService.login(response.token);
+        this.authService.login(response);
       }
     );
   }

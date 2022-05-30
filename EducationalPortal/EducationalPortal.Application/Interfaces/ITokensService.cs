@@ -2,7 +2,7 @@
 
 namespace EducationalPortal.Application.Interfaces
 {
-    public interface ITokenService
+    public interface ITokensService
     {
         string GenerateAccessToken(IEnumerable<Claim> claims);
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EducationalPortal.Infrastructure.DI
+namespace EducationalPortal.Infrastructure
 {
     public static class DependencyInjection
     {
@@ -31,7 +31,7 @@ namespace EducationalPortal.Infrastructure.DI
         {
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<ITokensService, TokensService>();
             services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ICloudStorageService, CloudStorageService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();

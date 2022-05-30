@@ -11,6 +11,7 @@ using EducationalPortal.API.Mapping;
 using EducationalPortal.Core.Entities.JoinEntities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
+using EducationalPortal.API.Models;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -25,11 +26,11 @@ namespace EducationalPortal.API.Controllers
 
         private readonly IGenericRepository<Role> _rolesRepository;
 
-        private readonly ITokenService _tokenService;
+        private readonly ITokensService _tokenService;
 
         private readonly Mapper _mapper = new();
 
-        public AccountController(IUsersService usersService, ITokenService tokenService,
+        public AccountController(IUsersService usersService, ITokensService tokenService,
                                  IShoppingCartService shoppingCartService,
                                  IGenericRepository<Role> rolesRepository)
         {
@@ -173,7 +174,7 @@ namespace EducationalPortal.API.Controllers
             return Ok(tokens);
         }
 
-        private async Task<Object> AddToRole(string roleName, string email)
+        private async Task<TokensModel> AddToRole(string roleName, string email)
         {
             var role = (await this._rolesRepository.GetAllAsync(r => r.Name == roleName)).FirstOrDefault();
             var user = await this._usersService.GetUserAsync(email);
@@ -182,7 +183,7 @@ namespace EducationalPortal.API.Controllers
             return await this.UpdateUserTokens(user);
         }
 
-        private async Task<Object> UpdateUserTokens(User user)
+        private async Task<TokensModel> UpdateUserTokens(User user)
         {
             var claims = await this.GetClaims(user);
             var accessToken = this._tokenService.GenerateAccessToken(claims);
@@ -195,9 +196,9 @@ namespace EducationalPortal.API.Controllers
             };
             await this._usersService.UpdateUserAsync(user);
 
-            return new
+            return new TokensModel
             {
-                Token = accessToken,
+                AccessToken = accessToken,
                 RefreshToken = refreshToken
             };
         }

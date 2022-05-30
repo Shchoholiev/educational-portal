@@ -76,7 +76,7 @@
             <img src="{{course?.thumbnail}}" class="card-img-top">
             <div class="card-body">
                 <h2 class="text-primary">{{course?.price}} points</h2>
-                <a class="btn btn-primary mb-3" style="width:100%">Add to cart</a>
+                <a class="btn btn-primary mb-3 w-100" (click)="addToCart(course.id)">Add to cart</a>
                 <h6>You will acquire skills:</h6>
                 <ul>
                     <li *ngFor="let skill of course?.skills">{{skill.name}}</li>

@@ -6,20 +6,20 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EducationalPortal.Infrastructure.Identity
+namespace EducationalPortal.Infrastructure.Services
 {
-    public class TokenService : ITokensService
+    public class TokensService : ITokensService
     {
         private readonly IConfiguration _configuration;
 
-        public TokenService(IConfiguration configuration)
+        public TokensService(IConfiguration configuration)
         {
-            this._configuration = configuration;
+            _configuration = configuration;
         }
 
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
-            var tokenOptions = this.GetTokenOptions(claims);
+            var tokenOptions = GetTokenOptions(claims);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             return tokenString;
         }
@@ -36,18 +36,17 @@ namespace EducationalPortal.Infrastructure.Identity
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
+                ValidateAudience = false,
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("HHUHU92479-JKKNS23O")),
-                ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                    _configuration.GetValue<string>("JsonWebTokenKeys:IssuerSigningKey"))),
+                ValidateLifetime = false
             };
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
             return principal;
         }
 

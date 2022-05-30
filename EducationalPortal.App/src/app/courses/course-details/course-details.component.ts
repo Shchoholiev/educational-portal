@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
 import { Course } from '../../shared/course.model';
 import { CoursesService } from '../courses.service';
 
@@ -16,7 +17,8 @@ export class CourseDetailsComponent implements OnInit {
   public course: Course;
 
   constructor(private _route: ActivatedRoute, private _service: CoursesService, 
-              public authService: AuthService) { }
+              public authService: AuthService, private _shoppingCartService: ShoppingCartService, 
+              private _router: Router) { }
 
   setCourse(id: number){
     this._service.getCourse(id).subscribe(
@@ -29,4 +31,15 @@ export class CourseDetailsComponent implements OnInit {
     this.setCourse(this.id);
   }
 
+  public addToCart(id: number){
+    if (this.authService.isAuthenticated) {
+      this._shoppingCartService.addToCartAuthorized(id).subscribe(
+        () => this._router.navigate(["/shopping-cart"])
+      );
+    }
+    else {
+      this._shoppingCartService.addToCart(id);
+      this._router.navigate(["/shopping-cart"]);
+    }
+  }
 }

@@ -1,6 +1,6 @@
 using EducationalPortal.API.DI;
+using EducationalPortal.Infrastructure;
 using EducationalPortal.Infrastructure.DataInitializer;
-using EducationalPortal.Infrastructure.DI;
 using EducationalPortal.Infrastructure.EF;
 using Newtonsoft.Json;
 
