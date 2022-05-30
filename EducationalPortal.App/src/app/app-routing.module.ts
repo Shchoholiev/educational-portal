@@ -11,11 +11,13 @@ import { AuthorComponent } from './account/author/author.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart/shopping-cart.component';
 import { MyLearningComponent } from './courses/my-learning/my-learning.component';
 import { CourseLearnComponent } from './courses/course-learn/course-learn.component';
+import { CourseEditComponent } from './courses/course-edit/course-edit.component';
 
 const routes: Routes = [
   { path: 'courses', component: CoursesComponent },
   { path: 'courses/:id', component: CourseDetailsComponent },
   { path: 'courses/learn/:id', component: CourseLearnComponent, canActivate: [AuthGuard] },
+  { path: 'courses/edit/:id', component: CourseEditComponent, canActivate: [AuthGuard] },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuard] },

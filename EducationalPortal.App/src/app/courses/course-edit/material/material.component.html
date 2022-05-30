@@ -1,0 +1,18 @@
+<div class="card m-1">
+    <div class="card-body d-flex flex-row">
+        <h6 class="mb-0" style="margin-right:10px">{{index}}</h6>
+        <img *ngIf="material.link.includes('videos')" style="height:17px; margin-right:10px;" class="mt-1"
+                  src="https://educationalportal.blob.core.windows.net/essentials/Video.svg"/>
+
+        <img *ngIf="material.link.includes('books')" style="height:17px; margin-right:10px;" class="mt-1"
+             src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
+
+        <img *ngIf="!material.link.includes('books') && !material.link.includes('videos')" 
+                style="height:17px; margin-right:10px;" class="mt-1"
+                 src="https://educationalportal.blob.core.windows.net/essentials/Article.svg"/>
+        <a href="{{material.link}}" target="_blank"><p class="mb-0" style="margin-right:7px;">{{material.name}}</p></a>
+        <button class="btn btn-sm btn-danger ms-3 my-auto" (click)="remove.emit(material.id)">
+            <i class="fa-xs fa-solid fa-trash-can"></i>
+        </button>
+    </div>
+</div>

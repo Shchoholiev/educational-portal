@@ -23,6 +23,10 @@ export class CoursesService {
   public getCourse(id: number){
     return this._http.get<Course>(`${this.baseURL}/${id}`);
   }
+  
+  public update(course: Course){
+    return this._http.put(`${this.baseURL}/${course.id}`, course);
+  }
 
   public delete(id: number){
     return this._http.delete(`${this.baseURL}/${id}`);

@@ -118,7 +118,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpGet("edit/{id}")]
         [Authorize(Roles = "Creator")]
-        public async Task<ActionResult<CourseDTO>> Edit(int id)
+        public async Task<ActionResult<CourseDTO>> GetCourseForEdit(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             var courseDTO = this._mapper.Map(course);

@@ -27,6 +27,10 @@ import { ArticleSideComponent } from './courses/course-learn/materials/article-s
 import { BookLearnComponent } from './courses/course-learn/materials/book-learn/book-learn.component';
 import { SafePipe } from './safe.pipe';
 import { VideoLearnComponent } from './courses/course-learn/materials/video-learn/video-learn.component';
+import { CourseEditComponent } from './courses/course-edit/course-edit.component';
+import { AddSkillsComponent } from './skills/add-skills/add-skills.component';
+import { SkillComponent } from './skills/skill/skill.component';
+import { MaterialComponent } from './courses/course-edit/material/material.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -54,7 +58,11 @@ export function tokenGetter() {
     ArticleSideComponent,
     BookLearnComponent,
     SafePipe,
-    VideoLearnComponent
+    VideoLearnComponent,
+    CourseEditComponent,
+    AddSkillsComponent,
+    SkillComponent,
+    MaterialComponent
   ],
   imports: [
     BrowserModule,

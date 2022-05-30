@@ -88,7 +88,8 @@
                             <h5 class="card-title">{{course.name}}</h5>
                             <p class="card-text">{{course.shortDescription}}</p>
                             <div class="d-flex flex-row">
-                                <a class="btn btn-primary me-2" style="z-index:1000">Edit</a>
+                                <a class="btn btn-primary me-2" style="z-index:1000" 
+                                    routerLink="/courses/edit/{{course.id}}">Edit</a>
                                 <button type="button" (click)="deleteCourse(course.id)" class="btn btn-danger mx-2" 
                                         style="z-index:1000">Delete</button>
                             </div>
