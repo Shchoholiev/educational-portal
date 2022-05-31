@@ -60,6 +60,9 @@
                     [disabled]="form.invalid || !article.resource"/>
         </div>
     </form>
+    <span class="text-danger">
+        <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+    </span>
 </section>
 
 <hr/>

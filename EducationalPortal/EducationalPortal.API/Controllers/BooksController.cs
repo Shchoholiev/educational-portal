@@ -53,7 +53,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]BookDTO bookDTO)
+        public async Task<IActionResult> Create([FromForm] BookDTO bookDTO)
         {
             if (ModelState.IsValid)
             {

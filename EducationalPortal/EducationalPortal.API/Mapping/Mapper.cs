@@ -14,19 +14,11 @@ namespace EducationalPortal.API.Mapping
     {
         private readonly IMapper _mapper = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Video, VideoViewModel>()
-            .ForMember(dest => dest.Quality,
-                opt => opt.MapFrom(src => src.Quality.Name));
+            cfg.CreateMap<Video, VideoViewModel>();
 
-            cfg.CreateMap<Book, BookViewModel>()
-            .ForMember(dest => dest.Extension,
-                opt => opt.MapFrom(src => src.Extension.Name))
-            .ForMember(dest => dest.Authors,
-                opt => opt.MapFrom(src => src.Authors.Select(a => a.FullName)));
+            cfg.CreateMap<Book, BookViewModel>();
 
-            cfg.CreateMap<Article, ArticleViewModel>()
-            .ForMember(dest => dest.Resource,
-                opt => opt.MapFrom(src => src.Resource.Name));
+            cfg.CreateMap<Article, ArticleViewModel>();
 
             cfg.CreateMap<Course, CourseViewModel>()
             .ForMember(dest => dest.Materials,

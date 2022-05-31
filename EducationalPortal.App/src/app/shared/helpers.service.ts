@@ -13,6 +13,6 @@ export class HelpersService {
   public fileToLink(blobContainer: string, file: File){
     var formData = new FormData;
     formData.append("file", file, file.name)
-    return this._http.post<string>(`${this.helpersURL}/file-to-link/${blobContainer}`, formData);
+    return this._http.post(`${this.helpersURL}/file-to-link/${blobContainer}`, formData);
   }
 }

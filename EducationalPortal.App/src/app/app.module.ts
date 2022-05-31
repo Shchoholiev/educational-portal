@@ -33,6 +33,10 @@ import { SkillComponent } from './skills/skill/skill.component';
 import { MaterialComponent } from './courses/course-edit/material/material.component';
 import { AddArticleComponent } from './articles/add-article/add-article.component';
 import { AddResourceComponent } from './resources/add-resource/add-resource.component';
+import { AddBooksComponent } from './books/add-books/add-books.component';
+import { CreateBookComponent } from './books/create-book/create-book.component';
+import { AddAuthorsComponent } from './authors/add-authors/add-authors.component';
+import { CreateAuthorComponent } from './authors/create-author/create-author.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -66,7 +70,11 @@ export function tokenGetter() {
     SkillComponent,
     MaterialComponent,
     AddArticleComponent,
-    AddResourceComponent
+    AddResourceComponent,
+    AddBooksComponent,
+    CreateBookComponent,
+    AddAuthorsComponent,
+    CreateAuthorComponent
   ],
   imports: [
     BrowserModule,

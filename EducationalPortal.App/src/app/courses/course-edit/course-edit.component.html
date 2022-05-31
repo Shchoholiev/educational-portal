@@ -10,7 +10,7 @@
                 <img src="{{course.thumbnail}}"/>
                 <div>
                     <label class="control-label">Thumbnail</label>
-                    <input class="form-control" type="file" onchange="setThumbnail($event)">
+                    <input class="form-control" type="file" (change)="setThumbnail($event)">
                 </div>
             </div>
             <div class="form-group mb-2"> 
@@ -42,7 +42,7 @@
             <div>
                 <span class="text-danger"></span>
             </div>
-            <input type="button" value="Add Skills" class="btn btn-primary mt-3"/>
+            <input type="button" value="Add Skills" class="btn btn-primary mt-3" (click)="addSkills()"/>
         </section>
 
         <hr/>
@@ -57,9 +57,9 @@
                 <span class="text-danger"></span>
             </div>
             <div class="mt-3">
-                <input type="button" value="Add Videos" class="btn btn-primary me-2"/>
-                <input type="button" value="Add Books" class="btn btn-primary me-2" />
-                <input type="button" value="Add Articles" class="btn btn-primary" />
+                <input type="button" value="Add Videos" class="btn btn-primary me-2" (click)="addVideos()"/>
+                <input type="button" value="Add Books" class="btn btn-primary me-2" (click)="addBooks()"/>
+                <input type="button" value="Add Articles" class="btn btn-primary" (click)="addArticles()"/>
             </div>
         </section>
 
@@ -71,8 +71,9 @@
         </section>
     </div>
 
-    <div class="col-7">
-        <app-add-skills [course]="course"></app-add-skills>
-        <app-add-article [course]="course"></app-add-article>
+    <div class="col-7" [ngSwitch]="panel">
+        <app-add-skills [course]="course" *ngSwitchCase="'skills'"></app-add-skills>
+        <app-add-article [course]="course" *ngSwitchCase="'articles'"></app-add-article>
+        <app-add-books [course]="course" *ngSwitchCase="'books'"></app-add-books>
     </div>
 </section>

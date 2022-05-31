@@ -13,6 +13,8 @@ export class CourseEditComponent implements OnInit {
 
   public course: Course = new Course();
 
+  public panel: string = "";
+
   constructor(private _helpersService: HelpersService, private _coursesService: CoursesService,
               private _route: ActivatedRoute, private _router: Router, ) { }
 
@@ -29,7 +31,7 @@ export class CourseEditComponent implements OnInit {
 
   public setThumbnail(event: Event){
     this.fileToLink(event)?.subscribe(
-      response => this.course.thumbnail = response
+      response => this.course.thumbnail = (response as any).link
     )
   }
 
@@ -49,10 +51,26 @@ export class CourseEditComponent implements OnInit {
     );
   }
 
+  public addSkills(){
+    this.panel = "skills";
+  }
+
+  public addBooks(){
+    this.panel = "books";
+  }
+
+  public addArticles(){
+    this.panel = "articles";
+  }
+
+  public addVideos(){
+    this.panel = "video";
+  }
+
   private fileToLink(event: Event){
     var input = event.target as HTMLInputElement;
     if (input.files) {
-      return this._helpersService.fileToLink('avatars', input?.files[0]);
+      return this._helpersService.fileToLink('thumbnails', input?.files[0]);
     }
     return;
   }
