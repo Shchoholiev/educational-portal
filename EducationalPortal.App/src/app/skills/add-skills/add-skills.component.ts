@@ -50,7 +50,6 @@ export class AddSkillsComponent implements OnInit {
         if (metadata) {
           this.metadata = JSON.parse(metadata);
         }
-        
       }
     )
   }

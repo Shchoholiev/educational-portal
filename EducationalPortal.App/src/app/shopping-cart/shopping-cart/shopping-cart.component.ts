@@ -18,7 +18,7 @@ export class ShoppingCartComponent implements OnInit {
 
   public pageSize: number = 10;
 
-  public metadata: string | null;
+  public metadata: any;
 
   constructor(public _shoppingCartService: ShoppingCartService, private _authService: AuthService,
               private _router: Router) { }
@@ -51,7 +51,10 @@ export class ShoppingCartComponent implements OnInit {
         response => {
           if (response.body) {
             this.cartItems = response.body;
-            this.metadata = response.headers.get('x-pagination');
+            var metadata = response.headers.get('x-pagination');
+            if (metadata) {
+              this.metadata = JSON.parse(metadata);
+            }          
           }
         }
       );
@@ -61,7 +64,10 @@ export class ShoppingCartComponent implements OnInit {
         response => {
           if (response.body) {
             this.cartItems = response.body;
-            this.metadata = response.headers.get('x-pagination');
+            var metadata = response.headers.get('x-pagination');
+            if (metadata) {
+              this.metadata = JSON.parse(metadata);
+            }          
           }
         }
       );

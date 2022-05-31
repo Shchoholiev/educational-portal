@@ -31,6 +31,8 @@ import { CourseEditComponent } from './courses/course-edit/course-edit.component
 import { AddSkillsComponent } from './skills/add-skills/add-skills.component';
 import { SkillComponent } from './skills/skill/skill.component';
 import { MaterialComponent } from './courses/course-edit/material/material.component';
+import { AddArticleComponent } from './articles/add-article/add-article.component';
+import { AddResourceComponent } from './resources/add-resource/add-resource.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -62,7 +64,9 @@ export function tokenGetter() {
     CourseEditComponent,
     AddSkillsComponent,
     SkillComponent,
-    MaterialComponent
+    MaterialComponent,
+    AddArticleComponent,
+    AddResourceComponent
   ],
   imports: [
     BrowserModule,

@@ -12,7 +12,7 @@ export class CoursesComponent implements OnInit {
 
   public list: Course[];
 
-  public metadata: string | null;
+  public metadata: any;
   
   public pageSize = 3;
 
@@ -26,7 +26,10 @@ export class CoursesComponent implements OnInit {
     this.service.getCoursesPage(this.pageSize, pageNumber).subscribe(
       response => { 
         this.list = response.body as Course[];
-        this.metadata = response.headers.get('x-pagination');
+        var metadata = response.headers.get('x-pagination');
+        if (metadata) {
+          this.metadata = JSON.parse(metadata);
+        }
       }
     )
   }
