@@ -20,6 +20,8 @@
     </div>
 </section>
 
+<span class="text-danger">{{deleteError}}</span>
+
 <app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>
 
 <hr/>
@@ -59,3 +61,7 @@
         </div>
     </form>
 </section>
+
+<hr/>
+
+<app-add-resource [article]="article"></app-add-resource>

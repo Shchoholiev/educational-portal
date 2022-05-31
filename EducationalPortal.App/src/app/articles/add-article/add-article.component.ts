@@ -17,11 +17,13 @@ export class AddArticleComponent implements OnInit {
 
   public metadata: any;
   
-  public pageSize = 4;
+  public pageSize = 3;
 
   public article: Article = new Article();
 
   public createErrors: string[] = [];
+
+  public deleteError: string;
 
   constructor(private _articlesService: ArticlesService) { }
 
@@ -43,11 +45,10 @@ export class AddArticleComponent implements OnInit {
   }
 
   public setPage(pageNumber: number){
+    this.deleteError = "";
     this._articlesService.getPage(this.pageSize, pageNumber).subscribe(
       response => { 
         this.articles = response.body as Article[];
-        console.log(this.articles);
-        
         var metadata = response.headers.get('x-pagination');
         if (metadata) {
           this.metadata = JSON.parse(metadata);
@@ -57,13 +58,19 @@ export class AddArticleComponent implements OnInit {
   }
 
   public delete(id: number){
-    this._articlesService.delete(id).subscribe(
-      () => {
+    this.deleteError = "";
+    this._articlesService.delete(id).pipe(
+      map(() => {
         if (this.metadata) {
           this.setPage(this.metadata.PageNumber);
         }
-      }
-    );
+      }),
+      catchError(err => {
+        this.deleteError = err.error;
+        return throwError(() => {
+          return this.deleteError;})
+    })
+    ).subscribe()
   }
 
   public create(){

@@ -1,10 +1,10 @@
 <section class="d-flex flex-wrap">
-    <div class="card m-1" *ngFor="let s of skills">
+    <div class="card my-1 me-2" *ngFor="let r of resources">
         <div class="card-body d-flex flex-row">
-            <input type="checkbox" class="form-check-input checkbox me-1" [checked]="skillExistsInCourse(s.id)"
-                    (click)="addSkillToCourse(s.id)"/>
-            <p class="mb-0" style="margin-right:10px;">{{s.name}}</p>
-            <button class="btn btn-sm btn-danger ms-3 p-1 px-2" (click)="this.delete(s.id)">
+            <input type="radio" class="form-check-input me-2" name="resourceRadio" (click)="chooseResource(r)"
+                    [checked]="resourceExistsInArticle(r.id)"/>
+            <p class="mb-0 me-2">{{r.name}}</p>
+            <button class="btn btn-sm btn-danger ms-3 p-1 px-2" (click)="this.delete(r.id)">
                 <i class="fa-xs fa-solid fa-trash-can"></i>
             </button>
         </div>
@@ -17,8 +17,8 @@
     <form (ngSubmit)="create()" #form="ngForm" novalidate>
         <div class="d-flex flex-row">
             <p style="margin:auto 0;">Name</p>
-            <input class="form-control mx-3" [(ngModel)]="skill.name" name="name" required/>
-            <input type="submit" value="Create Skill" class="btn btn-primary" [disabled]="form.invalid"/>
+            <input class="form-control mx-3" [(ngModel)]="resource.name" name="name" required/>
+            <input type="submit" value="Create Resource" class="btn btn-primary" [disabled]="form.invalid"/>
         </div>
         <span class="text-danger">
             <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>

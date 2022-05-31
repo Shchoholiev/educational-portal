@@ -23,6 +23,8 @@ export class AddSkillsComponent implements OnInit {
 
   public createErrors: string[] = [];
 
+  public deleteError: string;
+
   constructor(private _skillsService: SkillsService) { }
 
   ngOnInit(): void {
@@ -43,6 +45,7 @@ export class AddSkillsComponent implements OnInit {
   }
 
   public setPage(pageNumber: number){
+    this.deleteError = "";
     this._skillsService.getPage(this.pageSize, pageNumber).subscribe(
       response => { 
         this.skills = response.body as Skill[];
@@ -55,13 +58,19 @@ export class AddSkillsComponent implements OnInit {
   }
 
   public delete(id: number){
-    this._skillsService.delete(id).subscribe(
-      () => {
+    this.deleteError = "";
+    this._skillsService.delete(id).pipe(
+      map(() => {
         if (this.metadata) {
           this.setPage(this.metadata.PageNumber);
         }
-      }
-    );
+      }),
+      catchError(err => {
+        this.deleteError = err.error;
+        return throwError(() => {
+          return this.deleteError;})
+    })
+    ).subscribe()
   }
 
   public create(){

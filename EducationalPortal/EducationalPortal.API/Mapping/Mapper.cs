@@ -34,6 +34,8 @@ namespace EducationalPortal.API.Mapping
 
             cfg.CreateMap<ArticleDTO, Article>();
 
+            cfg.CreateMap<ResourceDTO, Resource>();
+
             cfg.CreateMap<CourseDTO, Course>()
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore())
