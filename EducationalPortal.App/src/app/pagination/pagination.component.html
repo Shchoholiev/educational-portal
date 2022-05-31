@@ -1,14 +1,14 @@
 <nav class="mt-3">
     <ul class="pagination justify-content-center" style="cursor: pointer;">
-        <li class="page-item" [ngClass]="{'disabled': !hasPreviousPage}">
-            <a (click)="setPage(pageNumber - 1)" class="page-link">Previous</a>
+        <li class="page-item" [ngClass]="{'disabled': !metadata.HasPreviousPage}">
+            <a (click)="setPage(metadata.PageNumber - 1)" class="page-link">Previous</a>
         </li>
         <li class="page-item" *ngFor="let e of forLoop(); let i = index;" 
-                                [ngClass]="{'active': pageNumber == i + 1}">
+                                [ngClass]="{'active': metadata.PageNumber == i + 1}">
             <a (click)="setPage(i + 1)" class="page-link">{{i + 1}}</a>
         </li>
-        <li class="page-item" [ngClass]="{'disabled': !hasNextPage}">
-            <a (click)="setPage(pageNumber + 1)" class="page-link">Next</a>
+        <li class="page-item" [ngClass]="{'disabled': !metadata.HasNextPage}">
+            <a (click)="setPage(metadata.PageNumber + 1)" class="page-link">Next</a>
         </li>
     </ul>
 </nav>

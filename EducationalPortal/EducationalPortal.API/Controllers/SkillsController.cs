@@ -45,7 +45,7 @@ namespace EducationalPortal.API.Controllers
             {
                 if (await this._skillsRepository.Exists(s => s.Name == skillDTO.Name))
                 {
-                    ModelState.AddModelError(string.Empty, "Skill already exists!");
+                    ModelState.AddModelError("Name", "Skill already exists!");
                 }
                 else
                 {
