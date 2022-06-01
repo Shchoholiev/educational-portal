@@ -180,6 +180,16 @@ namespace EducationalPortal.API.Controllers
             var user = await this._usersService.GetUserAsync(email);
             user.Roles.Add(role);
 
+            try
+            {
+                await this._usersService.SaveDbAsync();
+            }
+            catch (Exception e )
+            {
+
+                throw;
+            }
+
             return await this.UpdateUserTokens(user);
         }
 

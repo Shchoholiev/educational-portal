@@ -17,12 +17,15 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly ICoursesRepository _coursesRepository;
 
+        private readonly IGenericRepository<Role> _rolesRepository;
+
         public UsersService(IUsersRepository userRepository, IPasswordHasher passwordHasher,
-                            ICoursesRepository coursesRepository)
+                            ICoursesRepository coursesRepository, IGenericRepository<Role> rolesRepository)
         {
             this._usersRepository = userRepository;
             this._passwordHasher = passwordHasher;
             this._coursesRepository = coursesRepository;
+            this._rolesRepository = rolesRepository;
         }
 
         public async Task<OperationDetails> RegisterAsync(UserDTO userDTO)
@@ -34,13 +37,15 @@ namespace EducationalPortal.Infrastructure.Services
                 return operationDetails;
             }
 
+            var role = await this._rolesRepository.GetOneAsync(1);
+
             var user = new User
             {
                 Id = DateTime.Now.Ticks.ToString(),
                 Name = userDTO.Name,
                 Email = userDTO.Email,
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/profile_default.jpg",
-                Roles = new List<Role> { new Role { Id = 1 } },
+                Roles = new List<Role> { role },
             };
 
             try
@@ -164,6 +169,11 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<int> GetLearnedMaterialsCountAsync(int courseId, string email)
         {
             return await this._usersRepository.GetLearnedMaterialsCountAsync(courseId, email);
+        }
+
+        public async Task SaveDbAsync()
+        {
+            await this._usersRepository.SaveAsync();
         }
     }
 }

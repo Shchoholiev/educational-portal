@@ -33,6 +33,7 @@ namespace EducationalPortal.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new ArticleEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CartItemEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingHistoryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
         }
 
         public DbSet<Course> Courses { get; set; }

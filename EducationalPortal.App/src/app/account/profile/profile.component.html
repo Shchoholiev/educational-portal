@@ -100,8 +100,13 @@
             </div>
         </div>
 
-        <div *ngIf="authServe.isInRole('Creator')" class="my-2">
+        <div *ngIf="authService.isInRole('Creator')" class="my-2">
             <input type="button" class="btn btn-primary" value="Create Course" routerLink="/create-course"/>
         </div>
+
+        <div *ngIf="!authService.isInRole('Creator')" class="my-2">
+            <input type="button" class="btn btn-primary" value="Became Creator" (click)="becameCreator()"/>
+        </div>
+
     </div>
 </div>

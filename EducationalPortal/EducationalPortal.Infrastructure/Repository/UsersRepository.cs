@@ -130,7 +130,7 @@ namespace EducationalPortal.Infrastructure.IRepositories
             return count;
         }
 
-        private async Task SaveAsync()
+        public async Task SaveAsync()
         {
             await this._db.SaveChangesAsync();
         }

@@ -15,6 +15,7 @@ import { CourseEditComponent } from './courses/course-edit/course-edit.component
 import { CourseCreateComponent } from './courses/course-create/course-create.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/courses', pathMatch: 'full' },
   { path: 'courses', component: CoursesComponent, pathMatch: 'full' },
   { path: 'courses/:id', component: CourseDetailsComponent, pathMatch: 'full' },
   { path: 'courses/learn/:id', component: CourseLearnComponent, canActivate: [AuthGuard] },

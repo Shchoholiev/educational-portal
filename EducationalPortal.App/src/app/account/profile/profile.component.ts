@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   public error: string = "";
 
   constructor(private _accountService: AccountService, private _helpersService: HelpersService,
-              private _coursesService: CoursesService, public authServe: AuthService) { }
+              private _coursesService: CoursesService, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.refresh();
@@ -57,5 +57,11 @@ export class ProfileComponent implements OnInit {
         response => this.user.avatar = (<any>response).link
       );
     }
+  }
+
+  public becameCreator(){
+    this._accountService.becameCreator().subscribe(
+      (response) =>  this.authService.login(response)
+    );
   }
 }

@@ -31,5 +31,7 @@ namespace EducationalPortal.Application.IRepositories
         Task UpdateUsersCoursesAsync(UsersCourses usersCourses);
 
         Task<int> GetLearnedMaterialsCountAsync(int courseId, string email);
+
+        Task SaveAsync();
     }
 }

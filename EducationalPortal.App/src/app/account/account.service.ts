@@ -15,7 +15,7 @@ export class AccountService {
 
   private readonly baseURL = 'https://localhost:7106/api/account';
 
-  constructor(private _http: HttpClient, public authService: AuthService) { }
+  constructor(private _http: HttpClient) { }
 
   public getUser(){
     return this._http.get<User>(this.baseURL);
@@ -31,19 +31,15 @@ export class AccountService {
   }
 
   public register(form: Register){
-    this._http.post<Tokens>(this.baseURL + '/register', form).subscribe(
-      response => {
-        this.authService.login(response);
-      }
-    );
+    return this._http.post<Tokens>(this.baseURL + '/register', form);
   }
 
   public login(form: Login){
-    this._http.post<Tokens>(this.baseURL + '/login', form).subscribe(
-      response => {
-        this.authService.login(response);
-      }
-    );
+    return this._http.post<Tokens>(this.baseURL + '/login', form);
+  }
+
+  public becameCreator(){
+    return this._http.put<Tokens>(this.baseURL + '/became-creator', {});
   }
 
   public getMyLearningCourses(pageSize: number, pageNumber: number){
