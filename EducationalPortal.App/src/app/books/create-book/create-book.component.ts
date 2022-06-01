@@ -18,7 +18,7 @@ export class CreateBookComponent implements OnInit {
 
   @Output() refreshPaging = new EventEmitter<any>(true);
 
-  constructor(private _booksService: BooksService, private _helpersService: HelpersService) { }
+  constructor(private _booksService: BooksService) { }
 
   ngOnInit(): void {
   }

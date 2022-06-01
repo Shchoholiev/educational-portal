@@ -37,6 +37,8 @@ import { AddBooksComponent } from './books/add-books/add-books.component';
 import { CreateBookComponent } from './books/create-book/create-book.component';
 import { AddAuthorsComponent } from './authors/add-authors/add-authors.component';
 import { CreateAuthorComponent } from './authors/create-author/create-author.component';
+import { AddVideosComponent } from './videos/add-videos/add-videos.component';
+import { CreateVideoComponent } from './videos/create-video/create-video.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -74,7 +76,9 @@ export function tokenGetter() {
     AddBooksComponent,
     CreateBookComponent,
     AddAuthorsComponent,
-    CreateAuthorComponent
+    CreateAuthorComponent,
+    AddVideosComponent,
+    CreateVideoComponent
   ],
   imports: [
     BrowserModule,

@@ -64,7 +64,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   public addVideos(){
-    this.panel = "video";
+    this.panel = "videos";
   }
 
   private fileToLink(event: Event){
