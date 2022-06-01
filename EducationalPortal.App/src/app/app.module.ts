@@ -39,6 +39,7 @@ import { AddAuthorsComponent } from './authors/add-authors/add-authors.component
 import { CreateAuthorComponent } from './authors/create-author/create-author.component';
 import { AddVideosComponent } from './videos/add-videos/add-videos.component';
 import { CreateVideoComponent } from './videos/create-video/create-video.component';
+import { CourseCreateComponent } from './courses/course-create/course-create.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -78,7 +79,8 @@ export function tokenGetter() {
     AddAuthorsComponent,
     CreateAuthorComponent,
     AddVideosComponent,
-    CreateVideoComponent
+    CreateVideoComponent,
+    CourseCreateComponent
   ],
   imports: [
     BrowserModule,

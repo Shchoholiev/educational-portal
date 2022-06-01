@@ -4,6 +4,7 @@ import { HelpersService } from 'src/app/shared/helpers.service';
 import { User } from 'src/app/shared/user.model';
 import { AccountService } from '../account.service';
 import { catchError, of } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,7 @@ export class ProfileComponent implements OnInit {
   public error: string = "";
 
   constructor(private _accountService: AccountService, private _helpersService: HelpersService,
-              private _coursesService: CoursesService) { }
+              private _coursesService: CoursesService, public authServe: AuthService) { }
 
   ngOnInit(): void {
     this.refresh();

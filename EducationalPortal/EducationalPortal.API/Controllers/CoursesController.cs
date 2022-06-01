@@ -107,9 +107,8 @@ namespace EducationalPortal.API.Controllers
                     var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
                     course.Author = await _usersService.GetUserAsync(email);
                     await this._coursesRepository.AddAsync(course);
-                    var createdCourse = this._mapper.Map(course, new List<MaterialsBase>());
 
-                    return CreatedAtAction("GetCourse", new { id = course.Id }, createdCourse);
+                    return CreatedAtAction("GetCourse", new { id = course.Id }, course);
                 }
             }
 

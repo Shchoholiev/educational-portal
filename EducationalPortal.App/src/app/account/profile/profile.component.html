@@ -99,5 +99,9 @@
                 </div>
             </div>
         </div>
+
+        <div *ngIf="authServe.isInRole('Creator')" class="my-2">
+            <input type="button" class="btn btn-primary" value="Create Course" routerLink="/create-course"/>
+        </div>
     </div>
 </div>
