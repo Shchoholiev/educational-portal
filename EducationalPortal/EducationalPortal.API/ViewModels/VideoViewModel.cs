@@ -1,9 +1,11 @@
-﻿namespace EducationalPortal.API.ViewModels
+﻿using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+
+namespace EducationalPortal.API.ViewModels
 {
     public class VideoViewModel : MaterialsBaseViewModel
     {
         public DateTime Duration { get; set; }
 
-        public string Quality { get; set; }
+        public Quality Quality { get; set; }
     }
 }

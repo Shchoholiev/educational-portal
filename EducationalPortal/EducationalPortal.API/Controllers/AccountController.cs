@@ -1,19 +1,21 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
-using EducationalPortal.Infrastructure.Identity;
 using EducationalPortal.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using EducationalPortal.API.Mapping;
 using EducationalPortal.Core.Entities.JoinEntities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
+using EducationalPortal.API.Models;
 
 namespace EducationalPortal.API.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/account")]
     public class AccountController : Controller
@@ -22,18 +24,18 @@ namespace EducationalPortal.API.Controllers
 
         private readonly IShoppingCartService _shoppingCartService;
 
-        private readonly IUserManager _userManager;
-
         private readonly IGenericRepository<Role> _rolesRepository;
+
+        private readonly ITokensService _tokenService;
 
         private readonly Mapper _mapper = new();
 
-        public AccountController(IUsersService usersService, IUserManager userManager,
+        public AccountController(IUsersService usersService, ITokensService tokenService,
                                  IShoppingCartService shoppingCartService,
                                  IGenericRepository<Role> rolesRepository)
         {
             this._usersService = usersService;
-            this._userManager = userManager;
+            this._tokenService = tokenService;
             this._shoppingCartService = shoppingCartService;
             this._rolesRepository = rolesRepository;
         }
@@ -43,6 +45,11 @@ namespace EducationalPortal.API.Controllers
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await this._usersService.GetAuthorAsync(email);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             return user;
         }
 
@@ -55,6 +62,7 @@ namespace EducationalPortal.API.Controllers
             {
                 return NotFound();
             }
+
             return user;
         }
 
@@ -68,15 +76,14 @@ namespace EducationalPortal.API.Controllers
                 return NotFound();
             }
 
-            if (email != userDTO.Email && await this._usersService.GetUserAsync(email) != null)
+            if (email != userDTO.Email && await this._usersService.GetUserAsync(userDTO.Email) != null)
             {
                 return BadRequest("User with this email already exists");
             }
 
             this._mapper.Map(user, userDTO);
-            await this._usersService.UpdateUserAsync(user);
-
-            return NoContent();
+            var tokens = await UpdateUserTokens(user);
+            return Ok(tokens);
         }
 
         [HttpGet("my-learning")]
@@ -84,6 +91,7 @@ namespace EducationalPortal.API.Controllers
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, uc => true);
+            this.SetPagingMetadata(usersCourses);
             return usersCourses;
         }
 
@@ -93,6 +101,7 @@ namespace EducationalPortal.API.Controllers
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                     uc => uc.MaterialsCount > uc.LearnedMaterialsCount && uc.LearnedMaterialsCount > 0);
+            this.SetPagingMetadata(usersCourses);
             return usersCourses;
         }
 
@@ -102,12 +111,13 @@ namespace EducationalPortal.API.Controllers
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var usersCourses = await this._usersService.GetUsersCoursesPageAsync(email, pageParameters, 
                                                     uc => uc.MaterialsCount == uc.LearnedMaterialsCount);
+            this.SetPagingMetadata(usersCourses);
             return usersCourses;
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -116,9 +126,10 @@ namespace EducationalPortal.API.Controllers
                 
                 if (result.Succeeded)
                 {
-                    await this._userManager.SignInAsync(this.HttpContext, userDTO, false);
-                    await this.CheckShoppingCartCookies(userDTO.Email);
-                    return StatusCode(201);
+                    var user = await this._usersService.GetUserAsync(userDTO.Email);
+                    await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
+                    var tokens = await this.UpdateUserTokens(user);
+                    return Ok(tokens);
                 }
                 else
                 {
@@ -131,7 +142,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -141,9 +152,9 @@ namespace EducationalPortal.API.Controllers
                 if (result.Succeeded)
                 {
                     var user = await this._usersService.GetUserAsync(userDTO.Email);
-                    userDTO.Name = user.Name;
-                    await this._userManager.SignInAsync(this.HttpContext, userDTO, model.RememberMe);
-                    return Ok();
+                    await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
+                    var tokens = await this.UpdateUserTokens(user);
+                    return Ok(tokens);
                 }
                 else
                 {
@@ -154,57 +165,98 @@ namespace EducationalPortal.API.Controllers
             return BadRequest();
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await this._userManager.SignOutAsync(this.HttpContext);
-            return Ok();
-        }
-
         [HttpPut("became-creator")]
         public async Task<IActionResult> BecameCreator()
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            await this.AddToRole("Creator", email);
+            var tokens = await this.AddToRole("Creator", email);
 
-            return Ok();
+            return Ok(tokens);
         }
 
-        private async Task AddToRole(string roleName, string email)
+        private async Task<TokensModel> AddToRole(string roleName, string email)
         {
-            await this._userManager.AddToRoleAsync(HttpContext, roleName);
-
             var role = (await this._rolesRepository.GetAllAsync(r => r.Name == roleName)).FirstOrDefault();
             var user = await this._usersService.GetUserAsync(email);
             user.Roles.Add(role);
-            await this._usersService.UpdateUserAsync(user);
+
+            try
+            {
+                await this._usersService.SaveDbAsync();
+            }
+            catch (Exception e )
+            {
+
+                throw;
+            }
+
+            return await this.UpdateUserTokens(user);
         }
 
-        private async Task CheckShoppingCartCookies(string userEmail)
+        private async Task<TokensModel> UpdateUserTokens(User user)
         {
-            var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-            if (cookies != null)
+            var claims = await this.GetClaims(user);
+            var accessToken = this._tokenService.GenerateAccessToken(claims);
+            var refreshToken = this._tokenService.GenerateRefreshToken();
+
+            user.UserToken = new UserToken
+            {
+                RefreshToken = refreshToken,
+                RefreshTokenExpiryTime = DateTime.Now.AddDays(7),
+            };
+            await this._usersService.UpdateUserAsync(user);
+
+            return new TokensModel
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+        }
+
+        private async Task<IEnumerable<Claim>> GetClaims(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email),
+            };
+
+            foreach (var r in user.Roles)
+            {
+                var role = await this._rolesRepository.GetOneAsync(r.Id);
+                claims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
+
+            return claims;
+        }
+
+        private async Task CheckShoppingCartCookies(string email, string cookies)
+        {
+            if (!string.IsNullOrEmpty(cookies))
             {
                 var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookies);
                 foreach (var cartItem in cartItems)
                 {
-                    cartItem.User = new User { Email = userEmail };
-                    await this._shoppingCartService.AddAsync(cartItem);
+                    if (!await this._shoppingCartService.Exists(cartItem.Course.Id, email))
+                    {
+                        cartItem.User = new User { Email = email };
+                        await this._shoppingCartService.AddAsync(cartItem);
+                    }
                 }
-                var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(-1) };
-                Response.Cookies.Append("EducationalPortal_ShoppingCart", "", cookieOptions);
             }
         }
 
-        private string CheckReturnUrl(string returnUrl)
+        private void SetPagingMetadata(IPagedList pagedList)
         {
-            if (string.IsNullOrEmpty(returnUrl)
-               || returnUrl.Contains("Register")
-               || returnUrl.Contains("Login"))
+            var metadata = new
             {
-                return "/";
-            }
-            return returnUrl;
+                pagedList.PageSize,
+                pagedList.PageNumber,
+                pagedList.TotalPages,
+                pagedList.HasNextPage,
+                pagedList.HasPreviousPage
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
         }
     }
 }

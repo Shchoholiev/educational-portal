@@ -1,0 +1,51 @@
+<div>
+    <form (ngSubmit)="create()" #form="ngForm" novalidate>
+        <div class="d-flex flex-row mb-3">
+            <div class="form-group" style="margin-right:10px"> 
+                <label class="control-label">Name</label> 
+                <input class="form-control" [(ngModel)]="book.name" name="name" required>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label class="control-label">File</label>
+                <input class="form-control" type="file" (change)="upload($event)">
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label class="control-label">Pages Count</label>
+                <input class="form-control" type="number" style="width:105px" 
+                    [(ngModel)]="book.pagesCount" name="pagesCount" required>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label class="control-label">Publication Year</label>
+                <input class="form-control" type="number" style="width:130px" [(ngModel)]="book.publicationYear" 
+                        name="publicationDate" required>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+    <h6 class="mt-2">Authors:</h6>
+    <div class="d-flex flex-wrap" style="margin-right:10px">
+        <div class="card me-2 my-1" *ngFor="let a of book.authors">
+            <div class="card-body d-flex flex-row px-3" style="padding:6px;">
+                <p class="mb-0">{{a?.fullName}}</p>
+            </div>
+        </div>
+        <p *ngIf="!book.authors.length" class="text-muted">Choose at least one author!</p>
+    </div>
+    <div>
+        <span class="text-danger"></span>
+    </div>
+
+    <input type="button" value="Create Book" class="btn btn-primary mt-2" (click)="create()" 
+            [disabled]="form.invalid || !book.authors.length || !book.file"/>
+</div>
+
+<span class="text-danger">
+    <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+</span>
+
+<hr/>
+
+<app-add-authors [book]="book"></app-add-authors>

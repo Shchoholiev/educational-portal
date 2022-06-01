@@ -1,21 +1,21 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace EducationalPortal.Infrastructure.Repository
+namespace EducationalPortal.Infrastructure.IRepositories
 {
     public class CoursesRepository : ICoursesRepository
     {
         private readonly ApplicationContext _db;
         private readonly DbSet<Course> _table;
 
-        public CoursesRepository()
+        public CoursesRepository(ApplicationContext context)
         {
-            this._db = new ApplicationContext();
+            this._db = context;
             this._table = _db.Set<Course>();
         }
 

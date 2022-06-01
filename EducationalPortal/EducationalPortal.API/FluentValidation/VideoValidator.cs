@@ -8,7 +8,6 @@ namespace EducationalPortal.API.FluentValidation
         public VideoValidator()
         {
             RuleFor(b => b.Name).NotEmpty();
-            RuleFor(b => b.Link).NotEmpty();
             RuleFor(b => b.Duration).NotEmpty();
             RuleFor(b => b.Quality).NotEmpty();
         }

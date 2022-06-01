@@ -35,5 +35,7 @@ namespace EducationalPortal.Application.Interfaces
         Task AddAcquiredSkills(int courseId, string email);
 
         Task<int> GetLearnedMaterialsCountAsync(int courseId, string email);
+
+        Task SaveDbAsync();
     }
 }

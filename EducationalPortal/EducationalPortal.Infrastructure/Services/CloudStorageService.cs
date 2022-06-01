@@ -18,7 +18,7 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<string> UploadAsync(Stream fileStream, string fileName, string fileType, 
                                               string containerName)
         {
-            var container = new BlobContainerClient(_connectionString, containerName);
+            var container = new BlobContainerClient(this._connectionString, containerName);
             var blob = container.GetBlobClient(fileName);
 
             while (await blob.ExistsAsync())
@@ -31,7 +31,7 @@ namespace EducationalPortal.Infrastructure.Services
 
             return blob.Uri.ToString();
         }
-
+        
         public async Task DeleteAsync(string fileLink, string containerName)
         {
             var container = new BlobContainerClient(_connectionString, containerName);

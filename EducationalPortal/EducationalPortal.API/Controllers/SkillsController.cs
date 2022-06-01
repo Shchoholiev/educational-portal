@@ -1,5 +1,5 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +45,7 @@ namespace EducationalPortal.API.Controllers
             {
                 if (await this._skillsRepository.Exists(s => s.Name == skillDTO.Name))
                 {
-                    ModelState.AddModelError(string.Empty, "Skill already exists!");
+                    ModelState.AddModelError("Name", "Skill already exists!");
                 }
                 else
                 {

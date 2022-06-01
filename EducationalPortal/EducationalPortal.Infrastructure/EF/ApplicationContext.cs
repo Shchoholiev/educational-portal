@@ -18,13 +18,6 @@ namespace EducationalPortal.Infrastructure.EF
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            string connectionString = @"server=(LocalDb)\MSSQLLocalDB;database=EducationalPortal;integrated security=True;
-                    MultipleActiveResultSets=True;App=EntityFramework;";
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CourseEntityConfiguration());
@@ -40,6 +33,7 @@ namespace EducationalPortal.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new ArticleEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CartItemEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingHistoryEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
         }
 
         public DbSet<Course> Courses { get; set; }

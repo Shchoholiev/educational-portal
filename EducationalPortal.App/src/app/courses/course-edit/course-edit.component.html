@@ -1,0 +1,86 @@
+<section class="row">
+    <div class="col-5">
+        <form #form="ngForm" novalidate>
+            <div class="form-group mb-2"> 
+                <label class="control-label">Name</label> 
+                <input class="form-control" [(ngModel)]="course.name" name="name" required
+                        minlength="5" maxlength="100"/>
+                <span *ngIf="form.controls['name'].invalid" class="text-danger">
+                    Name must be between 5 and 100 characters.</span> 
+            </div>
+            <div class="d-flex mb-2 flex-column">
+                <img src="{{course.thumbnail}}"/>
+                <div>
+                    <label class="control-label">Thumbnail</label>
+                    <input class="form-control" type="file" (change)="setThumbnail($event)">
+                </div>
+            </div>
+            <div class="form-group mb-2"> 
+                <label class="control-label">Short Description</label> 
+                <textarea class="form-control" rows="2" [(ngModel)]="course.shortDescription" 
+                        name="shortDescription" minlength="30" maxlength="150" required></textarea>
+                <span *ngIf="form.controls['shortDescription'].invalid" class="text-danger">
+                    Short description must be between 30 and 150 characters.</span> 
+            </div>
+            <div class="form-group mb-2"> 
+                <label class="control-label">Description</label> 
+                <textarea class="form-control" rows="5" [(ngModel)]="course.description" name="description" 
+                    minlength="100" maxlength="3000" required></textarea>
+                <span *ngIf="form.controls['description'].invalid" class="text-danger">
+                    Description must be between 100 and 3000 characters.</span> 
+            </div>
+            <div class="form-group mb-2"> 
+                <label class="control-label">Price</label> 
+                <input class="form-control" [(ngModel)]="course.price" name="price" type="number" 
+                    required min="0" max="1000"/>
+                <span *ngIf="form.controls['price'].invalid" class="text-danger">
+                    Price must be between 0 and 1000</span>
+            </div>
+        </form>
+
+        <hr/>
+
+        <section class="form-group mb-2">
+            <h6>Skills:</h6>
+            <div class="d-flex flex-wrap">
+                <app-skill *ngFor="let s of course.skills" [skill]="s" (remove)="removeSkill($event)"></app-skill>
+            </div>
+            <div *ngIf="!course.skills.length">
+                <span class="text-danger">Choose at least one course!</span>
+            </div>
+            <input type="button" value="Add Skills" class="btn btn-primary mt-3" (click)="addSkills()"/>
+        </section>
+
+        <hr/>
+        
+        <section class="form-group mb-2">
+            <h6>Materials:</h6>
+            <div>
+                <app-material *ngFor="let m of course.materials; let i = index" [material]="m" [index]="i + 1"
+                            (remove)="removeMaterial($event)"></app-material>
+            </div>
+            <div *ngIf="!course.materials.length">
+                <span class="text-danger">Choose at least one material!</span>
+            </div>
+            <div class="mt-3">
+                <input type="button" value="Add Videos" class="btn btn-primary me-2" (click)="addVideos()"/>
+                <input type="button" value="Add Books" class="btn btn-primary me-2" (click)="addBooks()"/>
+                <input type="button" value="Add Articles" class="btn btn-primary" (click)="addArticles()"/>
+            </div>
+        </section>
+
+        <hr/>
+
+        <section class="form-group mb-2 d-flex">
+            <input type="button" value="Save" class="btn btn-success mx-auto w-50" (click)="update()" 
+                [disabled]="form.invalid || !course.materials.length || !course.skills.length"/>
+        </section>
+    </div>
+
+    <div class="col-7" [ngSwitch]="panel">
+        <app-add-skills [course]="course" *ngSwitchCase="'skills'"></app-add-skills>
+        <app-add-article [course]="course" *ngSwitchCase="'articles'"></app-add-article>
+        <app-add-books [course]="course" *ngSwitchCase="'books'"></app-add-books>
+        <app-add-videos [course]="course" *ngSwitchCase="'videos'"></app-add-videos>
+    </div>
+</section>

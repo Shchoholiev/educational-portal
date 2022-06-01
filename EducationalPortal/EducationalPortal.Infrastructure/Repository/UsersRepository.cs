@@ -1,21 +1,21 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace EducationalPortal.Infrastructure.Repository
+namespace EducationalPortal.Infrastructure.IRepositories
 {
     public class UsersRepository : IUsersRepository
     {
         private readonly ApplicationContext _db;
         private readonly DbSet<User> _table;
 
-        public UsersRepository()
+        public UsersRepository(ApplicationContext context)
         {
-            this._db = new ApplicationContext();
+            this._db = context;
             this._table = _db.Set<User>();
         }
 
@@ -41,7 +41,9 @@ namespace EducationalPortal.Infrastructure.Repository
 
         public async Task<User?> GetUserAsync(string email)
         {
-            return await this._table.Include(u => u.Roles).FirstOrDefaultAsync(u => u.Email == email);
+            return await this._table.Include(u => u.UserToken)
+                                    .Include(u => u.Roles)
+                                    .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserWithSkillsAsync(string email)
@@ -128,7 +130,7 @@ namespace EducationalPortal.Infrastructure.Repository
             return count;
         }
 
-        private async Task SaveAsync()
+        public async Task SaveAsync()
         {
             await this._db.SaveChangesAsync();
         }

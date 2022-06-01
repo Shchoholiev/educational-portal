@@ -8,6 +8,6 @@
 
         public string Password { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ShoppingCart { get; set; }
     }
 }

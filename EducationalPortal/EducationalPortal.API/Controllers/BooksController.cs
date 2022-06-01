@@ -1,6 +1,6 @@
 ﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.API.Mapping;
@@ -53,7 +53,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]BookDTO bookDTO)
+        public async Task<IActionResult> Create([FromForm] BookDTO bookDTO)
         {
             if (ModelState.IsValid)
             {

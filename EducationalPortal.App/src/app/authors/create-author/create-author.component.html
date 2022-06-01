@@ -1,0 +1,14 @@
+<form (ngSubmit)="create()" #form="ngForm" novalidate>
+    <div class="d-flex flex-row">
+        <p style="margin:auto 0;">Name</p>
+        <input class="form-control mx-3" [(ngModel)]="author.fullName" name="fullName" required/>
+        <input type="submit" value="Create Author" class="btn btn-primary" [disabled]="form.invalid"/>
+    </div>
+    <span class="text-danger">
+        <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+    </span>
+</form>
+
+<span class="text-danger">
+    <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+</span>

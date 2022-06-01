@@ -10,6 +10,6 @@
 
         public string Avatar { get; set; }
 
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }

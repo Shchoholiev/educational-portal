@@ -1,6 +1,7 @@
-﻿using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Exceptions;
+using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Text.RegularExpressions;
@@ -39,12 +40,25 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task DeleteAsync(int id)
         {
             var cartItem = await this._cartItemsRepository.GetOneAsync(id);
+            if (cartItem == null)
+            {
+                throw new RecordNotFoundException("Cart item not found in database.");
+            }
+
             await this._cartItemsRepository.DeleteAsync(cartItem);
         }
 
-        public async Task<PagedList<CartItem>> GetPageAsync(string userId, PageParameters pageParameters)
+        public async Task<PagedList<CartItem>> GetPageAsync(string email, PageParameters pageParameters)
         {
-            return await this._cartItemsRepository.GetPageAsync(pageParameters, ci => ci.Course);
+            return await this._cartItemsRepository.GetPageAsync(pageParameters, 
+                                                   ci => ci.User.Email == email, ci => ci.Course);
+        }
+
+        public async Task<int> GetTotalPrice(string email)
+        {
+            var cartItems = await this._cartItemsRepository.GetAllAsync(ci => ci.User.Email == email, 
+                                                                        ci => ci.Course);
+            return cartItems.Sum(ci => ci.Course.Price);
         }
 
         public async Task BuyAsync(string userEmail)
@@ -52,14 +66,13 @@ namespace EducationalPortal.Infrastructure.Services
             var user = await this._usersService.GetUserAsync(userEmail);
             var cartItems = await this._cartItemsRepository.GetAllAsync(ci => ci.User.Id == user.Id,
                                                                         ci => ci.Course);
-            var date = DateTime.Now;
 
             foreach (var cartItem in cartItems)
             {
                 user.Balance -= cartItem.Course.Price;
                 var shoppingHistory = new ShoppingHistory
                 {
-                    Date = date,
+                    Date = DateTime.Now,
                     Course = cartItem.Course,
                     User = user,
                     Price = cartItem.Course.Price,
@@ -118,7 +131,8 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<bool> Exists(int courseId, string userEmail)
         {
-            return await this._cartItemsRepository.Exists(ci => ci.Course.Id == courseId && ci.User.Email == userEmail);
+            return await this._cartItemsRepository.Exists(ci => ci.Course.Id == courseId 
+                                                             && ci.User.Email == userEmail);
         }
     }
 }

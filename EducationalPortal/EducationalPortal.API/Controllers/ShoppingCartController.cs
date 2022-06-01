@@ -1,13 +1,15 @@
-﻿using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Exceptions;
+using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace EducationalPortal.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/shopping-cart")]
     public class ShoppingCartController : Controller
@@ -22,65 +24,72 @@ namespace EducationalPortal.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery]PageParameters pageParameters)
         {
-            var pagedCart = new PagedList<CartItem>();
-
-            if (User.Identity.IsAuthenticated)
-            {
-                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                pagedCart = await this._shoppingCartService.GetPageAsync(userEmail, pageParameters);
-            }
-            else
-            {
-                var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-                if (cookies != null)
-                {
-                    var deserialised = (await this._shoppingCartService.GetDeserialisedAsync(cookies));
-                    var cartItems = deserialised.Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                                .Take(pageParameters.PageSize);
-                    var totalCount = deserialised.Count();
-                    pagedCart = new PagedList<CartItem>(cartItems, pageParameters, totalCount);
-                }
-            }
-
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var cartItems = await this._shoppingCartService.GetPageAsync(email, pageParameters);
             var metadata = new
             {
-                pagedCart.TotalItems,
-                pagedCart.PageSize,
-                pagedCart.PageNumber,
-                pagedCart.TotalPages,
-                pagedCart.HasNextPage,
-                pagedCart.HasPreviousPage
+                cartItems.PageSize,
+                cartItems.PageNumber,
+                cartItems.TotalPages,
+                cartItems.HasNextPage,
+                cartItems.HasPreviousPage
             };
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-            return pagedCart;
+            return cartItems;
         }
+
+        [AllowAnonymous]
+        [HttpGet("page-from-cookie")]
+        public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery] string cookie,
+                                                        [FromQuery] PageParameters pageParameters)
+        {
+            var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookie);
+            var totalPages = (int)Math.Ceiling(cartItems.Count() / (double)pageParameters.PageSize);
+            var metadata = new
+            {
+                PageSize = pageParameters.PageSize,
+                PageNumber = pageParameters.PageNumber,
+                TotalPages = totalPages,
+                HasPreviousPage = pageParameters.PageNumber > 1,
+                HasNextPage = pageParameters.PageNumber < totalPages
+            };
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+            var page = cartItems.Skip(pageParameters.PageSize * (pageParameters.PageNumber - 1))
+                                .Take(pageParameters.PageSize);
+
+            return Ok(page);
+        }
+
+        [HttpGet("total-price")]
+        public async Task<ActionResult<int>> GetTotalPrice()
+        {
+            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            return await this._shoppingCartService.GetTotalPrice(email);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("total-price-from-cookie")]
+        public async Task<ActionResult<int>> GetTotalPrice([FromQuery] string cookie)
+        {
+            var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookie);
+            return cartItems.Sum(ci => ci.Course.Price);
+        }
+
 
         [HttpPut("add-to-cart/{courseId}")]
         public async Task<IActionResult> AddToCart(int courseId)
         {
-            if (User.Identity.IsAuthenticated)
+            var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (!await this._shoppingCartService.Exists(courseId, userEmail))
             {
-                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                if (!await this._shoppingCartService.Exists(courseId, userEmail))
+                var cartItem = new CartItem
                 {
-                    var cartItem = new CartItem
-                    {
-                        Course = new Course { Id = courseId },
-                        User = new User { Email = userEmail }
-                    };
+                    Course = new Course { Id = courseId },
+                    User = new User { Email = userEmail }
+                };
 
-                    await this._shoppingCartService.AddAsync(cartItem);
-                }
-            }
-            else
-            {
-                var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-                if (cookies == null || !cookies.Contains($"{courseId}"))
-                {
-                    cookies += $"-{courseId}";
-                    this.SaveCookies(cookies);
-                }
+                await this._shoppingCartService.AddAsync(cartItem);
             }
 
             return Ok();
@@ -89,42 +98,17 @@ namespace EducationalPortal.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                await this._shoppingCartService.DeleteAsync(id);
-            }
-            else
-            {
-                var cookies = Request.Cookies["EducationalPortal_ShoppingCart"];
-                var matchRegex = new Regex(string.Format($"(-)?{id}"));
-                var newCookies = matchRegex.Replace(cookies, string.Empty);
-                this.SaveCookies(newCookies);
-            }
-
+            var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            await this._shoppingCartService.DeleteAsync(id);
             return NoContent();
         }
 
         [HttpPut("buy")]
         public async Task<IActionResult> Buy()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                await this._shoppingCartService.BuyAsync(userEmail);
-                Response.Redirect("/api/account/my-learning");
-                return Ok();
-            }
-            else
-            {
-                return StatusCode(302, new { uri = "/api/account/register" });
-            }
-        }
-
-        private void SaveCookies(string cookies)
-        {
-            var cookieOptions = new CookieOptions() { Expires = DateTime.Now.AddDays(7) };
-            Response.Cookies.Append("EducationalPortal_ShoppingCart", cookies, cookieOptions);
+            var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            await this._shoppingCartService.BuyAsync(userEmail);
+            return Ok();
         }
     }
 }

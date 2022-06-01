@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                    <img src="{{user.avatar}}" 
+                        class="rounded-circle p-1 bg-primary" width="110" height="110">
+                    <div class="mt-3">
+                        <h4>{{user.name}}</h4>
+                        <p class="text-secondary mb-1">{{user?.position}}</p>
+                    </div>
+                    <div class="bg-light text-secondary d-flex justify-content-between w-100 mt-1 px-3 py-2"
+                         style="border-radius: 12px;">
+                        <div class="text-start">
+                            <p class="small m-0">Balance amount</p>
+                            <h5 class="m-0">{{user.balance}} points</h5>
+                        </div>
+                        <i class="fa-solid fa-coins fa-xl my-auto"></i>
+                    </div>
+                    <div *ngIf="user?.usersSkills?.length" class="w-100">
+                        <hr>
+                        <div *ngFor="let us of user.usersSkills" class="d-flex flex-row justify-content-between">
+                            <h6 class="text-secondary mb-2">{{us.skill.name}}</h6>
+                            <p class="text-primary mb-2">{{us.level}} lvl</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card mb-3">
+            <form class="card-body text-muted" #form="ngForm" (ngSubmit)="this.update()" novalidate>
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Avatar</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="file" class="form-control" name="file" 
+                           (change)="this.fileToLink($event)">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Full Name</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="text" class="form-control" name="name" [(ngModel)]="user.name" 
+                            minlength="1" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Position</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="text" class="form-control" name="position" [(ngModel)]="user.position">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <h6 class="mb-0">Email</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        <input type="email" class="form-control" name="email" [(ngModel)]="user.email" 
+                            minlength="1" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-9 text-secondary">
+                        <p *ngIf="this.error" class="text-danger">{{this.error}}</p>
+                        <input type="submit" class="btn btn-primary px-4" value="Save Changes" 
+                                [disabled]="form.invalid">
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="user?.createdCourses?.length" class="card">
+            <div class="card-body">
+                <h5 class="d-flex align-items-center mb-3">Created Courses</h5>
+                <div class="d-flex flex-wrap">
+                    <div *ngFor="let course of user.createdCourses" class="card m-1" style="width: 16rem;">
+                        <img src="{{course.thumbnail}}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">{{course.name}}</h5>
+                            <p class="card-text">{{course.shortDescription}}</p>
+                            <div class="d-flex flex-row">
+                                <a class="btn btn-primary me-2" style="z-index:1000" 
+                                    routerLink="/courses/edit/{{course.id}}">Edit</a>
+                                <button type="button" (click)="deleteCourse(course.id)" class="btn btn-danger mx-2" 
+                                        style="z-index:1000">Delete</button>
+                            </div>
+                        </div>
+                        <a routerLink="/courses/{{course.id}}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="authService.isInRole('Creator')" class="my-2">
+            <input type="button" class="btn btn-primary" value="Create Course" routerLink="/create-course"/>
+        </div>
+
+        <div *ngIf="!authService.isInRole('Creator')" class="my-2">
+            <input type="button" class="btn btn-primary" value="Became Creator" (click)="becameCreator()"/>
+        </div>
+
+    </div>
+</div>

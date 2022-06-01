@@ -11,7 +11,9 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<IEnumerable<CartItem>> GetDeserialisedAsync(string cookies);
 
-        Task<PagedList<CartItem>> GetPageAsync(string userEmail, PageParameters pageParameters);
+        Task<PagedList<CartItem>> GetPageAsync(string email, PageParameters pageParameters);
+
+        Task<int> GetTotalPrice(string email);
 
         Task BuyAsync(string userEmail);
 

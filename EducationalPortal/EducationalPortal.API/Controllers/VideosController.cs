@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.DTO;
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.Repository;
+using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authorization;
@@ -50,7 +50,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]VideoDTO videoDTO)
+        public async Task<IActionResult> Create([FromForm] VideoDTO videoDTO)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +100,7 @@ namespace EducationalPortal.API.Controllers
         [HttpGet("get-qualities")]
         public async Task<ActionResult<IEnumerable<Quality>>> GetQualities()
         {
-            var qualities = (await this._qualitiesRepository.GetAllAsync()).ToList();
+            var qualities = await this._qualitiesRepository.GetPageAsync(new PageParameters());
             return qualities;
         }
     }
