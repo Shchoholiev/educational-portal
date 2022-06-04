@@ -1,4 +1,4 @@
-﻿namespace EducationalPortal.API.Models
+﻿namespace EducationalPortal.Application.Models
 {
     public class TokensModel
     {

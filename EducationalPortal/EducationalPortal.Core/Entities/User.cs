@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Core.Entities.EducationalMaterials;
+﻿using EducationalPortal.Core.Common;
+using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.ComponentModel.DataAnnotations;
 

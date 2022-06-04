@@ -1,4 +1,4 @@
-﻿using EducationalPortal.Application.DTO;
+﻿using EducationalPortal.Application.Models.DTO;
 
 namespace EducationalPortal.API.ViewModels
 {
@@ -16,6 +16,6 @@ namespace EducationalPortal.API.ViewModels
 
         public int Balance { get; set; }
 
-        public List<RoleDTO> Roles { get; set; }
+        public List<RoleDto> Roles { get; set; }
     }
 }

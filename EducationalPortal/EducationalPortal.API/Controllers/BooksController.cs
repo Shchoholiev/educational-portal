@@ -6,9 +6,9 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.API.Mapping;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
-using EducationalPortal.Application.DTO.EducationalMaterials;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -40,7 +40,6 @@ namespace EducationalPortal.API.Controllers
             var books = await this._booksRepository.GetPageAsync(pageParameters, b => b.Authors, b => b.Extension);
             var metadata = new
             {
-                books.TotalItems,
                 books.PageSize,
                 books.PageNumber,
                 books.TotalPages,
@@ -53,7 +52,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] BookDTO bookDTO)
+        public async Task<IActionResult> Create([FromForm] BookDto bookDTO)
         {
             if (ModelState.IsValid)
             {

@@ -1,4 +1,4 @@
-﻿using EducationalPortal.Application.DTO;
+﻿using EducationalPortal.Application.Models.DTO;
 
 namespace EducationalPortal.API.ViewModels
 {
@@ -16,9 +16,9 @@ namespace EducationalPortal.API.ViewModels
 
         public int Price { get; set; }
 
-        public UserDTO Author { get; set; }
+        public UserDto Author { get; set; }
 
-        public List<SkillDTO> Skills { get; set; }
+        public List<SkillDto> Skills { get; set; }
 
         public List<MaterialsBaseViewModel> Materials { get; set; }
     }

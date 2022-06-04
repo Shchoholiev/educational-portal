@@ -1,5 +1,4 @@
-﻿using EducationalPortal.Application.DTO;
-using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
@@ -7,6 +6,7 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -37,7 +37,6 @@ namespace EducationalPortal.API.Controllers
             var videos = await this._videosRepository.GetPageAsync(pageParameters, v => v.Quality);
             var metadata = new
             {
-                videos.TotalItems,
                 videos.PageSize,
                 videos.PageNumber,
                 videos.TotalPages,
@@ -50,7 +49,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] VideoDTO videoDTO)
+        public async Task<IActionResult> Create([FromForm] VideoDto videoDTO)
         {
             if (ModelState.IsValid)
             {

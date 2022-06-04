@@ -1,9 +1,9 @@
-﻿using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
+﻿using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class ResourceValidator : AbstractValidator<ResourceDTO>
+    public class ResourceValidator : AbstractValidator<ResourceDto>
     {
         public ResourceValidator()
         {

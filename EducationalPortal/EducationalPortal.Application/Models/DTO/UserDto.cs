@@ -1,6 +1,6 @@
-﻿namespace EducationalPortal.Application.DTO
+﻿namespace EducationalPortal.Application.Models.DTO
 {
-    public class UserDTO
+    public class UserDto
     {
         public string Name { get; set; }
 

@@ -1,6 +1,6 @@
-﻿namespace EducationalPortal.API.ViewModels
+﻿namespace EducationalPortal.Application.Models
 {
-    public class RegisterViewModel
+    public class RegisterModel
     {
         public string Name { get; set; }
 

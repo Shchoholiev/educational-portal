@@ -1,9 +1,9 @@
-﻿using EducationalPortal.Application.DTO;
+﻿using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class VideoValidator : AbstractValidator<VideoDTO>
+    public class VideoValidator : AbstractValidator<VideoDto>
     {
         public VideoValidator()
         {

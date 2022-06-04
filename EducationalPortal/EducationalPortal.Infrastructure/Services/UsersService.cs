@@ -1,11 +1,10 @@
-﻿using EducationalPortal.Application.Descriptions;
-using EducationalPortal.Application.DTO;
-using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
+using EducationalPortal.Application.Models.DTO;
 
 namespace EducationalPortal.Infrastructure.Services
 {
@@ -28,13 +27,10 @@ namespace EducationalPortal.Infrastructure.Services
             this._rolesRepository = rolesRepository;
         }
 
-        public async Task<OperationDetails> RegisterAsync(UserDTO userDTO)
+        public async Task RegisterAsync(UserDto userDTO)
         {
-            var operationDetails = new OperationDetails();
             if (await this._usersRepository.GetUserAsync(userDTO.Email) != null)
             {
-                operationDetails.AddError("This email is already used!");
-                return operationDetails;
             }
 
             var role = await this._rolesRepository.GetOneAsync(1);
@@ -55,29 +51,23 @@ namespace EducationalPortal.Infrastructure.Services
             }
             catch (Exception e)
             {
-                operationDetails.AddError(e.Message);
+
             }
 
-            return operationDetails;
         }
 
-        public async Task<OperationDetails> LoginAsync(UserDTO userDTO)
+        public async Task LoginAsync(UserDto userDTO)
         {
             var user = await this._usersRepository.GetUserAsync(userDTO.Email);
 
-            var operationDetails = new OperationDetails();
             if (user == null)
             {
-                operationDetails.AddError("User with this email not found!");
-                return operationDetails;
             }
 
             if (!this._passwordHasher.Check(userDTO.Password, user.PasswordHash))
             {
-                operationDetails.AddError("Incorrect password!");
-            }
 
-            return operationDetails;
+            }
         }
 
         public async Task<User?> GetUserAsync(string email)
@@ -95,10 +85,9 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._usersRepository.GetAuthorAsync(email);
         }
 
-        public async Task<OperationDetails> UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(User user)
         {
             await this._usersRepository.UpdateAsync(user);
-            return new OperationDetails();
         }
 
         public async Task DeleteAsync(string email)

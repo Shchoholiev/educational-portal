@@ -4,7 +4,7 @@ using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using EducationalPortal.Application.DTO;
+using EducationalPortal.Application.Models.DTO;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -26,7 +26,6 @@ namespace EducationalPortal.API.Controllers
             var skills = await this._skillsRepository.GetPageAsync(pageParameters);
             var metadata = new
             {
-                skills.TotalItems,
                 skills.PageSize,
                 skills.PageNumber,
                 skills.TotalPages,
@@ -39,7 +38,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]SkillDTO skillDTO)
+        public async Task<IActionResult> Create([FromBody]SkillDto skillDTO)
         {
             if (ModelState.IsValid)
             {

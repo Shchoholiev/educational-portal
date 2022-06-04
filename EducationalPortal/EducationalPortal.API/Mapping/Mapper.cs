@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using EducationalPortal.Application.DTO;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.API.ViewModels;
-using EducationalPortal.Application.DTO.EducationalMaterials;
-using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
+using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.Mapping
 {
@@ -24,11 +24,11 @@ namespace EducationalPortal.API.Mapping
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore());
 
-            cfg.CreateMap<ArticleDTO, Article>();
+            cfg.CreateMap<ArticleDto, Article>();
 
-            cfg.CreateMap<ResourceDTO, Resource>();
+            cfg.CreateMap<ResourceDto, Resource>();
 
-            cfg.CreateMap<CourseDTO, Course>()
+            cfg.CreateMap<CourseDto, Course>()
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore())
             .ForMember(dest => dest.Skills,
@@ -36,21 +36,21 @@ namespace EducationalPortal.API.Mapping
             .ForMember(dest => dest.Id,
                 opt => opt.Ignore());
 
-            cfg.CreateMap<Course, CourseDTO>();
+            cfg.CreateMap<Course, CourseDto>();
 
-            cfg.CreateMap<Skill, SkillDTO>();
+            cfg.CreateMap<Skill, SkillDto>();
 
-            cfg.CreateMap<MaterialsBase, MaterialBaseDTO>();
+            cfg.CreateMap<MaterialsBase, MaterialBaseDto>();
 
-            cfg.CreateMap<User, UserDTO>();
+            cfg.CreateMap<User, UserDto>();
 
-            cfg.CreateMap<UserDTO, User>();
+            cfg.CreateMap<UserDto, User>();
 
-            cfg.CreateMap<Role, RoleDTO>();
+            cfg.CreateMap<Role, RoleDto>();
 
-            cfg.CreateMap<BookDTO, Book>();
+            cfg.CreateMap<BookDto, Book>();
 
-            cfg.CreateMap<AuthorDTO, Author>();
+            cfg.CreateMap<AuthorDto, Author>();
 
         }).CreateMapper();
 
@@ -74,28 +74,28 @@ namespace EducationalPortal.API.Mapping
             return learnCourse;
         }
 
-        public User Map(User user, UserDTO userDTO)
+        public User Map(User user, UserDto userDTO)
         {
             return this._mapper.Map(userDTO, user);
         }
 
-        public Article Map(ArticleDTO articleDTO)
+        public Article Map(ArticleDto articleDTO)
         {
             return this._mapper.Map<Article>(articleDTO);
         }
 
-        public Book Map(BookDTO bookDTO)
+        public Book Map(BookDto bookDTO)
         {
             return this._mapper.Map<Book>(bookDTO);
         }
 
-        public CourseDTO Map(Course course)
+        public CourseDto Map(Course course)
         {
-            var courseDTO = this._mapper.Map<CourseDTO>(course);
+            var courseDTO = this._mapper.Map<CourseDto>(course);
             return courseDTO;
         }
 
-        public Course Map(CourseDTO courseDTO)
+        public Course Map(CourseDto courseDTO)
         {
             var course = this._mapper.Map<Course>(courseDTO);
             course = this.MapCourseJoinEntities(course, courseDTO);
@@ -103,7 +103,7 @@ namespace EducationalPortal.API.Mapping
             return course;
         }
 
-        public Course Map(Course course, CourseDTO courseDTO)
+        public Course Map(Course course, CourseDto courseDTO)
         {
             course = this._mapper.Map(courseDTO, course);
             course = this.MapCourseJoinEntities(course, courseDTO);
@@ -113,7 +113,7 @@ namespace EducationalPortal.API.Mapping
             return course;
         }
 
-        private Course MapCourseJoinEntities(Course course, CourseDTO courseDTO)
+        private Course MapCourseJoinEntities(Course course, CourseDto courseDTO)
         {
             course.CoursesMaterials = new List<CoursesMaterials>();
             for (int i = 0; i < courseDTO.Materials.Count; i++)

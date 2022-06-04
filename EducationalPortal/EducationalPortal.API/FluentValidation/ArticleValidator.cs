@@ -1,9 +1,9 @@
-﻿using EducationalPortal.Application.DTO.EducationalMaterials;
+﻿using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class ArticleValidator : AbstractValidator<ArticleDTO>
+    public class ArticleValidator : AbstractValidator<ArticleDto>
     {
         public ArticleValidator()
         {

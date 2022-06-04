@@ -1,6 +1,6 @@
-﻿namespace EducationalPortal.Application.DTO
+﻿namespace EducationalPortal.Application.Models.DTO
 {
-    public class CourseDTO
+    public class CourseDto
     {
         public int Id { get; set; }
 
@@ -14,8 +14,8 @@
 
         public int Price { get; set; }
 
-        public List<SkillDTO> Skills { get; set; }
+        public List<SkillDto> Skills { get; set; }
 
-        public List<MaterialBaseDTO> Materials { get; set; }
+        public List<MaterialBaseDto> Materials { get; set; }
     }
 }

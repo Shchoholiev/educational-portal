@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EducationalPortal.Core.Entities
+namespace EducationalPortal.Core.Common
 {
-    public class EntityBase
+    public abstract class EntityBase
     {
         [Key]
         public int Id { get; set; }

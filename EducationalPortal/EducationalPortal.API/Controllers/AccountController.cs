@@ -1,21 +1,19 @@
-﻿using EducationalPortal.Application.DTO;
-using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
-using EducationalPortal.API.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using EducationalPortal.API.Mapping;
 using EducationalPortal.Core.Entities.JoinEntities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
-using EducationalPortal.API.Models;
+using EducationalPortal.Application.Models;
+using EducationalPortal.Application.Models.DTO;
 
 namespace EducationalPortal.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     [ApiController]
     [Route("api/account")]
     public class AccountController : Controller
@@ -67,7 +65,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody]UserDTO userDTO)
+        public async Task<IActionResult> Update([FromBody]UserDto userDTO)
         {
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var user = await this._usersService.GetUserAsync(email);
@@ -117,24 +115,19 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                var userDTO = new UserDTO { Name = model.Name, Email = model.Email, Password = model.Password };
-                var result = await this._usersService.RegisterAsync(userDTO);
+                var userDTO = new UserDto { Name = model.Name, Email = model.Email, Password = model.Password };
+                await this._usersService.RegisterAsync(userDTO);
                 
-                if (result.Succeeded)
-                {
-                    var user = await this._usersService.GetUserAsync(userDTO.Email);
-                    await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
-                    var tokens = await this.UpdateUserTokens(user);
-                    return Ok(tokens);
-                }
-                else
-                {
-                    return BadRequest(result.Messages);
-                }
+                
+                var user = await this._usersService.GetUserAsync(userDTO.Email);
+                await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
+                var tokens = await this.UpdateUserTokens(user);
+                return Ok(tokens);
+                
             }
 
             return BadRequest();
@@ -142,24 +135,18 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody]LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var userDTO = new UserDTO { Email = model.Email, Password = model.Password };
-                var result = await this._usersService.LoginAsync(userDTO);
+                var userDTO = new UserDto { Email = model.Email, Password = model.Password };
+                await this._usersService.LoginAsync(userDTO);
 
-                if (result.Succeeded)
-                {
-                    var user = await this._usersService.GetUserAsync(userDTO.Email);
-                    await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
-                    var tokens = await this.UpdateUserTokens(user);
-                    return Ok(tokens);
-                }
-                else
-                {
-                    return BadRequest(result.Messages);
-                }
+                var user = await this._usersService.GetUserAsync(userDTO.Email);
+                await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
+                var tokens = await this.UpdateUserTokens(user);
+                return Ok(tokens);
+                
             }
 
             return BadRequest();

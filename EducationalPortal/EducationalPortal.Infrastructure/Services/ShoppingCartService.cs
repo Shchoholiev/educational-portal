@@ -42,7 +42,7 @@ namespace EducationalPortal.Infrastructure.Services
             var cartItem = await this._cartItemsRepository.GetOneAsync(id);
             if (cartItem == null)
             {
-                throw new RecordNotFoundException("Cart item not found in database.");
+                throw new NotFoundException("Cart item not found in database.");
             }
 
             await this._cartItemsRepository.DeleteAsync(cartItem);

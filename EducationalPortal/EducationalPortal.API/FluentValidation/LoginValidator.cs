@@ -1,9 +1,9 @@
-﻿using EducationalPortal.API.ViewModels;
+﻿using EducationalPortal.Application.Models;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class LoginValidator : AbstractValidator<LoginViewModel>
+    public class LoginValidator : AbstractValidator<LoginModel>
     {
         public LoginValidator()
         {

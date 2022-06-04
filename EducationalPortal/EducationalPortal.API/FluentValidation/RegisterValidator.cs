@@ -1,9 +1,9 @@
-﻿using EducationalPortal.API.ViewModels;
+﻿using EducationalPortal.Application.Models;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class RegisterValidator : AbstractValidator<RegisterViewModel>
+    public class RegisterValidator : AbstractValidator<RegisterModel>
     {
         public RegisterValidator()
         {

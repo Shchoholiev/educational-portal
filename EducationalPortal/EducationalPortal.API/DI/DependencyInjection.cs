@@ -1,13 +1,13 @@
-﻿using EducationalPortal.Application.DTO;
-using EducationalPortal.API.FluentValidation;
-using EducationalPortal.API.ViewModels;
+﻿using EducationalPortal.API.FluentValidation;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using EducationalPortal.Application.DTO.EducationalMaterials;
-using EducationalPortal.Application.DTO.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using EducationalPortal.Application.Models;
+using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.DI
 {
@@ -20,15 +20,15 @@ namespace EducationalPortal.API.DI
                 op.LocalizationEnabled = false;
                 op.DisableDataAnnotationsValidation = true;
             });
-            services.AddTransient<IValidator<LoginViewModel>, LoginValidator>();
-            services.AddTransient<IValidator<RegisterViewModel>, RegisterValidator>();
-            services.AddTransient<IValidator<CourseDTO>, CourseValidator>();
-            services.AddTransient<IValidator<SkillDTO>, SkillValidator>();
-            services.AddTransient<IValidator<BookDTO>, BookValidator>();
-            services.AddTransient<IValidator<ArticleDTO>, ArticleValidator>();
-            services.AddTransient<IValidator<VideoDTO>, VideoValidator>();
-            services.AddTransient<IValidator<AuthorDTO>, AuthorValidator>();
-            services.AddTransient<IValidator<ResourceDTO>, ResourceValidator>();
+            services.AddTransient<IValidator<LoginModel>, LoginValidator>();
+            services.AddTransient<IValidator<RegisterModel>, RegisterValidator>();
+            services.AddTransient<IValidator<CourseDto>, CourseValidator>();
+            services.AddTransient<IValidator<SkillDto>, SkillValidator>();
+            services.AddTransient<IValidator<BookDto>, BookValidator>();
+            services.AddTransient<IValidator<ArticleDto>, ArticleValidator>();
+            services.AddTransient<IValidator<VideoDto>, VideoValidator>();
+            services.AddTransient<IValidator<AuthorDto>, AuthorValidator>();
+            services.AddTransient<IValidator<ResourceDto>, ResourceValidator>();
 
             return services;
         }

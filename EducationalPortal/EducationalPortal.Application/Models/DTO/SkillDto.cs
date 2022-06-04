@@ -1,6 +1,6 @@
-﻿namespace EducationalPortal.Application.DTO
+﻿namespace EducationalPortal.Application.Models.DTO
 {
-    public class SkillDTO
+    public class SkillDto
     {
         public int Id { get; set; }
 

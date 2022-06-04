@@ -32,7 +32,6 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokensService, TokensService>();
-            services.AddScoped<IUserManager, UserManager>();
             services.AddScoped<ICloudStorageService, CloudStorageService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
 

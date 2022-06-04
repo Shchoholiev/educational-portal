@@ -1,6 +1,6 @@
-﻿using EducationalPortal.API.Models;
-using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.IRepositories;
+using EducationalPortal.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

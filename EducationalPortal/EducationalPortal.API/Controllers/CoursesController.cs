@@ -1,5 +1,4 @@
-﻿using EducationalPortal.Application.DTO;
-using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
@@ -10,6 +9,7 @@ using System.Security.Claims;
 using EducationalPortal.Core.Entities;
 using Newtonsoft.Json;
 using EducationalPortal.API.ViewModels;
+using EducationalPortal.Application.Models.DTO;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -42,7 +42,6 @@ namespace EducationalPortal.API.Controllers
             var courses = await this._coursesRepository.GetPageAsync(pageParameters);
             var metadata = new
             {
-                courses.TotalItems,
                 courses.PageSize,
                 courses.PageNumber,
                 courses.TotalPages,
@@ -93,7 +92,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> Create([FromBody] CourseDTO courseDTO)
+        public async Task<IActionResult> Create([FromBody] CourseDto courseDTO)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +116,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpGet("edit/{id}")]
         [Authorize(Roles = "Creator")]
-        public async Task<ActionResult<CourseDTO>> GetCourseForEdit(int id)
+        public async Task<ActionResult<CourseDto>> GetCourseForEdit(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             var courseDTO = this._mapper.Map(course);
@@ -126,7 +125,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> Edit(int id, [FromBody] CourseDTO courseDTO)
+        public async Task<IActionResult> Edit(int id, [FromBody] CourseDto courseDTO)
         {
             if (ModelState.IsValid)
             {

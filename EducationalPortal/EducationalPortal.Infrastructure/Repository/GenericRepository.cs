@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
-using EducationalPortal.Core.Entities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
+using EducationalPortal.Core.Common;
 
 namespace EducationalPortal.Infrastructure.IRepositories
 {

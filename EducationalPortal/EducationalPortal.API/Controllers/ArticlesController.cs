@@ -4,8 +4,8 @@ using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.API.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EducationalPortal.Application.DTO.EducationalMaterials;
 using Newtonsoft.Json;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -29,7 +29,6 @@ namespace EducationalPortal.API.Controllers
             var articles = await this._articlesRepository.GetPageAsync(pageParameters, a => a.Resource);
             var metadata = new
             {
-                articles.TotalItems,
                 articles.PageSize,
                 articles.PageNumber,
                 articles.TotalPages,
@@ -42,7 +41,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]ArticleDTO articleDTO)
+        public async Task<IActionResult> Create([FromBody]ArticleDto articleDTO)
         {
             if (ModelState.IsValid)
             {
