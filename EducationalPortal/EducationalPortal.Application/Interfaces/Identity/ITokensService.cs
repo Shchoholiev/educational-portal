@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace EducationalPortal.Application.Interfaces
+namespace EducationalPortal.Application.Interfaces.Identity
 {
     public interface ITokensService
     {

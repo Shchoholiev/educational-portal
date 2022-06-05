@@ -1,9 +1,10 @@
 ﻿using EducationalPortal.Application.Paging;
+using EducationalPortal.Core.Common;
 using System.Linq.Expressions;
 
-namespace EducationalPortal.Application.IRepositories
+namespace EducationalPortal.Application.Interfaces.Repositories
 {
-    public interface IGenericRepository<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity> where TEntity : EntityBase
     {
         Task AddAsync(TEntity item);
 
