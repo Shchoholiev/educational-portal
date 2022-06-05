@@ -14,13 +14,13 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<ShoppingHistory> _shoppingHistoryRepository;
 
-        private readonly IUsersService _usersService;
+        private readonly IAccountService _usersService;
 
         private readonly ICoursesRepository _coursesRepository;
 
         public ShoppingCartService(IGenericRepository<CartItem> cartItemsRepository,
                                    IGenericRepository<ShoppingHistory> shoppingHistoryRepository,
-                                   IUsersService usersService, ICoursesRepository coursesRepository)
+                                   IAccountService usersService, ICoursesRepository coursesRepository)
         {
             this._cartItemsRepository = cartItemsRepository;
             this._shoppingHistoryRepository = shoppingHistoryRepository;

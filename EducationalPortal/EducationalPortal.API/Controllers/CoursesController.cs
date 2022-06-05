@@ -18,7 +18,7 @@ namespace EducationalPortal.API.Controllers
     [Route("api/courses")]
     public class CoursesController : Controller
     {
-        private readonly IUsersService _usersService;
+        private readonly IAccountService _usersService;
 
         private readonly ICoursesRepository _coursesRepository;
 
@@ -26,7 +26,7 @@ namespace EducationalPortal.API.Controllers
 
         private readonly Mapper _mapper = new();
 
-        public CoursesController(IUsersService usersService, ICloudStorageService cloudStorageService,
+        public CoursesController(IAccountService usersService, ICloudStorageService cloudStorageService,
                                  ICoursesRepository coursesRepository,
                                  IGenericRepository<MaterialsBase> materialsRepository)
         {

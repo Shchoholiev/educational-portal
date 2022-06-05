@@ -18,7 +18,7 @@ namespace EducationalPortal.API.Controllers
     [Route("api/account")]
     public class AccountController : Controller
     {
-        private readonly IUsersService _usersService;
+        private readonly IAccountService _usersService;
 
         private readonly IShoppingCartService _shoppingCartService;
 
@@ -28,7 +28,7 @@ namespace EducationalPortal.API.Controllers
 
         private readonly Mapper _mapper = new();
 
-        public AccountController(IUsersService usersService, ITokensService tokenService,
+        public AccountController(IAccountService usersService, ITokensService tokenService,
                                  IShoppingCartService shoppingCartService,
                                  IGenericRepository<Role> rolesRepository)
         {

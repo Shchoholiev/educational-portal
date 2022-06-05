@@ -9,7 +9,7 @@ using EducationalPortal.Application.Models;
 
 namespace EducationalPortal.Infrastructure.Services
 {
-    public class UsersService : IUsersService
+    public class UsersService : IAccountService
     {
         private readonly IUsersRepository _usersRepository;
 

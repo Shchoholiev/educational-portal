@@ -28,7 +28,7 @@ namespace EducationalPortal.Infrastructure
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IAccountService, UsersService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokensService, TokensService>();
             services.AddScoped<ICloudStorageService, CloudStorageService>();
