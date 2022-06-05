@@ -30,8 +30,6 @@ namespace EducationalPortal.Infrastructure.IRepositories
         {
             var coursesMaterials = this._db.CoursesMaterials.Where(cm => cm.CourseId == course.Id);
             this._db.CoursesMaterials.RemoveRange(coursesMaterials);
-            var coursesSkills = this._db.CoursesSkills.Where(cs => cs.CourseId == course.Id);
-            this._db.CoursesSkills.RemoveRange(coursesSkills);
 
             this._table.Update(course);
             await this.SaveAsync();
@@ -51,12 +49,10 @@ namespace EducationalPortal.Infrastructure.IRepositories
         public async Task<Course> GetFullCourseAsync(int id)
         {
             var course = await this._table
-               .AsNoTracking()
                .Include(c => c.Author)
                .Include(c => c.CoursesMaterials)
                   .ThenInclude(cm => cm.Material)
-               .Include(c => c.CoursesSkills)
-                  .ThenInclude(cs => cs.Skill)
+               .Include(c => c.Skills)
                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null)
@@ -68,32 +64,20 @@ namespace EducationalPortal.Infrastructure.IRepositories
             foreach (var cm in course.CoursesMaterials.OrderBy(cm => cm.Index))
             {
                 var book = await this._db.Books
-                    .AsNoTracking()
                     .Include(b => b.Authors)
                     .Include(b => b.Extension)
                     .FirstOrDefaultAsync(b => b.Id == cm.MaterialId);
 
                 var video = await this._db.Videos
-                    .AsNoTracking()
                     .Include(v => v.Quality)
                     .FirstOrDefaultAsync(v => v.Id == cm.MaterialId);
 
                 var article = await this._db.Articles
-                    .AsNoTracking()
                     .Include(a => a.Resource)
                     .FirstOrDefaultAsync(a => a.Id == cm.MaterialId);
 
-                materials.Add(book ?? video ?? article ?? new MaterialsBase());
+                course.CoursesMaterials[cm.Index - 1].Material = book ?? video ?? article ?? new MaterialsBase();
             }
-            course.Materials = materials;
-            course.CoursesMaterials = null;
-
-            course.Skills = new List<Skill>();
-            foreach (var cs in course.CoursesSkills)
-            {
-                course.Skills.Add(cs.Skill);
-            }
-            course.CoursesSkills = null;
 
             return course;
         }

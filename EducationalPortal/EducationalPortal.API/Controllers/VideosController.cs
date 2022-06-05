@@ -49,7 +49,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] VideoDto videoDTO)
+        public async Task<IActionResult> Create([FromForm] VideoCreateDto videoDTO)
         {
             if (ModelState.IsValid)
             {

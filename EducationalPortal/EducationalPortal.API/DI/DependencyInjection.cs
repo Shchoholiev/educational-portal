@@ -8,6 +8,7 @@ using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
+using EducationalPortal.Application.Models.CreateDTO;
 
 namespace EducationalPortal.API.DI
 {
@@ -22,11 +23,11 @@ namespace EducationalPortal.API.DI
             });
             services.AddTransient<IValidator<LoginModel>, LoginValidator>();
             services.AddTransient<IValidator<RegisterModel>, RegisterValidator>();
-            services.AddTransient<IValidator<CourseDto>, CourseValidator>();
+            services.AddTransient<IValidator<CourseCreateDto>, CourseValidator>();
             services.AddTransient<IValidator<SkillDto>, SkillValidator>();
-            services.AddTransient<IValidator<BookDto>, BookValidator>();
-            services.AddTransient<IValidator<ArticleDto>, ArticleValidator>();
-            services.AddTransient<IValidator<VideoDto>, VideoValidator>();
+            services.AddTransient<IValidator<BookCreateDto>, BookValidator>();
+            services.AddTransient<IValidator<ArticleCreateDto>, ArticleValidator>();
+            services.AddTransient<IValidator<VideoCreateDto>, VideoValidator>();
             services.AddTransient<IValidator<AuthorDto>, AuthorValidator>();
             services.AddTransient<IValidator<ResourceDto>, ResourceValidator>();
 

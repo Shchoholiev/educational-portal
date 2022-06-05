@@ -5,11 +5,11 @@ using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using EducationalPortal.API.Mapping;
 using EducationalPortal.Core.Entities.JoinEntities;
 using Newtonsoft.Json;
 using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Mapping;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -119,12 +119,10 @@ namespace EducationalPortal.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userDTO = new UserDto { Name = model.Name, Email = model.Email, Password = model.Password };
-                await this._usersService.RegisterAsync(userDTO);
+                await this._usersService.RegisterAsync(model);
                 
-                
-                var user = await this._usersService.GetUserAsync(userDTO.Email);
-                await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
+                var user = await this._usersService.GetUserAsync(model.Email);
+                await this.CheckShoppingCartCookies(model.Email, model.ShoppingCart);
                 var tokens = await this.UpdateUserTokens(user);
                 return Ok(tokens);
                 
@@ -139,11 +137,10 @@ namespace EducationalPortal.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userDTO = new UserDto { Email = model.Email, Password = model.Password };
-                await this._usersService.LoginAsync(userDTO);
+                await this._usersService.LoginAsync(model);
 
-                var user = await this._usersService.GetUserAsync(userDTO.Email);
-                await this.CheckShoppingCartCookies(userDTO.Email, model.ShoppingCart);
+                var user = await this._usersService.GetUserAsync(model.Email);
+                await this.CheckShoppingCartCookies(model.Email, model.ShoppingCart);
                 var tokens = await this.UpdateUserTokens(user);
                 return Ok(tokens);
                 

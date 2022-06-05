@@ -2,14 +2,14 @@
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
-using EducationalPortal.API.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using EducationalPortal.Core.Entities;
 using Newtonsoft.Json;
-using EducationalPortal.API.ViewModels;
-using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.CreateDTO;
+using EducationalPortal.Application.Models.DTO.Course;
+using EducationalPortal.Application.Mapping;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -55,7 +55,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<CourseViewModel>> GetCourse(int id)
+        public async Task<ActionResult<CourseDto>> GetCourse(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             if (course == null)
@@ -78,7 +78,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet("learn/{id}")]
-        public async Task<ActionResult<LearnCourseViewModel>> GetCourseToLearn(int id)
+        public async Task<ActionResult<CourseLearnDto>> GetCourseToLearn(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
@@ -92,7 +92,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> Create([FromBody] CourseDto courseDTO)
+        public async Task<IActionResult> Create([FromBody] CourseCreateDto courseDTO)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpGet("edit/{id}")]
         [Authorize(Roles = "Creator")]
-        public async Task<ActionResult<CourseDto>> GetCourseForEdit(int id)
+        public async Task<ActionResult<CourseCreateDto>> GetCourseForEdit(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             var courseDTO = this._mapper.Map(course);
@@ -125,7 +125,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> Edit(int id, [FromBody] CourseDto courseDTO)
+        public async Task<IActionResult> Edit(int id, [FromBody] CourseCreateDto courseDTO)
         {
             if (ModelState.IsValid)
             {

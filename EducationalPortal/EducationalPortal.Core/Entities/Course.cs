@@ -18,13 +18,9 @@ namespace EducationalPortal.Core.Entities
 
         public List<Skill> Skills { get; set; }
 
-        public List<MaterialsBase> Materials { get; set; }
-
-        public User Author { get; set; }
-
         public List<CoursesMaterials> CoursesMaterials { get; set; }
 
-        public List<CoursesSkills> CoursesSkills { get; set; }
+        public User Author { get; set; }
 
         public List<UsersCourses> UsersCourses { get; set; }
     }

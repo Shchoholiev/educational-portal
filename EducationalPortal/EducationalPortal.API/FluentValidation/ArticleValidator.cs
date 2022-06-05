@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class ArticleValidator : AbstractValidator<ArticleDto>
+    public class ArticleValidator : AbstractValidator<ArticleCreateDto>
     {
         public ArticleValidator()
         {

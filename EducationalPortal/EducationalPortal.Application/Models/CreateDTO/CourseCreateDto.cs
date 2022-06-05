@@ -1,9 +1,9 @@
-﻿namespace EducationalPortal.Application.Models.DTO
-{
-    public class CourseDto
-    {
-        public int Id { get; set; }
+﻿using EducationalPortal.Application.Models.DTO;
 
+namespace EducationalPortal.Application.Models.CreateDTO
+{
+    public class CourseCreateDto
+    {
         public string Name { get; set; }
 
         public string Thumbnail { get; set; }

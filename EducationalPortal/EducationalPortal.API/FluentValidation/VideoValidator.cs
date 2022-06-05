@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class VideoValidator : AbstractValidator<VideoDto>
+    public class VideoValidator : AbstractValidator<VideoCreateDto>
     {
         public VideoValidator()
         {

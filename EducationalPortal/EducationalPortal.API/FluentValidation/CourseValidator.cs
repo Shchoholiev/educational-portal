@@ -1,9 +1,9 @@
-﻿using EducationalPortal.Application.Models.DTO;
+﻿using EducationalPortal.Application.Models.CreateDTO;
 using FluentValidation;
 
 namespace EducationalPortal.API.FluentValidation
 {
-    public class CourseValidator : AbstractValidator<CourseDto>
+    public class CourseValidator : AbstractValidator<CourseCreateDto>
     {
         public CourseValidator()
         {

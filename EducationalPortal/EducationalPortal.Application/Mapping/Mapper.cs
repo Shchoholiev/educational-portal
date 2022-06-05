@@ -3,40 +3,37 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
-using EducationalPortal.API.ViewModels;
 using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
+using EducationalPortal.Application.Models.CreateDTO;
+using EducationalPortal.Application.Models.DTO.Course;
 
-namespace EducationalPortal.API.Mapping
+namespace EducationalPortal.Application.Mapping
 {
     public class Mapper
     {
         private readonly IMapper _mapper = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Video, VideoViewModel>();
+            cfg.CreateMap<Video, VideoDto>();
 
-            cfg.CreateMap<Book, BookViewModel>();
+            cfg.CreateMap<Book, BookDto>();
 
-            cfg.CreateMap<Article, ArticleViewModel>();
+            cfg.CreateMap<Article, ArticleDto>();
 
-            cfg.CreateMap<Course, CourseViewModel>()
+            cfg.CreateMap<Course, CourseDto>()
             .ForMember(dest => dest.Materials,
                 opt => opt.Ignore());
 
-            cfg.CreateMap<ArticleDto, Article>();
+            cfg.CreateMap<ArticleCreateDto, Article>();
 
             cfg.CreateMap<ResourceDto, Resource>();
 
-            cfg.CreateMap<CourseDto, Course>()
-            .ForMember(dest => dest.Materials,
-                opt => opt.Ignore())
+            cfg.CreateMap<CourseCreateDto, Course>()
             .ForMember(dest => dest.Skills,
-                opt => opt.Ignore())
-            .ForMember(dest => dest.Id,
                 opt => opt.Ignore());
 
-            cfg.CreateMap<Course, CourseDto>();
+            cfg.CreateMap<Course, CourseCreateDto>();
 
             cfg.CreateMap<Skill, SkillDto>();
 
@@ -48,72 +45,72 @@ namespace EducationalPortal.API.Mapping
 
             cfg.CreateMap<Role, RoleDto>();
 
-            cfg.CreateMap<BookDto, Book>();
+            cfg.CreateMap<BookCreateDto, Book>();
 
             cfg.CreateMap<AuthorDto, Author>();
 
         }).CreateMapper();
 
-        public CourseViewModel Map(Course course, IEnumerable<MaterialsBase> learnedMaterials)
+        public CourseDto Map(Course course, IEnumerable<MaterialsBase> learnedMaterials)
         {
-            var courseViewModel = this._mapper.Map<CourseViewModel>(course);
-            courseViewModel.Materials = this.MapMaterials(course.Materials, learnedMaterials);
+            var courseViewModel = _mapper.Map<CourseDto>(course);
+            courseViewModel.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
+                                                     learnedMaterials);
 
             return courseViewModel;
         }
 
-        public LearnCourseViewModel MapLearnCourse(Course course, IEnumerable<MaterialsBase> learnedMaterials)
+        public CourseLearnDto MapLearnCourse(Course course, IEnumerable<MaterialsBase> learnedMaterials)
         {
-            var learnCourse = new LearnCourseViewModel
+            var learnCourse = new CourseLearnDto
             {
                 Id = course.Id,
                 Name = course.Name,
             };
-            learnCourse.Materials = this.MapMaterials(course.Materials, learnedMaterials);
+            learnCourse.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
+                                                 learnedMaterials);
 
             return learnCourse;
         }
 
         public User Map(User user, UserDto userDTO)
         {
-            return this._mapper.Map(userDTO, user);
+            return _mapper.Map(userDTO, user);
         }
 
-        public Article Map(ArticleDto articleDTO)
+        public Article Map(ArticleCreateDto articleDTO)
         {
-            return this._mapper.Map<Article>(articleDTO);
+            return _mapper.Map<Article>(articleDTO);
         }
 
-        public Book Map(BookDto bookDTO)
+        public Book Map(BookCreateDto bookDTO)
         {
-            return this._mapper.Map<Book>(bookDTO);
+            return _mapper.Map<Book>(bookDTO);
         }
 
-        public CourseDto Map(Course course)
+        public CourseCreateDto Map(Course course)
         {
-            var courseDTO = this._mapper.Map<CourseDto>(course);
+            var courseDTO = _mapper.Map<CourseCreateDto>(course);
             return courseDTO;
         }
 
-        public Course Map(CourseDto courseDTO)
+        public Course Map(CourseCreateDto courseDTO)
         {
-            var course = this._mapper.Map<Course>(courseDTO);
+            var course = _mapper.Map<Course>(courseDTO);
             course = this.MapCourseJoinEntities(course, courseDTO);
 
             return course;
         }
 
-        public Course Map(Course course, CourseDto courseDTO)
+        public Course Map(Course course, CourseCreateDto courseDTO)
         {
-            course = this._mapper.Map(courseDTO, course);
-            course = this.MapCourseJoinEntities(course, courseDTO);
-            course.Materials = null;
-            course.Skills = null;
+            course = _mapper.Map(courseDTO, course);
+            course = MapCourseJoinEntities(course, courseDTO);
 
             return course;
         }
 
-        private Course MapCourseJoinEntities(Course course, CourseDto courseDTO)
+        private Course MapCourseJoinEntities(Course course, CourseCreateDto courseDTO)
         {
             course.CoursesMaterials = new List<CoursesMaterials>();
             for (int i = 0; i < courseDTO.Materials.Count; i++)
@@ -126,40 +123,34 @@ namespace EducationalPortal.API.Mapping
                 course.CoursesMaterials.Add(courseMaterial);
             }
 
-            course.CoursesSkills = new List<CoursesSkills>();
-            foreach (var skill in courseDTO.Skills)
-            {
-                course.CoursesSkills.Add(new CoursesSkills { SkillId = skill.Id });
-            }
-
             return course;
         }
 
-        private List<MaterialsBaseViewModel> MapMaterials(IEnumerable<MaterialsBase> materials,
-                                                          IEnumerable<MaterialsBase> learnedMaterials)
+        private List<MaterialBaseDto> MapMaterials(IEnumerable<MaterialsBase> materials,
+                                                   IEnumerable<MaterialsBase> learnedMaterials)
         {
-            var materialsViewModel = new List<MaterialsBaseViewModel>();
+            var materialsViewModel = new List<MaterialBaseDto>();
             foreach (var material in materials)
             {
                 switch (material.GetType().Name)
                 {
                     case "Video":
                         var video = (Video)material;
-                        var videoViewModel = this._mapper.Map<VideoViewModel>(video);
+                        var videoViewModel = _mapper.Map<VideoDto>(video);
                         videoViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
                         materialsViewModel.Add(videoViewModel);
                         break;
 
                     case "Book":
                         var book = (Book)material;
-                        var bookViewModel = this._mapper.Map<BookViewModel>(book);
+                        var bookViewModel = _mapper.Map<BookDto>(book);
                         bookViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
                         materialsViewModel.Add(bookViewModel);
                         break;
 
                     case "Article":
                         var article = (Article)material;
-                        var articleViewModel = this._mapper.Map<ArticleViewModel>(article);
+                        var articleViewModel = _mapper.Map<ArticleDto>(article);
                         articleViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
                         materialsViewModel.Add(articleViewModel);
                         break;

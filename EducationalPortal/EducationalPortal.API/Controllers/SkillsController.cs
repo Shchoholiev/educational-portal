@@ -60,7 +60,7 @@ namespace EducationalPortal.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await this._skillsRepository.Exists(s => s.CoursesSkills.Any(cs => cs.SkillId == id)))
+            if (await this._skillsRepository.Exists(s => s.Courses.Any(c => c.Skills.Any(s => s.Id == id))))
             {
                 return BadRequest("This skill is used in other courses!");
             }

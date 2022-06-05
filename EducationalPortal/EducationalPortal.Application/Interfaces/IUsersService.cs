@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Application.Models.DTO;
+﻿using EducationalPortal.Application.Models;
+using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
@@ -8,9 +9,9 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface IUsersService
     {
-        Task RegisterAsync(UserDto userDTO);
+        Task RegisterAsync(RegisterModel model);
 
-        Task LoginAsync(UserDto userDTO);
+        Task LoginAsync(LoginModel model);
 
         Task UpdateUserAsync(User user);
 

@@ -1,11 +1,7 @@
-﻿using EducationalPortal.Application.Models.DTO;
-
-namespace EducationalPortal.API.ViewModels
+﻿namespace EducationalPortal.Application.Models.DTO.Course
 {
-    public class CourseViewModel
+    public class CourseDto : EntityBaseDto
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
 
         public string Thumbnail { get; set; }
@@ -20,6 +16,6 @@ namespace EducationalPortal.API.ViewModels
 
         public List<SkillDto> Skills { get; set; }
 
-        public List<MaterialsBaseViewModel> Materials { get; set; }
+        public List<MaterialBaseDto> Materials { get; set; }
     }
 }

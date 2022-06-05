@@ -22,7 +22,6 @@ namespace EducationalPortal.Infrastructure.EF
         {
             modelBuilder.ApplyConfiguration(new CourseEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CoursesMaterialsEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new CoursesSkillsEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UsersCoursesEntityConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SkillsEntityConfiguration());
@@ -41,8 +40,6 @@ namespace EducationalPortal.Infrastructure.EF
         public DbSet<UsersCourses> UsersCourses { get; set; }
 
         public DbSet<CoursesMaterials> CoursesMaterials { get; set; }
-
-        public DbSet<CoursesSkills> CoursesSkills { get; set; }
 
         public DbSet<Video> Videos { get; set; }
 

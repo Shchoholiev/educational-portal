@@ -1,9 +1,7 @@
 ﻿namespace EducationalPortal.Application.Models.DTO
 {
-    public class SkillDto
+    public class SkillDto : EntityBaseDto
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
     }
 }

@@ -3,12 +3,12 @@ using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
-using EducationalPortal.API.Mapping;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Models.CreateDTO;
+using EducationalPortal.Application.Mapping;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -52,7 +52,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] BookDto bookDTO)
+        public async Task<IActionResult> Create([FromForm] BookCreateDto bookDTO)
         {
             if (ModelState.IsValid)
             {

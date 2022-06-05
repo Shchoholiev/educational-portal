@@ -144,12 +144,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             context.Users.Add(user);
             context.SaveChanges();
 
-            var csharpCoursesSkills = new List<CoursesSkills>
-            {
-                new CoursesSkills { Skill = csharpCyntax },
-                new CoursesSkills { Skill = oop },
-                new CoursesSkills { Skill = linq },
-            };
+            var csharpCoursesSkills = new List<Skill>{ csharpCyntax, oop, linq };
 
             var courseCSharp = new Course
             {
@@ -169,7 +164,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "deliberate way so you can set a foundation and move from basic to more advanced concepts easily.",
                 Price = 80,
                 Author = user,
-                CoursesSkills = csharpCoursesSkills,
+                Skills = csharpCoursesSkills,
             };
 
             var coursesMaterials1 = new CoursesMaterials
@@ -230,19 +225,6 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             {
                 html, css, js, bootstrap5, responsibleDesign, flexbox,
                 asyncJS, bulma, nodeJS
-            };
-
-            var webCoursesSkills = new List<CoursesSkills>
-            {
-                new CoursesSkills { Skill = html },
-                new CoursesSkills { Skill = css },
-                new CoursesSkills { Skill = js },
-                new CoursesSkills { Skill = bootstrap5 },
-                new CoursesSkills { Skill = responsibleDesign },
-                new CoursesSkills { Skill = flexbox },
-                new CoursesSkills { Skill = asyncJS },
-                new CoursesSkills { Skill = bulma },
-                new CoursesSkills { Skill = nodeJS },
             };
 
             context.Skills.AddRange(webSkills);
@@ -347,7 +329,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                               "There are a lot of options for online developer training, but this course is " +
                               "without a doubt the most comprehensive and effective on the market.",
                 Price = 150,
-                CoursesSkills = webCoursesSkills,
+                Skills = webSkills,
                 Author = user,
             };
 
@@ -368,11 +350,9 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 
             // -------------------------
 
-            var jsCoursesSkills = new List<CoursesSkills>
+            var jsCoursesSkills = new List<Skill>
             {
-                new CoursesSkills { Skill = js },
-                new CoursesSkills { Skill = asyncJS },
-                new CoursesSkills { Skill = nodeJS },
+                js, asyncJS, nodeJS,
             };
 
             var jsCourse = new Course
@@ -391,7 +371,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
                                 "advanced, and even expert topics, so you don't have to buy any other course " +
                                 "in order to master JavaScript from the ground up!",
                 Price = 110,
-                CoursesSkills = jsCoursesSkills,
+                Skills = jsCoursesSkills,
                 Author = user,
             };
 

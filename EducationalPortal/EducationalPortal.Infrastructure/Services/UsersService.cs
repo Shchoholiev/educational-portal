@@ -5,6 +5,7 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models;
 
 namespace EducationalPortal.Infrastructure.Services
 {
@@ -27,9 +28,9 @@ namespace EducationalPortal.Infrastructure.Services
             this._rolesRepository = rolesRepository;
         }
 
-        public async Task RegisterAsync(UserDto userDTO)
+        public async Task RegisterAsync(RegisterModel model)
         {
-            if (await this._usersRepository.GetUserAsync(userDTO.Email) != null)
+            if (await this._usersRepository.GetUserAsync(model.Email) != null)
             {
             }
 
@@ -38,15 +39,15 @@ namespace EducationalPortal.Infrastructure.Services
             var user = new User
             {
                 Id = DateTime.Now.Ticks.ToString(),
-                Name = userDTO.Name,
-                Email = userDTO.Email,
+                Name = model.Name,
+                Email = model.Email,
                 Avatar = "https://educationalportal.blob.core.windows.net/avatars/profile_default.jpg",
                 Roles = new List<Role> { role },
             };
 
             try
             {
-                user.PasswordHash = this._passwordHasher.Hash(userDTO.Password);
+                user.PasswordHash = this._passwordHasher.Hash(model.Password);
                 await this._usersRepository.AddAsync(user);
             }
             catch (Exception e)
@@ -56,15 +57,15 @@ namespace EducationalPortal.Infrastructure.Services
 
         }
 
-        public async Task LoginAsync(UserDto userDTO)
+        public async Task LoginAsync(LoginModel model)
         {
-            var user = await this._usersRepository.GetUserAsync(userDTO.Email);
+            var user = await this._usersRepository.GetUserAsync(model.Email);
 
             if (user == null)
             {
             }
 
-            if (!this._passwordHasher.Check(userDTO.Password, user.PasswordHash))
+            if (!this._passwordHasher.Check(model.Password, user.PasswordHash))
             {
 
             }

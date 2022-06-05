@@ -1,11 +1,11 @@
 ﻿using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
-using EducationalPortal.API.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Mapping;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -41,7 +41,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]ArticleDto articleDTO)
+        public async Task<IActionResult> Create([FromBody] ArticleCreateDto articleDTO)
         {
             if (ModelState.IsValid)
             {
