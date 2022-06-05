@@ -1,6 +1,5 @@
 ﻿using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +9,7 @@ using Newtonsoft.Json;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Mapping;
+using EducationalPortal.Application.Interfaces.Repositories;
 
 namespace EducationalPortal.API.Controllers
 {

@@ -1,11 +1,11 @@
-﻿using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces.Identity;
 using System.Security.Cryptography;
 
-namespace EducationalPortal.Infrastructure.Identity
+namespace EducationalPortal.Infrastructure.Services.Identity
 {
     public class PasswordHasher : IPasswordHasher
     {
-        public const int SaltSize = 16;
+        private const int SaltSize = 16;
 
         private const int KeySize = 32;
 
@@ -19,7 +19,7 @@ namespace EducationalPortal.Infrastructure.Identity
 
         public string Hash(string password)
         {
-            using (var algorithm = new Rfc2898DeriveBytes(password, SaltSize, _iterations, 
+            using (var algorithm = new Rfc2898DeriveBytes(password, SaltSize, _iterations,
                                                           HashAlgorithmName.SHA256))
             {
                 var key = Convert.ToBase64String(algorithm.GetBytes(KeySize));

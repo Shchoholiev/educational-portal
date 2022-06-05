@@ -1,7 +1,4 @@
-﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Core.Entities;
-using EducationalPortal.Core.Entities.JoinEntities;
-using System.Linq.Expressions;
+﻿using EducationalPortal.Core.Entities;
 
 namespace EducationalPortal.Application.Interfaces.Repositories
 {
@@ -20,17 +17,6 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<User?> GetUserWithMaterialsAsync(string email);
 
         Task<User?> GetAuthorAsync(string email);
-
-        Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email);
-
-        Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters,
-                                                            Expression<Func<UsersCourses, bool>> predicate);
-
-        Task AddUsersCoursesAsync(UsersCourses usersCourses);
-
-        Task UpdateUsersCoursesAsync(UsersCourses usersCourses);
-
-        Task<int> GetLearnedMaterialsCountAsync(int courseId, string email);
 
         Task SaveAsync();
     }

@@ -1,10 +1,10 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using EducationalPortal.Application.Interfaces.Repositories;
 
 namespace EducationalPortal.Infrastructure.IRepositories
 {

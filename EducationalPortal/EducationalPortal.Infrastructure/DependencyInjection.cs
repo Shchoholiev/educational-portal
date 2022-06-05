@@ -1,9 +1,8 @@
 ﻿using EducationalPortal.Application.Interfaces;
-using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Infrastructure.EF;
-using EducationalPortal.Infrastructure.Identity;
 using EducationalPortal.Infrastructure.IRepositories;
 using EducationalPortal.Infrastructure.Services;
+using EducationalPortal.Infrastructure.Services.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

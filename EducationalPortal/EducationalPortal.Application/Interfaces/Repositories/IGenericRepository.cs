@@ -16,6 +16,8 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<TEntity> GetOneAsync(int id);
 
+        Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate);
+
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                                params Expression<Func<TEntity, object>>[] includeProperties); 
 
