@@ -2,7 +2,7 @@
 using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 using EducationalPortal.Application.Paging;
 
-namespace EducationalPortal.Application.Interfaces
+namespace EducationalPortal.Application.Interfaces.EducationalMaterials
 {
     public interface IVideosService
     {
