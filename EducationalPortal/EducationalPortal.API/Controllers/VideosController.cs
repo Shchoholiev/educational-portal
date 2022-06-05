@@ -6,7 +6,7 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Models.CreateDTO;
 
 namespace EducationalPortal.API.Controllers
 {

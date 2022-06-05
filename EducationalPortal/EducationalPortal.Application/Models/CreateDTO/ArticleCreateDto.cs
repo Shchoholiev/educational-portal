@@ -1,6 +1,7 @@
-﻿using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
+﻿using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 
-namespace EducationalPortal.Application.Models.DTO.EducationalMaterials
+namespace EducationalPortal.Application.Models.CreateDTO
 {
     public class ArticleCreateDto : MaterialBaseDto
     {

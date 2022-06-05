@@ -1,7 +1,8 @@
-﻿using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
+﻿using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Http;
 
-namespace EducationalPortal.Application.Models.DTO.EducationalMaterials
+namespace EducationalPortal.Application.Models.CreateDTO
 {
     public class VideoCreateDto : MaterialBaseDto
     {
