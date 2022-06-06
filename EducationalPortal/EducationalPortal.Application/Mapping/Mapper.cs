@@ -84,19 +84,49 @@ namespace EducationalPortal.Application.Mapping
             return _mapper.Map(userDTO, user);
         }
 
-        public Article Map(ArticleCreateDto articleDTO)
+        public Article Map(ArticleCreateDto source)
         {
-            return _mapper.Map<Article>(articleDTO);
+            return _mapper.Map<Article>(source);
         }
 
-        public Book Map(BookCreateDto bookDTO)
+        public Book Map(BookCreateDto source)
         {
-            return _mapper.Map<Book>(bookDTO);
+            return _mapper.Map<Book>(source);
         }
 
-        public CourseCreateDto Map(Course course)
+        public Resource Map(ResourceDto source)
         {
-            var courseDTO = _mapper.Map<CourseCreateDto>(course);
+            return _mapper.Map<Resource>(source);
+        }
+
+        public PagedList<ResourceDto> Map(PagedList<Resource> source)
+        {
+            return _mapper.Map<PagedList<ResourceDto>>(source);
+        }
+
+        public Author Map(AuthorDto source)
+        {
+            return _mapper.Map<Author>(source);
+        }
+
+        public PagedList<AuthorDto> Map(PagedList<Author> source)
+        {
+            return _mapper.Map<PagedList<AuthorDto>>(source);
+        }
+
+        public Skill Map(SkillDto source)
+        {
+            return _mapper.Map<Skill>(source);
+        }
+
+        public PagedList<SkillDto> Map(PagedList<Skill> source)
+        {
+            return this._mapper.Map<PagedList<SkillDto>>(source);
+        }
+
+        public CourseCreateDto Map(Course source)
+        {
+            var courseDTO = _mapper.Map<CourseCreateDto>(source);
             return courseDTO;
         }
 
