@@ -8,11 +8,11 @@ using System.Text;
 
 namespace EducationalPortal.Infrastructure.Services.Identity
 {
-    public class TokenService : ITokensService
+    public class TokensService : ITokensService
     {
         private readonly IConfiguration _configuration;
 
-        public TokenService(IConfiguration configuration)
+        public TokensService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
