@@ -1,15 +1,16 @@
 ﻿using System.Linq.Expressions;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using EducationalPortal.Core.Common;
+using EducationalPortal.Application.Interfaces.Repositories;
 
 namespace EducationalPortal.Infrastructure.IRepositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : EntityBase
     {
         private readonly ApplicationContext _db;
+
         private readonly DbSet<TEntity> _table;
 
         public GenericRepository(ApplicationContext context)
@@ -41,6 +42,10 @@ namespace EducationalPortal.Infrastructure.IRepositories
             return await this._table.FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await this._table.FirstOrDefaultAsync(predicate);
+        }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                                      params Expression<Func<TEntity, object>>[] includeProperties)
