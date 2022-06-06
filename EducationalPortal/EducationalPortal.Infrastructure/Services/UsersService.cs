@@ -28,49 +28,6 @@ namespace EducationalPortal.Infrastructure.Services
             this._rolesRepository = rolesRepository;
         }
 
-        public async Task RegisterAsync(RegisterModel model)
-        {
-            if (await this._usersRepository.GetUserAsync(model.Email) != null)
-            {
-            }
-
-            var role = await this._rolesRepository.GetOneAsync(1);
-
-            var user = new User
-            {
-                Id = DateTime.Now.Ticks.ToString(),
-                Name = model.Name,
-                Email = model.Email,
-                Avatar = "https://educationalportal.blob.core.windows.net/avatars/profile_default.jpg",
-                Roles = new List<Role> { role },
-            };
-
-            try
-            {
-                user.PasswordHash = this._passwordHasher.Hash(model.Password);
-                await this._usersRepository.AddAsync(user);
-            }
-            catch (Exception e)
-            {
-
-            }
-
-        }
-
-        public async Task LoginAsync(LoginModel model)
-        {
-            var user = await this._usersRepository.GetUserAsync(model.Email);
-
-            if (user == null)
-            {
-            }
-
-            if (!this._passwordHasher.Check(model.Password, user.PasswordHash))
-            {
-
-            }
-        }
-
         public async Task<User?> GetUserAsync(string email)
         {
             return await this._usersRepository.GetUserAsync(email);
