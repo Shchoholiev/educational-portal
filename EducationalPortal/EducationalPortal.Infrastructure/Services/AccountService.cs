@@ -1,49 +1,45 @@
-﻿using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Exceptions;
+using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Interfaces.Identity;
+using EducationalPortal.Application.Interfaces.Repositories;
+using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
-using EducationalPortal.Application.Models.DTO;
-using EducationalPortal.Application.Models;
 
 namespace EducationalPortal.Infrastructure.Services
 {
-    public class UsersService : IAccountService
+    public class AccountService : IAccountService
     {
         private readonly IUsersRepository _usersRepository;
 
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IUsersCoursesRepository _usersCoursesRepository;
 
         private readonly ICoursesRepository _coursesRepository;
 
-        private readonly IGenericRepository<Role> _rolesRepository;
+        private readonly IUserManager _userManager;
 
-        public UsersService(IUsersRepository userRepository, IPasswordHasher passwordHasher,
-                            ICoursesRepository coursesRepository, IGenericRepository<Role> rolesRepository)
+        public AccountService(IUsersRepository userRepository, IUsersCoursesRepository usersCoursesRepository,
+                              ICoursesRepository coursesRepository, IUserManager userManager)
         {
             this._usersRepository = userRepository;
-            this._passwordHasher = passwordHasher;
+            this._usersCoursesRepository = usersCoursesRepository;
             this._coursesRepository = coursesRepository;
-            this._rolesRepository = rolesRepository;
+            this._userManager = userManager;
         }
 
-        public async Task<User?> GetUserAsync(string email)
+        public async Task<TokensModel> RegisterAsync(RegisterModel register)
         {
-            return await this._usersRepository.GetUserAsync(email);
+            return await this._userManager.RegisterAsync(register);
         }
 
-        public async Task<User?> GetUserWithMaterialsAsync(string email)
+        public async Task<TokensModel> LoginAsync(LoginModel login)
         {
-            return await this._usersRepository.GetUserWithMaterialsAsync(email);
+            return await this._userManager.LoginAsync(login);
         }
 
-        public async Task<User?> GetAuthorAsync(string email)
-        {
-            return await this._usersRepository.GetAuthorAsync(email);
-        }
-
-        public async Task UpdateUserAsync(User user)
+        public async Task UpdateAsync(User user)
         {
             await this._usersRepository.UpdateAsync(user);
         }
@@ -51,30 +47,35 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task DeleteAsync(string email)
         {
             var user = await this._usersRepository.GetUserAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("user");
+            }
+
             await this._usersRepository.DeleteAsync(user);
         }
 
-        public async Task AddUsersCoursesAsync(UsersCourses usersCourses)
+        public async Task<TokensModel> AddToRoleAsync(string roleName, string email)
         {
-            await this._usersRepository.AddUsersCoursesAsync(usersCourses);
+            return await this._userManager.AddToRoleAsync(roleName, email);
         }
 
-        public async Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email)
+        public async Task<User?> GetAuthorAsync(string email)
         {
-            return await this._usersRepository.GetUsersCoursesAsync(courseId, email);
+            return await this._usersRepository.GetAuthorAsync(email);
         }
 
         public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters, 
                                                                 Expression<Func<UsersCourses, bool>> predicate)
         {
-            var usersCourses = await this._usersRepository
+            var usersCourses = await this._usersCoursesRepository
                                          .GetUsersCoursesPageAsync(email, pageParameters, predicate);
             foreach (var uc in usersCourses)
             {
                 var learnedMaterialsCount = uc.LearnedMaterialsCount;
-                uc.LearnedMaterialsCount = await this._usersRepository
+                uc.LearnedMaterialsCount = await this._usersCoursesRepository
                                                      .GetLearnedMaterialsCountAsync(uc.CourseId, email);
-                await this._usersRepository.UpdateUsersCoursesAsync(uc);
+                await this._usersCoursesRepository.UpdateUsersCoursesAsync(uc);
                 if (learnedMaterialsCount != uc.LearnedMaterialsCount
                     && uc.LearnedMaterialsCount == uc.MaterialsCount)
                 {
@@ -85,12 +86,7 @@ namespace EducationalPortal.Infrastructure.Services
             return usersCourses;
         }
 
-        public async Task UpdateUsersCoursesAsync(UsersCourses usersCourses)
-        {
-            await this._usersRepository.UpdateUsersCoursesAsync(usersCourses);
-        }
-
-        public async Task AddAcquiredSkills(int courseId, string email)
+        private async Task AddAcquiredSkills(int courseId, string email)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(courseId);
             var user = await this._usersRepository.GetUserWithSkillsAsync(email);
@@ -111,16 +107,6 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             await this._usersRepository.UpdateAsync(user);
-        }
-
-        public async Task<int> GetLearnedMaterialsCountAsync(int courseId, string email)
-        {
-            return await this._usersRepository.GetLearnedMaterialsCountAsync(courseId, email);
-        }
-
-        public async Task SaveDbAsync()
-        {
-            await this._usersRepository.SaveAsync();
         }
     }
 }

@@ -21,6 +21,6 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<TokensModel> LoginAsync(LoginModel login);
 
-        Task<TokensModel> AddToRoleAsync(string roleName);
+        Task<TokensModel> AddToRoleAsync(string roleName, string email);
     }
 }
