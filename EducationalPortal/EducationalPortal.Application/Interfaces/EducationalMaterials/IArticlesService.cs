@@ -8,10 +8,8 @@ namespace EducationalPortal.Application.Interfaces.EducationalMaterials
     {
         Task<PagedList<ArticleDto>> GetPageAsync(PageParameters pageParameters);
 
-        Task Create(ArticleCreateDto articleDto);
+        Task CreateAsync(ArticleCreateDto articleDto);
 
-        Task Update(ArticleCreateDto articleDto);
-
-        Task Delete(int id);
+        Task DeleteAsync(int id);
     }
 }

@@ -23,6 +23,6 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<TokensModel> AddToRoleAsync(string roleName, string email);
 
-        Task AddAcquiredSkills(int courseId, string email);
+        Task AddAcquiredSkillsAsync(int courseId, string email);
     }
 }

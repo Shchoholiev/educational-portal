@@ -7,8 +7,8 @@ namespace EducationalPortal.Application.Interfaces.EducationalMaterials
     {
         Task<PagedList<ResourceDto>> GetPageAsync(PageParameters pageParameters);
 
-        Task Create(ResourceDto resourceDto);
+        Task CreateAsync(ResourceDto resourceDto);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
     }
 }

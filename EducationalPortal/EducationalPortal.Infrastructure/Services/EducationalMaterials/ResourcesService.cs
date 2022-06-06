@@ -6,7 +6,7 @@ using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 
-namespace EducationalPortal.Infrastructure.Services
+namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 {
     public class ResourcesService : IResourcesService
     {
@@ -19,7 +19,7 @@ namespace EducationalPortal.Infrastructure.Services
             this._resourcesRepository = resourcesRepository;
         }
 
-        public async Task Create(ResourceDto resourceDto)
+        public async Task CreateAsync(ResourceDto resourceDto)
         {
             if (await this._resourcesRepository.Exists(s => s.Name == resourceDto.Name))
             {
@@ -27,10 +27,10 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var resource = this._mapper.Map(resourceDto);
-            await this._resourcesRepository.UpdateAsync(resource);
+            await this._resourcesRepository.AddAsync(resource);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             if (await this._resourcesRepository.Exists(r => r.Articles.Any(a => a.Resource.Id == id)))
             {

@@ -12,16 +12,16 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<CourseLearnDto> GetCourseLearnAsync(int id, string email);
 
-        Task<CourseCreateDto> GetCourseForEdit(int id);
+        Task<CourseCreateDto> GetCourseForEditAsync(int id);
 
-        Task Create(CourseCreateDto courseDto, string authorEmail);
+        Task CreateAsync(CourseCreateDto courseDto, string authorEmail);
 
-        Task Update(int id, CourseCreateDto courseDto);
+        Task UpdateAsync(int id, CourseCreateDto courseDto);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task<int> MaterialLearned(int materialId, int courseId, string email);
+        Task<int> MaterialLearnedAsync(int materialId, int courseId, string email);
 
-        Task<int> MaterialUnearned(int materialId, int courseId, string email);
+        Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email);
     }
 }

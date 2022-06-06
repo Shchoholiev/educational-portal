@@ -79,14 +79,14 @@ namespace EducationalPortal.Infrastructure.Services
                 if (learnedMaterialsCount != uc.LearnedMaterialsCount
                     && uc.LearnedMaterialsCount == uc.MaterialsCount)
                 {
-                    await this.AddAcquiredSkills(uc.CourseId, email);
+                    await this.AddAcquiredSkillsAsync(uc.CourseId, email);
                 }
             }
 
             return usersCourses;
         }
 
-        public async Task AddAcquiredSkills(int courseId, string email)
+        public async Task AddAcquiredSkillsAsync(int courseId, string email)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(courseId);
             if (course == null)

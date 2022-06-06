@@ -19,7 +19,7 @@ namespace EducationalPortal.Infrastructure.Services
             this._skillsRepository = skillsRepository;
         }
 
-        public async Task Create(SkillDto skillDto)
+        public async Task CreateAsync(SkillDto skillDto)
         {
             if (await this._skillsRepository.Exists(s => s.Name == skillDto.Name))
             {
@@ -27,10 +27,10 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var skill = this._mapper.Map(skillDto);
-            await this._skillsRepository.UpdateAsync(skill);
+            await this._skillsRepository.AddAsync(skill);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             if (await this._skillsRepository.Exists(s => s.Courses.Any(c => c.Skills.Any(s => s.Id == id))))
             {

@@ -34,7 +34,7 @@ namespace EducationalPortal.Infrastructure.Services
             this._materialsRepository = materialsRepository;
         }
 
-        public async Task Create(CourseCreateDto courseDto, string authorEmail)
+        public async Task CreateAsync(CourseCreateDto courseDto, string authorEmail)
         {
             var course = this._mapper.Map(courseDto);
             var author = await this._usersRepository.GetUserAsync(authorEmail);
@@ -42,7 +42,7 @@ namespace EducationalPortal.Infrastructure.Services
             await this._coursesRepository.AddAsync(course);
         }
 
-        public async Task Update(int id, CourseCreateDto courseDto)
+        public async Task UpdateAsync(int id, CourseCreateDto courseDto)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             if (course == null)
@@ -54,7 +54,7 @@ namespace EducationalPortal.Infrastructure.Services
             await this._coursesRepository.UpdateAsync(course);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var course = await this._coursesRepository.GetCourseAsync(id);
             if (course == null)
@@ -78,7 +78,7 @@ namespace EducationalPortal.Infrastructure.Services
             return dto;
         }
 
-        public async Task<CourseCreateDto> GetCourseForEdit(int id)
+        public async Task<CourseCreateDto> GetCourseForEditAsync(int id)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(id);
             if (course == null)
@@ -113,7 +113,7 @@ namespace EducationalPortal.Infrastructure.Services
             return coursesDtos;
         }
 
-        public async Task<int> MaterialLearned(int materialId, int courseId, string email)
+        public async Task<int> MaterialLearnedAsync(int materialId, int courseId, string email)
         {
             var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, email);
             if (userCourse == null)
@@ -131,13 +131,13 @@ namespace EducationalPortal.Infrastructure.Services
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             if (progress == 100)
             {
-                await this._accountService.AddAcquiredSkills(courseId, email);
+                await this._accountService.AddAcquiredSkillsAsync(courseId, email);
             }
 
             return progress;
         }
 
-        public async Task<int> MaterialUnearned(int materialId, int courseId, string email)
+        public async Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email)
         {
             var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, email);
             if (userCourse == null)

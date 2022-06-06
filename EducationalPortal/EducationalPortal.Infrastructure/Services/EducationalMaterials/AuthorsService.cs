@@ -6,7 +6,7 @@ using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 
-namespace EducationalPortal.Infrastructure.Services
+namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 {
     public class AuthorsService : IAuthorsService
     {
@@ -19,7 +19,7 @@ namespace EducationalPortal.Infrastructure.Services
             this._authorsRepository = resourcesRepository;
         }
 
-        public async Task Create(AuthorDto authorDto)
+        public async Task CreateAsync(AuthorDto authorDto)
         {
             if (await this._authorsRepository.Exists(s => s.FullName == authorDto.FullName))
             {
@@ -27,10 +27,10 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var author = this._mapper.Map(authorDto);
-            await this._authorsRepository.UpdateAsync(author);
+            await this._authorsRepository.AddAsync(author);
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             if (await this._authorsRepository.Exists(a => a.Books.Any(b => b.Authors.Any(a => a.Id == id))))
             {

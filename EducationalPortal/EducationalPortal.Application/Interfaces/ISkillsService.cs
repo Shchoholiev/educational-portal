@@ -1,5 +1,4 @@
-﻿using EducationalPortal.Application.Models.CreateDTO;
-using EducationalPortal.Application.Models.DTO;
+﻿using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
 
 namespace EducationalPortal.Application.Interfaces
@@ -8,8 +7,8 @@ namespace EducationalPortal.Application.Interfaces
     {
         Task<PagedList<SkillDto>> GetPageAsync(PageParameters pageParameters);
 
-        Task Create(SkillDto skillDto);
+        Task CreateAsync(SkillDto skillDto);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
     }
 }

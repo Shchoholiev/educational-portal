@@ -16,37 +16,34 @@ namespace EducationalPortal.Application.Mapping
     {
         private readonly IMapper _mapper = new MapperConfiguration(cfg =>
         {
-            cfg.CreateMap<Course, CourseShortDto>();
+            cfg.CreateMap<MaterialsBase, MaterialBaseDto>();
+            cfg.CreateMap<MaterialsBase, MaterialBaseCreateDto>();
 
+            cfg.CreateMap<Course, CourseShortDto>();
             cfg.CreateMap<Course, CourseDto>();
+            cfg.CreateMap<CourseCreateDto, Course>();
+            cfg.CreateMap<Course, CourseCreateDto>();
 
             cfg.CreateMap<Video, VideoDto>();
+            cfg.CreateMap<VideoCreateDto, Video>()
+               .ForMember(dest => dest.Duration, opt => opt.Ignore());
+
+            cfg.CreateMap<Quality, QualityDto>();
 
             cfg.CreateMap<Book, BookDto>();
+            cfg.CreateMap<BookCreateDto, Book>();
 
             cfg.CreateMap<Article, ArticleDto>();
-
             cfg.CreateMap<ArticleCreateDto, Article>();
 
             cfg.CreateMap<ResourceDto, Resource>();
 
-            cfg.CreateMap<CourseCreateDto, Course>()
-            .ForMember(dest => dest.Skills,
-                opt => opt.Ignore());
-
-            cfg.CreateMap<Course, CourseCreateDto>();
-
             cfg.CreateMap<Skill, SkillDto>();
 
-            cfg.CreateMap<MaterialsBase, MaterialBaseDto>();
-
             cfg.CreateMap<User, UserDto>();
-
             cfg.CreateMap<UserDto, User>();
 
             cfg.CreateMap<Role, RoleDto>();
-
-            cfg.CreateMap<BookCreateDto, Book>();
 
             cfg.CreateMap<AuthorDto, Author>();
 
@@ -89,9 +86,29 @@ namespace EducationalPortal.Application.Mapping
             return _mapper.Map<Article>(source);
         }
 
+        public PagedList<ArticleDto> Map(PagedList<Article> source)
+        {
+            return _mapper.Map<PagedList<ArticleDto>>(source);
+        }
+
         public Book Map(BookCreateDto source)
         {
             return _mapper.Map<Book>(source);
+        }
+
+        public PagedList<BookDto> Map(PagedList<Book> source)
+        {
+            return _mapper.Map<PagedList<BookDto>>(source);
+        }
+
+        public Video Map(VideoCreateDto source)
+        {
+            return _mapper.Map<Video>(source);
+        }
+
+        public PagedList<VideoDto> Map(PagedList<Video> source)
+        {
+            return _mapper.Map<PagedList<VideoDto>>(source);
         }
 
         public Resource Map(ResourceDto source)
@@ -122,6 +139,11 @@ namespace EducationalPortal.Application.Mapping
         public PagedList<SkillDto> Map(PagedList<Skill> source)
         {
             return this._mapper.Map<PagedList<SkillDto>>(source);
+        }
+
+        public IEnumerable<QualityDto> Map(IEnumerable<Quality> source)
+        {
+            return _mapper.Map<IEnumerable<QualityDto>>(source);
         }
 
         public CourseCreateDto Map(Course source)

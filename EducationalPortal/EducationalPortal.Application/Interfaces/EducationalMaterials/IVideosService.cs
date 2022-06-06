@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using EducationalPortal.Application.Paging;
 
 namespace EducationalPortal.Application.Interfaces.EducationalMaterials
@@ -8,10 +9,10 @@ namespace EducationalPortal.Application.Interfaces.EducationalMaterials
     {
         Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters);
 
-        Task Create(VideoCreateDto videoDto);
+        Task CreateAsync(VideoCreateDto videoDto);
 
-        Task Update(VideoCreateDto videoDto);
+        Task DeleteAsync(int id);
 
-        Task Delete(int id);
+        Task<IEnumerable<QualityDto>> GetQualitiesAsync();
     }
 }
