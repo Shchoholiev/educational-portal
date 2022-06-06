@@ -8,6 +8,7 @@ using EducationalPortal.Application.Models.DTO.EducationalMaterials;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
+using EducationalPortal.Application.Paging;
 
 namespace EducationalPortal.Application.Mapping
 {
@@ -15,15 +16,15 @@ namespace EducationalPortal.Application.Mapping
     {
         private readonly IMapper _mapper = new MapperConfiguration(cfg =>
         {
+            cfg.CreateMap<Course, CourseShortDto>();
+
+            cfg.CreateMap<Course, CourseDto>();
+
             cfg.CreateMap<Video, VideoDto>();
 
             cfg.CreateMap<Book, BookDto>();
 
             cfg.CreateMap<Article, ArticleDto>();
-
-            cfg.CreateMap<Course, CourseDto>()
-            .ForMember(dest => dest.Materials,
-                opt => opt.Ignore());
 
             cfg.CreateMap<ArticleCreateDto, Article>();
 
@@ -51,7 +52,12 @@ namespace EducationalPortal.Application.Mapping
 
         }).CreateMapper();
 
-        public CourseDto Map(Course course, IEnumerable<MaterialsBase> learnedMaterials)
+        public PagedList<CourseShortDto> Map(PagedList<Course> courses)
+        {
+            return this._mapper.Map<PagedList<CourseShortDto>>(courses);
+        }
+
+        public CourseDto Map(Course course, IEnumerable<MaterialsBase>? learnedMaterials)
         {
             var courseViewModel = _mapper.Map<CourseDto>(course);
             courseViewModel.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
@@ -60,7 +66,7 @@ namespace EducationalPortal.Application.Mapping
             return courseViewModel;
         }
 
-        public CourseLearnDto MapLearnCourse(Course course, IEnumerable<MaterialsBase> learnedMaterials)
+        public CourseLearnDto MapLearnCourse(Course course, IEnumerable<MaterialsBase>? learnedMaterials)
         {
             var learnCourse = new CourseLearnDto
             {
@@ -127,7 +133,7 @@ namespace EducationalPortal.Application.Mapping
         }
 
         private List<MaterialBaseDto> MapMaterials(IEnumerable<MaterialsBase> materials,
-                                                   IEnumerable<MaterialsBase> learnedMaterials)
+                                                   IEnumerable<MaterialsBase>? learnedMaterials)
         {
             var materialsViewModel = new List<MaterialBaseDto>();
             foreach (var material in materials)
@@ -137,21 +143,21 @@ namespace EducationalPortal.Application.Mapping
                     case "Video":
                         var video = (Video)material;
                         var videoViewModel = _mapper.Map<VideoDto>(video);
-                        videoViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
+                        videoViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
                         materialsViewModel.Add(videoViewModel);
                         break;
 
                     case "Book":
                         var book = (Book)material;
                         var bookViewModel = _mapper.Map<BookDto>(book);
-                        bookViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
+                        bookViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
                         materialsViewModel.Add(bookViewModel);
                         break;
 
                     case "Article":
                         var article = (Article)material;
                         var articleViewModel = _mapper.Map<ArticleDto>(article);
-                        articleViewModel.IsLearned = learnedMaterials.Any(m => m.Id == material.Id);
+                        articleViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
                         materialsViewModel.Add(articleViewModel);
                         break;
 

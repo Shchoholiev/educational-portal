@@ -49,7 +49,7 @@ namespace EducationalPortal.Infrastructure.Services
             var user = await this._usersRepository.GetUserAsync(email);
             if (user == null)
             {
-                throw new NotFoundException("user");
+                throw new NotFoundException("User");
             }
 
             await this._usersRepository.DeleteAsync(user);
@@ -86,10 +86,20 @@ namespace EducationalPortal.Infrastructure.Services
             return usersCourses;
         }
 
-        private async Task AddAcquiredSkills(int courseId, string email)
+        public async Task AddAcquiredSkills(int courseId, string email)
         {
             var course = await this._coursesRepository.GetFullCourseAsync(courseId);
+            if (course == null)
+            {
+                throw new NotFoundException("Course");
+            }
+
             var user = await this._usersRepository.GetUserWithSkillsAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("User");
+            }
+
             foreach (var skill in course.Skills)
             {
                 if (user.UsersSkills.Any(us => us.SkillId == skill.Id))

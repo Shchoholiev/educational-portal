@@ -8,20 +8,20 @@ namespace EducationalPortal.Application.Interfaces
     {
         Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters);
 
-        Task<CourseDto> GetCourseAsync(int id);
+        Task<CourseDto> GetCourseAsync(int id, string? email);
 
-        Task<CourseLearnDto> GetCourseLearnAsync(int id);
+        Task<CourseLearnDto> GetCourseLearnAsync(int id, string email);
 
         Task<CourseCreateDto> GetCourseForEdit(int id);
 
-        Task Create(CourseCreateDto courseDto);
+        Task Create(CourseCreateDto courseDto, string authorEmail);
 
-        Task Update(CourseCreateDto courseDto);
+        Task Update(int id, CourseCreateDto courseDto);
 
         Task Delete(int id);
 
-        Task<int> MaterialLearned(int materialId, int courseId);
+        Task<int> MaterialLearned(int materialId, int courseId, string email);
 
-        Task<int> MaterialUnearned(int materialId, int courseId);
+        Task<int> MaterialUnearned(int materialId, int courseId, string email);
     }
 }
