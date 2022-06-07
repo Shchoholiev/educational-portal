@@ -29,6 +29,7 @@ namespace EducationalPortal.Application.Mapping
                .ForMember(dest => dest.Duration, opt => opt.Ignore());
 
             cfg.CreateMap<Quality, QualityDto>();
+            cfg.CreateMap<QualityDto, Quality>();
 
             cfg.CreateMap<Book, BookDto>();
             cfg.CreateMap<BookCreateDto, Book>();
@@ -37,15 +38,21 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<ArticleCreateDto, Article>();
 
             cfg.CreateMap<ResourceDto, Resource>();
+            cfg.CreateMap<Resource, ResourceDto>();
 
             cfg.CreateMap<Skill, SkillDto>();
+            cfg.CreateMap<SkillDto, Skill>();
 
             cfg.CreateMap<User, UserDto>();
             cfg.CreateMap<UserDto, User>();
 
             cfg.CreateMap<Role, RoleDto>();
+            cfg.CreateMap<RoleDto, Role>();
 
             cfg.CreateMap<AuthorDto, Author>();
+            cfg.CreateMap<Author, AuthorDto>();
+
+            cfg.CreateMap<CartItem, CartItemDto>();
 
         }).CreateMapper();
 
@@ -74,6 +81,11 @@ namespace EducationalPortal.Application.Mapping
                                                  learnedMaterials);
 
             return learnCourse;
+        }
+
+        public PagedList<CartItemDto> Map(PagedList<CartItem> courses)
+        {
+            return this._mapper.Map<PagedList<CartItemDto>>(courses);
         }
 
         public User Map(User user, UserDto userDTO)

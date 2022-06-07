@@ -4,7 +4,8 @@
     {
         public AlreadyExistsException() : base() { }
 
-        public AlreadyExistsException(string message) : base(message) { }
+        public AlreadyExistsException(string entityName)
+            : base($"\"{entityName}\" already exists.") { }
 
         public AlreadyExistsException(string message, Exception innerException)
             : base(message, innerException) { }

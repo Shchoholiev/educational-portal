@@ -21,20 +21,26 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IUserManager _userManager;
 
+        private readonly IShoppingCartService _shoppingCartService;
+
         private readonly Mapper _mapper = new();
 
         public AccountService(IUsersRepository userRepository, IUsersCoursesRepository usersCoursesRepository,
-                              ICoursesRepository coursesRepository, IUserManager userManager)
+                              ICoursesRepository coursesRepository, IUserManager userManager,
+                              IShoppingCartService shoppingCartService)
         {
             this._usersRepository = userRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._coursesRepository = coursesRepository;
             this._userManager = userManager;
+            this._shoppingCartService = shoppingCartService;
         }
 
         public async Task<TokensModel> RegisterAsync(RegisterModel register)
         {
-            return await this._userManager.RegisterAsync(register);
+            var tokens = await this._userManager.RegisterAsync(register);
+            await this._shoppingCartService.CheckShoppingCartCookiesAsync(register.Email, register.ShoppingCart);
+            return tokens;
         }
 
         public async Task<TokensModel> LoginAsync(LoginModel login)

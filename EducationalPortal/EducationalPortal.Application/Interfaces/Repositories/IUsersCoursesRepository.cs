@@ -16,5 +16,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task UpdateUsersCoursesAsync(UsersCourses usersCourses);
 
         Task<int> GetLearnedMaterialsCountAsync(int courseId, string email);
+
+        Task<bool> ExistsAsync(int courseId, string email);
     }
 }

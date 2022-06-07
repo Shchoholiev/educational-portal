@@ -50,7 +50,7 @@ namespace EducationalPortal.Infrastructure.IRepositories
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                                      params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            IQueryable<TEntity> query = this._table.AsNoTracking().Where(predicate);
+            var query = this._table.AsNoTracking().Where(predicate);
             return await this.Include(query, includeProperties).ToListAsync();
         }
 
@@ -69,10 +69,10 @@ namespace EducationalPortal.Infrastructure.IRepositories
         public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
                                                     params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            IQueryable<TEntity> query = this._table
-                                            .AsNoTracking()
-                                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                            .Take(pageParameters.PageSize);
+            var query = this._table
+                            .AsNoTracking()
+                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                            .Take(pageParameters.PageSize);
             var entities = await this.Include(query, includeProperties).ToListAsync();
             var totalCount = await this._table.CountAsync();
 
@@ -83,11 +83,11 @@ namespace EducationalPortal.Infrastructure.IRepositories
                                                  Expression<Func<TEntity, bool>> predicate,
                                                  params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            IQueryable<TEntity> query = this._table
-                                            .AsNoTracking()
-                                            .Where(predicate)
-                                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                            .Take(pageParameters.PageSize);
+            var query = this._table
+                            .AsNoTracking()
+                            .Where(predicate)
+                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                            .Take(pageParameters.PageSize);
             var entities = await this.Include(query, includeProperties).ToListAsync();
             var totalCount = await this._table.Where(predicate).CountAsync();
 
