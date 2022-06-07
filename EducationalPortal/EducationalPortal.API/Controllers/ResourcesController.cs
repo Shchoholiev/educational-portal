@@ -1,80 +1,43 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
+using EducationalPortal.Application.Interfaces.EducationalMaterials;
 
 namespace EducationalPortal.API.Controllers
 {
     [Authorize(Roles = "Creator")]
-    [ApiController]
-    [Route("api/resources")]
-    public class ResourcesController : Controller
+    public class ResourcesController : ApiControllerBase
     {
-        private readonly IGenericRepository<Resource> _resourcesRepository;
+        private readonly IResourcesService _resourcesService;
 
-        public ResourcesController(IGenericRepository<Resource> resourcesRepository)
+        public ResourcesController(IResourcesService resourcesService)
         {
-            this._resourcesRepository = resourcesRepository;
+            this._resourcesService = resourcesService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Resource>>> GetResources([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<ResourceDto>>> GetResources([FromQuery]PageParameters pageParameters)
         {
-            var resources = await this._resourcesRepository.GetPageAsync(pageParameters);
-            var metadata = new
-            {
-                resources.PageSize,
-                resources.PageNumber,
-                resources.TotalPages,
-                resources.HasNextPage,
-                resources.HasPreviousPage
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-
+            var resources = await this._resourcesService.GetPageAsync(pageParameters);
+            this.SetPagingMetadata(resources);
             return resources;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]ResourceDto resourceDTO)
+        public async Task<IActionResult> Create([FromBody]ResourceDto resourceDto)
         {
-            if (ModelState.IsValid)
-            {
-                if (await this._resourcesRepository.Exists(r => r.Name == resourceDTO.Name))
-                {
-                    ModelState.AddModelError(string.Empty, "Resource already exists!");
-                }
-                else
-                {
-                    var resource = new Resource { Id = resourceDTO.Id, Name = resourceDTO.Name };
-                    await this._resourcesRepository.AddAsync(resource);
-                    return StatusCode(201);
-                }
-            }
-
-            return BadRequest(ModelState);
+            await this._resourcesService.CreateAsync(resourceDto);
+            return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await this._resourcesRepository.Exists(r => r.Articles.Any(a => a.Resource.Id == id)))
-            {
-                return BadRequest("This resource is used in other courses!");
-            }
-            else
-            {
-                var resource = await this._resourcesRepository.GetOneAsync(id);
-                if (resource == null)
-                {
-                    return NotFound();
-                }
-
-                await this._resourcesRepository.DeleteAsync(resource);
-                return NoContent();
-            }
+            await this._resourcesService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }
