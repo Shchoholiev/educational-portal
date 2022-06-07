@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
+using EducationalPortal.Core.Entities;
 
 namespace EducationalPortal.Application.Interfaces
 {
@@ -14,7 +15,7 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<CourseCreateDto> GetCourseForEditAsync(int id);
 
-        Task CreateAsync(CourseCreateDto courseDto, string authorEmail);
+        Task<Course> CreateAsync(CourseCreateDto courseDto, string authorEmail);
 
         Task UpdateAsync(int id, CourseCreateDto courseDto);
 

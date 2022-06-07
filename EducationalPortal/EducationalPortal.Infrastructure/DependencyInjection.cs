@@ -26,6 +26,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IUsersCoursesRepository, UsersCoursesRepository>();
+            services.AddScoped<ICartItemsRepository, ICartItemsRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;

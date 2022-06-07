@@ -5,6 +5,7 @@ using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
+using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -34,12 +35,13 @@ namespace EducationalPortal.Infrastructure.Services
             this._materialsRepository = materialsRepository;
         }
 
-        public async Task CreateAsync(CourseCreateDto courseDto, string authorEmail)
+        public async Task<Course> CreateAsync(CourseCreateDto courseDto, string authorEmail)
         {
             var course = this._mapper.Map(courseDto);
             var author = await this._usersRepository.GetUserAsync(authorEmail);
             course.Author = author;
             await this._coursesRepository.AddAsync(course);
+            return course;
         }
 
         public async Task UpdateAsync(int id, CourseCreateDto courseDto)
