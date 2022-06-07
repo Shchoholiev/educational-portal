@@ -81,6 +81,11 @@ namespace EducationalPortal.Application.Mapping
             return _mapper.Map(userDTO, user);
         }
 
+        public UserDto Map(User source)
+        {
+            return _mapper.Map<UserDto>(source);
+        }
+
         public Article Map(ArticleCreateDto source)
         {
             return _mapper.Map<Article>(source);

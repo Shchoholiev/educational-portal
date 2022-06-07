@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Application.Models;
+using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
@@ -8,9 +9,11 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface IAccountService
     {
-        Task<User?> GetAuthorAsync(string email);
+        Task<UserDto> GetUserAsync(string email);
 
-        Task UpdateAsync(User user);
+        Task<UserDto> GetAuthorAsync(string email);
+
+        Task<TokensModel> UpdateAsync(string email, UserDto userDto);
 
         Task DeleteAsync(string id);
 

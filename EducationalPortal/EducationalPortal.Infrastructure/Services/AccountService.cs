@@ -2,9 +2,10 @@
 using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Interfaces.Identity;
 using EducationalPortal.Application.Interfaces.Repositories;
+using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models;
+using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
 
@@ -19,6 +20,8 @@ namespace EducationalPortal.Infrastructure.Services
         private readonly ICoursesRepository _coursesRepository;
 
         private readonly IUserManager _userManager;
+
+        private readonly Mapper _mapper = new();
 
         public AccountService(IUsersRepository userRepository, IUsersCoursesRepository usersCoursesRepository,
                               ICoursesRepository coursesRepository, IUserManager userManager)
@@ -39,9 +42,9 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._userManager.LoginAsync(login);
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task<TokensModel> UpdateAsync(string email, UserDto userDto)
         {
-            await this._usersRepository.UpdateAsync(user);
+            return await this._userManager.UpdateAsync(email, userDto);
         }
 
         public async Task DeleteAsync(string email)
@@ -60,9 +63,33 @@ namespace EducationalPortal.Infrastructure.Services
             return await this._userManager.AddToRoleAsync(roleName, email);
         }
 
-        public async Task<User?> GetAuthorAsync(string email)
+        public async Task<UserDto> GetUserAsync(string email)
         {
-            return await this._usersRepository.GetAuthorAsync(email);
+            var user = await this._usersRepository.GetAuthorAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("User");
+            }
+
+            var dto = this._mapper.Map(user);
+            return dto;
+        }
+
+        public async Task<UserDto> GetAuthorAsync(string email)
+        {
+            var author = await this._usersRepository.GetAuthorAsync(email);
+            if (author == null)
+            {
+                throw new NotFoundException("User");
+            }
+
+            if (!author.Roles.Any(r => r.Name == "Creator"))
+            {
+                throw new NotFoundException("Author");
+            }
+
+            var dto = this._mapper.Map(author);
+            return dto;
         }
 
         public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters, 

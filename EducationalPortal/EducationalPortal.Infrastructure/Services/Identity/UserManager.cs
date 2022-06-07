@@ -1,7 +1,9 @@
 ﻿using EducationalPortal.Application.Exceptions;
 using EducationalPortal.Application.Interfaces.Identity;
 using EducationalPortal.Application.Interfaces.Repositories;
+using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models;
+using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Core.Entities;
 using System.Security.Claims;
 
@@ -16,6 +18,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
         private readonly ITokensService _tokensService;
 
         private readonly IGenericRepository<Role> _rolesRepository;
+
+        private readonly Mapper _mapper = new();
 
         public UserManager(IUsersRepository usersRepository, IPasswordHasher passwordHasher,
                            ITokensService tokensService, IGenericRepository<Role> rolesRepository)
@@ -58,7 +62,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
 
             if (user == null)
             {
-                throw new InvalidDataException("User with this email was not found.");
+                throw new NotFoundException("User");
             }
 
             if (!this._passwordHasher.Check(login.Password, user.PasswordHash))
@@ -88,6 +92,27 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             }
 
             user.Roles.Add(role);
+            await this._usersRepository.UpdateAsync(user);
+            var tokens = this.GetUserTokens(user);
+
+            return tokens;
+        }
+
+        public async Task<TokensModel> UpdateAsync(string email, UserDto userDto)
+        {
+            var user = await this._usersRepository.GetAuthorAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("User");
+            }
+
+            if (email != userDto.Email && await this._usersRepository.GetUserAsync(userDto.Email) != null)
+            {
+                throw new AlreadyExistsException("email", userDto.Email);
+            }
+
+            this._mapper.Map(user, userDto);
+            user.UserToken = this.GetRefreshToken();
             await this._usersRepository.UpdateAsync(user);
             var tokens = this.GetUserTokens(user);
 
