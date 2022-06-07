@@ -1,106 +1,49 @@
-﻿using EducationalPortal.Application.Interfaces;
-using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
-using EducationalPortal.Core.Entities.EducationalMaterials;
-using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+﻿using EducationalPortal.Application.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using EducationalPortal.Application.Models.CreateDTO;
+using EducationalPortal.Application.Interfaces.EducationalMaterials;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials;
+using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 
 namespace EducationalPortal.API.Controllers
 {
     [Authorize(Roles = "Creator")]
-    [ApiController]
-    [Route("api/videos")]
-    public class VideosController : Controller
+    public class VideosController : ApiControllerBase
     {
-        private readonly IGenericRepository<Video> _videosRepository;
+        private readonly IVideosService _videosService;
 
-        private readonly IGenericRepository<Quality> _qualitiesRepository;
-
-        private readonly ICloudStorageService _cloudStorageService;
-
-        public VideosController(IGenericRepository<Video> videosRepository,
-                                IGenericRepository<Quality> qualitiesRepository,
-                                ICloudStorageService cloudStorageService)
+        public VideosController(IVideosService videosService)
         {
-            this._videosRepository = videosRepository;
-            this._qualitiesRepository = qualitiesRepository;
-            this._cloudStorageService = cloudStorageService;
+            this._videosService = videosService;
         }
 
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Video>>> GetVideos([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<VideoDto>>> GetVideos([FromQuery]PageParameters pageParameters)
         {
-            var videos = await this._videosRepository.GetPageAsync(pageParameters, v => v.Quality);
-            var metadata = new
-            {
-                videos.PageSize,
-                videos.PageNumber,
-                videos.TotalPages,
-                videos.HasNextPage,
-                videos.HasPreviousPage
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-
+            var videos = await this._videosService.GetPageAsync(pageParameters);
+            this.SetPagingMetadata(videos);
             return videos;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] VideoCreateDto videoDTO)
         {
-            if (ModelState.IsValid)
-            {
-                if (await this._videosRepository.Exists(v => v.Name == videoDTO.Name))
-                {
-                    ModelState.AddModelError(string.Empty, "Video with this name already exists!");
-                }
-                else
-                {
-                    var video = new Video { Name = videoDTO.Name };
-                    using (var stream = videoDTO.File.OpenReadStream())
-                    {
-                        video.Link = await this._cloudStorageService.UploadAsync(stream, videoDTO.File.FileName,
-                                                                            videoDTO.File.ContentType, "videos");
-                    }
-                    video.Duration = DateTime.MinValue.AddSeconds(videoDTO.Duration);
-                    video.Quality = new Quality { Id = videoDTO.Quality.Id, Name = videoDTO.Quality.Name ?? null };
-                    this._videosRepository.Attach(video);
-                    await this._videosRepository.AddAsync(video);
-                    return StatusCode(201);
-                }
-            }
-
-            return BadRequest(ModelState);
+            await this._videosService.CreateAsync(videoDTO);
+            return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await this._videosRepository.Exists(v => v.CoursesMaterials.Any(cm => cm.MaterialId == id)))
-            {
-                return BadRequest("This video is used in other videos!");
-            }
-            else
-            {
-                var video = await this._videosRepository.GetOneAsync(id);
-                if (video == null)
-                {
-                    return NotFound();
-                }
-
-                await this._videosRepository.DeleteAsync(video);
-                return NoContent();
-            }
+            await this._videosService.DeleteAsync(id);
+            return NoContent();
         }
 
         [HttpGet("get-qualities")]
-        public async Task<ActionResult<IEnumerable<Quality>>> GetQualities()
+        public async Task<ActionResult<IEnumerable<QualityDto>>> GetQualities()
         {
-            var qualities = await this._qualitiesRepository.GetPageAsync(new PageParameters());
-            return qualities;
+            return Ok(await this._videosService.GetQualitiesAsync());
         }
     }
 }
