@@ -6,6 +6,7 @@ using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.JoinEntities;
+using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -22,19 +23,22 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly ICoursesRepository _coursesRepository;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
         public ShoppingCartService(ICartItemsRepository cartItemsRepository,
                                    IGenericRepository<ShoppingHistory> shoppingHistoryRepository,
                                    IUsersRepository usersRepository,
                                    IUsersCoursesRepository usersCoursesRepository, 
-                                   ICoursesRepository coursesRepository)
+                                   ICoursesRepository coursesRepository, ILogger<ShoppingCartService> logger)
         {
             this._cartItemsRepository = cartItemsRepository;
             this._shoppingHistoryRepository = shoppingHistoryRepository;
             this._usersRepository = usersRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._coursesRepository = coursesRepository;
+            this._logger = logger;
         }
 
         public async Task AddToCartAsync(int courseId, string email)
@@ -57,6 +61,8 @@ namespace EducationalPortal.Infrastructure.Services
             };
 
             await this._cartItemsRepository.AddAsync(cartItem);
+
+            this._logger.LogInformation($"Created cart item with id: {cartItem.Id}.");
         }
 
         public async Task DeleteAsync(int id)
@@ -68,12 +74,17 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             await this._cartItemsRepository.DeleteAsync(cartItem);
+
+            this._logger.LogInformation($"Deleted cart item with id: {cartItem.Id}.");
         }
 
         public async Task<PagedList<CartItemDto>> GetPageAsync(PageParameters pageParameters, string email)
         {
             var cartItems = await this._cartItemsRepository.GetPageAsync(pageParameters, email);
             var dtos = this._mapper.Map(cartItems);
+
+            this._logger.LogInformation($"Returned cart items page {cartItems.PageNumber} from database.");
+
             return dtos;
         }
 
@@ -101,18 +112,29 @@ namespace EducationalPortal.Infrastructure.Services
 
             var pagedList = new PagedList<CartItem>(cartItems, pageParameters, cookiesArray.Length);
             var dtos = this._mapper.Map(pagedList);
+
+            this._logger.LogInformation($"Returned cart items page {pagedList.PageNumber} from cookies.");
+
             return dtos;
         }
 
         public async Task<int> GetTotalPriceAsync(string email)
         {
-            return await this._cartItemsRepository.GetTotalPriceAsync(email);
+            var totalPrice = await this._cartItemsRepository.GetTotalPriceAsync(email);
+
+            this._logger.LogInformation($"Returned total price {totalPrice} for cart from database.");
+
+            return totalPrice;
         }
 
         public async Task<int> GetTotalPriceFromCookieAsync(string cookies)
         {
             var cartItems = await this.GetAllFromCookiesAsync(cookies);
-            return cartItems.Sum(ci => ci.Course.Price);
+            var totalPrice = cartItems.Sum(ci => ci.Course.Price);
+
+            this._logger.LogInformation($"Returned total price {totalPrice} for cart from cookies.");
+
+            return totalPrice;
         }
 
         public async Task BuyAsync(string userEmail)
@@ -133,6 +155,8 @@ namespace EducationalPortal.Infrastructure.Services
                 await this.AddShoppingHistoryAsync(user, cartItem.Course);
                 await this._cartItemsRepository.DeleteAsync(cartItem);
             }
+
+            this._logger.LogInformation($"User with email {userEmail} bought courses.");
         }
 
         public async Task CheckShoppingCartCookiesAsync(string email, string? cookies)
@@ -152,6 +176,8 @@ namespace EducationalPortal.Infrastructure.Services
                     await this._cartItemsRepository.AddAsync(cartItem);
                 }
             }
+
+            this._logger.LogInformation($"Added items from cookies to cart for user with email {email}.");
         }
 
         private async Task<IEnumerable<CartItem>> GetAllFromCookiesAsync(string cookies)
@@ -172,6 +198,8 @@ namespace EducationalPortal.Infrastructure.Services
                 cartItems.Add(cartItem);
             }
 
+            this._logger.LogInformation($"Returned all cart items from cookies.");
+
             return cartItems;
         }
 
@@ -187,6 +215,8 @@ namespace EducationalPortal.Infrastructure.Services
 
             this._shoppingHistoryRepository.Attach(shoppingHistory);
             await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
+
+            this._logger.LogInformation($"Created shopping history with id {shoppingHistory.Id}.");
         }
 
         private async Task AddRevenueAsync(CartItem cartItem)
@@ -194,6 +224,9 @@ namespace EducationalPortal.Infrastructure.Services
             var author = await this._coursesRepository.GetCourseAuthor(cartItem.Course.Id);
             author.Balance += cartItem.Course.Price;
             await this._usersRepository.UpdateAsync(author);
+
+            this._logger.LogInformation($"Added revenue to author with email {author.Email} " +
+                                        $"for selling course with id: {cartItem.Course.Id}.");
         }
 
         private async Task PayForPurchasesAsync(User user)
@@ -201,6 +234,8 @@ namespace EducationalPortal.Infrastructure.Services
             var sum = await this._cartItemsRepository.GetTotalPriceAsync(user.Email);
             user.Balance -= sum;
             await this._usersRepository.UpdateAsync(user);
+
+            this._logger.LogInformation($"User with email {user.Email} payed {sum} points.");
         }
 
         private async Task AddUsersCoursesAsync(User user, Course course)
@@ -220,6 +255,8 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             await this._usersCoursesRepository.AddUsersCoursesAsync(userCourse);
+
+            this._logger.LogInformation($"Added course with id: {course.Id} to user with email: {user.Email}.");
         }
     }
 }

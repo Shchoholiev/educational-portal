@@ -5,6 +5,7 @@ using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Core.Entities;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
 namespace EducationalPortal.Infrastructure.Services.Identity
@@ -19,15 +20,19 @@ namespace EducationalPortal.Infrastructure.Services.Identity
 
         private readonly IGenericRepository<Role> _rolesRepository;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
         public UserManager(IUsersRepository usersRepository, IPasswordHasher passwordHasher,
-                           ITokensService tokensService, IGenericRepository<Role> rolesRepository)
+                           ITokensService tokensService, IGenericRepository<Role> rolesRepository,
+                           ILogger<UserManager> logger)
         {
             this._usersRepository = usersRepository;
             this._passwordHasher = passwordHasher;
             this._tokensService = tokensService;
             this._rolesRepository = rolesRepository;
+            this._logger = logger;
         }
 
         public async Task<TokensModel> RegisterAsync(RegisterModel register)
@@ -53,6 +58,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             await this._usersRepository.AddAsync(user);
             var tokens = this.GetUserTokens(user);
 
+            this._logger.LogInformation($"Created user with email: {user.Email}.");
+
             return tokens;
         }
 
@@ -73,6 +80,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             user.UserToken = this.GetRefreshToken();
             await this._usersRepository.UpdateAsync(user);
             var tokens = this.GetUserTokens(user);
+
+            this._logger.LogInformation($"Logged in user with email: {login.Email}.");
 
             return tokens;
         }
@@ -95,6 +104,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             await this._usersRepository.UpdateAsync(user);
             var tokens = this.GetUserTokens(user);
 
+            this._logger.LogInformation($"Added role {roleName} to user with email: {email}.");
+
             return tokens;
         }
 
@@ -116,6 +127,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             await this._usersRepository.UpdateAsync(user);
             var tokens = this.GetUserTokens(user);
 
+            this._logger.LogInformation($"Update user with email: {email}.");
+
             return tokens;
         }
 
@@ -128,6 +141,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                 RefreshTokenExpiryTime = DateTime.Now.AddDays(7),
             };
 
+            this._logger.LogInformation($"Returned new refresh token.");
+
             return token;
         }
 
@@ -135,6 +150,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
         {
             var claims = this.GetClaims(user);
             var accessToken = this._tokensService.GenerateAccessToken(claims);
+
+            this._logger.LogInformation($"Returned new access and refresh tokens.");
 
             return new TokensModel
             {
@@ -155,6 +172,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Name));
             }
+
+            this._logger.LogInformation($"Returned claims for user with email: {user.Email}.");
 
             return claims;
         }

@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Application.Exceptions;
 using EducationalPortal.Application.Models.ExceptionHandling;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace EducationalPortal.Infrastructure.ExceptionHandling
@@ -9,12 +10,11 @@ namespace EducationalPortal.Infrastructure.ExceptionHandling
     {
         private readonly RequestDelegate _next;
 
-        //private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly ILogger _logger;
 
-        public ExceptionMiddleware(RequestDelegate next)
-            //, ILogger<ExceptionMiddleware> logger)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
         {
-            //this._logger = logger;
+            this._logger = logger;
             this._next = next;
         }
 
@@ -26,22 +26,22 @@ namespace EducationalPortal.Infrastructure.ExceptionHandling
             }
             catch (NotFoundException ex)
             {
-                //this._logger.LogError($"Parameter is out of range: {ex}");
+                this._logger.LogError($"Entity not found: {ex}");
                 await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.NotFound);
             }
             catch (AlreadyExistsException ex)
             {
-                //this._logger.LogError($"Parameter is out of range: {ex}");
+                this._logger.LogError($"Entity already exists: {ex}");
                 await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.BadRequest);
             }
             catch (DeleteEntityException ex)
             {
-                //this._logger.LogError($"Parameter is out of range: {ex}");
+                this._logger.LogError($"Can't delete entity due to error: {ex}");
                 await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.Conflict);
             }
             catch (Exception ex)
             {
-                //this._logger.LogError($"Something went wrong: {ex}");
+                this._logger.LogError($"Something went wrong: {ex}");
                 await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.InternalServerError);
             }
         }

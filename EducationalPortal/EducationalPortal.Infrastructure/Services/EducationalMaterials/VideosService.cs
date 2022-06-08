@@ -9,6 +9,7 @@ using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 {
@@ -20,15 +21,18 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 
         private readonly ICloudStorageService _cloudStorageService;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
         public VideosService(IGenericRepository<Video> videosRepository,
                                 IGenericRepository<Quality> qualitiesRepository,
-                                ICloudStorageService cloudStorageService)
+                                ICloudStorageService cloudStorageService, ILogger<VideosService> logger)
         {
             this._videosRepository = videosRepository;
             this._qualitiesRepository = qualitiesRepository;
             this._cloudStorageService = cloudStorageService;
+            this._logger = logger;
         }
 
         public async Task CreateAsync(VideoCreateDto videoDto)
@@ -43,6 +47,8 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 
             this._videosRepository.Attach(video);
             await this._videosRepository.AddAsync(video);
+
+            this._logger.LogInformation($"Created video with id: {video.Id}.");
         }
 
         public async Task DeleteAsync(int id)
@@ -59,12 +65,17 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             }
 
             await this._videosRepository.DeleteAsync(video);
+
+            this._logger.LogInformation($"Deleted video with id: {video.Id}.");
         }
 
         public async Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters)
         {
             var videos = await this._videosRepository.GetPageAsync(pageParameters);
             var dtos = this._mapper.Map(videos);
+
+            this._logger.LogInformation($"Returned videos page {videos.PageNumber} from database.");
+
             return dtos;
         }
 
@@ -72,6 +83,9 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
         {
             var qualities = await this._qualitiesRepository.GetAllAsync(q => true);
             var dtos = this._mapper.Map(qualities);
+
+            this._logger.LogInformation($"Returned all qualities from database.");
+
             return dtos;
         }
     }

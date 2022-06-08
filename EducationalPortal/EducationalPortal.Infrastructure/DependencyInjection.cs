@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure
 {
@@ -56,6 +58,14 @@ namespace EducationalPortal.Infrastructure
         public static void ConfigureCustomExceptionMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
+        }
+
+        public static ILoggingBuilder AddLogger(this ILoggingBuilder logging, IConfiguration configuration)
+        {
+            logging.ClearProviders();
+            logging.AddNLog(configuration);
+
+            return logging;
         }
     }
 }

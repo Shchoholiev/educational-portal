@@ -7,6 +7,7 @@ using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.Services
 {
@@ -20,16 +21,20 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
         public CoursesService(ICoursesRepository coursesRepository, IUsersRepository usersRepository,
                               IUsersCoursesRepository usersCoursesRepository,
-                              IGenericRepository<MaterialsBase> materialsRepository)
+                              IGenericRepository<MaterialsBase> materialsRepository,
+                              ILogger<CoursesService> logger)
         {
             this._coursesRepository = coursesRepository;
             this._usersRepository = usersRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._materialsRepository = materialsRepository;
+            this._logger = logger;
         }
 
         public async Task<Course> CreateAsync(CourseCreateDto courseDto, string authorEmail)
@@ -38,6 +43,9 @@ namespace EducationalPortal.Infrastructure.Services
             var author = await this._usersRepository.GetUserAsync(authorEmail);
             course.Author = author;
             await this._coursesRepository.AddAsync(course);
+
+            this._logger.LogInformation($"Created course with id: {course.Id}.");
+
             return course;
         }
 
@@ -51,6 +59,8 @@ namespace EducationalPortal.Infrastructure.Services
 
             this._mapper.Map(course, courseDto);
             await this._coursesRepository.UpdateAsync(course);
+
+            this._logger.LogInformation($"Updated course with id: {course.Id}.");
         }
 
         public async Task DeleteAsync(int id)
@@ -61,6 +71,8 @@ namespace EducationalPortal.Infrastructure.Services
                 throw new NotFoundException("Course");
             }
             await this._coursesRepository.DeleteAsync(course);
+
+            this._logger.LogInformation($"Deleted course with id: {course.Id}.");
         }
 
         public async Task<CourseDto> GetCourseAsync(int id, string? email)
@@ -74,6 +86,8 @@ namespace EducationalPortal.Infrastructure.Services
             var user = await this._usersRepository.GetUserWithMaterialsAsync(email);
             var dto = this._mapper.Map(course, user?.Materials);
 
+            this._logger.LogInformation($"Returned course with id: {course.Id}.");
+
             return dto;
         }
 
@@ -86,6 +100,9 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var courseDTO = this._mapper.Map(course);
+
+            this._logger.LogInformation($"Returned course for edit with id: {course.Id}.");
+
             return courseDTO;
         }
 
@@ -102,6 +119,8 @@ namespace EducationalPortal.Infrastructure.Services
             var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(course.Id, email);
             dto.Progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
 
+            this._logger.LogInformation($"Returned course learn with id: {course.Id}.");
+
             return dto;
         }
 
@@ -109,6 +128,9 @@ namespace EducationalPortal.Infrastructure.Services
         {
             var courses = await this._coursesRepository.GetPageAsync(pageParameters);
             var coursesDtos = this._mapper.Map(courses);
+
+            this._logger.LogInformation($"Returned courses page {courses.PageNumber} from database.");
+
             return coursesDtos;
         }
 
@@ -127,10 +149,15 @@ namespace EducationalPortal.Infrastructure.Services
             user.Materials.Add(await this._materialsRepository.GetOneAsync(materialId));
             await this._usersRepository.UpdateAsync(user);
 
+            this._logger.LogInformation($"Material with id: {materialId} added to user with email: {email}." +
+                                        $" Material learned.");
+
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             if (progress == 100)
             {
                 await this._usersRepository.AddAcquiredSkillsAsync(courseId, email);
+                this._logger.LogInformation($"Added skills of course with id: {courseId} " +
+                                            $"to user with email: {email}. Course learned.");
             }
 
             return progress;
@@ -151,8 +178,10 @@ namespace EducationalPortal.Infrastructure.Services
             user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
             await this._usersRepository.UpdateAsync(user);
 
-            var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
+            this._logger.LogInformation($"Material with id: {materialId} added removed from user with " +
+                                        $"email: {email}. Material unlearned.");
 
+            var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             return progress;
         }
     }

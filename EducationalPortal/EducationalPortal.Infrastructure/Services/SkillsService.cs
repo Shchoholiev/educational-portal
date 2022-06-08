@@ -5,6 +5,7 @@ using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.Services
 {
@@ -12,11 +13,14 @@ namespace EducationalPortal.Infrastructure.Services
     {
         private readonly IGenericRepository<Skill> _skillsRepository;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
-        public SkillsService(IGenericRepository<Skill> skillsRepository)
+        public SkillsService(IGenericRepository<Skill> skillsRepository, ILogger<SkillsService> logger)
         {
             this._skillsRepository = skillsRepository;
+            this._logger = logger;
         }
 
         public async Task CreateAsync(SkillDto skillDto)
@@ -28,6 +32,8 @@ namespace EducationalPortal.Infrastructure.Services
 
             var skill = this._mapper.Map(skillDto);
             await this._skillsRepository.AddAsync(skill);
+
+            this._logger.LogInformation($"Created skill with id: {skill.Id}.");
         }
 
         public async Task DeleteAsync(int id)
@@ -44,12 +50,17 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             await this._skillsRepository.DeleteAsync(skill);
+
+            this._logger.LogInformation($"Deleted skill with id: {skill.Id}.");
         }
 
         public async Task<PagedList<SkillDto>> GetPageAsync(PageParameters pageParameters)
         {
             var skills = await this._skillsRepository.GetPageAsync(pageParameters);
             var dtos = this._mapper.Map(skills);
+
+            this._logger.LogInformation($"Returned skills page {skills.PageNumber} from database.");
+
             return dtos;
         }
     }

@@ -3,6 +3,7 @@ using EducationalPortal.API.DI;
 using EducationalPortal.Infrastructure;
 using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.EF;
+using EducationalPortal.Infrastructure.Services.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Newtonsoft.Json;
 
@@ -29,6 +30,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddFluentValidators();
+builder.Logging.AddLogger(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -38,7 +40,8 @@ var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-await DbInitializer.Initialize(context);
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<PasswordHasher>>();
+await DbInitializer.Initialize(context, logger);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -2,6 +2,7 @@
 using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Application.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,10 +17,14 @@ namespace EducationalPortal.Infrastructure.Services.Identity
 
         private readonly IUsersRepository _usersRepository;
 
-        public TokensService(IConfiguration configuration, IUsersRepository usersRepository)
+        private readonly ILogger _logger;
+
+        public TokensService(IConfiguration configuration, IUsersRepository usersRepository,
+                             ILogger<TokensService> logger)
         {
             this._configuration = configuration;
             this._usersRepository = usersRepository;
+            this._logger = logger;
         }
 
         public async Task<TokensModel> Refresh(TokensModel tokensModel, string email)
@@ -38,6 +43,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             user.UserToken.RefreshToken = newRefreshToken;
             await this._usersRepository.UpdateAsync(user);
 
+            this._logger.LogInformation($"Refreshed user tokens.");
+
             return new TokensModel
             {
                 AccessToken = newAccessToken,
@@ -50,6 +57,9 @@ namespace EducationalPortal.Infrastructure.Services.Identity
         {
             var tokenOptions = GetTokenOptions(claims);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+            this._logger.LogInformation($"Generated new access token.");
+
             return tokenString;
         }
 
@@ -59,7 +69,11 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
+                var refreshToken = Convert.ToBase64String(randomNumber);
+
+                this._logger.LogInformation($"Generated new refresh token.");
+
+                return refreshToken;
             }
         }
 
@@ -80,6 +94,9 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, 
                                             StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
+
+            this._logger.LogInformation($"Returned data from expired access token.");
+
             return principal;
         }
 

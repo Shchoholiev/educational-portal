@@ -9,6 +9,7 @@ using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 
 namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
@@ -21,15 +22,18 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 
         private readonly ICloudStorageService _cloudStorageService;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
         public BooksService(IGenericRepository<Book> resourcesRepository,
                             IGenericRepository<Extension> extensionsRepository,
-                            ICloudStorageService cloudStorageService)
+                            ICloudStorageService cloudStorageService, ILogger<BooksService> logger)
         {
             this._booksRepository = resourcesRepository;
             this._extensionsRepository = extensionsRepository;
             this._cloudStorageService = cloudStorageService;
+            this._logger = logger;
         }
 
         public async Task CreateAsync(BookCreateDto bookDto)
@@ -44,6 +48,8 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
 
             this._booksRepository.Attach(book);
             await this._booksRepository.AddAsync(book);
+
+            this._logger.LogInformation($"Created book with id: {book.Id}.");
         }
 
         public async Task DeleteAsync(int id)
@@ -60,12 +66,17 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             }
 
             await this._booksRepository.DeleteAsync(book);
+
+            this._logger.LogInformation($"Deleted book with id: {book.Id}.");
         }
 
         public async Task<PagedList<BookDto>> GetPageAsync(PageParameters pageParameters)
         {
             var books = await this._booksRepository.GetPageAsync(pageParameters);
             var dtos = this._mapper.Map(books);
+
+            this._logger.LogInformation($"Returned books page {books.PageNumber} from database.");
+
             return dtos;
         }
 

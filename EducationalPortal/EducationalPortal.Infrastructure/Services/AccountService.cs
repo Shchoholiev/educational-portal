@@ -7,6 +7,7 @@ using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.JoinEntities;
+using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -21,21 +22,28 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IShoppingCartService _shoppingCartService;
 
+        private readonly ILogger _logger;
+
         private readonly Mapper _mapper = new();
 
         public AccountService(IUsersRepository userRepository, IUsersCoursesRepository usersCoursesRepository,
-                              IUserManager userManager, IShoppingCartService shoppingCartService)
+                              IUserManager userManager, IShoppingCartService shoppingCartService,
+                              ILogger<AccountService> logger)
         {
             this._usersRepository = userRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._userManager = userManager;
             this._shoppingCartService = shoppingCartService;
+            this._logger = logger;
         }
 
         public async Task<TokensModel> RegisterAsync(RegisterModel register)
         {
             var tokens = await this._userManager.RegisterAsync(register);
             await this._shoppingCartService.CheckShoppingCartCookiesAsync(register.Email, register.ShoppingCart);
+            
+            this._logger.LogInformation($"Registered user with email: {register.Email}.");
+
             return tokens;
         }
 
@@ -58,6 +66,8 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             await this._usersRepository.DeleteAsync(user);
+
+            this._logger.LogInformation($"Deleted user with email: {user.Email}.");
         }
 
         public async Task<TokensModel> AddToRoleAsync(string roleName, string email)
@@ -74,6 +84,9 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var dto = this._mapper.Map(user);
+
+            this._logger.LogInformation($"Returned user with email: {user.Email}.");
+
             return dto;
         }
 
@@ -91,6 +104,9 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var dto = this._mapper.Map(author);
+
+            this._logger.LogInformation($"Returned user as author with email: {author.Email}.");
+
             return dto;
         }
 
@@ -109,8 +125,12 @@ namespace EducationalPortal.Infrastructure.Services
                     && uc.LearnedMaterialsCount == uc.MaterialsCount)
                 {
                     await this._usersRepository.AddAcquiredSkillsAsync(uc.CourseId, email);
+                    this._logger.LogInformation($"Added skills of course with id: {uc.CourseId} " +
+                                            $"to user with email: {email}. Course learned.");
                 }
             }
+
+            this._logger.LogInformation($"Returned users courses page {usersCourses.PageNumber} from database.");
 
             return usersCourses;
         }

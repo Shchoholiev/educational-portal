@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Application.Interfaces.Identity;
+using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 
 namespace EducationalPortal.Infrastructure.Services.Identity
@@ -11,10 +12,13 @@ namespace EducationalPortal.Infrastructure.Services.Identity
 
         private readonly int _iterations;
 
-        public PasswordHasher()
+        private readonly ILogger _logger;
+
+        public PasswordHasher(ILogger<PasswordHasher> logger)
         {
             var random = new Random();
-            _iterations = random.Next(100, 1000);
+            this._iterations = random.Next(100, 1000);
+            this._logger = logger;
         }
 
         public string Hash(string password)
@@ -25,7 +29,9 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                 var key = Convert.ToBase64String(algorithm.GetBytes(KeySize));
                 var salt = Convert.ToBase64String(algorithm.Salt);
 
-                return $"{_iterations}.{salt}.{key}";
+                this._logger.LogInformation($"Hashed password.");
+
+                return $"{this._iterations}.{salt}.{key}";
             }
         }
 
@@ -41,6 +47,9 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                                                           HashAlgorithmName.SHA256))
             {
                 var key = Convert.ToBase64String(algorithm.GetBytes(KeySize));
+
+                this._logger.LogInformation($"Checked password.");
+
                 return key == userKey;
             }
         }
