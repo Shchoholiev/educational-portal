@@ -1,0 +1,65 @@
+﻿using EducationalPortal.Application.Exceptions;
+using EducationalPortal.Application.Models.ExceptionHandling;
+using Microsoft.AspNetCore.Http;
+using System.Net;
+
+namespace EducationalPortal.Infrastructure.ExceptionHandling
+{
+    public class ExceptionMiddleware
+    {
+        private readonly RequestDelegate _next;
+
+        //private readonly ILogger<ExceptionMiddleware> _logger;
+
+        public ExceptionMiddleware(RequestDelegate next)
+            //, ILogger<ExceptionMiddleware> logger)
+        {
+            //this._logger = logger;
+            this._next = next;
+        }
+
+        public async Task InvokeAsync(HttpContext httpContext)
+        {
+            try
+            {
+                await this._next(httpContext);
+            }
+            catch (NotFoundException ex)
+            {
+                //this._logger.LogError($"Parameter is out of range: {ex}");
+                await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.NotFound);
+            }
+            catch (AlreadyExistsException ex)
+            {
+                //this._logger.LogError($"Parameter is out of range: {ex}");
+                await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.BadRequest);
+            }
+            catch (DeleteEntityException ex)
+            {
+                //this._logger.LogError($"Parameter is out of range: {ex}");
+                await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.Conflict);
+            }
+            catch (Exception ex)
+            {
+                //this._logger.LogError($"Something went wrong: {ex}");
+                await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, int statusCode)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = statusCode;
+
+            var message = exception switch
+            {
+                NotFoundException => $"{exception.Message} Refresh the page and try again.",
+                AlreadyExistsException => $"{exception.Message} Change properties or delete existing object.",
+                DeleteEntityException => $"{exception.Message}",
+                _ => "Internal Server Error",
+            };
+
+            await context.Response.WriteAsync(new ErrorDetails(statusCode, message).ToString());
+        }
+    }
+}

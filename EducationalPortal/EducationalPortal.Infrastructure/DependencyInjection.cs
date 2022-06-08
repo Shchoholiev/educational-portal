@@ -3,10 +3,12 @@ using EducationalPortal.Application.Interfaces.EducationalMaterials;
 using EducationalPortal.Application.Interfaces.Identity;
 using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Infrastructure.EF;
+using EducationalPortal.Infrastructure.ExceptionHandling;
 using EducationalPortal.Infrastructure.Repositories;
 using EducationalPortal.Infrastructure.Services;
 using EducationalPortal.Infrastructure.Services.EducationalMaterials;
 using EducationalPortal.Infrastructure.Services.Identity;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,6 +51,11 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
             return services;
+        }
+
+        public static void ConfigureCustomExceptionMiddleware(this IApplicationBuilder app)
+        {
+            app.UseMiddleware<ExceptionMiddleware>();
         }
     }
 }
