@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using EducationalPortal.Application.Interfaces.Repositories;
 
-namespace EducationalPortal.Infrastructure.IRepositories
+namespace EducationalPortal.Infrastructure.Repositories
 {
     public class CoursesRepository : ICoursesRepository
     {
@@ -31,6 +31,8 @@ namespace EducationalPortal.Infrastructure.IRepositories
         {
             var coursesMaterials = this._db.CoursesMaterials.Where(cm => cm.CourseId == course.Id);
             this._db.CoursesMaterials.RemoveRange(coursesMaterials);
+            var coursesSkills = this._db.CoursesSkills.Where(cm => cm.CourseId == course.Id);
+            this._db.CoursesSkills.RemoveRange(coursesSkills);
 
             this._table.Update(course);
             await this.SaveAsync();
@@ -40,6 +42,11 @@ namespace EducationalPortal.Infrastructure.IRepositories
         {
             this._table.Remove(course);
             await this.SaveAsync();
+        }
+
+        public void Detach(object entity)
+        {
+            this._db.Entry(entity).State = EntityState.Detached;
         }
 
         public async Task<Course?> GetCourseAsync(int id)
@@ -53,7 +60,8 @@ namespace EducationalPortal.Infrastructure.IRepositories
                .Include(c => c.Author)
                .Include(c => c.CoursesMaterials)
                   .ThenInclude(cm => cm.Material)
-               .Include(c => c.Skills)
+               .Include(c => c.CoursesSkills)
+                  .ThenInclude(cs => cs.Skill)
                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (course == null)

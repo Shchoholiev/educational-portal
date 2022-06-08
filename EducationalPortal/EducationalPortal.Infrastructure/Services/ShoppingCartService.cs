@@ -16,8 +16,6 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<ShoppingHistory> _shoppingHistoryRepository;
 
-        private readonly IAccountService _accountService;
-
         private readonly IUsersRepository _usersRepository;
 
         private readonly IUsersCoursesRepository _usersCoursesRepository;
@@ -28,13 +26,12 @@ namespace EducationalPortal.Infrastructure.Services
 
         public ShoppingCartService(ICartItemsRepository cartItemsRepository,
                                    IGenericRepository<ShoppingHistory> shoppingHistoryRepository,
-                                   IAccountService accountService, IUsersRepository usersRepository,
+                                   IUsersRepository usersRepository,
                                    IUsersCoursesRepository usersCoursesRepository, 
                                    ICoursesRepository coursesRepository)
         {
             this._cartItemsRepository = cartItemsRepository;
             this._shoppingHistoryRepository = shoppingHistoryRepository;
-            this._accountService = accountService;
             this._usersRepository = usersRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._coursesRepository = coursesRepository;
@@ -219,7 +216,7 @@ namespace EducationalPortal.Infrastructure.Services
 
             if (userCourse.MaterialsCount == userCourse.LearnedMaterialsCount)
             {
-                await this._accountService.AddAcquiredSkillsAsync(course.Id, user.Email);
+                await this._usersRepository.AddAcquiredSkillsAsync(course.Id, user.Email);
             }
 
             await this._usersCoursesRepository.AddUsersCoursesAsync(userCourse);

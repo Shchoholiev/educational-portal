@@ -32,7 +32,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task DeleteAsync(int id)
         {
-            if (await this._skillsRepository.Exists(s => s.Courses.Any(c => c.Skills.Any(s => s.Id == id))))
+            if (await this._skillsRepository.Exists(s => s.CoursesSkills.Any(cs => cs.SkillId == id)))
             {
                 throw new DeleteEntityException("This skill is used in other courses!");
             }

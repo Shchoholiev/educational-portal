@@ -6,6 +6,6 @@ namespace EducationalPortal.Application.Models.DTO.EducationalMaterials
     {
         public QualityDto Quality { get; set; }
 
-        public int Duration { get; set; }
+        public DateTime Duration { get; set; }
     }
 }

@@ -17,8 +17,6 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IUsersCoursesRepository _usersCoursesRepository;
 
-        private readonly ICoursesRepository _coursesRepository;
-
         private readonly IUserManager _userManager;
 
         private readonly IShoppingCartService _shoppingCartService;
@@ -26,12 +24,10 @@ namespace EducationalPortal.Infrastructure.Services
         private readonly Mapper _mapper = new();
 
         public AccountService(IUsersRepository userRepository, IUsersCoursesRepository usersCoursesRepository,
-                              ICoursesRepository coursesRepository, IUserManager userManager,
-                              IShoppingCartService shoppingCartService)
+                              IUserManager userManager, IShoppingCartService shoppingCartService)
         {
             this._usersRepository = userRepository;
             this._usersCoursesRepository = usersCoursesRepository;
-            this._coursesRepository = coursesRepository;
             this._userManager = userManager;
             this._shoppingCartService = shoppingCartService;
         }
@@ -112,44 +108,11 @@ namespace EducationalPortal.Infrastructure.Services
                 if (learnedMaterialsCount != uc.LearnedMaterialsCount
                     && uc.LearnedMaterialsCount == uc.MaterialsCount)
                 {
-                    await this.AddAcquiredSkillsAsync(uc.CourseId, email);
+                    await this._usersRepository.AddAcquiredSkillsAsync(uc.CourseId, email);
                 }
             }
 
             return usersCourses;
-        }
-
-        public async Task AddAcquiredSkillsAsync(int courseId, string email)
-        {
-            var course = await this._coursesRepository.GetFullCourseAsync(courseId);
-            if (course == null)
-            {
-                throw new NotFoundException("Course");
-            }
-
-            var user = await this._usersRepository.GetUserWithSkillsAsync(email);
-            if (user == null)
-            {
-                throw new NotFoundException("User");
-            }
-
-            foreach (var skill in course.Skills)
-            {
-                if (user.UsersSkills.Any(us => us.SkillId == skill.Id))
-                {
-                    user.UsersSkills.FirstOrDefault(us => us.SkillId == skill.Id).Level++;
-                }
-                else
-                {
-                    user.UsersSkills.Add(new UsersSkills
-                    {
-                        SkillId = skill.Id,
-                        Level = 1,
-                    });
-                }
-            }
-
-            await this._usersRepository.UpdateAsync(user);
         }
     }
 }

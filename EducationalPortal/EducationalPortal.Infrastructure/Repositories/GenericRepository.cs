@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using EducationalPortal.Core.Common;
 using EducationalPortal.Application.Interfaces.Repositories;
 
-namespace EducationalPortal.Infrastructure.IRepositories
+namespace EducationalPortal.Infrastructure.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : EntityBase
     {

@@ -22,5 +22,12 @@
 
             this.AddRange(items);
         }
+
+        public void MapList(IPagedList list)
+        {
+            this.PageNumber = list.PageNumber;
+            this.PageSize = list.PageSize;
+            this.TotalPages = list.TotalPages;
+        }
     }
 }

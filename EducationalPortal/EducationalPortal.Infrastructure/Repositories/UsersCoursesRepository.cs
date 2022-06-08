@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using EducationalPortal.Application.Interfaces.Repositories;
 
-namespace EducationalPortal.Infrastructure.IRepositories
+namespace EducationalPortal.Infrastructure.Repositories
 {
     public class UsersCoursesRepository : IUsersCoursesRepository
     {
@@ -66,16 +66,14 @@ namespace EducationalPortal.Infrastructure.IRepositories
                                           .Include(cm => cm.Material)
                                           .Where(cm => cm.CourseId == courseId);
 
-            var count = await courseMaterials.CountAsync(cm => user.Materials.Any(m => m.Id == cm.MaterialId));
-
-            //obsolete but tests neded
-            //foreach (var cm in courseMaterials)
-            //{
-            //    if (user.Materials.Any(m => m.Id == cm.MaterialId))
-            //    {
-            //        count++;
-            //    }
-            //}
+            var count = 0;
+            foreach (var cm in courseMaterials)
+            {
+                if (user.Materials.Any(m => m.Id == cm.MaterialId))
+                {
+                    count++;
+                }
+            }
 
             return count;
         }

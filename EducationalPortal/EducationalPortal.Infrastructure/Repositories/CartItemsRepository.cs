@@ -39,6 +39,7 @@ namespace EducationalPortal.Infrastructure.Repositories
         public async Task<IEnumerable<CartItem>> GetAllAsync(string email)
         {
             return await this._table.AsNoTracking()
+                                    .Include(ci => ci.Course)
                                     .Where(ci => ci.User.Email == email)
                                     .ToListAsync();
         }
@@ -52,6 +53,7 @@ namespace EducationalPortal.Infrastructure.Repositories
         {
             var cartItems = await this._table
                                      .AsNoTracking()
+                                     .Include(ci => ci.Course)
                                      .Where(ci => ci.User.Email == email)
                                      .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                      .Take(pageParameters.PageSize)

@@ -12,6 +12,8 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task DeleteAsync(Course course);
 
+        void Detach(object entity);
+
         Task<Course?> GetCourseAsync(int id);
 
         Task<Course> GetFullCourseAsync(int id);

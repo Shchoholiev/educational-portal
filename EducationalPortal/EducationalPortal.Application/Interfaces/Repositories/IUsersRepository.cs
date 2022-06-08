@@ -17,5 +17,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<User?> GetUserWithMaterialsAsync(string email);
 
         Task<User?> GetAuthorAsync(string email);
+
+        Task AddAcquiredSkillsAsync(int courseId, string email);
     }
 }

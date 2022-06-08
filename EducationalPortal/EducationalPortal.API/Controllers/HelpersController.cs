@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EducationalPortal.API.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/helpers")]
-    public class HelpersController : Controller
+    public class HelpersController : ApiControllerBase
     {
         private readonly ICloudStorageService _cloudStorageService;
 

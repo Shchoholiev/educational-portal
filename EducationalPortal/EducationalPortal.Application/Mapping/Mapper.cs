@@ -20,9 +20,14 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<MaterialsBase, MaterialBaseCreateDto>();
 
             cfg.CreateMap<Course, CourseShortDto>();
-            cfg.CreateMap<Course, CourseDto>();
+            cfg.CreateMap<Course, CourseDto>()
+               .ForMember(dest => dest.Skills, 
+               opt => opt.MapFrom(s => s.CoursesSkills.Select(cs => cs.Skill)));
+
             cfg.CreateMap<CourseCreateDto, Course>();
-            cfg.CreateMap<Course, CourseCreateDto>();
+            cfg.CreateMap<Course, CourseCreateDto>()
+               .ForMember(dest => dest.Skills,
+               opt => opt.MapFrom(s => s.CoursesSkills.Select(cs => cs.Skill))); ;
 
             cfg.CreateMap<Video, VideoDto>();
             cfg.CreateMap<VideoCreateDto, Video>()
@@ -34,6 +39,8 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<Book, BookDto>();
             cfg.CreateMap<BookCreateDto, Book>();
 
+            cfg.CreateMap<Extension, ExtensionDto>();
+
             cfg.CreateMap<Article, ArticleDto>();
             cfg.CreateMap<ArticleCreateDto, Article>();
 
@@ -44,7 +51,9 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<SkillDto, Skill>();
 
             cfg.CreateMap<User, UserDto>();
-            cfg.CreateMap<UserDto, User>();
+            cfg.CreateMap<UserDto, User>()
+               .ForMember(dest => dest.CreatedCourses, opt => opt.Ignore());
+            cfg.CreateMap<UsersSkills, UsersSkillsDto>();
 
             cfg.CreateMap<Role, RoleDto>();
             cfg.CreateMap<RoleDto, Role>();
@@ -56,14 +65,16 @@ namespace EducationalPortal.Application.Mapping
 
         }).CreateMapper();
 
-        public PagedList<CourseShortDto> Map(PagedList<Course> courses)
+        public PagedList<CourseShortDto> Map(PagedList<Course> source)
         {
-            return this._mapper.Map<PagedList<CourseShortDto>>(courses);
+            var dtos = this._mapper.Map<PagedList<CourseShortDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public CourseDto Map(Course course, IEnumerable<MaterialsBase>? learnedMaterials)
         {
-            var courseViewModel = _mapper.Map<CourseDto>(course);
+            var courseViewModel = this._mapper.Map<CourseDto>(course);
             courseViewModel.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
                                                      learnedMaterials);
 
@@ -83,89 +94,103 @@ namespace EducationalPortal.Application.Mapping
             return learnCourse;
         }
 
-        public PagedList<CartItemDto> Map(PagedList<CartItem> courses)
+        public PagedList<CartItemDto> Map(PagedList<CartItem> source)
         {
-            return this._mapper.Map<PagedList<CartItemDto>>(courses);
+            var dtos = this._mapper.Map<PagedList<CartItemDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public User Map(User user, UserDto userDTO)
         {
-            return _mapper.Map(userDTO, user);
+            return this._mapper.Map(userDTO, user);
         }
 
         public UserDto Map(User source)
         {
-            return _mapper.Map<UserDto>(source);
+            return this._mapper.Map<UserDto>(source);
         }
 
         public Article Map(ArticleCreateDto source)
         {
-            return _mapper.Map<Article>(source);
+            return this._mapper.Map<Article>(source);
         }
 
         public PagedList<ArticleDto> Map(PagedList<Article> source)
         {
-            return _mapper.Map<PagedList<ArticleDto>>(source);
+            var dtos = this._mapper.Map<PagedList<ArticleDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public Book Map(BookCreateDto source)
         {
-            return _mapper.Map<Book>(source);
+            return this._mapper.Map<Book>(source);
         }
 
         public PagedList<BookDto> Map(PagedList<Book> source)
         {
-            return _mapper.Map<PagedList<BookDto>>(source);
+            var dtos = this._mapper.Map<PagedList<BookDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public Video Map(VideoCreateDto source)
         {
-            return _mapper.Map<Video>(source);
+            return this._mapper.Map<Video>(source);
         }
 
         public PagedList<VideoDto> Map(PagedList<Video> source)
         {
-            return _mapper.Map<PagedList<VideoDto>>(source);
+            var dtos = this._mapper.Map<PagedList<VideoDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public Resource Map(ResourceDto source)
         {
-            return _mapper.Map<Resource>(source);
+            return this._mapper.Map<Resource>(source);
         }
 
         public PagedList<ResourceDto> Map(PagedList<Resource> source)
         {
-            return _mapper.Map<PagedList<ResourceDto>>(source);
+            var dtos = this._mapper.Map<PagedList<ResourceDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public Author Map(AuthorDto source)
         {
-            return _mapper.Map<Author>(source);
+            return this._mapper.Map<Author>(source);
         }
 
         public PagedList<AuthorDto> Map(PagedList<Author> source)
         {
-            return _mapper.Map<PagedList<AuthorDto>>(source);
+            var dtos = this._mapper.Map<PagedList<AuthorDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public Skill Map(SkillDto source)
         {
-            return _mapper.Map<Skill>(source);
+            return this._mapper.Map<Skill>(source);
         }
 
         public PagedList<SkillDto> Map(PagedList<Skill> source)
         {
-            return this._mapper.Map<PagedList<SkillDto>>(source);
+            var dtos = this._mapper.Map<PagedList<SkillDto>>(source);
+            dtos.MapList(source);
+            return dtos;
         }
 
         public IEnumerable<QualityDto> Map(IEnumerable<Quality> source)
         {
-            return _mapper.Map<IEnumerable<QualityDto>>(source);
+            return this._mapper.Map<IEnumerable<QualityDto>>(source);
         }
 
         public CourseCreateDto Map(Course source)
         {
-            var courseDTO = _mapper.Map<CourseCreateDto>(source);
+            var courseDTO = this._mapper.Map<CourseCreateDto>(source);
             return courseDTO;
         }
 
@@ -179,7 +204,7 @@ namespace EducationalPortal.Application.Mapping
 
         public Course Map(Course course, CourseCreateDto courseDTO)
         {
-            course = _mapper.Map(courseDTO, course);
+            course = this._mapper.Map(courseDTO, course);
             course = MapCourseJoinEntities(course, courseDTO);
 
             return course;
@@ -198,6 +223,12 @@ namespace EducationalPortal.Application.Mapping
                 course.CoursesMaterials.Add(courseMaterial);
             }
 
+            course.CoursesSkills = new List<CoursesSkills>();
+            foreach (var skill in courseDTO.Skills)
+            {
+                course.CoursesSkills.Add(new CoursesSkills { SkillId = skill.Id });
+            }
+
             return course;
         }
 
@@ -211,21 +242,21 @@ namespace EducationalPortal.Application.Mapping
                 {
                     case "Video":
                         var video = (Video)material;
-                        var videoViewModel = _mapper.Map<VideoDto>(video);
+                        var videoViewModel = this._mapper.Map<VideoDto>(video);
                         videoViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
                         materialsViewModel.Add(videoViewModel);
                         break;
 
                     case "Book":
                         var book = (Book)material;
-                        var bookViewModel = _mapper.Map<BookDto>(book);
+                        var bookViewModel = this._mapper.Map<BookDto>(book);
                         bookViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
                         materialsViewModel.Add(bookViewModel);
                         break;
 
                     case "Article":
                         var article = (Article)material;
-                        var articleViewModel = _mapper.Map<ArticleDto>(article);
+                        var articleViewModel = this._mapper.Map<ArticleDto>(article);
                         articleViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
                         materialsViewModel.Add(articleViewModel);
                         break;

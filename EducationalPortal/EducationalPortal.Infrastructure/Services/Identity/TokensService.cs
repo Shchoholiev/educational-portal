@@ -1,4 +1,6 @@
 ﻿using EducationalPortal.Application.Interfaces.Identity;
+using EducationalPortal.Application.Interfaces.Repositories;
+using EducationalPortal.Application.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,10 +14,37 @@ namespace EducationalPortal.Infrastructure.Services.Identity
     {
         private readonly IConfiguration _configuration;
 
-        public TokensService(IConfiguration configuration)
+        private readonly IUsersRepository _usersRepository;
+
+        public TokensService(IConfiguration configuration, IUsersRepository usersRepository)
         {
-            _configuration = configuration;
+            this._configuration = configuration;
+            this._usersRepository = usersRepository;
         }
+
+        public async Task<TokensModel> Refresh(TokensModel tokensModel, string email)
+        {
+            var principal = this.GetPrincipalFromExpiredToken(tokensModel.AccessToken);
+
+            var user = await this._usersRepository.GetUserAsync(email);
+            if (user == null || user?.UserToken?.RefreshToken != tokensModel.RefreshToken
+                             || user?.UserToken?.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                throw new SecurityTokenExpiredException();
+            }
+
+            var newAccessToken = this.GenerateAccessToken(principal.Claims);
+            var newRefreshToken = this.GenerateRefreshToken();
+            user.UserToken.RefreshToken = newRefreshToken;
+            await this._usersRepository.UpdateAsync(user);
+
+            return new TokensModel
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken
+            };
+        }
+
 
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
@@ -34,21 +63,22 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             }
         }
 
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
+                ValidateAudience = false, 
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("HHUHU92479-JKKNS23O")),
-                ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+                ValidateLifetime = false 
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, 
+                                            StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
             return principal;
         }

@@ -3,7 +3,7 @@ using EducationalPortal.Application.Interfaces.EducationalMaterials;
 using EducationalPortal.Application.Interfaces.Identity;
 using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Infrastructure.EF;
-using EducationalPortal.Infrastructure.IRepositories;
+using EducationalPortal.Infrastructure.Repositories;
 using EducationalPortal.Infrastructure.Services;
 using EducationalPortal.Infrastructure.Services.EducationalMaterials;
 using EducationalPortal.Infrastructure.Services.Identity;
@@ -26,7 +26,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IUsersCoursesRepository, UsersCoursesRepository>();
-            services.AddScoped<ICartItemsRepository, ICartItemsRepository>();
+            services.AddScoped<ICartItemsRepository, CartItemsRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;
@@ -38,6 +38,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<ITokensService, TokensService>();
             services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<ICoursesService, CoursesService>();
             services.AddScoped<IArticlesService, ArticlesService>();
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<IVideosService, VideosService>();

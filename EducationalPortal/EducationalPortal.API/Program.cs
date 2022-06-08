@@ -1,14 +1,19 @@
+using EducationalPortal.API.Config;
 using EducationalPortal.API.DI;
 using EducationalPortal.Infrastructure;
 using EducationalPortal.Infrastructure.DataInitializer;
 using EducationalPortal.Infrastructure.EF;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddJWTTokenServices(builder.Configuration);
 
-builder.Services.AddControllers().AddNewtonsoftJson(options => 
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(new ToKebabRouteTransformer()));
+}).AddNewtonsoftJson(options => 
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 builder.Services.AddCors(options =>
 {

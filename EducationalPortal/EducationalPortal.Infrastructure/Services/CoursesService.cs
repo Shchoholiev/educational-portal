@@ -17,21 +17,18 @@ namespace EducationalPortal.Infrastructure.Services
         private readonly IUsersRepository _usersRepository;
 
         private readonly IUsersCoursesRepository _usersCoursesRepository;
-        
-        private readonly IAccountService _accountService;
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
 
         private readonly Mapper _mapper = new();
 
         public CoursesService(ICoursesRepository coursesRepository, IUsersRepository usersRepository,
-                              IUsersCoursesRepository usersCoursesRepository, IAccountService accountService,
+                              IUsersCoursesRepository usersCoursesRepository,
                               IGenericRepository<MaterialsBase> materialsRepository)
         {
             this._coursesRepository = coursesRepository;
             this._usersRepository = usersRepository;
             this._usersCoursesRepository = usersCoursesRepository;
-            this._accountService = accountService;
             this._materialsRepository = materialsRepository;
         }
 
@@ -133,7 +130,7 @@ namespace EducationalPortal.Infrastructure.Services
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             if (progress == 100)
             {
-                await this._accountService.AddAcquiredSkillsAsync(courseId, email);
+                await this._usersRepository.AddAcquiredSkillsAsync(courseId, email);
             }
 
             return progress;

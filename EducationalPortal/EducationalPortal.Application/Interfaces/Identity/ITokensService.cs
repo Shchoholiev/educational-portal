@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using EducationalPortal.Application.Models;
+using System.Security.Claims;
 
 namespace EducationalPortal.Application.Interfaces.Identity
 {
@@ -8,6 +9,6 @@ namespace EducationalPortal.Application.Interfaces.Identity
 
         string GenerateRefreshToken();
 
-        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        Task<TokensModel> Refresh(TokensModel tokensModel, string email);
     }
 }

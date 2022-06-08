@@ -2,8 +2,10 @@
 using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using EducationalPortal.Application.Interfaces.Repositories;
+using EducationalPortal.Application.Exceptions;
+using EducationalPortal.Core.Entities.JoinEntities;
 
-namespace EducationalPortal.Infrastructure.IRepositories
+namespace EducationalPortal.Infrastructure.Repositories
 {
     public class UsersRepository : IUsersRepository
     {
@@ -67,6 +69,41 @@ namespace EducationalPortal.Infrastructure.IRepositories
                                 .ThenInclude(us => us.Skill)
                              .Include(u => u.Roles)
                              .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task AddAcquiredSkillsAsync(int courseId, string email)
+        {
+            var course = await this._db.Courses.Include(c => c.CoursesSkills)
+                                                    .ThenInclude(cs => cs.Skill)
+                                                .FirstOrDefaultAsync(c => c.Id == courseId);
+            if (course == null)
+            {
+                throw new NotFoundException("Course");
+            }
+
+            var user = await this.GetUserWithSkillsAsync(email);
+            if (user == null)
+            {
+                throw new NotFoundException("User");
+            }
+
+            foreach (var skill in course.CoursesSkills.Select(cs => cs.Skill))
+            {
+                if (user.UsersSkills.Any(us => us.SkillId == skill.Id))
+                {
+                    user.UsersSkills.FirstOrDefault(us => us.SkillId == skill.Id).Level++;
+                }
+                else
+                {
+                    user.UsersSkills.Add(new UsersSkills
+                    {
+                        SkillId = skill.Id,
+                        Level = 1,
+                    });
+                }
+            }
+
+            await this.UpdateAsync(user);
         }
 
         private async Task SaveAsync()
