@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.Models.CreateDTO;
 using FluentValidation;
 
-namespace EducationalPortal.API.FluentValidation
+namespace EducationalPortal.Application.FluentValidation
 {
     public class VideoValidator : AbstractValidator<VideoCreateDto>
     {

@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.Models.DTO;
 using FluentValidation;
 
-namespace EducationalPortal.API.FluentValidation
+namespace EducationalPortal.Application.FluentValidation
 {
     public class SkillValidator : AbstractValidator<SkillDto>
     {

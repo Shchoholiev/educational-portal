@@ -4,13 +4,23 @@ using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using EducationalPortal.Infrastructure.Services.Identity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.DataInitializer
 {
     public static class DbInitializer
     {
-        public static async Task Initialize(ApplicationContext context, ILogger<PasswordHasher> logger)
+        public static async Task InitializeDb(WebApplication app)
+        {
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<PasswordHasher>>();
+            await Initialize(context, logger);
+        }
+
+        private static async Task Initialize(ApplicationContext context, ILogger<PasswordHasher> logger)
         {
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();

@@ -1,7 +1,7 @@
 ﻿using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using FluentValidation;
 
-namespace EducationalPortal.API.FluentValidation
+namespace EducationalPortal.Application.FluentValidation
 {
     public class AuthorValidator : AbstractValidator<AuthorDto>
     {
