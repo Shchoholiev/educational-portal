@@ -1,22 +1,24 @@
-﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Core.Entities;
+﻿using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Paging;
 
 namespace EducationalPortal.Application.Interfaces
 {
     public interface IShoppingCartService
     {
-        Task AddAsync(CartItem cartItem);
+        Task AddToCartAsync(int courseId, string email);
 
         Task DeleteAsync(int cartItemId);
 
-        Task<IEnumerable<CartItem>> GetDeserialisedAsync(string cookies);
+        Task<PagedList<CartItemDto>> GetPageAsync(PageParameters pageParameters, string email);
 
-        Task<PagedList<CartItem>> GetPageAsync(string email, PageParameters pageParameters);
+        Task<PagedList<CartItemDto>> GetPageFromCookieAsync(PageParameters pageParameters, string cookies);
 
-        Task<int> GetTotalPrice(string email);
+        Task<int> GetTotalPriceAsync(string email);
+
+        Task<int> GetTotalPriceFromCookieAsync(string cookies);
 
         Task BuyAsync(string userEmail);
 
-        Task<bool> Exists(int courseId, string userEmail);
+        Task CheckShoppingCartCookiesAsync(string email, string? cookies);
     }
 }

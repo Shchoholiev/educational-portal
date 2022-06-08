@@ -8,8 +8,6 @@
 
         public int TotalPages { get; set; }
 
-        public int TotalItems { get; set; }
-
         public bool HasPreviousPage => PageNumber > 1;
 
         public bool HasNextPage => PageNumber < TotalPages;
@@ -20,10 +18,16 @@
         {
             this.PageNumber = pageParameters.PageNumber;
             this.PageSize = pageParameters.PageSize;
-            this.TotalItems = totalItems;
             this.TotalPages = (int)Math.Ceiling(totalItems / (double)pageParameters.PageSize);
 
             this.AddRange(items);
+        }
+
+        public void MapList(IPagedList list)
+        {
+            this.PageNumber = list.PageNumber;
+            this.PageSize = list.PageSize;
+            this.TotalPages = list.TotalPages;
         }
     }
 }

@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EducationalPortal.API.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/helpers")]
-    public class HelpersController : Controller
+    public class HelpersController : ApiControllerBase
     {
         private readonly ICloudStorageService _cloudStorageService;
 
@@ -18,17 +16,14 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("file-to-link/{blobContainer}")]
         [Authorize]
-        public async Task<IActionResult> FileToLink(string blobContainer)
+        public async Task<IActionResult> FileToLink(string blobContainer, [FromForm] IFormFile file)
         {
-            var link = String.Empty;
-            var file = Request.Form.Files[0];
             using (var stream = file.OpenReadStream())
             {
-                link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
+                var link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
                                                                    blobContainer);
+                return Ok(new { link });
             }
-
-            return Ok(new { link = link });
         }
     }
 }

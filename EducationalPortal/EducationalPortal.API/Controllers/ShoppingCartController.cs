@@ -1,18 +1,13 @@
-﻿using EducationalPortal.Application.Exceptions;
-using EducationalPortal.Application.Interfaces;
+﻿using EducationalPortal.Application.Interfaces;
+using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Paging;
-using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Security.Claims;
 
 namespace EducationalPortal.API.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/shopping-cart")]
-    public class ShoppingCartController : Controller
+    public class ShoppingCartController : ApiControllerBase
     {
         private readonly IShoppingCartService _shoppingCartService;
 
@@ -22,83 +17,47 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<CartItemDto>>> GetCart([FromQuery]PageParameters pageParameters)
         {
-            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var cartItems = await this._shoppingCartService.GetPageAsync(email, pageParameters);
-            var metadata = new
-            {
-                cartItems.PageSize,
-                cartItems.PageNumber,
-                cartItems.TotalPages,
-                cartItems.HasNextPage,
-                cartItems.HasPreviousPage
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-
+            var cartItems = await this._shoppingCartService.GetPageAsync(pageParameters, Email);
+            this.SetPagingMetadata(cartItems);
             return cartItems;
         }
 
         [AllowAnonymous]
         [HttpGet("page-from-cookie")]
-        public async Task<ActionResult<IEnumerable<CartItem>>> GetCart([FromQuery] string cookie,
-                                                        [FromQuery] PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<CartItemDto>>> GetCart([FromQuery] string cookie,
+                                                                       [FromQuery] PageParameters pageParameters)
         {
-            var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookie);
-            var totalPages = (int)Math.Ceiling(cartItems.Count() / (double)pageParameters.PageSize);
-            var metadata = new
-            {
-                PageSize = pageParameters.PageSize,
-                PageNumber = pageParameters.PageNumber,
-                TotalPages = totalPages,
-                HasPreviousPage = pageParameters.PageNumber > 1,
-                HasNextPage = pageParameters.PageNumber < totalPages
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-            var page = cartItems.Skip(pageParameters.PageSize * (pageParameters.PageNumber - 1))
-                                .Take(pageParameters.PageSize);
-
-            return Ok(page);
+            var cartItems = await this._shoppingCartService.GetPageFromCookieAsync(pageParameters, cookie);
+            this.SetPagingMetadata(cartItems);
+            return cartItems;
         }
 
         [HttpGet("total-price")]
         public async Task<ActionResult<int>> GetTotalPrice()
         {
-            var email = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            return await this._shoppingCartService.GetTotalPrice(email);
+            return await this._shoppingCartService.GetTotalPriceAsync(Email);
         }
 
         [AllowAnonymous]
         [HttpGet("total-price-from-cookie")]
         public async Task<ActionResult<int>> GetTotalPrice([FromQuery] string cookie)
         {
-            var cartItems = await this._shoppingCartService.GetDeserialisedAsync(cookie);
-            return cartItems.Sum(ci => ci.Course.Price);
+            return await this._shoppingCartService.GetTotalPriceFromCookieAsync(cookie);
         }
 
 
         [HttpPut("add-to-cart/{courseId}")]
         public async Task<IActionResult> AddToCart(int courseId)
         {
-            var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            if (!await this._shoppingCartService.Exists(courseId, userEmail))
-            {
-                var cartItem = new CartItem
-                {
-                    Course = new Course { Id = courseId },
-                    User = new User { Email = userEmail }
-                };
-
-                await this._shoppingCartService.AddAsync(cartItem);
-            }
-
+            await this._shoppingCartService.AddToCartAsync(courseId, Email);
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             await this._shoppingCartService.DeleteAsync(id);
             return NoContent();
         }
@@ -106,8 +65,7 @@ namespace EducationalPortal.API.Controllers
         [HttpPut("buy")]
         public async Task<IActionResult> Buy()
         {
-            var userEmail = User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            await this._shoppingCartService.BuyAsync(userEmail);
+            await this._shoppingCartService.BuyAsync(Email);
             return Ok();
         }
     }

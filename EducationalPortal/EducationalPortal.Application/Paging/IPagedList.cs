@@ -8,8 +8,6 @@
 
         public int TotalPages { get; set; }
 
-        public int TotalItems { get; set; }
-
         public bool HasPreviousPage { get; }
 
         public bool HasNextPage { get; }

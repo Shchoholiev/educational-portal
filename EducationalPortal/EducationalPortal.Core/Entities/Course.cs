@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Core.Entities.EducationalMaterials;
+﻿using EducationalPortal.Core.Common;
+using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.JoinEntities;
 
 namespace EducationalPortal.Core.Entities
@@ -15,15 +16,11 @@ namespace EducationalPortal.Core.Entities
 
         public int Price { get; set; }
 
-        public List<Skill> Skills { get; set; }
-
-        public List<MaterialsBase> Materials { get; set; }
-
-        public User Author { get; set; }
+        public List<CoursesSkills> CoursesSkills { get; set; }
 
         public List<CoursesMaterials> CoursesMaterials { get; set; }
 
-        public List<CoursesSkills> CoursesSkills { get; set; }
+        public User Author { get; set; }
 
         public List<UsersCourses> UsersCourses { get; set; }
     }

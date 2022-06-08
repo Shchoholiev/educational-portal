@@ -1,81 +1,41 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Application.IRepositories;
-using EducationalPortal.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using EducationalPortal.Application.DTO;
+using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Interfaces;
 
 namespace EducationalPortal.API.Controllers
 {
     [Authorize(Roles = "Creator")]
-    [ApiController]
-    [Route("api/skills")]
-    public class SkillsController : Controller
+    public class SkillsController : ApiControllerBase
     {
-        private readonly IGenericRepository<Skill> _skillsRepository;
+        private readonly ISkillsService _skillsService;
 
-        public SkillsController(IGenericRepository<Skill> skillsRepository)
+        public SkillsController(ISkillsService skillsService)
         {
-            this._skillsRepository = skillsRepository;
+            this._skillsService = skillsService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills([FromQuery]PageParameters pageParameters)
+        public async Task<ActionResult<IEnumerable<SkillDto>>> GetSkills([FromQuery]PageParameters pageParameters)
         {
-            var skills = await this._skillsRepository.GetPageAsync(pageParameters);
-            var metadata = new
-            {
-                skills.TotalItems,
-                skills.PageSize,
-                skills.PageNumber,
-                skills.TotalPages,
-                skills.HasNextPage,
-                skills.HasPreviousPage
-            };
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
-
+            var skills = await this._skillsService.GetPageAsync(pageParameters);
+            this.SetPagingMetadata(skills);
             return skills;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]SkillDTO skillDTO)
+        public async Task<IActionResult> Create([FromBody]SkillDto skillDto)
         {
-            if (ModelState.IsValid)
-            {
-                if (await this._skillsRepository.Exists(s => s.Name == skillDTO.Name))
-                {
-                    ModelState.AddModelError("Name", "Skill already exists!");
-                }
-                else
-                {
-                    var skill = new Skill { Id = skillDTO.Id, Name = skillDTO.Name };
-                    await this._skillsRepository.AddAsync(skill);
-                    return StatusCode(201);
-                }
-            }
-
-            return BadRequest(ModelState);
+            await this._skillsService.CreateAsync(skillDto);
+            return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if (await this._skillsRepository.Exists(s => s.CoursesSkills.Any(cs => cs.SkillId == id)))
-            {
-                return BadRequest("This skill is used in other courses!");
-            }
-            else
-            {
-                var skill = await this._skillsRepository.GetOneAsync(id);
-                if (skill == null)
-                {
-                    return NotFound();
-                }
-
-                await this._skillsRepository.DeleteAsync(skill);
-                return NoContent();
-            }
+            await this._skillsService.DeleteAsync(id);
+            return NoContent();
         }
     }
 }

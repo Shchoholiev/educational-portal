@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Core.Entities.JoinEntities;
+﻿using EducationalPortal.Core.Common;
+using EducationalPortal.Core.Entities.JoinEntities;
 
 namespace EducationalPortal.Core.Entities
 {
@@ -6,8 +7,8 @@ namespace EducationalPortal.Core.Entities
     {
         public string Name { get; set; }
 
-        public List<UsersSkills?> UsersSkills { get; set; }
+        public List<CoursesSkills> CoursesSkills { get; set; }
 
-        public List<CoursesSkills?> CoursesSkills { get; set; }
+        public List<UsersSkills> UsersSkills { get; set; }
     }
 }

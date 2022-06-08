@@ -3,13 +3,24 @@ using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
-using EducationalPortal.Infrastructure.Identity;
+using EducationalPortal.Infrastructure.Services.Identity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.DataInitializer
 {
     public static class DbInitializer
     {
-        public static async Task Initialize(ApplicationContext context)
+        public static async Task InitializeDb(WebApplication app)
+        {
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<PasswordHasher>>();
+            await Initialize(context, logger);
+        }
+
+        private static async Task Initialize(ApplicationContext context, ILogger<PasswordHasher> logger)
         {
             await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
@@ -99,7 +110,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
             context.Roles.Add(roleAdmin);
             context.SaveChanges();
 
-            var passwordHasher = new PasswordHasher();
+            var passwordHasher = new PasswordHasher(logger);
             var passwordHash = passwordHasher.Hash("12345Yuiop-");
 
             var user = new User

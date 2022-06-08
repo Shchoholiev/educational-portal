@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Core.Entities.JoinEntities;
+﻿using EducationalPortal.Core.Common;
+using EducationalPortal.Core.Entities.JoinEntities;
 
 namespace EducationalPortal.Core.Entities.EducationalMaterials
 {
