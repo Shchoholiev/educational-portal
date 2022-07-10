@@ -28,7 +28,7 @@ namespace EducationalPortal.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DockerDb");
+            var connectionString = Environment.GetEnvironmentVariable("DBConnectionString");
 
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connectionString)

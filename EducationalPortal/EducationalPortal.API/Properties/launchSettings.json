@@ -14,7 +14,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DBConnectionString": "server=(LocalDb)\\MSSQLLocalDB;database=EducationalPortal;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework;"
       },
       "applicationUrl": "https://localhost:7106;http://localhost:7105",
       "dotnetRunMessages": true
@@ -32,7 +33,10 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "environmentVariables": {
+        "DBConnectionString": "server=db;database=EducationalPortal;user=sa;password=12345Yuiop-;TrustServerCertificate=true;"
+      }
     }
   }
 }
