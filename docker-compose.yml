@@ -20,7 +20,8 @@ services:
       - ASPNETCORE_URLS=https://+;http://+
       - ASPNETCORE_HTTPSPORT=7106
       - ASPNETCORE_Kestrel__Certificates__Default__Password=passw0rd!
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.API.pfx
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+      - DBConnectionString=server=db;database=EducationalPortal;user=sa;password=12345Yuiop-;TrustServerCertificate=true;
     volumes:
       - ~/.aspnet/https:/https:ro
   
