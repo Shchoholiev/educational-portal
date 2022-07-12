@@ -5,12 +5,12 @@ namespace EducationalPortal.Application.Interfaces.Identity
 {
     public interface IUserManager
     {
-        Task<TokensModel> RegisterAsync(RegisterModel register);
+        Task<TokensModel> RegisterAsync(RegisterModel register, CancellationToken cancellationToken);
 
-        Task<TokensModel> LoginAsync(LoginModel login);
+        Task<TokensModel> LoginAsync(LoginModel login, CancellationToken cancellationToken);
 
-        Task<TokensModel> AddToRoleAsync(string roleName, string email);
+        Task<TokensModel> AddToRoleAsync(string roleName, string email, CancellationToken cancellationToken);
 
-        Task<TokensModel> UpdateAsync(string email, UserDto userDto);
+        Task<TokensModel> UpdateAsync(string email, UserDto userDto, CancellationToken cancellationToken);
     }
 }

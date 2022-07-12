@@ -7,12 +7,13 @@ namespace EducationalPortal.Application.Interfaces.EducationalMaterials
 {
     public interface IVideosService
     {
-        Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters);
+        Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters, 
+                                               CancellationToken cancellationToken);
 
-        Task CreateAsync(VideoCreateDto videoDto);
+        Task CreateAsync(VideoCreateDto videoDto, CancellationToken cancellationToken);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
 
-        Task<IEnumerable<QualityDto>> GetQualitiesAsync();
+        Task<IEnumerable<QualityDto>> GetQualitiesAsync(CancellationToken cancellationToken);
     }
 }
