@@ -35,14 +35,14 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             this._logger = logger;
         }
 
-        public async Task<TokensModel> RegisterAsync(RegisterModel register)
+        public async Task<TokensModel> RegisterAsync(RegisterModel register, CancellationToken cancellationToken)
         {
-            if (await this._usersRepository.GetUserAsync(register.Email) != null)
+            if (await this._usersRepository.GetUserAsync(register.Email, cancellationToken) != null)
             {
                 throw new AlreadyExistsException("user email", register.Email);
             }
 
-            var role = await this._rolesRepository.GetOneAsync(r => r.Name == "Student");
+            var role = await this._rolesRepository.GetOneAsync(r => r.Name == "Student", cancellationToken);
 
             var user = new User
             {
@@ -55,7 +55,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                 UserToken = this.GetRefreshToken(),
             };
             
-            await this._usersRepository.AddAsync(user);
+            await this._usersRepository.AddAsync(user, cancellationToken);
             var tokens = this.GetUserTokens(user);
 
             this._logger.LogInformation($"Created user with email: {user.Email}.");
@@ -63,9 +63,9 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             return tokens;
         }
 
-        public async Task<TokensModel> LoginAsync(LoginModel login)
+        public async Task<TokensModel> LoginAsync(LoginModel login, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetUserAsync(login.Email);
+            var user = await this._usersRepository.GetUserAsync(login.Email, cancellationToken);
 
             if (user == null)
             {
@@ -78,7 +78,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             }
 
             user.UserToken = this.GetRefreshToken();
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersRepository.UpdateAsync(user, cancellationToken);
             var tokens = this.GetUserTokens(user);
 
             this._logger.LogInformation($"Logged in user with email: {login.Email}.");
@@ -86,22 +86,23 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             return tokens;
         }
 
-        public async Task<TokensModel> AddToRoleAsync(string roleName, string email)
+        public async Task<TokensModel> AddToRoleAsync(string roleName, string email, 
+                                                      CancellationToken cancellationToken)
         {
-            var role = await this._rolesRepository.GetOneAsync(r => r.Name == roleName);
+            var role = await this._rolesRepository.GetOneAsync(r => r.Name == roleName, cancellationToken);
             if (role == null)
             {
                 throw new AlreadyExistsException("role name", roleName);
             }
 
-            var user = await this._usersRepository.GetUserAsync(email);
+            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new AlreadyExistsException("user email", email);
             }
 
             user.Roles.Add(role);
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersRepository.UpdateAsync(user, cancellationToken);
             var tokens = this.GetUserTokens(user);
 
             this._logger.LogInformation($"Added role {roleName} to user with email: {email}.");
@@ -109,22 +110,23 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             return tokens;
         }
 
-        public async Task<TokensModel> UpdateAsync(string email, UserDto userDto)
+        public async Task<TokensModel> UpdateAsync(string email, UserDto userDto, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetAuthorAsync(email);
+            var user = await this._usersRepository.GetAuthorAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
             }
 
-            if (email != userDto.Email && await this._usersRepository.GetUserAsync(userDto.Email) != null)
+            if (email != userDto.Email 
+                && await this._usersRepository.GetUserAsync(userDto.Email, cancellationToken) != null)
             {
                 throw new AlreadyExistsException("email", userDto.Email);
             }
 
             this._mapper.Map(user, userDto);
             user.UserToken = this.GetRefreshToken();
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersRepository.UpdateAsync(user, cancellationToken);
             var tokens = this.GetUserTokens(user);
 
             this._logger.LogInformation($"Update user with email: {email}.");

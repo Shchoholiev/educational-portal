@@ -27,11 +27,12 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             this._logger = logger;
         }
 
-        public async Task<TokensModel> Refresh(TokensModel tokensModel, string email)
+        public async Task<TokensModel> Refresh(TokensModel tokensModel, string email, 
+                                               CancellationToken cancellationToken)
         {
             var principal = this.GetPrincipalFromExpiredToken(tokensModel.AccessToken);
 
-            var user = await this._usersRepository.GetUserAsync(email);
+            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
             if (user == null || user?.UserToken?.RefreshToken != tokensModel.RefreshToken
                              || user?.UserToken?.RefreshTokenExpiryTime <= DateTime.Now)
             {
@@ -41,7 +42,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             var newAccessToken = this.GenerateAccessToken(principal.Claims);
             var newRefreshToken = this.GenerateRefreshToken();
             user.UserToken.RefreshToken = newRefreshToken;
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersRepository.UpdateAsync(user, cancellationToken);
 
             this._logger.LogInformation($"Refreshed user tokens.");
 

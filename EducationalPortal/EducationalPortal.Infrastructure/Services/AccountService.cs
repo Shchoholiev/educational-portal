@@ -37,47 +37,51 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger = logger;
         }
 
-        public async Task<TokensModel> RegisterAsync(RegisterModel register)
+        public async Task<TokensModel> RegisterAsync(RegisterModel register, 
+                                                     CancellationToken cancellationToken)
         {
-            var tokens = await this._userManager.RegisterAsync(register);
-            await this._shoppingCartService.CheckShoppingCartCookiesAsync(register.Email, register.ShoppingCart);
+            var tokens = await this._userManager.RegisterAsync(register, cancellationToken);
+            await this._shoppingCartService.CheckShoppingCartCookiesAsync(register.Email, 
+                register.ShoppingCart, cancellationToken);
             
             this._logger.LogInformation($"Registered user with email: {register.Email}.");
 
             return tokens;
         }
 
-        public async Task<TokensModel> LoginAsync(LoginModel login)
+        public async Task<TokensModel> LoginAsync(LoginModel login, CancellationToken cancellationToken)
         {
-            return await this._userManager.LoginAsync(login);
+            return await this._userManager.LoginAsync(login, cancellationToken);
         }
 
-        public async Task<TokensModel> UpdateAsync(string email, UserDto userDto)
+        public async Task<TokensModel> UpdateAsync(string email, UserDto userDto, 
+                                                   CancellationToken cancellationToken)
         {
-            return await this._userManager.UpdateAsync(email, userDto);
+            return await this._userManager.UpdateAsync(email, userDto, cancellationToken);
         }
 
-        public async Task DeleteAsync(string email)
+        public async Task DeleteAsync(string email, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetUserAsync(email);
+            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
             }
 
-            await this._usersRepository.DeleteAsync(user);
+            await this._usersRepository.DeleteAsync(user, cancellationToken);
 
             this._logger.LogInformation($"Deleted user with email: {user.Email}.");
         }
 
-        public async Task<TokensModel> AddToRoleAsync(string roleName, string email)
+        public async Task<TokensModel> AddToRoleAsync(string roleName, string email, 
+                                                      CancellationToken cancellationToken)
         {
-            return await this._userManager.AddToRoleAsync(roleName, email);
+            return await this._userManager.AddToRoleAsync(roleName, email, cancellationToken);
         }
 
-        public async Task<UserDto> GetUserAsync(string email)
+        public async Task<UserDto> GetUserAsync(string email, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetAuthorAsync(email);
+            var user = await this._usersRepository.GetAuthorAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -90,9 +94,9 @@ namespace EducationalPortal.Infrastructure.Services
             return dto;
         }
 
-        public async Task<UserDto> GetAuthorAsync(string email)
+        public async Task<UserDto> GetAuthorAsync(string email, CancellationToken cancellationToken)
         {
-            var author = await this._usersRepository.GetAuthorAsync(email);
+            var author = await this._usersRepository.GetAuthorAsync(email, cancellationToken);
             if (author == null)
             {
                 throw new NotFoundException("User");
@@ -111,20 +115,21 @@ namespace EducationalPortal.Infrastructure.Services
         }
 
         public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters, 
-                                                                Expression<Func<UsersCourses, bool>> predicate)
+                                                                Expression<Func<UsersCourses, bool>> predicate, 
+                                                                CancellationToken cancellationToken)
         {
             var usersCourses = await this._usersCoursesRepository
-                                         .GetUsersCoursesPageAsync(email, pageParameters, predicate);
+                .GetUsersCoursesPageAsync(email, pageParameters, predicate, cancellationToken);
             foreach (var uc in usersCourses)
             {
                 var learnedMaterialsCount = uc.LearnedMaterialsCount;
                 uc.LearnedMaterialsCount = await this._usersCoursesRepository
-                                                     .GetLearnedMaterialsCountAsync(uc.CourseId, email);
-                await this._usersCoursesRepository.UpdateUsersCoursesAsync(uc);
+                    .GetLearnedMaterialsCountAsync(uc.CourseId, email, cancellationToken);
+                await this._usersCoursesRepository.UpdateUsersCoursesAsync(uc, cancellationToken);
                 if (learnedMaterialsCount != uc.LearnedMaterialsCount
                     && uc.LearnedMaterialsCount == uc.MaterialsCount)
                 {
-                    await this._usersRepository.AddAcquiredSkillsAsync(uc.CourseId, email);
+                    await this._usersRepository.AddAcquiredSkillsAsync(uc.CourseId, email, cancellationToken);
                     this._logger.LogInformation($"Added skills of course with id: {uc.CourseId} " +
                                             $"to user with email: {email}. Course learned.");
                 }
