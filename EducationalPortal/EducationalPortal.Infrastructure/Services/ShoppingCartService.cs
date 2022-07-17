@@ -41,14 +41,14 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger = logger;
         }
 
-        public async Task AddToCartAsync(int courseId, string email)
+        public async Task AddToCartAsync(int courseId, string email, CancellationToken cancellationToken)
         {
-            if (await this._cartItemsRepository.ExistsAsync(courseId, email))
+            if (await this._cartItemsRepository.ExistsAsync(courseId, email, cancellationToken))
             {
                 throw new AlreadyExistsException("Cart");
             }
 
-            var user = await this._usersRepository.GetUserAsync(email);
+            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -60,27 +60,28 @@ namespace EducationalPortal.Infrastructure.Services
                 User = user,
             };
 
-            await this._cartItemsRepository.AddAsync(cartItem);
+            await this._cartItemsRepository.AddAsync(cartItem, cancellationToken);
 
             this._logger.LogInformation($"Created cart item with id: {cartItem.Id}.");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            var cartItem = await this._cartItemsRepository.GetOneAsync(id);
+            var cartItem = await this._cartItemsRepository.GetOneAsync(id, cancellationToken);
             if (cartItem == null)
             {
                 throw new NotFoundException("Cart");
             }
 
-            await this._cartItemsRepository.DeleteAsync(cartItem);
+            await this._cartItemsRepository.DeleteAsync(cartItem, cancellationToken);
 
             this._logger.LogInformation($"Deleted cart item with id: {cartItem.Id}.");
         }
 
-        public async Task<PagedList<CartItemDto>> GetPageAsync(PageParameters pageParameters, string email)
+        public async Task<PagedList<CartItemDto>> GetPageAsync(PageParameters pageParameters, string email, 
+                                                               CancellationToken cancellationToken)
         {
-            var cartItems = await this._cartItemsRepository.GetPageAsync(pageParameters, email);
+            var cartItems = await this._cartItemsRepository.GetPageAsync(pageParameters, email, cancellationToken);
             var dtos = this._mapper.Map(cartItems);
 
             this._logger.LogInformation($"Returned cart items page {cartItems.PageNumber} from database.");
@@ -88,8 +89,8 @@ namespace EducationalPortal.Infrastructure.Services
             return dtos;
         }
 
-        public async Task<PagedList<CartItemDto>> GetPageFromCookieAsync(PageParameters pageParameters, 
-                                                                         string cookies)
+        public async Task<PagedList<CartItemDto>> GetPageFromCookieAsync(PageParameters pageParameters, string cookies, 
+                                                                         CancellationToken cancellationToken)
         {
             var cartItems = new List<CartItem>();
             var regex = new Regex("[-]");
@@ -104,7 +105,7 @@ namespace EducationalPortal.Infrastructure.Services
                 var cartItem = new CartItem
                 {
                     Id = courseId,
-                    Course = await this._coursesRepository.GetCourseAsync(courseId)
+                    Course = await this._coursesRepository.GetCourseAsync(courseId, cancellationToken)
                 };
 
                 cartItems.Add(cartItem);
@@ -118,18 +119,18 @@ namespace EducationalPortal.Infrastructure.Services
             return dtos;
         }
 
-        public async Task<int> GetTotalPriceAsync(string email)
+        public async Task<int> GetTotalPriceAsync(string email, CancellationToken cancellationToken)
         {
-            var totalPrice = await this._cartItemsRepository.GetTotalPriceAsync(email);
+            var totalPrice = await this._cartItemsRepository.GetTotalPriceAsync(email, cancellationToken);
 
             this._logger.LogInformation($"Returned total price {totalPrice} for cart from database.");
 
             return totalPrice;
         }
 
-        public async Task<int> GetTotalPriceFromCookieAsync(string cookies)
+        public async Task<int> GetTotalPriceFromCookieAsync(string cookies, CancellationToken cancellationToken)
         {
-            var cartItems = await this.GetAllFromCookiesAsync(cookies);
+            var cartItems = await this.GetAllFromCookiesAsync(cookies, cancellationToken);
             var totalPrice = cartItems.Sum(ci => ci.Course.Price);
 
             this._logger.LogInformation($"Returned total price {totalPrice} for cart from cookies.");
@@ -137,50 +138,52 @@ namespace EducationalPortal.Infrastructure.Services
             return totalPrice;
         }
 
-        public async Task BuyAsync(string userEmail)
+        public async Task BuyAsync(string userEmail, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetUserAsync(userEmail);
+            var user = await this._usersRepository.GetUserAsync(userEmail, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
             }
 
-            var cartItems = await this._cartItemsRepository.GetAllAsync(userEmail);
+            var cartItems = await this._cartItemsRepository.GetAllAsync(userEmail, cancellationToken);
 
-            await this.PayForPurchasesAsync(user);
+            await this.PayForPurchasesAsync(user, cancellationToken);
             foreach (var cartItem in cartItems)
             {
-                await this.AddUsersCoursesAsync(user, cartItem.Course);
-                await this.AddRevenueAsync(cartItem);
-                await this.AddShoppingHistoryAsync(user, cartItem.Course);
-                await this._cartItemsRepository.DeleteAsync(cartItem);
+                await this.AddUsersCoursesAsync(user, cartItem.Course, cancellationToken);
+                await this.AddRevenueAsync(cartItem, cancellationToken);
+                await this.AddShoppingHistoryAsync(user, cartItem.Course, cancellationToken);
+                await this._cartItemsRepository.DeleteAsync(cartItem, cancellationToken);
             }
 
             this._logger.LogInformation($"User with email {userEmail} bought courses.");
         }
 
-        public async Task CheckShoppingCartCookiesAsync(string email, string? cookies)
+        public async Task CheckShoppingCartCookiesAsync(string email, string? cookies, 
+                                                        CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(cookies))
             {
                 return;
             }
 
-            var cartItems = await this.GetAllFromCookiesAsync(cookies);
+            var cartItems = await this.GetAllFromCookiesAsync(cookies, cancellationToken);
             foreach (var cartItem in cartItems)
             {
-                if (!await this._cartItemsRepository.ExistsAsync(cartItem.Course.Id, email)
-                    || !await this._usersCoursesRepository.ExistsAsync(cartItem.Course.Id, email))
+                if (!await this._cartItemsRepository.ExistsAsync(cartItem.Course.Id, email, cancellationToken)
+                    || !await this._usersCoursesRepository.ExistsAsync(cartItem.Course.Id, email, cancellationToken))
                 {
                     cartItem.User = new User { Email = email };
-                    await this._cartItemsRepository.AddAsync(cartItem);
+                    await this._cartItemsRepository.AddAsync(cartItem, cancellationToken);
                 }
             }
 
             this._logger.LogInformation($"Added items from cookies to cart for user with email {email}.");
         }
 
-        private async Task<IEnumerable<CartItem>> GetAllFromCookiesAsync(string cookies)
+        private async Task<IEnumerable<CartItem>> GetAllFromCookiesAsync(string cookies, 
+                                                                         CancellationToken cancellationToken)
         {
             var cartItems = new List<CartItem>();
             var regex = new Regex("[-]");
@@ -192,7 +195,7 @@ namespace EducationalPortal.Infrastructure.Services
                 var cartItem = new CartItem
                 {
                     Id = courseId,
-                    Course = await this._coursesRepository.GetCourseAsync(courseId)
+                    Course = await this._coursesRepository.GetCourseAsync(courseId, cancellationToken)
                 };
 
                 cartItems.Add(cartItem);
@@ -203,7 +206,7 @@ namespace EducationalPortal.Infrastructure.Services
             return cartItems;
         }
 
-        private async Task AddShoppingHistoryAsync(User user, Course course)
+        private async Task AddShoppingHistoryAsync(User user, Course course, CancellationToken cancellationToken)
         {
             var shoppingHistory = new ShoppingHistory
             {
@@ -214,47 +217,47 @@ namespace EducationalPortal.Infrastructure.Services
             };
 
             this._shoppingHistoryRepository.Attach(shoppingHistory);
-            await this._shoppingHistoryRepository.AddAsync(shoppingHistory);
+            await this._shoppingHistoryRepository.AddAsync(shoppingHistory, cancellationToken);
 
             this._logger.LogInformation($"Created shopping history with id {shoppingHistory.Id}.");
         }
 
-        private async Task AddRevenueAsync(CartItem cartItem)
+        private async Task AddRevenueAsync(CartItem cartItem, CancellationToken cancellationToken)
         {
-            var author = await this._coursesRepository.GetCourseAuthor(cartItem.Course.Id);
+            var author = await this._coursesRepository.GetCourseAuthor(cartItem.Course.Id, cancellationToken);
             author.Balance += cartItem.Course.Price;
-            await this._usersRepository.UpdateAsync(author);
+            await this._usersRepository.UpdateAsync(author, cancellationToken);
 
             this._logger.LogInformation($"Added revenue to author with email {author.Email} " +
                                         $"for selling course with id: {cartItem.Course.Id}.");
         }
 
-        private async Task PayForPurchasesAsync(User user)
+        private async Task PayForPurchasesAsync(User user, CancellationToken cancellationToken)
         {
-            var sum = await this._cartItemsRepository.GetTotalPriceAsync(user.Email);
+            var sum = await this._cartItemsRepository.GetTotalPriceAsync(user.Email, cancellationToken);
             user.Balance -= sum;
-            await this._usersRepository.UpdateAsync(user);
+            await this._usersRepository.UpdateAsync(user, cancellationToken);
 
             this._logger.LogInformation($"User with email {user.Email} payed {sum} points.");
         }
 
-        private async Task AddUsersCoursesAsync(User user, Course course)
+        private async Task AddUsersCoursesAsync(User user, Course course, CancellationToken cancellationToken)
         {
             var userCourse = new UsersCourses
             {
                 Course = course,
                 User = user,
-                MaterialsCount = await this._coursesRepository.GetMaterialsCountAsync(course.Id),
+                MaterialsCount = await this._coursesRepository.GetMaterialsCountAsync(course.Id, cancellationToken),
                 LearnedMaterialsCount = await this._usersCoursesRepository.GetLearnedMaterialsCountAsync(
-                                                                                course.Id, user.Email),
+                                                                    course.Id, user.Email, cancellationToken),
             };
 
             if (userCourse.MaterialsCount == userCourse.LearnedMaterialsCount)
             {
-                await this._usersRepository.AddAcquiredSkillsAsync(course.Id, user.Email);
+                await this._usersRepository.AddAcquiredSkillsAsync(course.Id, user.Email, cancellationToken);
             }
 
-            await this._usersCoursesRepository.AddUsersCoursesAsync(userCourse);
+            await this._usersCoursesRepository.AddUsersCoursesAsync(userCourse, cancellationToken);
 
             this._logger.LogInformation($"Added course with id: {course.Id} to user with email: {user.Email}.");
         }

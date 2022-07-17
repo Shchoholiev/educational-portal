@@ -23,40 +23,42 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger = logger;
         }
 
-        public async Task CreateAsync(SkillDto skillDto)
+        public async Task CreateAsync(SkillDto skillDto, CancellationToken cancellationToken)
         {
-            if (await this._skillsRepository.Exists(s => s.Name == skillDto.Name))
+            if (await this._skillsRepository.ExistsAsync(s => s.Name == skillDto.Name, cancellationToken))
             {
                 throw new AlreadyExistsException("skill name", skillDto.Name);
             }
 
             var skill = this._mapper.Map(skillDto);
-            await this._skillsRepository.AddAsync(skill);
+            await this._skillsRepository.AddAsync(skill, cancellationToken);
 
             this._logger.LogInformation($"Created skill with id: {skill.Id}.");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            if (await this._skillsRepository.Exists(s => s.CoursesSkills.Any(cs => cs.SkillId == id)))
+            if (await this._skillsRepository.ExistsAsync(s => s.CoursesSkills.Any(cs => cs.SkillId == id),
+                                                         cancellationToken))
             {
                 throw new DeleteEntityException("This skill is used in other courses!");
             }
 
-            var skill = await this._skillsRepository.GetOneAsync(id);
+            var skill = await this._skillsRepository.GetOneAsync(id, cancellationToken);
             if (skill == null)
             {
                 throw new NotFoundException("Skill");
             }
 
-            await this._skillsRepository.DeleteAsync(skill);
+            await this._skillsRepository.DeleteAsync(skill, cancellationToken);
 
             this._logger.LogInformation($"Deleted skill with id: {skill.Id}.");
         }
 
-        public async Task<PagedList<SkillDto>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<SkillDto>> GetPageAsync(PageParameters pageParameters, 
+                                                            CancellationToken cancellationToken)
         {
-            var skills = await this._skillsRepository.GetPageAsync(pageParameters);
+            var skills = await this._skillsRepository.GetPageAsync(pageParameters, cancellationToken);
             var dtos = this._mapper.Map(skills);
 
             this._logger.LogInformation($"Returned skills page {skills.PageNumber} from database.");

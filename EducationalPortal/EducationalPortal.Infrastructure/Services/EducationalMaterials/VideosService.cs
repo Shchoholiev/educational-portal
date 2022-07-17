@@ -35,43 +35,45 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             this._logger = logger;
         }
 
-        public async Task CreateAsync(VideoCreateDto videoDto)
+        public async Task CreateAsync(VideoCreateDto videoDto, CancellationToken cancellationToken)
         {
             var video = this._mapper.Map(videoDto);
             using (var stream = videoDto.File.OpenReadStream())
             {
                 video.Link = await this._cloudStorageService.UploadAsync(stream, videoDto.File.FileName,
-                                                                    videoDto.File.ContentType, "videos");
+                                            videoDto.File.ContentType, "videos", cancellationToken);
             }
             video.Duration = DateTime.MinValue.AddSeconds(videoDto.Duration);
 
             this._videosRepository.Attach(video);
-            await this._videosRepository.AddAsync(video);
+            await this._videosRepository.AddAsync(video, cancellationToken);
 
             this._logger.LogInformation($"Created video with id: {video.Id}.");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            if (await this._videosRepository.Exists(a => a.CoursesMaterials.Any(cm => cm.MaterialId == id)))
+            if (await this._videosRepository.ExistsAsync(
+                a => a.CoursesMaterials.Any(cm => cm.MaterialId == id), cancellationToken))
             {
                 throw new DeleteEntityException("This video is used in other courses!");
             }
 
-            var video = await this._videosRepository.GetOneAsync(id);
+            var video = await this._videosRepository.GetOneAsync(id, cancellationToken);
             if (video == null)
             {
                 throw new NotFoundException("Video");
             }
 
-            await this._videosRepository.DeleteAsync(video);
+            await this._videosRepository.DeleteAsync(video, cancellationToken);
 
             this._logger.LogInformation($"Deleted video with id: {video.Id}.");
         }
 
-        public async Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters, 
+                                                            CancellationToken cancellationToken)
         {
-            var videos = await this._videosRepository.GetPageAsync(pageParameters);
+            var videos = await this._videosRepository.GetPageAsync(pageParameters, cancellationToken);
             var dtos = this._mapper.Map(videos);
 
             this._logger.LogInformation($"Returned videos page {videos.PageNumber} from database.");
@@ -79,9 +81,9 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             return dtos;
         }
 
-        public async Task<IEnumerable<QualityDto>> GetQualitiesAsync()
+        public async Task<IEnumerable<QualityDto>> GetQualitiesAsync(CancellationToken cancellationToken)
         {
-            var qualities = await this._qualitiesRepository.GetAllAsync(q => true);
+            var qualities = await this._qualitiesRepository.GetAllAsync(q => true, cancellationToken);
             var dtos = this._mapper.Map(qualities);
 
             this._logger.LogInformation($"Returned all qualities from database.");

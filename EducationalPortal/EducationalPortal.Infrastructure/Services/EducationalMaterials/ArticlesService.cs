@@ -25,36 +25,38 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             this._logger = logger;
         }
 
-        public async Task CreateAsync(ArticleCreateDto articleDto)
+        public async Task CreateAsync(ArticleCreateDto articleDto, CancellationToken cancellationToken)
         {
             var article = this._mapper.Map(articleDto);
             this._articlesRepository.Attach(article);
-            await this._articlesRepository.AddAsync(article);
+            await this._articlesRepository.AddAsync(article, cancellationToken);
 
             this._logger.LogInformation($"Created article with id: {article.Id}.");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            if (await this._articlesRepository.Exists(a => a.CoursesMaterials.Any(cm => cm.MaterialId == id)))
+            if (await this._articlesRepository.ExistsAsync(
+                a => a.CoursesMaterials.Any(cm => cm.MaterialId == id), cancellationToken))
             {
                 throw new DeleteEntityException("This article is used in other courses!");
             }
 
-            var article = await this._articlesRepository.GetOneAsync(id);
+            var article = await this._articlesRepository.GetOneAsync(id, cancellationToken);
             if (article == null)
             {
                 throw new NotFoundException("Article");
             }
 
-            await this._articlesRepository.DeleteAsync(article);
+            await this._articlesRepository.DeleteAsync(article, cancellationToken);
 
             this._logger.LogInformation($"Deleted article with id: {article.Id}.");
         }
 
-        public async Task<PagedList<ArticleDto>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<ArticleDto>> GetPageAsync(PageParameters pageParameters, 
+                                                              CancellationToken cancellationToken)
         {
-            var articles = await this._articlesRepository.GetPageAsync(pageParameters);
+            var articles = await this._articlesRepository.GetPageAsync(pageParameters, cancellationToken);
             var dtos = this._mapper.Map(articles);
 
             this._logger.LogInformation($"Returned articles page {articles.PageNumber} from database.");
