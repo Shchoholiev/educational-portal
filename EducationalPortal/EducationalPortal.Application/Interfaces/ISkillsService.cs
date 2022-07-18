@@ -5,10 +5,11 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface ISkillsService
     {
-        Task<PagedList<SkillDto>> GetPageAsync(PageParameters pageParameters);
+        Task<PagedList<SkillDto>> GetPageAsync(PageParameters pageParameters, 
+                                               CancellationToken cancellationToken);
 
-        Task CreateAsync(SkillDto skillDto);
+        Task CreateAsync(SkillDto skillDto, CancellationToken cancellationToken);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

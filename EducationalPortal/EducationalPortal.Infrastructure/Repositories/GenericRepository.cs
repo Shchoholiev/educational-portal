@@ -19,77 +19,80 @@ namespace EducationalPortal.Infrastructure.Repositories
             this._table = _db.Set<TEntity>();
         }
 
-        public async Task AddAsync(TEntity item)
+        public async Task AddAsync(TEntity item, CancellationToken cancellationToken)
         {
-            await this._table.AddAsync(item);
-            await this.SaveAsync();
+            await this._table.AddAsync(item, cancellationToken);
+            await this.SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(TEntity item)
+        public async Task UpdateAsync(TEntity item, CancellationToken cancellationToken)
         {
             this._table.Update(item);
-            await this.SaveAsync();
+            await this.SaveAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(TEntity item)
+        public async Task DeleteAsync(TEntity item, CancellationToken cancellationToken)
         {
             this._table.Remove(item);
-            await this.SaveAsync();
+            await this.SaveAsync(cancellationToken);
         }
 
-        public async Task<TEntity> GetOneAsync(int id)
+        public async Task<TEntity> GetOneAsync(int id, CancellationToken cancellationToken)
         {
-            return await this._table.FirstOrDefaultAsync(i => i.Id == id);
+            return await this._table.FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
         }
 
-        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate, 
+                                               CancellationToken cancellationToken)
         {
-            return await this._table.FirstOrDefaultAsync(predicate);
+            return await this._table.FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
-                                                     params Expression<Func<TEntity, object>>[] includeProperties)
+                                                            CancellationToken cancellationToken,
+                                                   params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var query = this._table.AsNoTracking().Where(predicate);
-            return await this.Include(query, includeProperties).ToListAsync();
+            return await this.Include(query, includeProperties).ToListAsync(cancellationToken);
         }
 
-        public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, 
+                                                           CancellationToken cancellationToken)
         {
             var entities = await this._table
                                      .AsNoTracking()
                                      .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                      .Take(pageParameters.PageSize)
-                                     .ToListAsync();
-            var totalCount = await this._table.CountAsync();
+                                     .ToListAsync(cancellationToken);
+            var totalCount = await this._table.CountAsync(cancellationToken);
 
             return new PagedList<TEntity>(entities, pageParameters, totalCount);
         }
 
         public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
+                                                           CancellationToken cancellationToken,
                                                     params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            var query = this._table
-                            .AsNoTracking()
-                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                            .Take(pageParameters.PageSize);
-            var entities = await this.Include(query, includeProperties).ToListAsync();
-            var totalCount = await this._table.CountAsync();
+            var query = this._table.AsNoTracking()
+                                   .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                   .Take(pageParameters.PageSize);
+            var entities = await this.Include(query, includeProperties).ToListAsync(cancellationToken);
+            var totalCount = await this._table.CountAsync(cancellationToken);
 
             return new PagedList<TEntity>(entities, pageParameters, totalCount);
         }
 
         public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
                                                  Expression<Func<TEntity, bool>> predicate,
+                                                 CancellationToken cancellationToken,
                                                  params Expression<Func<TEntity, object>>[] includeProperties)
         {
-            var query = this._table
-                            .AsNoTracking()
-                            .Where(predicate)
-                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                            .Take(pageParameters.PageSize);
-            var entities = await this.Include(query, includeProperties).ToListAsync();
-            var totalCount = await this._table.Where(predicate).CountAsync();
+            var query = this._table.AsNoTracking()
+                                   .Where(predicate)
+                                   .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                   .Take(pageParameters.PageSize);
+            var entities = await this.Include(query, includeProperties).ToListAsync(cancellationToken);
+            var totalCount = await this._table.CountAsync(predicate, cancellationToken);
 
             return new PagedList<TEntity>(entities, pageParameters, totalCount);
         }
@@ -102,9 +105,10 @@ namespace EducationalPortal.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, 
+                                            CancellationToken cancellationToken)
         {
-            return await this._table.AnyAsync(predicate);
+            return await this._table.AnyAsync(predicate, cancellationToken);
         }
 
         private IQueryable<TEntity> Include(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includeProperties)
@@ -114,9 +118,9 @@ namespace EducationalPortal.Infrastructure.Repositories
                     => current.Include(includeProperty));
         }
 
-        private async Task SaveAsync()
+        private async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await this._db.SaveChangesAsync();
+            await this._db.SaveChangesAsync(cancellationToken);
         }
     }
 }

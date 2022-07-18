@@ -36,43 +36,45 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             this._logger = logger;
         }
 
-        public async Task CreateAsync(BookCreateDto bookDto)
+        public async Task CreateAsync(BookCreateDto bookDto, CancellationToken cancellationToken)
         {
             var book = this._mapper.Map(bookDto);
-            book.Extension = await this.GetFileExtension(bookDto.File);
+            book.Extension = await this.GetFileExtension(bookDto.File, cancellationToken);
             using (var stream = bookDto.File.OpenReadStream())
             {
                 book.Link = await this._cloudStorageService.UploadAsync(stream, bookDto.File.FileName,
-                                                                    bookDto.File.ContentType, "books");
+                                                  bookDto.File.ContentType, "books", cancellationToken);
             }
 
             this._booksRepository.Attach(book);
-            await this._booksRepository.AddAsync(book);
+            await this._booksRepository.AddAsync(book, cancellationToken);
 
             this._logger.LogInformation($"Created book with id: {book.Id}.");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            if (await this._booksRepository.Exists(a => a.CoursesMaterials.Any(cm => cm.MaterialId == id)))
+            if (await this._booksRepository.ExistsAsync(
+                a => a.CoursesMaterials.Any(cm => cm.MaterialId == id), cancellationToken))
             {
                 throw new DeleteEntityException("This book is used in other courses!");
             }
 
-            var book = await this._booksRepository.GetOneAsync(id);
+            var book = await this._booksRepository.GetOneAsync(id, cancellationToken);
             if (book == null)
             {
                 throw new NotFoundException("Book");
             }
 
-            await this._booksRepository.DeleteAsync(book);
+            await this._booksRepository.DeleteAsync(book, cancellationToken);
 
             this._logger.LogInformation($"Deleted book with id: {book.Id}.");
         }
 
-        public async Task<PagedList<BookDto>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<BookDto>> GetPageAsync(PageParameters pageParameters, 
+                                                           CancellationToken cancellationToken)
         {
-            var books = await this._booksRepository.GetPageAsync(pageParameters);
+            var books = await this._booksRepository.GetPageAsync(pageParameters, cancellationToken);
             var dtos = this._mapper.Map(books);
 
             this._logger.LogInformation($"Returned books page {books.PageNumber} from database.");
@@ -80,11 +82,13 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             return dtos;
         }
 
-        private async Task<Extension> GetFileExtension(IFormFile file)
+        private async Task<Extension> GetFileExtension(IFormFile file, CancellationToken cancellationToken)
         {
             var regex = new Regex("[a-b0-9]*/");
             var extensionName = regex.Split(file.ContentType);
-            var extension = await this._extensionsRepository.GetOneAsync(e => e.Name == extensionName[1]);
+            var extension = await this._extensionsRepository.GetOneAsync(
+                e => e.Name == extensionName[1], cancellationToken);
+
             return extension ?? new Extension { Name = extensionName[1] };
         }
     }

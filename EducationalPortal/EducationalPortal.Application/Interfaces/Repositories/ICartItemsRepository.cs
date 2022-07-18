@@ -5,18 +5,19 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 {
     public interface ICartItemsRepository
     {
-        Task AddAsync(CartItem cartItem);
+        Task AddAsync(CartItem cartItem, CancellationToken cancellationToken);
 
-        Task DeleteAsync(CartItem cartItem);
+        Task DeleteAsync(CartItem cartItem, CancellationToken cancellationToken);
 
-        Task<CartItem?> GetOneAsync(int id);
+        Task<CartItem?> GetOneAsync(int id, CancellationToken cancellationToken);
 
-        Task<PagedList<CartItem>> GetPageAsync(PageParameters pageParameters, string email);
+        Task<PagedList<CartItem>> GetPageAsync(PageParameters pageParameters, string email, 
+                                               CancellationToken cancellationToken);
 
-        Task<IEnumerable<CartItem>> GetAllAsync(string email);
+        Task<IEnumerable<CartItem>> GetAllAsync(string email, CancellationToken cancellationToken);
 
-        Task<bool> ExistsAsync(int courseId, string email);
+        Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken);
 
-        Task<int> GetTotalPriceAsync(string email);
+        Task<int> GetTotalPriceAsync(string email, CancellationToken cancellationToken);
     }
 }

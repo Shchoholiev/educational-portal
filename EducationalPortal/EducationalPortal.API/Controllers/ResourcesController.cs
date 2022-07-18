@@ -1,5 +1,4 @@
 ﻿using EducationalPortal.Application.Paging;
-using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -19,24 +18,26 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ResourceDto>>> GetResources([FromQuery]PageParameters pageParameters)
+        public async Task<IEnumerable<ResourceDto>> GetResourcesAsync([FromQuery] PageParameters pageParameters, 
+                                                                      CancellationToken cancellationToken)
         {
-            var resources = await this._resourcesService.GetPageAsync(pageParameters);
+            var resources = await this._resourcesService.GetPageAsync(pageParameters, cancellationToken);
             this.SetPagingMetadata(resources);
             return resources;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]ResourceDto resourceDto)
+        public async Task<IActionResult> CreateAsync([FromBody] ResourceDto resourceDto, 
+                                                     CancellationToken cancellationToken)
         {
-            await this._resourcesService.CreateAsync(resourceDto);
+            await this._resourcesService.CreateAsync(resourceDto, cancellationToken);
             return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            await this._resourcesService.DeleteAsync(id);
+            await this._resourcesService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
     }

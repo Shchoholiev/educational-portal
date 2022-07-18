@@ -16,72 +16,72 @@ namespace EducationalPortal.Infrastructure.Repositories
         public UsersRepository(ApplicationContext context)
         {
             this._db = context;
-            this._table = _db.Set<User>();
+            this._table = _db.Users;
         }
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(User user, CancellationToken cancellationToken)
         {
             this._db.Attach(user);
             await this._table.AddAsync(user);
-            await this.SaveAsync();
+            await this.SaveAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(User user, CancellationToken cancellationToken)
         {
             this._db.Attach(user);
             this._table.Update(user);
-            await this.SaveAsync();
+            await this.SaveAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(User user)
+        public async Task DeleteAsync(User user, CancellationToken cancellationToken)
         {
             this._table.Remove(user);
-            await this.SaveAsync();
+            await this.SaveAsync(cancellationToken);
         }
 
-        public async Task<User?> GetUserAsync(string email)
+        public async Task<User?> GetUserAsync(string email, CancellationToken cancellationToken)
         {
             return await this._table.Include(u => u.UserToken)
                                     .Include(u => u.Roles)
-                                    .FirstOrDefaultAsync(u => u.Email == email);
+                                    .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        public async Task<User?> GetUserWithSkillsAsync(string email)
+        public async Task<User?> GetUserWithSkillsAsync(string email, CancellationToken cancellationToken)
         {
             return await this._table
                              .Include(u => u.UsersSkills)
                                 .ThenInclude(us => us.Skill)
-                             .FirstOrDefaultAsync(u => u.Email == email);
+                             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        public async Task<User?> GetUserWithMaterialsAsync(string email)
+        public async Task<User?> GetUserWithMaterialsAsync(string email, CancellationToken cancellationToken)
         {
             return await this._table
                              .Include(u => u.Materials)
-                             .FirstOrDefaultAsync(u => u.Email == email);
+                             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        public async Task<User?> GetAuthorAsync(string email)
+        public async Task<User?> GetAuthorAsync(string email, CancellationToken cancellationToken)
         {
             return await this._table
                              .Include(u => u.CreatedCourses)
                              .Include(u => u.UsersSkills)
                                 .ThenInclude(us => us.Skill)
                              .Include(u => u.Roles)
-                             .FirstOrDefaultAsync(u => u.Email == email);
+                             .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        public async Task AddAcquiredSkillsAsync(int courseId, string email)
+        public async Task AddAcquiredSkillsAsync(int courseId, string email, CancellationToken cancellationToken)
         {
             var course = await this._db.Courses.Include(c => c.CoursesSkills)
                                                     .ThenInclude(cs => cs.Skill)
-                                                .FirstOrDefaultAsync(c => c.Id == courseId);
+                                                .FirstOrDefaultAsync(c => c.Id == courseId, cancellationToken);
             if (course == null)
             {
                 throw new NotFoundException("Course");
             }
 
-            var user = await this.GetUserWithSkillsAsync(email);
+            var user = await this.GetUserWithSkillsAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -103,12 +103,12 @@ namespace EducationalPortal.Infrastructure.Repositories
                 }
             }
 
-            await this.UpdateAsync(user);
+            await this.UpdateAsync(user, cancellationToken);
         }
 
-        private async Task SaveAsync()
+        private async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await this._db.SaveChangesAsync();
+            await this._db.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -17,24 +17,25 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SkillDto>>> GetSkills([FromQuery]PageParameters pageParameters)
+        public async Task<IEnumerable<SkillDto>> GetSkillsAsync([FromQuery] PageParameters pageParameters, 
+                                                                CancellationToken cancellationToken)
         {
-            var skills = await this._skillsService.GetPageAsync(pageParameters);
+            var skills = await this._skillsService.GetPageAsync(pageParameters, cancellationToken);
             this.SetPagingMetadata(skills);
             return skills;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]SkillDto skillDto)
+        public async Task<IActionResult> CreateAsync([FromBody]SkillDto skillDto, CancellationToken cancellationToken)
         {
-            await this._skillsService.CreateAsync(skillDto);
+            await this._skillsService.CreateAsync(skillDto, cancellationToken);
             return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            await this._skillsService.DeleteAsync(id);
+            await this._skillsService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
     }

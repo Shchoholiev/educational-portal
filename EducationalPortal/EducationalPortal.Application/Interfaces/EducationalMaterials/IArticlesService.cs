@@ -6,10 +6,11 @@ namespace EducationalPortal.Application.Interfaces.EducationalMaterials
 {
     public interface IArticlesService
     {
-        Task<PagedList<ArticleDto>> GetPageAsync(PageParameters pageParameters);
+        Task<PagedList<ArticleDto>> GetPageAsync(PageParameters pageParameters, 
+                                                 CancellationToken cancellationToken);
 
-        Task CreateAsync(ArticleCreateDto articleDto);
+        Task CreateAsync(ArticleCreateDto articleDto, CancellationToken cancellationToken);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id, CancellationToken cancellationToken);
     }
 }

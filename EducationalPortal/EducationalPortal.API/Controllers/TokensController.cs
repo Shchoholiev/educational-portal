@@ -14,9 +14,10 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<ActionResult<TokensModel>> Refresh([FromBody] TokensModel tokensModel)
+        public async Task<ActionResult<TokensModel>> RefreshAsync([FromBody] TokensModel tokensModel, 
+                                                                  CancellationToken cancellationToken)
         {
-            return await this._tokenService.Refresh(tokensModel, Email);
+            return await this._tokenService.RefreshAsync(tokensModel, Email, cancellationToken);
         }
     }
 }

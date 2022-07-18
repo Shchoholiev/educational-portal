@@ -6,27 +6,28 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 {
     public interface ICoursesRepository
     {
-        Task AddAsync(Course course);
+        Task AddAsync(Course course, CancellationToken cancellationToken);
 
-        Task UpdateAsync(Course newCourse);
+        Task UpdateAsync(Course newCourse, CancellationToken cancellationToken);
 
-        Task DeleteAsync(Course course);
+        Task DeleteAsync(Course course, CancellationToken cancellationToken);
 
         void Detach(object entity);
 
-        Task<Course?> GetCourseAsync(int id);
+        Task<Course?> GetCourseAsync(int id, CancellationToken cancellationToken);
 
-        Task<Course> GetFullCourseAsync(int id);
+        Task<Course> GetFullCourseAsync(int id, CancellationToken cancellationToken);
 
-        Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters);
+        Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
 
         Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, 
-                                             Expression<Func<Course, bool>> predicate);
+                                             Expression<Func<Course, bool>> predicate, 
+                                             CancellationToken cancellationToken);
 
-        Task<int> GetMaterialsCountAsync(int courseId);
+        Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken);
 
-        Task<User> GetCourseAuthor(int courseId);
+        Task<User> GetCourseAuthor(int courseId, CancellationToken cancellationToken);
 
-        Task<bool> Exists(Expression<Func<Course, bool>> predicate);
+        Task<bool> ExistsAsync(Expression<Func<Course, bool>> predicate, CancellationToken cancellationToken);
     }
 }

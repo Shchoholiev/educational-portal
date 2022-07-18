@@ -24,40 +24,42 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
             this._logger = logger;
         }
 
-        public async Task CreateAsync(ResourceDto resourceDto)
+        public async Task CreateAsync(ResourceDto resourceDto, CancellationToken cancellationToken)
         {
-            if (await this._resourcesRepository.Exists(s => s.Name == resourceDto.Name))
+            if (await this._resourcesRepository.ExistsAsync(s => s.Name == resourceDto.Name, cancellationToken))
             {
                 throw new AlreadyExistsException("resource name", resourceDto.Name);
             }
 
             var resource = this._mapper.Map(resourceDto);
-            await this._resourcesRepository.AddAsync(resource);
+            await this._resourcesRepository.AddAsync(resource, cancellationToken);
 
             this._logger.LogInformation($"Created resource with id: {resource.Id}.");
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            if (await this._resourcesRepository.Exists(r => r.Articles.Any(a => a.Resource.Id == id)))
+            if (await this._resourcesRepository.ExistsAsync(
+                r => r.Articles.Any(a => a.Resource.Id == id), cancellationToken))
             {
                 throw new DeleteEntityException("This resource is used in other courses!");
             }
 
-            var resource = await this._resourcesRepository.GetOneAsync(id);
+            var resource = await this._resourcesRepository.GetOneAsync(id, cancellationToken);
             if (resource == null)
             {
                 throw new NotFoundException("Resource");
             }
 
-            await this._resourcesRepository.DeleteAsync(resource);
+            await this._resourcesRepository.DeleteAsync(resource, cancellationToken);
 
             this._logger.LogInformation($"Deleted resource with id: {resource.Id}.");
         }
 
-        public async Task<PagedList<ResourceDto>> GetPageAsync(PageParameters pageParameters)
+        public async Task<PagedList<ResourceDto>> GetPageAsync(PageParameters pageParameters, 
+                                                               CancellationToken cancellationToken)
         {
-            var resources = await this._resourcesRepository.GetPageAsync(pageParameters);
+            var resources = await this._resourcesRepository.GetPageAsync(pageParameters, cancellationToken);
             var dtos = this._mapper.Map(resources);
 
             this._logger.LogInformation($"Returned resources page {resources.PageNumber} from database.");

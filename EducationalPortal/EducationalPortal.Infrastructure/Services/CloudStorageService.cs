@@ -20,21 +20,22 @@ namespace EducationalPortal.Infrastructure.Services
         }
 
         public async Task<string> UploadAsync(Stream fileStream, string fileName, string fileType, 
-                                              string containerName)
+                                              string containerName, CancellationToken cancellationToken)
         {
             var container = new BlobContainerClient(this._connectionString, containerName);
             var blob = container.GetBlobClient(fileName);
 
-            while (await blob.ExistsAsync())
+            while (await blob.ExistsAsync(cancellationToken))
             {
                 this._logger.LogInformation($"File with name: {fileName} already exists. " +
                                             $"Changing name and trying upload file again.");
 
-                fileName = fileName + "_new";
+                fileName += "_new";
                 blob = container.GetBlobClient(fileName);
             }
 
-            await blob.UploadAsync(fileStream, new BlobHttpHeaders { ContentType = fileType });
+            var options = new BlobUploadOptions { HttpHeaders = new BlobHttpHeaders { ContentType = fileType } };
+            await blob.UploadAsync(fileStream, options, cancellationToken);
             var link = blob.Uri.ToString();
 
             this._logger.LogInformation($"Uploaded file to Blob Storage. Link: {link}.");
@@ -42,12 +43,12 @@ namespace EducationalPortal.Infrastructure.Services
             return link;
         }
         
-        public async Task DeleteAsync(string fileLink, string containerName)
+        public async Task DeleteAsync(string fileLink, string containerName, CancellationToken cancellationToken)
         {
             var container = new BlobContainerClient(_connectionString, containerName);
             var regex = new Regex($".*{containerName}/");
             var filePath = regex.Split(fileLink);
-            await container.DeleteBlobAsync(filePath[1]);
+            await container.DeleteBlobAsync(filePath[1], DeleteSnapshotsOption.None, null, cancellationToken);
 
             this._logger.LogInformation($"Deleted file from Blob Storage via link: {fileLink}.");
         }
