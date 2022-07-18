@@ -21,7 +21,7 @@ namespace EducationalPortal.Infrastructure.Repositories
 
         public async Task AddAsync(User user, CancellationToken cancellationToken)
         {
-            this._db.Attach(user, cancellationToken);
+            this._db.Attach(user);
             await this._table.AddAsync(user);
             await this.SaveAsync(cancellationToken);
         }

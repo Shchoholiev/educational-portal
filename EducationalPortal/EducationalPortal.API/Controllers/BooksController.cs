@@ -18,24 +18,26 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks([FromQuery] PageParameters pageParameters)
+        public async Task<IEnumerable<BookDto>> GetBooksAsync([FromQuery] PageParameters pageParameters, 
+                                                              CancellationToken cancellationToken)
         {
-            var books = await this._booksService.GetPageAsync(pageParameters);
+            var books = await this._booksService.GetPageAsync(pageParameters, cancellationToken);
             this.SetPagingMetadata(books);
             return books;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] BookCreateDto bookDTO)
+        public async Task<IActionResult> CreateAsync([FromForm] BookCreateDto bookDto, 
+                                                     CancellationToken cancellationToken)
         {
-            await this._booksService.CreateAsync(bookDTO);
+            await this._booksService.CreateAsync(bookDto, cancellationToken);
             return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            await this._booksService.DeleteAsync(id);
+            await this._booksService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
     }

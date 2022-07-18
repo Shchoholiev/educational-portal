@@ -16,12 +16,13 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost("file-to-link/{blobContainer}")]
         [Authorize]
-        public async Task<IActionResult> FileToLink(string blobContainer, [FromForm] IFormFile file)
+        public async Task<IActionResult> FileToLinkAsync(string blobContainer, [FromForm] IFormFile file, 
+                                                         CancellationToken cancellationToken)
         {
             using (var stream = file.OpenReadStream())
             {
                 var link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
-                                                                   blobContainer);
+                                                                   blobContainer, cancellationToken);
                 return Ok(new { link });
             }
         }

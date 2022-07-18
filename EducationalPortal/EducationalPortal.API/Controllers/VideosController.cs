@@ -19,31 +19,33 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<VideoDto>>> GetVideos([FromQuery]PageParameters pageParameters)
+        public async Task<IEnumerable<VideoDto>> GetVideosAsync([FromQuery] PageParameters pageParameters, 
+                                                                 CancellationToken cancellationToken)
         {
-            var videos = await this._videosService.GetPageAsync(pageParameters);
+            var videos = await this._videosService.GetPageAsync(pageParameters, cancellationToken);
             this.SetPagingMetadata(videos);
             return videos;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] VideoCreateDto videoDTO)
+        public async Task<IActionResult> CreateAsync([FromForm] VideoCreateDto videoDto, 
+                                                     CancellationToken cancellationToken)
         {
-            await this._videosService.CreateAsync(videoDTO);
+            await this._videosService.CreateAsync(videoDto, cancellationToken);
             return StatusCode(201);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id, CancellationToken cancellationToken)
         {
-            await this._videosService.DeleteAsync(id);
+            await this._videosService.DeleteAsync(id, cancellationToken);
             return NoContent();
         }
 
         [HttpGet("get-qualities")]
-        public async Task<ActionResult<IEnumerable<QualityDto>>> GetQualities()
+        public async Task<IEnumerable<QualityDto>> GetQualities(CancellationToken cancellationToken)
         {
-            return Ok(await this._videosService.GetQualitiesAsync());
+            return await this._videosService.GetQualitiesAsync(cancellationToken);
         }
     }
 }

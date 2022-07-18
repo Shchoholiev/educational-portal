@@ -27,7 +27,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             this._logger = logger;
         }
 
-        public async Task<TokensModel> Refresh(TokensModel tokensModel, string email, 
+        public async Task<TokensModel> RefreshAsync(TokensModel tokensModel, string email, 
                                                CancellationToken cancellationToken)
         {
             var principal = this.GetPrincipalFromExpiredToken(tokensModel.AccessToken);
@@ -52,7 +52,6 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                 RefreshToken = newRefreshToken
             };
         }
-
 
         public string GenerateAccessToken(IEnumerable<Claim> claims)
         {
