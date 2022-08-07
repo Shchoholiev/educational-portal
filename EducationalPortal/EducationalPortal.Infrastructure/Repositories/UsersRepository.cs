@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Application.Exceptions;
 using EducationalPortal.Core.Entities.JoinEntities;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Infrastructure.Repositories
 {
@@ -100,6 +101,11 @@ namespace EducationalPortal.Infrastructure.Repositories
             }
 
             await this.UpdateAsync(user, cancellationToken);
+        }
+
+        public Task<bool> ExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken)
+        {
+            return this._table.AnyAsync(predicate, cancellationToken);
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)

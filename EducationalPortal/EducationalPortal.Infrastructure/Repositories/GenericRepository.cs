@@ -88,10 +88,10 @@ namespace EducationalPortal.Infrastructure.Repositories
             this._db.AttachRange(obj);
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, 
+        public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, 
                                             CancellationToken cancellationToken)
         {
-            return await this._table.AnyAsync(predicate, cancellationToken);
+            return this._table.AnyAsync(predicate, cancellationToken);
         }
 
         private IQueryable<TEntity> Include(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includeProperties)
