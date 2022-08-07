@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Core.Entities;
+using System.Linq.Expressions;
 
 namespace EducationalPortal.Application.Interfaces.Repositories
 {
@@ -19,5 +20,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<User?> GetAuthorAsync(string email, CancellationToken cancellationToken);
 
         Task AddAcquiredSkillsAsync(int courseId, string email, CancellationToken cancellationToken);
+    
+        Task<bool> ExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken);
     }
 }

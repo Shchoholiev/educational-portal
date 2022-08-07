@@ -37,23 +37,22 @@ namespace EducationalPortal.Infrastructure.Repositories
             await this.SaveAsync(cancellationToken);
         }
 
-        public async Task<TEntity> GetOneAsync(int id, CancellationToken cancellationToken)
+        public Task<TEntity?> GetOneAsync(int id, CancellationToken cancellationToken)
         {
-            return await this._table.FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
+            return this._table.FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
         }
 
-        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate, 
-                                               CancellationToken cancellationToken)
+        public Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> predicate, 
+                                          CancellationToken cancellationToken)
         {
-            return await this._table.FirstOrDefaultAsync(predicate, cancellationToken);
+            return this._table.FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
-                                                            CancellationToken cancellationToken,
-                                                   params Expression<Func<TEntity, object>>[] includeProperties)
+        public Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
+            CancellationToken cancellationToken, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             var query = this._table.AsNoTracking().Where(predicate);
-            return await this.Include(query, includeProperties).ToListAsync(cancellationToken);
+            return this.Include(query, includeProperties).ToListAsync(cancellationToken);
         }
 
         public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, 
@@ -64,19 +63,6 @@ namespace EducationalPortal.Infrastructure.Repositories
                                      .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                      .Take(pageParameters.PageSize)
                                      .ToListAsync(cancellationToken);
-            var totalCount = await this._table.CountAsync(cancellationToken);
-
-            return new PagedList<TEntity>(entities, pageParameters, totalCount);
-        }
-
-        public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
-                                                           CancellationToken cancellationToken,
-                                                    params Expression<Func<TEntity, object>>[] includeProperties)
-        {
-            var query = this._table.AsNoTracking()
-                                   .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                   .Take(pageParameters.PageSize);
-            var entities = await this.Include(query, includeProperties).ToListAsync(cancellationToken);
             var totalCount = await this._table.CountAsync(cancellationToken);
 
             return new PagedList<TEntity>(entities, pageParameters, totalCount);
@@ -99,23 +85,19 @@ namespace EducationalPortal.Infrastructure.Repositories
 
         public void Attach(params object[] obj)
         {
-            foreach (var o in obj)
-            {
-                this._db.Attach(o);
-            }
+            this._db.AttachRange(obj);
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, 
+        public Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, 
                                             CancellationToken cancellationToken)
         {
-            return await this._table.AnyAsync(predicate, cancellationToken);
+            return this._table.AnyAsync(predicate, cancellationToken);
         }
 
         private IQueryable<TEntity> Include(IQueryable<TEntity> query, params Expression<Func<TEntity, object>>[] includeProperties)
         {
             return includeProperties
-                .Aggregate(query, (current, includeProperty)
-                    => current.Include(includeProperty));
+                .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)

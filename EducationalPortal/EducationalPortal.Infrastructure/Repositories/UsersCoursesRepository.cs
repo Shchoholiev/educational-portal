@@ -19,16 +19,15 @@ namespace EducationalPortal.Infrastructure.Repositories
             this._table = _db.UsersCourses;
         }
 
-        public async Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email, 
-                                                              CancellationToken cancellationToken)
+        public Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email, CancellationToken cancellationToken)
         {
-            return await this._table.FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.User.Email == email,
-                                                         cancellationToken);
+            return this._table.FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.User.Email == email,
+                                                   cancellationToken);
         }
 
-        public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters, 
-                                                                            Expression<Func<UsersCourses, bool>> predicate, 
-                                                                            CancellationToken cancellationToken)
+        public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, 
+            PageParameters pageParameters, Expression<Func<UsersCourses, bool>> predicate, 
+            CancellationToken cancellationToken)
         {
             var usersCourses =  await this._table.AsNoTracking()
                                                  .Where(uc => uc.User.Email == email)
@@ -62,30 +61,14 @@ namespace EducationalPortal.Infrastructure.Repositories
         public async Task<int> GetLearnedMaterialsCountAsync(int courseId, string email, 
                                                             CancellationToken cancellationToken)
         {
-            var user = await this._db.Users.Include(u => u.Materials)
-                                           .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
-
-            var courseMaterials = this._db.CoursesMaterials
-                                          .AsNoTracking()
-                                          .Include(cm => cm.Material)
-                                          .Where(cm => cm.CourseId == courseId);
-
-            var count = 0;
-            foreach (var cm in courseMaterials)
-            {
-                if (user.Materials.Any(m => m.Id == cm.MaterialId))
-                {
-                    count++;
-                }
-            }
-
-            return count;
+            return await this._db.CoursesMaterials.AsNoTracking()
+                .CountAsync(cm => cm.CourseId == courseId && cm.Material.Users.Any(
+                    u => u.Id == this._db.Users.FirstOrDefault(u => u.Email == email).Id));
         }
 
-        public async Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken)
+        public Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken)
         {
-            return await this._table.AnyAsync(uc => uc.Course.Id == courseId && uc.User.Email == email, 
-                                              cancellationToken);
+            return this._table.AnyAsync(uc => uc.Course.Id == courseId && uc.User.Email == email, cancellationToken);
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)

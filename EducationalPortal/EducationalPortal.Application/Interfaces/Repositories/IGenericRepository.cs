@@ -14,18 +14,15 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         void Attach(params object[] obj);
 
-        Task<TEntity> GetOneAsync(int id, CancellationToken cancellationToken);
+        Task<TEntity?> GetOneAsync(int id, CancellationToken cancellationToken);
 
-        Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
+        Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);
 
-        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
+        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate,
                                                CancellationToken cancellationToken,
                                                params Expression<Func<TEntity, object>>[] includeProperties); 
 
         Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
-
-        Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken,
-                                              params Expression<Func<TEntity, object>>[] includeProperties);
 
         Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
                                               Expression<Func<TEntity, bool>> predicate,

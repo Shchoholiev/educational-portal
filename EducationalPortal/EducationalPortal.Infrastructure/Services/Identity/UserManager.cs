@@ -37,7 +37,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
 
         public async Task<TokensModel> RegisterAsync(RegisterModel register, CancellationToken cancellationToken)
         {
-            if (await this._usersRepository.GetUserAsync(register.Email, cancellationToken) != null)
+            if (await this._usersRepository.ExistsAsync(u => u.Email == register.Email, cancellationToken))
             {
                 throw new AlreadyExistsException("user email", register.Email);
             }
@@ -66,7 +66,6 @@ namespace EducationalPortal.Infrastructure.Services.Identity
         public async Task<TokensModel> LoginAsync(LoginModel login, CancellationToken cancellationToken)
         {
             var user = await this._usersRepository.GetUserAsync(login.Email, cancellationToken);
-
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -92,13 +91,13 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             var role = await this._rolesRepository.GetOneAsync(r => r.Name == roleName, cancellationToken);
             if (role == null)
             {
-                throw new AlreadyExistsException("role name", roleName);
+                throw new NotFoundException("Role");
             }
 
             var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
             if (user == null)
             {
-                throw new AlreadyExistsException("user email", email);
+                throw new NotFoundException("User");
             }
 
             user.Roles.Add(role);
