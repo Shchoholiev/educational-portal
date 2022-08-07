@@ -44,17 +44,12 @@ namespace EducationalPortal.Infrastructure.Repositories
             await this.SaveAsync(cancellationToken);
         }
 
-        public void Detach(object entity)
+        public Task<Course?> GetCourseAsync(int id, CancellationToken cancellationToken)
         {
-            this._db.Entry(entity).State = EntityState.Detached;
+            return this._table.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
 
-        public async Task<Course?> GetCourseAsync(int id, CancellationToken cancellationToken)
-        {
-            return await this._table.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
-        }
-
-        public async Task<Course> GetFullCourseAsync(int id, CancellationToken cancellationToken)
+        public async Task<Course?> GetFullCourseAsync(int id, CancellationToken cancellationToken)
         {
             var course = await this._table
                .Include(c => c.Author)
@@ -117,24 +112,17 @@ namespace EducationalPortal.Infrastructure.Repositories
             return new PagedList<Course>(courses, pageParameters, totalCount);
         }
 
-        public async Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken)
+        public Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken)
         {
-            return await this._db.CoursesMaterials
-                                 .AsNoTracking()
-                                 .Where(cm => cm.CourseId == courseId)
-                                 .CountAsync(cancellationToken);
+            return this._db.CoursesMaterials.AsNoTracking()
+                                            .Where(cm => cm.CourseId == courseId)
+                                            .CountAsync(cancellationToken);
         }
 
-        public async Task<User> GetCourseAuthor(int courseId, CancellationToken cancellationToken)
+        public Task<User?> GetCourseAuthor(int courseId, CancellationToken cancellationToken)
         {
-            return await this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId), 
-                                                            cancellationToken);
-        }
-
-        public async Task<bool> ExistsAsync(Expression<Func<Course, bool>> predicate, 
-                                            CancellationToken cancellationToken)
-        {
-            return await this._table.AnyAsync(predicate, cancellationToken);
+            return this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId), 
+                                                      cancellationToken);
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)

@@ -14,7 +14,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<PagedList<CartItem>> GetPageAsync(PageParameters pageParameters, string email, 
                                                CancellationToken cancellationToken);
 
-        Task<IEnumerable<CartItem>> GetAllAsync(string email, CancellationToken cancellationToken);
+        Task<List<CartItem>> GetAllAsync(string email, CancellationToken cancellationToken);
 
         Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken);
 
