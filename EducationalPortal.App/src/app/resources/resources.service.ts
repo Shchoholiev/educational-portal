@@ -7,7 +7,7 @@ import { Resource } from '../shared/resource.model';
 })
 export class ResourcesService {
 
-  private readonly baseURL = 'https://localhost:7106/api/resources';
+  private readonly baseURL = '/api/resources';
 
   constructor(private _http: HttpClient) { }
 

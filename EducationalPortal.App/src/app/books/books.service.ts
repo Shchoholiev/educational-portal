@@ -8,7 +8,7 @@ import { BookDto } from './book-dto.model';
 })
 export class BooksService {
 
-  private readonly baseURL = 'https://localhost:7106/api/books';
+  private readonly baseURL = '/api/books';
 
   constructor(private _http: HttpClient) { }
 

@@ -1,6 +1,6 @@
 using EducationalPortal.API;
 using EducationalPortal.Infrastructure;
-using EducationalPortal.Infrastructure.DataInitializer;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +11,10 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddFluentValidators();
 builder.Logging.AddLogger(builder.Configuration);
+builder.Services.AddSpaStaticFiles(config =>
+{
+    config.RootPath = "../../EducationalPortal.App/dist";
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -19,7 +23,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    await DbInitializer.InitializeDb(app);
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -35,6 +38,18 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
+app.UseStaticFiles();
+app.UseSpaStaticFiles();
+
+app.UseSpa(spa =>
+{
+    spa.Options.SourcePath = "../../EducationalPortal.App";
+    spa.UseAngularCliServer(npmScript: "start");
+});
 
 app.Run();

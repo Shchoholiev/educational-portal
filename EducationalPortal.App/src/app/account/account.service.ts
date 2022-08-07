@@ -13,7 +13,7 @@ import { UserDTO } from './user-dto.model';
 })
 export class AccountService {
 
-  private readonly baseURL = 'https://localhost:7106/api/account';
+  private readonly baseURL = '/api/account';
 
   constructor(private _http: HttpClient) { }
 

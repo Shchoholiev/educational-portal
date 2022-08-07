@@ -7,7 +7,7 @@ import { Skill } from '../shared/skill.model';
 })
 export class SkillsService {
 
-  private readonly baseURL = 'https://localhost:7106/api/skills';
+  private readonly baseURL = '/api/skills';
 
   constructor(private _http: HttpClient) { }
 

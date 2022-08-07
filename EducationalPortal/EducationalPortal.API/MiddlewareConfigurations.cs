@@ -52,7 +52,7 @@ namespace EducationalPortal.API
                 options.AddPolicy("allowMyOrigin",
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:4200")
+                    builder.AllowAnyOrigin()
                            .AllowAnyMethod()
                            .AllowAnyHeader()
                            .WithExposedHeaders("X-Pagination");

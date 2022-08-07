@@ -64,7 +64,7 @@ export class AuthService {
     }
 
     var tokens = new Tokens(accessToken, refreshToken);
-    return this._http.post("https://localhost:7106/api/tokens/refresh", tokens, { observe: 'response' }).pipe(
+    return this._http.post("/api/tokens/refresh", tokens, { observe: 'response' }).pipe(
       map((response) => {
         this.login((<any>response).body);
         return true;

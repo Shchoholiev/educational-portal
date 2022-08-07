@@ -15,7 +15,9 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DBConnectionString": "server=(LocalDb)\\MSSQLLocalDB;database=EducationalPortal;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework;"
+        //"DBConnectionString": "server=(LocalDb)\\MSSQLLocalDB;database=EducationalPortal;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework;"
+        "DBConnectionString": "Server=tcp:educational-portal.database.windows.net,1433;Initial Catalog=educational-portal;Persist Security Info=False;User ID=shchoholiev;Password=3r7shf94-3oc;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
       },
       "applicationUrl": "https://localhost:7106;http://localhost:7105",
       "dotnetRunMessages": true

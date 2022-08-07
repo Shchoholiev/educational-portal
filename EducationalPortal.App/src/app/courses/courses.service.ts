@@ -9,7 +9,7 @@ import { LearnCourse } from '../shared/learn-course.model';
 })
 export class CoursesService {
 
-  private readonly baseURL = 'https://localhost:7106/api/courses';
+  private readonly baseURL = '/api/courses';
 
   constructor(private _http: HttpClient) { }
 

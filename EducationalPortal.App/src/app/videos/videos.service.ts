@@ -9,7 +9,7 @@ import { VideoDto } from './video-dto.model';
 })
 export class VideosService {
 
-  private readonly baseURL = 'https://localhost:7106/api/videos';
+  private readonly baseURL = '/api/videos';
 
   constructor(private _http: HttpClient) { }
 

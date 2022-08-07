@@ -7,7 +7,7 @@ import { Author } from '../shared/author.model';
 })
 export class AuthorsService {
 
-  private readonly baseURL = 'https://localhost:7106/api/authors';
+  private readonly baseURL = '/api/authors';
 
   constructor(private _http: HttpClient) { }
 

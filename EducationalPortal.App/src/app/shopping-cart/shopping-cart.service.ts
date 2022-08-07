@@ -9,7 +9,7 @@ import { CartItem } from '../shared/cart-item.model';
 })
 export class ShoppingCartService {
 
-  private readonly baseURL = 'https://localhost:7106/api/shopping-cart';
+  private readonly baseURL = '/api/shopping-cart';
 
   constructor(private _http: HttpClient) { }
 

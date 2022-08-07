@@ -7,7 +7,7 @@ import { Article } from '../shared/article.model';
 })
 export class ArticlesService {
 
-  private readonly baseURL = 'https://localhost:7106/api/articles';
+  private readonly baseURL = '/api/articles';
 
   constructor(private _http: HttpClient) { }
 

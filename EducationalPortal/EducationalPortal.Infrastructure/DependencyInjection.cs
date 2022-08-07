@@ -28,7 +28,7 @@ namespace EducationalPortal.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = Environment.GetEnvironmentVariable("DBConnectionString");
+            var connectionString = configuration.GetConnectionString("SQLDatabase");
 
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connectionString)
