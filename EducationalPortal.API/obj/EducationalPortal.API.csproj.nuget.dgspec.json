@@ -1,0 +1,338 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj",
+        "projectName": "EducationalPortal.API",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj",
+        "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj"
+              },
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
+              },
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[6.0.5, )"
+            },
+            "Microsoft.AspNetCore.SpaServices.Extensions": {
+              "target": "Package",
+              "version": "[6.0.7, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.15.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.3.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
+        "projectName": "EducationalPortal.Application",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
+        "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[11.0.1, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[11.0.2, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.15, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
+        "projectName": "EducationalPortal.Core",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
+        "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
+        "projectName": "EducationalPortal.Infrastructure",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj"
+              },
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Azure.Storage.Blobs": {
+              "target": "Package",
+              "version": "[12.11.0, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.0.2, )"
+            },
+            "Microsoft.AspNetCore.Authentication": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Cookies": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.3, )"
+            },
+            "Microsoft.Extensions.Configuration.Binder": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "NLog.Extensions.Logging": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

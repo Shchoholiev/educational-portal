@@ -1,0 +1,714 @@
+2022-08-08 00:01:02.9593|INFO|Microsoft.AspNetCore.SpaServices|Starting @angular/cli on port 62264...
+2022-08-08 00:01:03.7570|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\rareb\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-08-08 00:01:05.5444|INFO|Microsoft.Hosting.Lifetime|Now listening on: https://localhost:7106
+2022-08-08 00:01:05.5444|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:7105
+2022-08-08 00:01:05.5444|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2022-08-08 00:01:05.5444|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2022-08-08 00:01:05.5444|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.API\
+2022-08-08 00:01:05.9643|ERROR|Microsoft.AspNetCore.SpaServices|npm WARN config global `--global`, `--local` are deprecated. Use `--location=global` instead.
+
+2022-08-08 00:01:08.5778|INFO|Microsoft.AspNetCore.SpaServices|> educational-portal.app@0.0.0 start
+
+2022-08-08 00:01:08.5778|INFO|Microsoft.AspNetCore.SpaServices|> ng serve
+
+2022-08-08 00:01:08.8074|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger - -
+2022-08-08 00:01:09.0665|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger - - - 301 0 - 263.8869ms
+2022-08-08 00:01:09.1086|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/index.html - -
+2022-08-08 00:01:10.0218|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/index.html - - - 200 - text/html;charset=utf-8 913.1938ms
+2022-08-08 00:01:10.0415|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui-bundle.js - -
+2022-08-08 00:01:10.0415|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui.css - -
+2022-08-08 00:01:10.0415|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui-standalone-preset.js - -
+2022-08-08 00:01:10.1036|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_vs/browserLink - -
+2022-08-08 00:01:10.1036|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - -
+2022-08-08 00:01:10.1457|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - - - 200 12012 application/javascript;+charset=utf-8 42.0468ms
+2022-08-08 00:01:10.2058|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2022-08-08 00:01:10.2121|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui.css - - - 200 143943 text/css 170.4699ms
+2022-08-08 00:01:10.2121|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2022-08-08 00:01:10.2121|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui-standalone-preset.js - - - 200 339486 application/javascript 171.1284ms
+2022-08-08 00:01:10.5985|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2022-08-08 00:01:10.5985|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui-bundle.js - - - 200 1095087 application/javascript 557.2917ms
+2022-08-08 00:01:10.6890|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 585.3445ms
+2022-08-08 00:01:11.4030|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - -
+2022-08-08 00:01:12.3011|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 897.9899ms
+2022-08-08 00:01:28.3366|ERROR|Microsoft.AspNetCore.SpaServices|- Generating browser application bundles (phase: setup)...
+
+2022-08-08 00:01:30.7405|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses - -
+2022-08-08 00:01:31.8875|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-08-08 00:01:31.9911|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-08-08 00:01:36.5356|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-08-08 00:01:38.6625|WARN|Microsoft.EntityFrameworkCore.Query|The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2022-08-08 00:01:38.6625|WARN|Microsoft.EntityFrameworkCore.Query|The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2022-08-08 00:01:42.0713|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (387ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-08-08 00:01:42.4990|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (160ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-08-08 00:01:42.5599|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-08-08 00:01:43.0560|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-08-08 00:01:43.2333|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 11227.1945ms
+2022-08-08 00:01:43.2412|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-08-08 00:01:43.2853|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses - - - 200 818 application/json;+charset=utf-8 12544.7526ms
+2022-08-08 00:01:58.3735|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/courses - -
+2022-08-08 00:02:18.2539|ERROR|Microsoft.AspNetCore.SpaServices|ΓêÜ Browser application bundle generation complete.
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|Initial Chunk Files   | Names         |  Raw Size
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|vendor.js             | vendor        |   2.35 MB |
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|main.js               | main          | 387.86 kB |
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|polyfills.js          | polyfills     | 294.87 kB |
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|styles.css, styles.js | styles        | 173.25 kB |
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|runtime.js            | runtime       |   6.54 kB |
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|| Initial Total |   3.19 MB
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|Build at: 2022-08-07T21:02:18.238Z - Hash: 8c0001bd6baece30 - Time: 47900ms
+
+2022-08-08 00:02:18.6382|INFO|Microsoft.AspNetCore.SpaServices|** Angular Live Development Server is listening on localhost:62264, open your browser on http://localhost:62264/ **
+
+2022-08-08 00:02:18.8158|INFO|Microsoft.AspNetCore.SpaServices|ΓêÜ Compiled successfully.
+
+2022-08-08 00:02:23.6279|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/courses - - - 200 - text/html;+charset=utf-8 25254.2742ms
+2022-08-08 00:02:23.7437|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/styles.css - -
+2022-08-08 00:02:23.7662|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/runtime.js - -
+2022-08-08 00:02:23.7944|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/polyfills.js - -
+2022-08-08 00:02:23.8258|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-08-08 00:02:23.8258|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-08-08 00:02:23.8258|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/vendor.js - -
+2022-08-08 00:02:23.8258|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-08-08 00:02:23.8354|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/styles.css - - - 200 737 text/css;+charset=utf-8 91.6731ms
+2022-08-08 00:02:23.8354|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_vs/browserLink - -
+2022-08-08 00:02:23.8565|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/styles.js - -
+2022-08-08 00:02:23.8769|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - -
+2022-08-08 00:02:23.8820|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/main.js - -
+2022-08-08 00:02:23.8820|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-08-08 00:02:23.9273|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - - - 200 12012 application/javascript;+charset=utf-8 50.2972ms
+2022-08-08 00:02:24.0957|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/runtime.js - - - 200 6696 application/javascript;+charset=utf-8 329.4726ms
+2022-08-08 00:02:24.2500|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/polyfills.js - - - 200 301943 application/javascript;+charset=utf-8 455.4591ms
+2022-08-08 00:02:24.3697|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET https://localhost:7106/runtime.js.map - -
+2022-08-08 00:02:24.3697|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET https://localhost:7106/ws - -
+2022-08-08 00:02:24.3697|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-08-08 00:02:24.4123|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET https://localhost:7106/polyfills.js.map - -
+2022-08-08 00:02:24.8210|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 984.5878ms
+2022-08-08 00:02:24.9883|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/vendor.js - - - 200 2462581 application/javascript;+charset=utf-8 1160.3422ms
+2022-08-08 00:02:25.0279|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/styles.js - - - 200 176668 application/javascript;+charset=utf-8 1177.4409ms
+2022-08-08 00:02:25.0555|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/main.js - - - 200 397165 application/javascript;+charset=utf-8 1173.4861ms
+2022-08-08 00:02:25.0693|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/1.1 GET https://localhost:7106/runtime.js.map - - - 200 5719 application/json;+charset=utf-8 699.6585ms
+2022-08-08 00:02:25.2102|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/1.1 GET https://localhost:7106/polyfills.js.map - - - 200 368440 application/json;+charset=utf-8 797.8377ms
+2022-08-08 00:02:25.3543|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET https://localhost:7106/vendor.js.map - -
+2022-08-08 00:02:25.4462|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET https://localhost:7106/styles.js.map - -
+2022-08-08 00:02:25.4694|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/1.1 GET https://localhost:7106/main.js.map - -
+2022-08-08 00:02:26.2143|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 POST https://localhost:7106/api/tokens/refresh application/json 595
+2022-08-08 00:02:26.2143|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-08-08 00:02:26.2332|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-08-08 00:02:26.3315|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/1.1 GET https://localhost:7106/vendor.js.map - - - 200 3242823 application/json;+charset=utf-8 977.2229ms
+2022-08-08 00:02:26.3519|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/1.1 GET https://localhost:7106/styles.js.map - - - 200 225660 application/json;+charset=utf-8 905.6762ms
+2022-08-08 00:02:26.3737|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/1.1 GET https://localhost:7106/main.js.map - - - 200 220587 application/json;+charset=utf-8 904.4431ms
+2022-08-08 00:02:26.9397|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Failed to validate the token.|Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+2022-08-08 00:02:26.9397|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Failed to validate the token.|Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+2022-08-08 00:02:27.5182|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+2022-08-08 00:02:27.5182|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-08-08 00:02:27.5193|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-08-08 00:02:27.5617|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+2022-08-08 00:02:27.5617|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.TokensController.RefreshAsync (EducationalPortal.API)'
+2022-08-08 00:02:27.5731|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "Refresh", controller = "Tokens"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EducationalPortal.Application.Models.TokensModel]] RefreshAsync(EducationalPortal.Application.Models.TokensModel, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.TokensController (EducationalPortal.API).
+2022-08-08 00:02:27.6316|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-08-08 00:02:27.8029|INFO|EducationalPortal.Infrastructure.Services.Identity.TokensService|Returned data from expired access token.
+2022-08-08 00:02:27.8270|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-08-08 00:02:27.8270|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (153ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-08-08 00:02:27.9603|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (129ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-08-08 00:02:27.9603|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-08-08 00:02:27.9603|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-08-08 00:02:27.9603|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 449.7388ms
+2022-08-08 00:02:27.9603|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-08-08 00:02:27.9603|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 200 818 application/json;+charset=utf-8 1753.2635ms
+2022-08-08 00:02:28.8578|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (124ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t].[Id0], [t].[RefreshToken], [t].[RefreshTokenExpiryTime], [t0].[RolesId], [t0].[UsersId], [t0].[Id], [t0].[Name]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId], [u0].[Id] AS [Id0], [u0].[RefreshToken], [u0].[RefreshTokenExpiryTime]
+    FROM [Users] AS [u]
+    LEFT JOIN [UserToken] AS [u0] ON [u].[UserTokenId] = [u0].[Id]
+    WHERE 0 = 1
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[RolesId], [r].[UsersId], [r0].[Id], [r0].[Name]
+    FROM [RoleUser] AS [r]
+    INNER JOIN [Roles] AS [r0] ON [r].[RolesId] = [r0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[RolesId], [t0].[UsersId]
+2022-08-08 00:02:29.4645|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.TokensController.RefreshAsync (EducationalPortal.API) in 1891.2877ms
+2022-08-08 00:02:29.4645|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.TokensController.RefreshAsync (EducationalPortal.API)'
+2022-08-08 00:02:30.3599|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses/2 - -
+2022-08-08 00:02:30.3741|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Failed to validate the token.|Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+2022-08-08 00:02:30.3741|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+2022-08-08 00:02:30.3741|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-08-08 00:02:30.3862|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourse", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[EducationalPortal.Application.Models.DTO.Course.CourseDto] GetCourseAsync(Int32, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-08-08 00:02:30.3998|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-08-08 00:02:30.4195|ERROR|EducationalPortal.Infrastructure.ExceptionHandling.ExceptionMiddleware|Something went wrong: Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: SecurityToken has Expired
+   at EducationalPortal.Infrastructure.Services.Identity.TokensService.RefreshAsync(TokensModel tokensModel, String email, CancellationToken cancellationToken) in C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Infrastructure\Services\Identity\TokensService.cs:line 39
+   at EducationalPortal.API.Controllers.TokensController.RefreshAsync(TokensModel tokensModel, CancellationToken cancellationToken) in C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.API\Controllers\TokensController.cs:line 20
+   at lambda_method58(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at EducationalPortal.Infrastructure.ExceptionHandling.ExceptionMiddleware.InvokeAsync(HttpContext httpContext) in C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Infrastructure\ExceptionHandling\ExceptionMiddleware.cs:line 25
+2022-08-08 00:02:30.4298|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 POST https://localhost:7106/api/tokens/refresh application/json 595 - 500 - application/json 4215.4651ms
+2022-08-08 00:02:30.7086|WARN|Microsoft.EntityFrameworkCore.Query|Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2022-08-08 00:02:31.7163|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (952ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[AuthorId], [t].[Description], [t].[Name], [t].[Price], [t].[ShortDescription], [t].[Thumbnail], [t].[Id0], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name0], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[CourseId], [t0].[MaterialId], [t0].[Index], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator], [t2].[CourseId], [t2].[SkillId], [t2].[Id], [t2].[Name]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [u].[Id] AS [Id0], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name] AS [Name0], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Courses] AS [c]
+    LEFT JOIN [Users] AS [u] ON [c].[AuthorId] = [u].[Id]
+    WHERE [c].[Id] = @__id_0
+) AS [t]
+LEFT JOIN (
+    SELECT [c0].[CourseId], [c0].[MaterialId], [c0].[Index], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [CoursesMaterials] AS [c0]
+    INNER JOIN (
+        SELECT [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m]
+        LEFT JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+    ) AS [t1] ON [c0].[MaterialId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[CourseId]
+LEFT JOIN (
+    SELECT [c1].[CourseId], [c1].[SkillId], [s].[Id], [s].[Name]
+    FROM [CoursesSkills] AS [c1]
+    INNER JOIN [Skills] AS [s] ON [c1].[SkillId] = [s].[Id]
+) AS [t2] ON [t].[Id] = [t2].[CourseId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[CourseId], [t0].[MaterialId], [t0].[Id], [t2].[CourseId], [t2].[SkillId]
+2022-08-08 00:02:32.3691|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-08-08 00:02:32.3691|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Failed to validate the token.|Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+2022-08-08 00:02:32.3691|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+2022-08-08 00:02:32.3691|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-08-08 00:02:32.3691|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-08-08 00:02:32.3691|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-08-08 00:02:32.7927|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (127ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:32.9409|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:33.1048|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:33.2368|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (124ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:33.4100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (161ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-08-08 00:02:33.4100|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (133ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:33.5447|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (134ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:33.6715|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (126ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:33.8123|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (140ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:33.8754|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (465ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-08-08 00:02:33.8804|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-08-08 00:02:33.8804|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-08-08 00:02:33.8804|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 1507.1414ms
+2022-08-08 00:02:33.8804|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-08-08 00:02:33.8804|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 200 818 application/json;+charset=utf-8 1512.1828ms
+2022-08-08 00:02:33.9410|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (127ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:34.0673|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (125ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:34.2047|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (137ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:34.3290|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:34.5032|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (172ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:34.6841|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (174ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:34.7561|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses/2 - -
+2022-08-08 00:02:34.8050|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Failed to validate the token.|Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+2022-08-08 00:02:34.8050|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+2022-08-08 00:02:34.8050|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-08-08 00:02:34.8050|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourse", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[EducationalPortal.Application.Models.DTO.Course.CourseDto] GetCourseAsync(Int32, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-08-08 00:02:34.8050|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-08-08 00:02:35.2098|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (132ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:35.3580|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (134ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:35.4002|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (530ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[AuthorId], [t].[Description], [t].[Name], [t].[Price], [t].[ShortDescription], [t].[Thumbnail], [t].[Id0], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name0], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[CourseId], [t0].[MaterialId], [t0].[Index], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator], [t2].[CourseId], [t2].[SkillId], [t2].[Id], [t2].[Name]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [u].[Id] AS [Id0], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name] AS [Name0], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Courses] AS [c]
+    LEFT JOIN [Users] AS [u] ON [c].[AuthorId] = [u].[Id]
+    WHERE [c].[Id] = @__id_0
+) AS [t]
+LEFT JOIN (
+    SELECT [c0].[CourseId], [c0].[MaterialId], [c0].[Index], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [CoursesMaterials] AS [c0]
+    INNER JOIN (
+        SELECT [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m]
+        LEFT JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+    ) AS [t1] ON [c0].[MaterialId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[CourseId]
+LEFT JOIN (
+    SELECT [c1].[CourseId], [c1].[SkillId], [s].[Id], [s].[Name]
+    FROM [CoursesSkills] AS [c1]
+    INNER JOIN [Skills] AS [s] ON [c1].[SkillId] = [s].[Id]
+) AS [t2] ON [t].[Id] = [t2].[CourseId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[CourseId], [t0].[MaterialId], [t0].[Id], [t2].[CourseId], [t2].[SkillId]
+2022-08-08 00:02:35.4812|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (122ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:35.6105|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (129ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:35.7359|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (125ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:35.8594|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:35.9883|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (128ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:36.1629|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (133ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[MaterialsId], [t0].[UsersId], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE 0 = 1
+) AS [t]
+LEFT JOIN (
+    SELECT [m].[MaterialsId], [m].[UsersId], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [MaterialsBaseUser] AS [m]
+    INNER JOIN (
+        SELECT [m0].[Id], [m0].[Link], [m0].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m0]
+        LEFT JOIN [Articles] AS [a] ON [m0].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m0].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m0].[Id] = [v].[Id]
+    ) AS [t1] ON [m].[MaterialsId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t0].[MaterialsId], [t0].[UsersId]
+2022-08-08 00:02:36.2131|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned course with id: 2.
+2022-08-08 00:02:36.2131|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.Course.CourseDto'.
+2022-08-08 00:02:36.2436|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API) in 5857.2964ms
+2022-08-08 00:02:36.2436|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-08-08 00:02:36.2436|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses/2 - - - 200 3435 application/json;+charset=utf-8 5884.4865ms
+2022-08-08 00:02:36.4508|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (130ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:36.5756|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:36.7000|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (124ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:36.8344|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (134ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:36.9578|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (122ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:37.0908|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (132ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:37.2173|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (126ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:37.3486|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (130ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:37.4751|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (125ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:37.6023|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (127ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:37.7340|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (131ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:37.8625|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (128ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:37.9906|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (127ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:38.1137|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:38.2396|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (125ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:38.3637|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:38.4872|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (122ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:38.6194|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (132ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:38.7428|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-08-08 00:02:38.8759|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (132ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:39.0047|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (128ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-08-08 00:02:39.1290|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (123ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[MaterialsId], [t0].[UsersId], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE 0 = 1
+) AS [t]
+LEFT JOIN (
+    SELECT [m].[MaterialsId], [m].[UsersId], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [MaterialsBaseUser] AS [m]
+    INNER JOIN (
+        SELECT [m0].[Id], [m0].[Link], [m0].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m0]
+        LEFT JOIN [Articles] AS [a] ON [m0].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m0].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m0].[Id] = [v].[Id]
+    ) AS [t1] ON [m].[MaterialsId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t0].[MaterialsId], [t0].[UsersId]
+2022-08-08 00:02:39.1497|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned course with id: 2.
+2022-08-08 00:02:39.1497|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.Course.CourseDto'.
+2022-08-08 00:02:39.1497|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API) in 4341.7669ms
+2022-08-08 00:02:39.1497|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-08-08 00:02:39.1497|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses/2 - - - 200 3435 application/json;+charset=utf-8 4394.5275ms

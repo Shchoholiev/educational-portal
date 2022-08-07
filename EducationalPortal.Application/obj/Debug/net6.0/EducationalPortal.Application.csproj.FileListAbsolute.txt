@@ -1,0 +1,15 @@
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\bin\Debug\net6.0\EducationalPortal.Application.deps.json
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\bin\Debug\net6.0\EducationalPortal.Application.dll
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\bin\Debug\net6.0\EducationalPortal.Application.pdb
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\bin\Debug\net6.0\EducationalPortal.Core.dll
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\bin\Debug\net6.0\EducationalPortal.Core.pdb
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.csproj.AssemblyReference.cache
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.AssemblyInfoInputs.cache
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.AssemblyInfo.cs
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.csproj.CoreCompileInputs.cache
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.csproj.CopyComplete
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.dll
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\refint\EducationalPortal.Application.dll
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\EducationalPortal.Application.pdb
+C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.Application\obj\Debug\net6.0\ref\EducationalPortal.Application.dll

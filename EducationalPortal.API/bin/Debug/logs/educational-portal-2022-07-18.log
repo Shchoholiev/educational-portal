@@ -1,0 +1,2444 @@
+2022-07-18 09:32:48.3824|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:32:52.9981|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (88ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2022-07-18 09:32:53.2999|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (89ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [EducationalPortal] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2022-07-18 09:32:53.3278|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (27ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [EducationalPortal];
+2022-07-18 09:32:53.8061|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (331ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [EducationalPortal];
+2022-07-18 09:32:53.8838|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (78ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [EducationalPortal] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2022-07-18 09:32:53.9103|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2022-07-18 09:32:54.2060|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Authors] (
+    [Id] int NOT NULL IDENTITY,
+    [FullName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Authors] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2165|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Extensions] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Extensions] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2165|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Materials] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Link] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Materials] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2165|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Qualities] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Qualities] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2165|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Resources] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Resources] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Skills] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Skills] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UserToken] (
+    [Id] int NOT NULL IDENTITY,
+    [RefreshToken] nvarchar(max) NOT NULL,
+    [RefreshTokenExpiryTime] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserToken] PRIMARY KEY ([Id])
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL,
+    [PagesCount] int NOT NULL,
+    [ExtensionId] int NOT NULL,
+    [PublicationYear] int NOT NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Books_Extensions_ExtensionId] FOREIGN KEY ([ExtensionId]) REFERENCES [Extensions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Books_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id])
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Videos] (
+    [Id] int NOT NULL,
+    [Duration] datetime2 NOT NULL,
+    [QualityId] int NOT NULL,
+    CONSTRAINT [PK_Videos] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Videos_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id]),
+    CONSTRAINT [FK_Videos_Qualities_QualityId] FOREIGN KEY ([QualityId]) REFERENCES [Qualities] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Articles] (
+    [Id] int NOT NULL,
+    [ResourceId] int NOT NULL,
+    [PublicationDate] datetime2 NOT NULL,
+    CONSTRAINT [PK_Articles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Articles_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id]),
+    CONSTRAINT [FK_Articles_Resources_ResourceId] FOREIGN KEY ([ResourceId]) REFERENCES [Resources] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2239|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] nvarchar(450) NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Position] nvarchar(max) NULL,
+    [Avatar] nvarchar(max) NOT NULL,
+    [Email] nvarchar(450) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [Balance] int NOT NULL,
+    [UserTokenId] int NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_UserToken_UserTokenId] FOREIGN KEY ([UserTokenId]) REFERENCES [UserToken] ([Id])
+);
+2022-07-18 09:32:54.2404|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AuthorBook] (
+    [AuthorsId] int NOT NULL,
+    [BooksId] int NOT NULL,
+    CONSTRAINT [PK_AuthorBook] PRIMARY KEY ([AuthorsId], [BooksId]),
+    CONSTRAINT [FK_AuthorBook_Authors_AuthorsId] FOREIGN KEY ([AuthorsId]) REFERENCES [Authors] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AuthorBook_Books_BooksId] FOREIGN KEY ([BooksId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2404|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Courses] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Thumbnail] nvarchar(max) NOT NULL,
+    [ShortDescription] nvarchar(max) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [Price] int NOT NULL,
+    [AuthorId] nvarchar(450) NULL,
+    CONSTRAINT [PK_Courses] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Courses_Users_AuthorId] FOREIGN KEY ([AuthorId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 09:32:54.2404|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [MaterialsBaseUser] (
+    [MaterialsId] int NOT NULL,
+    [UsersId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_MaterialsBaseUser] PRIMARY KEY ([MaterialsId], [UsersId]),
+    CONSTRAINT [FK_MaterialsBaseUser_Materials_MaterialsId] FOREIGN KEY ([MaterialsId]) REFERENCES [Materials] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_MaterialsBaseUser_Users_UsersId] FOREIGN KEY ([UsersId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2404|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [RoleUser] (
+    [RolesId] int NOT NULL,
+    [UsersId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_RoleUser] PRIMARY KEY ([RolesId], [UsersId]),
+    CONSTRAINT [FK_RoleUser_Roles_RolesId] FOREIGN KEY ([RolesId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RoleUser_Users_UsersId] FOREIGN KEY ([UsersId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2404|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UsersSkills] (
+    [UserId] nvarchar(450) NOT NULL,
+    [SkillId] int NOT NULL,
+    [Level] int NOT NULL,
+    CONSTRAINT [PK_UsersSkills] PRIMARY KEY ([UserId], [SkillId]),
+    CONSTRAINT [FK_UsersSkills_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsersSkills_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2564|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CartItems] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [CourseId] int NOT NULL,
+    CONSTRAINT [PK_CartItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_CartItems_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CartItems_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 09:32:54.2564|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CoursesMaterials] (
+    [CourseId] int NOT NULL,
+    [MaterialId] int NOT NULL,
+    [Index] int NOT NULL,
+    CONSTRAINT [PK_CoursesMaterials] PRIMARY KEY ([CourseId], [MaterialId]),
+    CONSTRAINT [FK_CoursesMaterials_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CoursesMaterials_Materials_MaterialId] FOREIGN KEY ([MaterialId]) REFERENCES [Materials] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2564|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CoursesSkills] (
+    [CourseId] int NOT NULL,
+    [SkillId] int NOT NULL,
+    CONSTRAINT [PK_CoursesSkills] PRIMARY KEY ([CourseId], [SkillId]),
+    CONSTRAINT [FK_CoursesSkills_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CoursesSkills_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2564|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ShoppingHistory] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [CourseId] int NOT NULL,
+    [Price] int NOT NULL,
+    [Date] datetime2 NOT NULL,
+    CONSTRAINT [PK_ShoppingHistory] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ShoppingHistory_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ShoppingHistory_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 09:32:54.2564|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UsersCourses] (
+    [UserId] nvarchar(450) NOT NULL,
+    [CourseId] int NOT NULL,
+    [MaterialsCount] int NOT NULL,
+    [LearnedMaterialsCount] int NOT NULL,
+    CONSTRAINT [PK_UsersCourses] PRIMARY KEY ([UserId], [CourseId]),
+    CONSTRAINT [FK_UsersCourses_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsersCourses_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Articles_ResourceId] ON [Articles] ([ResourceId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_AuthorBook_BooksId] ON [AuthorBook] ([BooksId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Books_ExtensionId] ON [Books] ([ExtensionId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CartItems_CourseId] ON [CartItems] ([CourseId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CartItems_UserId] ON [CartItems] ([UserId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Courses_AuthorId] ON [Courses] ([AuthorId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CoursesMaterials_MaterialId] ON [CoursesMaterials] ([MaterialId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CoursesSkills_SkillId] ON [CoursesSkills] ([SkillId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_MaterialsBaseUser_UsersId] ON [MaterialsBaseUser] ([UsersId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Roles_Name] ON [Roles] ([Name]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_RoleUser_UsersId] ON [RoleUser] ([UsersId]);
+2022-07-18 09:32:54.2706|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ShoppingHistory_CourseId] ON [ShoppingHistory] ([CourseId]);
+2022-07-18 09:32:54.2855|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ShoppingHistory_UserId] ON [ShoppingHistory] ([UserId]);
+2022-07-18 09:32:54.2855|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2022-07-18 09:32:54.2855|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Users_UserTokenId] ON [Users] ([UserTokenId]);
+2022-07-18 09:32:54.2855|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UsersCourses_CourseId] ON [UsersCourses] ([CourseId]);
+2022-07-18 09:32:54.2855|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UsersSkills_SkillId] ON [UsersSkills] ([SkillId]);
+2022-07-18 09:32:54.2855|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Videos_QualityId] ON [Videos] ([QualityId]);
+2022-07-18 09:32:54.7764|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (93ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DECLARE @inserted0 TABLE ([Id] int, [_Position] [int]);
+MERGE [Qualities] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4),
+(@p5, 5),
+(@p6, 6),
+(@p7, 7)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position
+INTO @inserted0;
+
+SELECT [i].[Id] FROM @inserted0 i
+ORDER BY [i].[_Position];
+2022-07-18 09:32:54.9498|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:54.9685|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:54.9918|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Extensions] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Extensions]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.0119|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.0740|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.0740|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 09:32:55.0841|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 09:32:55.0841|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Resources] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Resources]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1088|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1088|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:55.1333|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1333|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1333|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1544|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1544|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1544|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.1658|INFO|EducationalPortal.Infrastructure.Services.Identity.PasswordHasher|Hashed password.
+2022-07-18 09:32:55.2632|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 450), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [Avatar], [Balance], [Email], [Name], [PasswordHash], [Position], [UserTokenId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2022-07-18 09:32:55.2770|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (11ms) [Parameters=[@p8='?' (DbType = Int32), @p9='?' (Size = 450), @p10='?' (DbType = Int32), @p11='?' (Size = 450), @p12='?' (DbType = Int32), @p13='?' (Size = 450), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (Size = 450), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (Size = 450), @p20='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [RoleUser] ([RolesId], [UsersId])
+VALUES (@p8, @p9),
+(@p10, @p11);
+INSERT INTO [UsersSkills] ([SkillId], [UserId], [Level])
+VALUES (@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20);
+2022-07-18 09:32:55.3300|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3441|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (DbType = Int32), @p20='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p15, @p16),
+(@p17, @p18),
+(@p19, @p20);
+2022-07-18 09:32:55.3616|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = 450), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [UsersCourses] ([CourseId], [UserId], [LearnedMaterialsCount], [MaterialsCount])
+VALUES (@p0, @p1, @p2, @p3);
+2022-07-18 09:32:55.3733|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DECLARE @inserted0 TABLE ([Id] int, [_Position] [int]);
+MERGE [Skills] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4),
+(@p5, 5),
+(@p6, 6),
+(@p7, 7),
+(@p8, 8)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position
+INTO @inserted0;
+
+SELECT [i].[Id] FROM @inserted0 i
+ORDER BY [i].[_Position];
+2022-07-18 09:32:55.3733|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3733|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:55.3733|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 09:32:55.3794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Resources] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Resources]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.3949|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:55.4127|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.4127|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:32:55.4127|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.4309|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (9ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (DbType = Int32), @p20='?' (DbType = Int32), @p21='?' (DbType = Int32), @p22='?' (DbType = Int32), @p23='?' (DbType = Int32), @p24='?' (DbType = Int32), @p25='?' (DbType = Int32), @p26='?' (DbType = Int32), @p27='?' (DbType = Int32), @p28='?' (DbType = Int32), @p29='?' (DbType = Int32), @p30='?' (DbType = Int32), @p31='?' (DbType = Int32), @p32='?' (DbType = Int32), @p33='?' (DbType = Int32), @p34='?' (DbType = Int32), @p35='?' (DbType = Int32), @p36='?' (DbType = Int32), @p37='?' (DbType = Int32), @p38='?' (DbType = Int32), @p39='?' (DbType = Int32), @p40='?' (DbType = Int32), @p41='?' (DbType = Int32), @p42='?' (DbType = Int32), @p43='?' (DbType = Int32), @p44='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20),
+(@p21, @p22, @p23),
+(@p24, @p25, @p26);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p27, @p28),
+(@p29, @p30),
+(@p31, @p32),
+(@p33, @p34),
+(@p35, @p36),
+(@p37, @p38),
+(@p39, @p40),
+(@p41, @p42),
+(@p43, @p44);
+2022-07-18 09:32:55.4309|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:32:55.4309|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p12, @p13),
+(@p14, @p15),
+(@p16, @p17);
+2022-07-18 09:32:56.5480|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\rareb\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-07-18 09:32:57.2801|INFO|Microsoft.Hosting.Lifetime|Now listening on: https://localhost:7106
+2022-07-18 09:32:57.2801|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:7105
+2022-07-18 09:32:57.2801|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2022-07-18 09:32:57.2801|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2022-07-18 09:32:57.2801|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.API\
+2022-07-18 09:33:00.1559|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger - -
+2022-07-18 09:33:00.3829|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger - - - 301 0 - 236.8141ms
+2022-07-18 09:33:00.3829|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/index.html - -
+2022-07-18 09:33:00.9344|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui.css - -
+2022-07-18 09:33:00.9344|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui-bundle.js - -
+2022-07-18 09:33:00.9344|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui-standalone-preset.js - -
+2022-07-18 09:33:00.9344|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - -
+2022-07-18 09:33:00.9429|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/index.html - - - 200 - text/html;charset=utf-8 555.4161ms
+2022-07-18 09:33:00.9429|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - - - 200 12012 application/javascript;+charset=utf-8 9.8046ms
+2022-07-18 09:33:00.9429|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_vs/browserLink - -
+2022-07-18 09:33:01.0673|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2022-07-18 09:33:01.0673|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2022-07-18 09:33:01.0673|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui.css - - - 200 143943 text/css 134.9082ms
+2022-07-18 09:33:01.0673|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui-standalone-preset.js - - - 200 339486 application/javascript 134.4826ms
+2022-07-18 09:33:01.1645|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2022-07-18 09:33:01.1645|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui-bundle.js - - - 200 1095087 application/javascript 234.2446ms
+2022-07-18 09:33:01.3767|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 431.1439ms
+2022-07-18 09:33:01.6236|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - -
+2022-07-18 09:33:01.6882|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/favicon-32x32.png - -
+2022-07-18 09:33:01.6882|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2022-07-18 09:33:01.6882|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/favicon-32x32.png - - - 200 628 image/png 0.9248ms
+2022-07-18 09:33:02.0637|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 440.0424ms
+2022-07-18 09:37:43.9309|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-07-18 09:37:44.0517|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:37:44.8045|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 09:37:44.8415|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 09:37:44.8550|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:37:45.9389|WARN|Microsoft.EntityFrameworkCore.Query|The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2022-07-18 09:37:45.9389|WARN|Microsoft.EntityFrameworkCore.Query|The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2022-07-18 09:37:46.1886|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (33ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-07-18 09:37:46.2867|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-07-18 09:37:46.3199|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-07-18 09:37:46.6065|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-07-18 09:37:46.6780|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 1829.6906ms
+2022-07-18 09:37:46.6780|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 09:37:46.6973|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 200 818 application/json;+charset=utf-8 2766.4495ms
+2022-07-18 09:38:57.6745|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses/3 - -
+2022-07-18 09:38:57.6850|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:38:57.6850|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-07-18 09:38:57.7027|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourse", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[EducationalPortal.Application.Models.DTO.Course.CourseDto] GetCourseAsync(Int32, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 09:38:57.7862|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:38:58.2628|WARN|Microsoft.EntityFrameworkCore.Query|Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2022-07-18 09:38:58.3660|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (31ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[AuthorId], [t].[Description], [t].[Name], [t].[Price], [t].[ShortDescription], [t].[Thumbnail], [t].[Id0], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name0], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[CourseId], [t0].[MaterialId], [t0].[Index], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator], [t2].[CourseId], [t2].[SkillId], [t2].[Id], [t2].[Name]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [u].[Id] AS [Id0], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name] AS [Name0], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Courses] AS [c]
+    LEFT JOIN [Users] AS [u] ON [c].[AuthorId] = [u].[Id]
+    WHERE [c].[Id] = @__id_0
+) AS [t]
+LEFT JOIN (
+    SELECT [c0].[CourseId], [c0].[MaterialId], [c0].[Index], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [CoursesMaterials] AS [c0]
+    INNER JOIN (
+        SELECT [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m]
+        LEFT JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+    ) AS [t1] ON [c0].[MaterialId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[CourseId]
+LEFT JOIN (
+    SELECT [c1].[CourseId], [c1].[SkillId], [s].[Id], [s].[Name]
+    FROM [CoursesSkills] AS [c1]
+    INNER JOIN [Skills] AS [s] ON [c1].[SkillId] = [s].[Id]
+) AS [t2] ON [t].[Id] = [t2].[CourseId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[CourseId], [t0].[MaterialId], [t0].[Id], [t2].[CourseId], [t2].[SkillId]
+2022-07-18 09:38:58.5163|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:38:58.5417|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:38:58.5597|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:38:58.5597|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:38:58.5684|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:38:58.5684|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:38:58.5995|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[MaterialsId], [t0].[UsersId], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE 0 = 1
+) AS [t]
+LEFT JOIN (
+    SELECT [m].[MaterialsId], [m].[UsersId], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [MaterialsBaseUser] AS [m]
+    INNER JOIN (
+        SELECT [m0].[Id], [m0].[Link], [m0].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m0]
+        LEFT JOIN [Articles] AS [a] ON [m0].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m0].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m0].[Id] = [v].[Id]
+    ) AS [t1] ON [m].[MaterialsId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t0].[MaterialsId], [t0].[UsersId]
+2022-07-18 09:38:58.6332|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned course with id: 3.
+2022-07-18 09:38:58.6332|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.Course.CourseDto'.
+2022-07-18 09:38:58.6576|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API) in 954.7882ms
+2022-07-18 09:38:58.6576|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-07-18 09:38:58.6576|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses/3 - - - 200 2269 application/json;+charset=utf-8 983.6383ms
+2022-07-18 09:39:19.0592|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-07-18 09:39:19.0673|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:19.0673|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 09:39:19.0673|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 09:39:19.0673|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:19.0890|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-07-18 09:39:19.0890|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-07-18 09:39:19.0977|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-07-18 09:39:19.0977|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-07-18 09:39:19.0977|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 27.0109ms
+2022-07-18 09:39:19.0977|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 09:39:19.0977|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 200 818 application/json;+charset=utf-8 40.0065ms
+2022-07-18 09:39:19.9035|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses/2 - -
+2022-07-18 09:39:19.9035|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:19.9035|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-07-18 09:39:19.9035|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourse", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[EducationalPortal.Application.Models.DTO.Course.CourseDto] GetCourseAsync(Int32, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 09:39:19.9108|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:19.9108|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[AuthorId], [t].[Description], [t].[Name], [t].[Price], [t].[ShortDescription], [t].[Thumbnail], [t].[Id0], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name0], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[CourseId], [t0].[MaterialId], [t0].[Index], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator], [t2].[CourseId], [t2].[SkillId], [t2].[Id], [t2].[Name]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [u].[Id] AS [Id0], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name] AS [Name0], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Courses] AS [c]
+    LEFT JOIN [Users] AS [u] ON [c].[AuthorId] = [u].[Id]
+    WHERE [c].[Id] = @__id_0
+) AS [t]
+LEFT JOIN (
+    SELECT [c0].[CourseId], [c0].[MaterialId], [c0].[Index], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [CoursesMaterials] AS [c0]
+    INNER JOIN (
+        SELECT [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m]
+        LEFT JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+    ) AS [t1] ON [c0].[MaterialId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[CourseId]
+LEFT JOIN (
+    SELECT [c1].[CourseId], [c1].[SkillId], [s].[Id], [s].[Name]
+    FROM [CoursesSkills] AS [c1]
+    INNER JOIN [Skills] AS [s] ON [c1].[SkillId] = [s].[Id]
+) AS [t2] ON [t].[Id] = [t2].[CourseId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[CourseId], [t0].[MaterialId], [t0].[Id], [t2].[CourseId], [t2].[SkillId]
+2022-07-18 09:39:19.9366|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:19.9366|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9366|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9366|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:19.9466|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9466|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9466|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:19.9466|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9581|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9581|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:19.9971|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (26ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9971|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:19.9971|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:19.9971|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:20.0089|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:20.0202|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[MaterialsId], [t0].[UsersId], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE 0 = 1
+) AS [t]
+LEFT JOIN (
+    SELECT [m].[MaterialsId], [m].[UsersId], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [MaterialsBaseUser] AS [m]
+    INNER JOIN (
+        SELECT [m0].[Id], [m0].[Link], [m0].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m0]
+        LEFT JOIN [Articles] AS [a] ON [m0].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m0].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m0].[Id] = [v].[Id]
+    ) AS [t1] ON [m].[MaterialsId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t0].[MaterialsId], [t0].[UsersId]
+2022-07-18 09:39:20.0554|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned course with id: 2.
+2022-07-18 09:39:20.0554|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.Course.CourseDto'.
+2022-07-18 09:39:20.0554|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API) in 150.2191ms
+2022-07-18 09:39:20.0554|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-07-18 09:39:20.0554|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses/2 - - - 200 3435 application/json;+charset=utf-8 156.7545ms
+2022-07-18 09:39:38.6815|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 OPTIONS https://localhost:7106/api/account/login - -
+2022-07-18 09:39:38.6815|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:38.6815|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 OPTIONS https://localhost:7106/api/account/login - - - 204 - - 8.5533ms
+2022-07-18 09:39:38.6926|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 POST https://localhost:7106/api/account/login application/json 91
+2022-07-18 09:39:38.6926|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:38.6926|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.AccountController.Login (EducationalPortal.API)'
+2022-07-18 09:39:38.6926|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "Login", controller = "Account"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EducationalPortal.Application.Models.TokensModel]] Login(EducationalPortal.Application.Models.LoginModel, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.AccountController (EducationalPortal.API).
+2022-07-18 09:39:38.6926|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:38.9009|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (20ms) [Parameters=[@__email_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t].[Id0], [t].[RefreshToken], [t].[RefreshTokenExpiryTime], [t0].[RolesId], [t0].[UsersId], [t0].[Id], [t0].[Name]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId], [u0].[Id] AS [Id0], [u0].[RefreshToken], [u0].[RefreshTokenExpiryTime]
+    FROM [Users] AS [u]
+    LEFT JOIN [UserToken] AS [u0] ON [u].[UserTokenId] = [u0].[Id]
+    WHERE [u].[Email] = @__email_0
+) AS [t]
+LEFT JOIN (
+    SELECT [r].[RolesId], [r].[UsersId], [r0].[Id], [r0].[Name]
+    FROM [RoleUser] AS [r]
+    INNER JOIN [Roles] AS [r0] ON [r].[RolesId] = [r0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[RolesId], [t0].[UsersId]
+2022-07-18 09:39:38.9009|INFO|EducationalPortal.Infrastructure.Services.Identity.PasswordHasher|Checked password.
+2022-07-18 09:39:38.9009|INFO|EducationalPortal.Infrastructure.Services.Identity.TokensService|Generated new refresh token.
+2022-07-18 09:39:38.9009|INFO|EducationalPortal.Infrastructure.Services.Identity.UserManager|Returned new refresh token.
+2022-07-18 09:39:38.9733|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (DbType = DateTime2)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [UserToken] ([RefreshToken], [RefreshTokenExpiryTime])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [UserToken]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:39:38.9994|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p9='?' (Size = 450), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 450), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [Users] SET [Avatar] = @p2, [Balance] = @p3, [Email] = @p4, [Name] = @p5, [PasswordHash] = @p6, [Position] = @p7, [UserTokenId] = @p8
+WHERE [Id] = @p9;
+SELECT @@ROWCOUNT;
+2022-07-18 09:39:39.0122|INFO|EducationalPortal.Infrastructure.Services.Identity.UserManager|Returned claims for user with email: default@gmail.com.
+2022-07-18 09:39:39.3563|INFO|EducationalPortal.Infrastructure.Services.Identity.TokensService|Generated new access token.
+2022-07-18 09:39:39.3563|INFO|EducationalPortal.Infrastructure.Services.Identity.UserManager|Returned new access and refresh tokens.
+2022-07-18 09:39:39.3563|INFO|EducationalPortal.Infrastructure.Services.Identity.UserManager|Logged in user with email: default@gmail.com.
+2022-07-18 09:39:39.3563|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.TokensModel'.
+2022-07-18 09:39:39.3563|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.AccountController.Login (EducationalPortal.API) in 658.7591ms
+2022-07-18 09:39:39.3563|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.AccountController.Login (EducationalPortal.API)'
+2022-07-18 09:39:39.3563|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 POST https://localhost:7106/api/account/login application/json 91 - 200 595 application/json;+charset=utf-8 667.8883ms
+2022-07-18 09:39:39.4152|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 OPTIONS https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-07-18 09:39:39.4152|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:39.4152|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 OPTIONS https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 204 - - 0.6921ms
+2022-07-18 09:39:39.4152|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-07-18 09:39:39.4152|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:39.6650|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 09:39:39.6650|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 09:39:39.6650|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:39.6809|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-07-18 09:39:39.6809|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-07-18 09:39:39.6948|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-07-18 09:39:39.6948|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-07-18 09:39:39.6948|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 30.9265ms
+2022-07-18 09:39:39.6948|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 09:39:39.6948|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 200 818 application/json;+charset=utf-8 273.9840ms
+2022-07-18 09:39:40.9392|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 OPTIONS https://localhost:7106/api/courses/3 - -
+2022-07-18 09:39:40.9466|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:40.9466|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 OPTIONS https://localhost:7106/api/courses/3 - - - 204 - - 7.9387ms
+2022-07-18 09:39:40.9466|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses/3 - -
+2022-07-18 09:39:40.9466|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:40.9466|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-07-18 09:39:40.9466|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourse", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[EducationalPortal.Application.Models.DTO.Course.CourseDto] GetCourseAsync(Int32, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 09:39:40.9466|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:40.9695|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[AuthorId], [t].[Description], [t].[Name], [t].[Price], [t].[ShortDescription], [t].[Thumbnail], [t].[Id0], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name0], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[CourseId], [t0].[MaterialId], [t0].[Index], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator], [t2].[CourseId], [t2].[SkillId], [t2].[Id], [t2].[Name]
+FROM (
+    SELECT TOP(1) [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [u].[Id] AS [Id0], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name] AS [Name0], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Courses] AS [c]
+    LEFT JOIN [Users] AS [u] ON [c].[AuthorId] = [u].[Id]
+    WHERE [c].[Id] = @__id_0
+) AS [t]
+LEFT JOIN (
+    SELECT [c0].[CourseId], [c0].[MaterialId], [c0].[Index], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [CoursesMaterials] AS [c0]
+    INNER JOIN (
+        SELECT [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m]
+        LEFT JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+    ) AS [t1] ON [c0].[MaterialId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[CourseId]
+LEFT JOIN (
+    SELECT [c1].[CourseId], [c1].[SkillId], [s].[Id], [s].[Name]
+    FROM [CoursesSkills] AS [c1]
+    INNER JOIN [Skills] AS [s] ON [c1].[SkillId] = [s].[Id]
+) AS [t2] ON [t].[Id] = [t2].[CourseId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[CourseId], [t0].[MaterialId], [t0].[Id], [t2].[CourseId], [t2].[SkillId]
+2022-07-18 09:39:40.9735|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:40.9735|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:40.9735|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:40.9735|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Link], [t].[Name], [t].[ExtensionId], [t].[PagesCount], [t].[PublicationYear], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId], [t0].[Id], [t0].[FullName], [t].[Name0]
+FROM (
+    SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [e].[Id] AS [Id0], [e].[Name] AS [Name0]
+    FROM [Materials] AS [m]
+    INNER JOIN [Books] AS [b] ON [m].[Id] = [b].[Id]
+    INNER JOIN [Extensions] AS [e] ON [b].[ExtensionId] = [e].[Id]
+    WHERE [m].[Id] = @__cm_MaterialId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [a].[AuthorsId], [a].[BooksId], [a0].[Id], [a0].[FullName]
+    FROM [AuthorBook] AS [a]
+    INNER JOIN [Authors] AS [a0] ON [a].[AuthorsId] = [a0].[Id]
+) AS [t0] ON [t].[Id] = [t0].[BooksId]
+ORDER BY [t].[Id], [t].[Id0], [t0].[AuthorsId], [t0].[BooksId]
+2022-07-18 09:39:40.9735|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [v].[Duration], [v].[QualityId], [q].[Id], [q].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Videos] AS [v] ON [m].[Id] = [v].[Id]
+INNER JOIN [Qualities] AS [q] ON [v].[QualityId] = [q].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:40.9735|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__cm_MaterialId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT TOP(1) [m].[Id], [m].[Link], [m].[Name], [a].[PublicationDate], [a].[ResourceId], [r].[Id], [r].[Name]
+FROM [Materials] AS [m]
+INNER JOIN [Articles] AS [a] ON [m].[Id] = [a].[Id]
+INNER JOIN [Resources] AS [r] ON [a].[ResourceId] = [r].[Id]
+WHERE [m].[Id] = @__cm_MaterialId_0
+2022-07-18 09:39:41.0310|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (42ms) [Parameters=[@__email_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [t0].[MaterialsId], [t0].[UsersId], [t0].[Id], [t0].[Link], [t0].[Name], [t0].[PublicationDate], [t0].[ResourceId], [t0].[ExtensionId], [t0].[PagesCount], [t0].[PublicationYear], [t0].[Duration], [t0].[QualityId], [t0].[Discriminator]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE [u].[Email] = @__email_0
+) AS [t]
+LEFT JOIN (
+    SELECT [m].[MaterialsId], [m].[UsersId], [t1].[Id], [t1].[Link], [t1].[Name], [t1].[PublicationDate], [t1].[ResourceId], [t1].[ExtensionId], [t1].[PagesCount], [t1].[PublicationYear], [t1].[Duration], [t1].[QualityId], [t1].[Discriminator]
+    FROM [MaterialsBaseUser] AS [m]
+    INNER JOIN (
+        SELECT [m0].[Id], [m0].[Link], [m0].[Name], [a].[PublicationDate], [a].[ResourceId], [b].[ExtensionId], [b].[PagesCount], [b].[PublicationYear], [v].[Duration], [v].[QualityId], CASE
+            WHEN [v].[Id] IS NOT NULL THEN N'Video'
+            WHEN [b].[Id] IS NOT NULL THEN N'Book'
+            WHEN [a].[Id] IS NOT NULL THEN N'Article'
+        END AS [Discriminator]
+        FROM [Materials] AS [m0]
+        LEFT JOIN [Articles] AS [a] ON [m0].[Id] = [a].[Id]
+        LEFT JOIN [Books] AS [b] ON [m0].[Id] = [b].[Id]
+        LEFT JOIN [Videos] AS [v] ON [m0].[Id] = [v].[Id]
+    ) AS [t1] ON [m].[MaterialsId] = [t1].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UsersId]
+ORDER BY [t].[Id], [t0].[MaterialsId], [t0].[UsersId]
+2022-07-18 09:39:41.0558|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned course with id: 3.
+2022-07-18 09:39:41.0558|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.Course.CourseDto'.
+2022-07-18 09:39:41.0558|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API) in 101.3881ms
+2022-07-18 09:39:41.0558|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCourseAsync (EducationalPortal.API)'
+2022-07-18 09:39:41.0558|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses/3 - - - 200 2269 application/json;+charset=utf-8 103.4061ms
+2022-07-18 09:39:43.3826|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 OPTIONS https://localhost:7106/api/account/author/default@gmail.com - -
+2022-07-18 09:39:43.3826|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:43.3826|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 OPTIONS https://localhost:7106/api/account/author/default@gmail.com - - - 204 - - 4.9166ms
+2022-07-18 09:39:43.3826|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/account/author/default@gmail.com - -
+2022-07-18 09:39:43.3826|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:43.3826|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.AccountController.Author (EducationalPortal.API)'
+2022-07-18 09:39:43.3989|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "Author", controller = "Account"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EducationalPortal.Application.Models.DTO.UserDto]] Author(System.String, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.AccountController (EducationalPortal.API).
+2022-07-18 09:39:43.3989|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:43.4471|WARN|Microsoft.EntityFrameworkCore.Query|Compiling a query which loads related collections for more than one collection navigation, either via 'Include' or through projection, but no 'QuerySplittingBehavior' has been configured. By default, Entity Framework will use 'QuerySplittingBehavior.SingleQuery', which can potentially result in slow query performance. See https://go.microsoft.com/fwlink/?linkid=2134277 for more information. To identify the query that's triggering this warning call 'ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning))'.
+2022-07-18 09:39:43.4752|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (21ms) [Parameters=[@__email_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [t0].[UserId], [t0].[SkillId], [t0].[Level], [t0].[Id], [t0].[Name], [t1].[RolesId], [t1].[UsersId], [t1].[Id], [t1].[Name]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE [u].[Email] = @__email_0
+) AS [t]
+LEFT JOIN [Courses] AS [c] ON [t].[Id] = [c].[AuthorId]
+LEFT JOIN (
+    SELECT [u0].[UserId], [u0].[SkillId], [u0].[Level], [s].[Id], [s].[Name]
+    FROM [UsersSkills] AS [u0]
+    INNER JOIN [Skills] AS [s] ON [u0].[SkillId] = [s].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UserId]
+LEFT JOIN (
+    SELECT [r].[RolesId], [r].[UsersId], [r0].[Id], [r0].[Name]
+    FROM [RoleUser] AS [r]
+    INNER JOIN [Roles] AS [r0] ON [r].[RolesId] = [r0].[Id]
+) AS [t1] ON [t].[Id] = [t1].[UsersId]
+ORDER BY [t].[Id], [c].[Id], [t0].[UserId], [t0].[SkillId], [t0].[Id], [t1].[RolesId], [t1].[UsersId]
+2022-07-18 09:39:43.4967|INFO|EducationalPortal.Infrastructure.Services.AccountService|Returned user as author with email: default@gmail.com.
+2022-07-18 09:39:43.4967|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.UserDto'.
+2022-07-18 09:39:43.4967|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.AccountController.Author (EducationalPortal.API) in 101.4776ms
+2022-07-18 09:39:43.4967|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.AccountController.Author (EducationalPortal.API)'
+2022-07-18 09:39:43.4967|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/account/author/default@gmail.com - - - 200 1236 application/json;+charset=utf-8 108.0029ms
+2022-07-18 09:39:45.1382|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 OPTIONS https://localhost:7106/api/account - -
+2022-07-18 09:39:45.1382|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:45.1382|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 OPTIONS https://localhost:7106/api/account - - - 204 - - 3.7437ms
+2022-07-18 09:39:45.1382|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/account - -
+2022-07-18 09:39:45.1454|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 09:39:45.1636|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.AccountController.Profile (EducationalPortal.API)'
+2022-07-18 09:39:45.1636|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "Profile", controller = "Account"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[EducationalPortal.Application.Models.DTO.UserDto]] Profile(System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.AccountController (EducationalPortal.API).
+2022-07-18 09:39:45.1773|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:39:45.2011|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@__email_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SELECT [t].[Id], [t].[Avatar], [t].[Balance], [t].[Email], [t].[Name], [t].[PasswordHash], [t].[Position], [t].[UserTokenId], [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail], [t0].[UserId], [t0].[SkillId], [t0].[Level], [t0].[Id], [t0].[Name], [t1].[RolesId], [t1].[UsersId], [t1].[Id], [t1].[Name]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Avatar], [u].[Balance], [u].[Email], [u].[Name], [u].[PasswordHash], [u].[Position], [u].[UserTokenId]
+    FROM [Users] AS [u]
+    WHERE [u].[Email] = @__email_0
+) AS [t]
+LEFT JOIN [Courses] AS [c] ON [t].[Id] = [c].[AuthorId]
+LEFT JOIN (
+    SELECT [u0].[UserId], [u0].[SkillId], [u0].[Level], [s].[Id], [s].[Name]
+    FROM [UsersSkills] AS [u0]
+    INNER JOIN [Skills] AS [s] ON [u0].[SkillId] = [s].[Id]
+) AS [t0] ON [t].[Id] = [t0].[UserId]
+LEFT JOIN (
+    SELECT [r].[RolesId], [r].[UsersId], [r0].[Id], [r0].[Name]
+    FROM [RoleUser] AS [r]
+    INNER JOIN [Roles] AS [r0] ON [r].[RolesId] = [r0].[Id]
+) AS [t1] ON [t].[Id] = [t1].[UsersId]
+ORDER BY [t].[Id], [c].[Id], [t0].[UserId], [t0].[SkillId], [t0].[Id], [t1].[RolesId], [t1].[UsersId]
+2022-07-18 09:39:45.2141|INFO|EducationalPortal.Infrastructure.Services.AccountService|Returned user with email: default@gmail.com.
+2022-07-18 09:39:45.2141|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Models.DTO.UserDto'.
+2022-07-18 09:39:45.2141|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.AccountController.Profile (EducationalPortal.API) in 47.3321ms
+2022-07-18 09:39:45.2141|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.AccountController.Profile (EducationalPortal.API)'
+2022-07-18 09:39:45.2141|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/account - - - 200 1236 application/json;+charset=utf-8 72.2336ms
+2022-07-18 09:42:58.7889|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 09:42:59.8039|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (104ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2022-07-18 09:43:00.0926|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (94ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [EducationalPortal] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2022-07-18 09:43:00.1164|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (23ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [EducationalPortal];
+2022-07-18 09:43:00.6158|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (345ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [EducationalPortal];
+2022-07-18 09:43:00.7125|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (97ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [EducationalPortal] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2022-07-18 09:43:00.8176|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2022-07-18 09:43:01.0875|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Authors] (
+    [Id] int NOT NULL IDENTITY,
+    [FullName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Authors] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0875|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Extensions] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Extensions] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0875|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Materials] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Link] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Materials] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Qualities] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Qualities] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Resources] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Resources] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Skills] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Skills] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UserToken] (
+    [Id] int NOT NULL IDENTITY,
+    [RefreshToken] nvarchar(max) NOT NULL,
+    [RefreshTokenExpiryTime] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserToken] PRIMARY KEY ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL,
+    [PagesCount] int NOT NULL,
+    [ExtensionId] int NOT NULL,
+    [PublicationYear] int NOT NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Books_Extensions_ExtensionId] FOREIGN KEY ([ExtensionId]) REFERENCES [Extensions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Books_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id])
+);
+2022-07-18 09:43:01.0997|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Videos] (
+    [Id] int NOT NULL,
+    [Duration] datetime2 NOT NULL,
+    [QualityId] int NOT NULL,
+    CONSTRAINT [PK_Videos] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Videos_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id]),
+    CONSTRAINT [FK_Videos_Qualities_QualityId] FOREIGN KEY ([QualityId]) REFERENCES [Qualities] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1150|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Articles] (
+    [Id] int NOT NULL,
+    [ResourceId] int NOT NULL,
+    [PublicationDate] datetime2 NOT NULL,
+    CONSTRAINT [PK_Articles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Articles_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id]),
+    CONSTRAINT [FK_Articles_Resources_ResourceId] FOREIGN KEY ([ResourceId]) REFERENCES [Resources] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1150|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] nvarchar(450) NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Position] nvarchar(max) NULL,
+    [Avatar] nvarchar(max) NOT NULL,
+    [Email] nvarchar(450) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [Balance] int NOT NULL,
+    [UserTokenId] int NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_UserToken_UserTokenId] FOREIGN KEY ([UserTokenId]) REFERENCES [UserToken] ([Id])
+);
+2022-07-18 09:43:01.1150|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AuthorBook] (
+    [AuthorsId] int NOT NULL,
+    [BooksId] int NOT NULL,
+    CONSTRAINT [PK_AuthorBook] PRIMARY KEY ([AuthorsId], [BooksId]),
+    CONSTRAINT [FK_AuthorBook_Authors_AuthorsId] FOREIGN KEY ([AuthorsId]) REFERENCES [Authors] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AuthorBook_Books_BooksId] FOREIGN KEY ([BooksId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1150|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Courses] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Thumbnail] nvarchar(max) NOT NULL,
+    [ShortDescription] nvarchar(max) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [Price] int NOT NULL,
+    [AuthorId] nvarchar(450) NULL,
+    CONSTRAINT [PK_Courses] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Courses_Users_AuthorId] FOREIGN KEY ([AuthorId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 09:43:01.1150|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [MaterialsBaseUser] (
+    [MaterialsId] int NOT NULL,
+    [UsersId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_MaterialsBaseUser] PRIMARY KEY ([MaterialsId], [UsersId]),
+    CONSTRAINT [FK_MaterialsBaseUser_Materials_MaterialsId] FOREIGN KEY ([MaterialsId]) REFERENCES [Materials] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_MaterialsBaseUser_Users_UsersId] FOREIGN KEY ([UsersId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1150|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [RoleUser] (
+    [RolesId] int NOT NULL,
+    [UsersId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_RoleUser] PRIMARY KEY ([RolesId], [UsersId]),
+    CONSTRAINT [FK_RoleUser_Roles_RolesId] FOREIGN KEY ([RolesId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RoleUser_Users_UsersId] FOREIGN KEY ([UsersId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1315|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UsersSkills] (
+    [UserId] nvarchar(450) NOT NULL,
+    [SkillId] int NOT NULL,
+    [Level] int NOT NULL,
+    CONSTRAINT [PK_UsersSkills] PRIMARY KEY ([UserId], [SkillId]),
+    CONSTRAINT [FK_UsersSkills_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsersSkills_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1315|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CartItems] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [CourseId] int NOT NULL,
+    CONSTRAINT [PK_CartItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_CartItems_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CartItems_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 09:43:01.1315|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CoursesMaterials] (
+    [CourseId] int NOT NULL,
+    [MaterialId] int NOT NULL,
+    [Index] int NOT NULL,
+    CONSTRAINT [PK_CoursesMaterials] PRIMARY KEY ([CourseId], [MaterialId]),
+    CONSTRAINT [FK_CoursesMaterials_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CoursesMaterials_Materials_MaterialId] FOREIGN KEY ([MaterialId]) REFERENCES [Materials] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1315|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CoursesSkills] (
+    [CourseId] int NOT NULL,
+    [SkillId] int NOT NULL,
+    CONSTRAINT [PK_CoursesSkills] PRIMARY KEY ([CourseId], [SkillId]),
+    CONSTRAINT [FK_CoursesSkills_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CoursesSkills_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1315|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ShoppingHistory] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [CourseId] int NOT NULL,
+    [Price] int NOT NULL,
+    [Date] datetime2 NOT NULL,
+    CONSTRAINT [PK_ShoppingHistory] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ShoppingHistory_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ShoppingHistory_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 09:43:01.1315|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UsersCourses] (
+    [UserId] nvarchar(450) NOT NULL,
+    [CourseId] int NOT NULL,
+    [MaterialsCount] int NOT NULL,
+    [LearnedMaterialsCount] int NOT NULL,
+    CONSTRAINT [PK_UsersCourses] PRIMARY KEY ([UserId], [CourseId]),
+    CONSTRAINT [FK_UsersCourses_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsersCourses_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Articles_ResourceId] ON [Articles] ([ResourceId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_AuthorBook_BooksId] ON [AuthorBook] ([BooksId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Books_ExtensionId] ON [Books] ([ExtensionId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CartItems_CourseId] ON [CartItems] ([CourseId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CartItems_UserId] ON [CartItems] ([UserId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Courses_AuthorId] ON [Courses] ([AuthorId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CoursesMaterials_MaterialId] ON [CoursesMaterials] ([MaterialId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CoursesSkills_SkillId] ON [CoursesSkills] ([SkillId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_MaterialsBaseUser_UsersId] ON [MaterialsBaseUser] ([UsersId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Roles_Name] ON [Roles] ([Name]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_RoleUser_UsersId] ON [RoleUser] ([UsersId]);
+2022-07-18 09:43:01.1469|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ShoppingHistory_CourseId] ON [ShoppingHistory] ([CourseId]);
+2022-07-18 09:43:01.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ShoppingHistory_UserId] ON [ShoppingHistory] ([UserId]);
+2022-07-18 09:43:01.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2022-07-18 09:43:01.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Users_UserTokenId] ON [Users] ([UserTokenId]);
+2022-07-18 09:43:01.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UsersCourses_CourseId] ON [UsersCourses] ([CourseId]);
+2022-07-18 09:43:01.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UsersSkills_SkillId] ON [UsersSkills] ([SkillId]);
+2022-07-18 09:43:01.1608|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Videos_QualityId] ON [Videos] ([QualityId]);
+2022-07-18 09:43:01.6534|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (90ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DECLARE @inserted0 TABLE ([Id] int, [_Position] [int]);
+MERGE [Qualities] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4),
+(@p5, 5),
+(@p6, 6),
+(@p7, 7)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position
+INTO @inserted0;
+
+SELECT [i].[Id] FROM @inserted0 i
+ORDER BY [i].[_Position];
+2022-07-18 09:43:01.8482|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:01.8482|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:01.8734|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Extensions] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Extensions]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:01.8945|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:01.9558|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:01.9638|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 09:43:01.9638|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 09:43:01.9795|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Resources] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Resources]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:01.9900|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:01.9900|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:02.0175|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.0211|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.0211|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.0579|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.0579|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.0579|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.0728|INFO|EducationalPortal.Infrastructure.Services.Identity.PasswordHasher|Hashed password.
+2022-07-18 09:43:02.1657|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 450), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [Avatar], [Balance], [Email], [Name], [PasswordHash], [Position], [UserTokenId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2022-07-18 09:43:02.1794|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[@p8='?' (DbType = Int32), @p9='?' (Size = 450), @p10='?' (DbType = Int32), @p11='?' (Size = 450), @p12='?' (DbType = Int32), @p13='?' (Size = 450), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (Size = 450), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (Size = 450), @p20='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [RoleUser] ([RolesId], [UsersId])
+VALUES (@p8, @p9),
+(@p10, @p11);
+INSERT INTO [UsersSkills] ([SkillId], [UserId], [Level])
+VALUES (@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20);
+2022-07-18 09:43:02.2325|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.2522|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (14ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (DbType = Int32), @p20='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p15, @p16),
+(@p17, @p18),
+(@p19, @p20);
+2022-07-18 09:43:02.2847|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = 450), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [UsersCourses] ([CourseId], [UserId], [LearnedMaterialsCount], [MaterialsCount])
+VALUES (@p0, @p1, @p2, @p3);
+2022-07-18 09:43:02.2970|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DECLARE @inserted0 TABLE ([Id] int, [_Position] [int]);
+MERGE [Skills] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4),
+(@p5, 5),
+(@p6, 6),
+(@p7, 7),
+(@p8, 8)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position
+INTO @inserted0;
+
+SELECT [i].[Id] FROM @inserted0 i
+ORDER BY [i].[_Position];
+2022-07-18 09:43:02.2970|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.2970|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 09:43:02.3021|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 09:43:02.3168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Resources] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Resources]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:02.3168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 09:43:02.3168|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3328|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (7ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (DbType = Int32), @p20='?' (DbType = Int32), @p21='?' (DbType = Int32), @p22='?' (DbType = Int32), @p23='?' (DbType = Int32), @p24='?' (DbType = Int32), @p25='?' (DbType = Int32), @p26='?' (DbType = Int32), @p27='?' (DbType = Int32), @p28='?' (DbType = Int32), @p29='?' (DbType = Int32), @p30='?' (DbType = Int32), @p31='?' (DbType = Int32), @p32='?' (DbType = Int32), @p33='?' (DbType = Int32), @p34='?' (DbType = Int32), @p35='?' (DbType = Int32), @p36='?' (DbType = Int32), @p37='?' (DbType = Int32), @p38='?' (DbType = Int32), @p39='?' (DbType = Int32), @p40='?' (DbType = Int32), @p41='?' (DbType = Int32), @p42='?' (DbType = Int32), @p43='?' (DbType = Int32), @p44='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20),
+(@p21, @p22, @p23),
+(@p24, @p25, @p26);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p27, @p28),
+(@p29, @p30),
+(@p31, @p32),
+(@p33, @p34),
+(@p35, @p36),
+(@p37, @p38),
+(@p39, @p40),
+(@p41, @p42),
+(@p43, @p44);
+2022-07-18 09:43:02.3328|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 09:43:02.3328|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p12, @p13),
+(@p14, @p15),
+(@p16, @p17);
+2022-07-18 09:43:02.6756|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\rareb\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-07-18 09:43:03.0449|INFO|Microsoft.Hosting.Lifetime|Now listening on: https://localhost:7106
+2022-07-18 09:43:03.0449|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:7105
+2022-07-18 09:43:03.0449|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2022-07-18 09:43:03.0449|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2022-07-18 09:43:03.0449|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.API\
+2022-07-18 09:43:04.0878|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger - -
+2022-07-18 09:43:04.2340|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger - - - 301 0 - 151.9790ms
+2022-07-18 09:43:04.2506|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/index.html - -
+2022-07-18 09:43:04.6604|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui.css - -
+2022-07-18 09:43:04.6604|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui-standalone-preset.js - -
+2022-07-18 09:43:04.6604|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/swagger-ui-bundle.js - -
+2022-07-18 09:43:04.6604|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - -
+2022-07-18 09:43:04.6604|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - - - 200 12012 application/javascript;+charset=utf-8 10.3168ms
+2022-07-18 09:43:04.6604|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_vs/browserLink - -
+2022-07-18 09:43:04.7551|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/index.html - - - 200 - text/html;charset=utf-8 504.5289ms
+2022-07-18 09:43:04.8301|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2022-07-18 09:43:04.8380|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2022-07-18 09:43:04.8380|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui.css - - - 200 143943 text/css 177.7167ms
+2022-07-18 09:43:04.8380|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui-standalone-preset.js - - - 200 339486 application/javascript 180.3614ms
+2022-07-18 09:43:04.8895|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2022-07-18 09:43:04.8895|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/swagger-ui-bundle.js - - - 200 1095087 application/javascript 229.0898ms
+2022-07-18 09:43:04.8980|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 224.4500ms
+2022-07-18 09:43:05.3757|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - -
+2022-07-18 09:43:05.4614|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/favicon-32x32.png - -
+2022-07-18 09:43:05.4614|INFO|Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware|Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2022-07-18 09:43:05.4614|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/favicon-32x32.png - - - 200 628 image/png 0.6467ms
+2022-07-18 09:43:05.7328|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 357.2040ms
+2022-07-18 14:10:39.0916|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 14:10:42.2921|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (87ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2022-07-18 14:10:42.6016|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (133ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [EducationalPortal] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END;
+2022-07-18 14:10:42.6321|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (30ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+DROP DATABASE [EducationalPortal];
+2022-07-18 14:10:43.0521|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (235ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+CREATE DATABASE [EducationalPortal];
+2022-07-18 14:10:43.1343|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (82ms) [Parameters=[], CommandType='Text', CommandTimeout='60']
+IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [EducationalPortal] SET READ_COMMITTED_SNAPSHOT ON;
+END;
+2022-07-18 14:10:43.1634|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT 1
+2022-07-18 14:10:43.4335|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (10ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Authors] (
+    [Id] int NOT NULL IDENTITY,
+    [FullName] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Authors] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4335|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Extensions] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Extensions] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4335|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Materials] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Link] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Materials] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4423|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Qualities] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Qualities] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4423|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Resources] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Resources] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4423|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4423|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Skills] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Skills] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4423|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UserToken] (
+    [Id] int NOT NULL IDENTITY,
+    [RefreshToken] nvarchar(max) NOT NULL,
+    [RefreshTokenExpiryTime] datetime2 NOT NULL,
+    CONSTRAINT [PK_UserToken] PRIMARY KEY ([Id])
+);
+2022-07-18 14:10:43.4423|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Books] (
+    [Id] int NOT NULL,
+    [PagesCount] int NOT NULL,
+    [ExtensionId] int NOT NULL,
+    [PublicationYear] int NOT NULL,
+    CONSTRAINT [PK_Books] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Books_Extensions_ExtensionId] FOREIGN KEY ([ExtensionId]) REFERENCES [Extensions] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Books_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id])
+);
+2022-07-18 14:10:43.4593|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Videos] (
+    [Id] int NOT NULL,
+    [Duration] datetime2 NOT NULL,
+    [QualityId] int NOT NULL,
+    CONSTRAINT [PK_Videos] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Videos_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id]),
+    CONSTRAINT [FK_Videos_Qualities_QualityId] FOREIGN KEY ([QualityId]) REFERENCES [Qualities] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4593|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Articles] (
+    [Id] int NOT NULL,
+    [ResourceId] int NOT NULL,
+    [PublicationDate] datetime2 NOT NULL,
+    CONSTRAINT [PK_Articles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Articles_Materials_Id] FOREIGN KEY ([Id]) REFERENCES [Materials] ([Id]),
+    CONSTRAINT [FK_Articles_Resources_ResourceId] FOREIGN KEY ([ResourceId]) REFERENCES [Resources] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4593|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] nvarchar(450) NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Position] nvarchar(max) NULL,
+    [Avatar] nvarchar(max) NOT NULL,
+    [Email] nvarchar(450) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [Balance] int NOT NULL,
+    [UserTokenId] int NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Users_UserToken_UserTokenId] FOREIGN KEY ([UserTokenId]) REFERENCES [UserToken] ([Id])
+);
+2022-07-18 14:10:43.4751|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (9ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [AuthorBook] (
+    [AuthorsId] int NOT NULL,
+    [BooksId] int NOT NULL,
+    CONSTRAINT [PK_AuthorBook] PRIMARY KEY ([AuthorsId], [BooksId]),
+    CONSTRAINT [FK_AuthorBook_Authors_AuthorsId] FOREIGN KEY ([AuthorsId]) REFERENCES [Authors] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AuthorBook_Books_BooksId] FOREIGN KEY ([BooksId]) REFERENCES [Books] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4751|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [Courses] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Thumbnail] nvarchar(max) NOT NULL,
+    [ShortDescription] nvarchar(max) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [Price] int NOT NULL,
+    [AuthorId] nvarchar(450) NULL,
+    CONSTRAINT [PK_Courses] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Courses_Users_AuthorId] FOREIGN KEY ([AuthorId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 14:10:43.4751|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [MaterialsBaseUser] (
+    [MaterialsId] int NOT NULL,
+    [UsersId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_MaterialsBaseUser] PRIMARY KEY ([MaterialsId], [UsersId]),
+    CONSTRAINT [FK_MaterialsBaseUser_Materials_MaterialsId] FOREIGN KEY ([MaterialsId]) REFERENCES [Materials] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_MaterialsBaseUser_Users_UsersId] FOREIGN KEY ([UsersId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4751|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [RoleUser] (
+    [RolesId] int NOT NULL,
+    [UsersId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_RoleUser] PRIMARY KEY ([RolesId], [UsersId]),
+    CONSTRAINT [FK_RoleUser_Roles_RolesId] FOREIGN KEY ([RolesId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RoleUser_Users_UsersId] FOREIGN KEY ([UsersId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4911|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UsersSkills] (
+    [UserId] nvarchar(450) NOT NULL,
+    [SkillId] int NOT NULL,
+    [Level] int NOT NULL,
+    CONSTRAINT [PK_UsersSkills] PRIMARY KEY ([UserId], [SkillId]),
+    CONSTRAINT [FK_UsersSkills_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsersSkills_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4911|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CartItems] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [CourseId] int NOT NULL,
+    CONSTRAINT [PK_CartItems] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_CartItems_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CartItems_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 14:10:43.4911|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CoursesMaterials] (
+    [CourseId] int NOT NULL,
+    [MaterialId] int NOT NULL,
+    [Index] int NOT NULL,
+    CONSTRAINT [PK_CoursesMaterials] PRIMARY KEY ([CourseId], [MaterialId]),
+    CONSTRAINT [FK_CoursesMaterials_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CoursesMaterials_Materials_MaterialId] FOREIGN KEY ([MaterialId]) REFERENCES [Materials] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.4911|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [CoursesSkills] (
+    [CourseId] int NOT NULL,
+    [SkillId] int NOT NULL,
+    CONSTRAINT [PK_CoursesSkills] PRIMARY KEY ([CourseId], [SkillId]),
+    CONSTRAINT [FK_CoursesSkills_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_CoursesSkills_Skills_SkillId] FOREIGN KEY ([SkillId]) REFERENCES [Skills] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [ShoppingHistory] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NULL,
+    [CourseId] int NOT NULL,
+    [Price] int NOT NULL,
+    [Date] datetime2 NOT NULL,
+    CONSTRAINT [PK_ShoppingHistory] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ShoppingHistory_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ShoppingHistory_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id])
+);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE TABLE [UsersCourses] (
+    [UserId] nvarchar(450) NOT NULL,
+    [CourseId] int NOT NULL,
+    [MaterialsCount] int NOT NULL,
+    [LearnedMaterialsCount] int NOT NULL,
+    CONSTRAINT [PK_UsersCourses] PRIMARY KEY ([UserId], [CourseId]),
+    CONSTRAINT [FK_UsersCourses_Courses_CourseId] FOREIGN KEY ([CourseId]) REFERENCES [Courses] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UsersCourses_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Articles_ResourceId] ON [Articles] ([ResourceId]);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_AuthorBook_BooksId] ON [AuthorBook] ([BooksId]);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Books_ExtensionId] ON [Books] ([ExtensionId]);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CartItems_CourseId] ON [CartItems] ([CourseId]);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CartItems_UserId] ON [CartItems] ([UserId]);
+2022-07-18 14:10:43.5041|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Courses_AuthorId] ON [Courses] ([AuthorId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CoursesMaterials_MaterialId] ON [CoursesMaterials] ([MaterialId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_CoursesSkills_SkillId] ON [CoursesSkills] ([SkillId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_MaterialsBaseUser_UsersId] ON [MaterialsBaseUser] ([UsersId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Roles_Name] ON [Roles] ([Name]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_RoleUser_UsersId] ON [RoleUser] ([UsersId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ShoppingHistory_CourseId] ON [ShoppingHistory] ([CourseId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_ShoppingHistory_UserId] ON [ShoppingHistory] ([UserId]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2022-07-18 14:10:43.5204|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Users_UserTokenId] ON [Users] ([UserTokenId]);
+2022-07-18 14:10:43.5354|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UsersCourses_CourseId] ON [UsersCourses] ([CourseId]);
+2022-07-18 14:10:43.5354|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_UsersSkills_SkillId] ON [UsersSkills] ([SkillId]);
+2022-07-18 14:10:43.5354|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+CREATE INDEX [IX_Videos_QualityId] ON [Videos] ([QualityId]);
+2022-07-18 14:10:44.0695|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (84ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DECLARE @inserted0 TABLE ([Id] int, [_Position] [int]);
+MERGE [Qualities] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4),
+(@p5, 5),
+(@p6, 6),
+(@p7, 7)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position
+INTO @inserted0;
+
+SELECT [i].[Id] FROM @inserted0 i
+ORDER BY [i].[_Position];
+2022-07-18 14:10:44.2636|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.2741|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.2883|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Extensions] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Extensions]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.3073|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.3697|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.3846|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 14:10:44.3846|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 14:10:44.4097|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Resources] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Resources]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4217|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4217|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.4516|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4516|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4516|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Skills] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Skills]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4756|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4756|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (1ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4756|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Roles] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Roles]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.4756|INFO|EducationalPortal.Infrastructure.Services.Identity.PasswordHasher|Hashed password.
+2022-07-18 14:10:44.5738|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (DbType = Int32), @p3='?' (Size = 450), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Users] ([Id], [Avatar], [Balance], [Email], [Name], [PasswordHash], [Position], [UserTokenId])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7);
+2022-07-18 14:10:44.5934|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (17ms) [Parameters=[@p8='?' (DbType = Int32), @p9='?' (Size = 450), @p10='?' (DbType = Int32), @p11='?' (Size = 450), @p12='?' (DbType = Int32), @p13='?' (Size = 450), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (Size = 450), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (Size = 450), @p20='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [RoleUser] ([RolesId], [UsersId])
+VALUES (@p8, @p9),
+(@p10, @p11);
+INSERT INTO [UsersSkills] ([SkillId], [UserId], [Level])
+VALUES (@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20);
+2022-07-18 14:10:44.6611|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (3ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.6611|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (DbType = Int32), @p20='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p15, @p16),
+(@p17, @p18),
+(@p19, @p20);
+2022-07-18 14:10:44.6931|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (2ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (Size = 450), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [UsersCourses] ([CourseId], [UserId], [LearnedMaterialsCount], [MaterialsCount])
+VALUES (@p0, @p1, @p2, @p3);
+2022-07-18 14:10:44.6931|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (8ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (Size = 4000), @p4='?' (Size = 4000), @p5='?' (Size = 4000), @p6='?' (Size = 4000), @p7='?' (Size = 4000), @p8='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+DECLARE @inserted0 TABLE ([Id] int, [_Position] [int]);
+MERGE [Skills] USING (
+VALUES (@p0, 0),
+(@p1, 1),
+(@p2, 2),
+(@p3, 3),
+(@p4, 4),
+(@p5, 5),
+(@p6, 6),
+(@p7, 7),
+(@p8, 8)) AS i ([Name], _Position) ON 1=0
+WHEN NOT MATCHED THEN
+INSERT ([Name])
+VALUES (i.[Name])
+OUTPUT INSERTED.[Id], i._Position
+INTO @inserted0;
+
+SELECT [i].[Id] FROM @inserted0 i
+ORDER BY [i].[_Position];
+2022-07-18 14:10:44.6931|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Videos] ([Id], [Duration], [QualityId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Authors] ([FullName])
+VALUES (@p0);
+SELECT [Id]
+FROM [Authors]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = Int32), @p4='?' (DbType = Int32), @p5='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Books] ([Id], [ExtensionId], [PagesCount], [PublicationYear])
+VALUES (@p2, @p3, @p4, @p5);
+2022-07-18 14:10:44.7071|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [AuthorBook] ([AuthorsId], [BooksId])
+VALUES (@p6, @p7);
+2022-07-18 14:10:44.7242|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Resources] ([Name])
+VALUES (@p0);
+SELECT [Id]
+FROM [Resources]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7242|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7242|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.7242|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 4000), @p1='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Materials] ([Link], [Name])
+VALUES (@p0, @p1);
+SELECT [Id]
+FROM [Materials]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7242|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p2='?' (DbType = Int32), @p3='?' (DbType = DateTime2), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Articles] ([Id], [PublicationDate], [ResourceId])
+VALUES (@p2, @p3, @p4);
+2022-07-18 14:10:44.7242|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7396|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (5ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32), @p18='?' (DbType = Int32), @p19='?' (DbType = Int32), @p20='?' (DbType = Int32), @p21='?' (DbType = Int32), @p22='?' (DbType = Int32), @p23='?' (DbType = Int32), @p24='?' (DbType = Int32), @p25='?' (DbType = Int32), @p26='?' (DbType = Int32), @p27='?' (DbType = Int32), @p28='?' (DbType = Int32), @p29='?' (DbType = Int32), @p30='?' (DbType = Int32), @p31='?' (DbType = Int32), @p32='?' (DbType = Int32), @p33='?' (DbType = Int32), @p34='?' (DbType = Int32), @p35='?' (DbType = Int32), @p36='?' (DbType = Int32), @p37='?' (DbType = Int32), @p38='?' (DbType = Int32), @p39='?' (DbType = Int32), @p40='?' (DbType = Int32), @p41='?' (DbType = Int32), @p42='?' (DbType = Int32), @p43='?' (DbType = Int32), @p44='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11),
+(@p12, @p13, @p14),
+(@p15, @p16, @p17),
+(@p18, @p19, @p20),
+(@p21, @p22, @p23),
+(@p24, @p25, @p26);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p27, @p28),
+(@p29, @p30),
+(@p31, @p32),
+(@p33, @p34),
+(@p35, @p36),
+(@p37, @p38),
+(@p39, @p40),
+(@p41, @p42),
+(@p43, @p44);
+2022-07-18 14:10:44.7396|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Int32), @p4='?' (Size = 4000), @p5='?' (Size = 4000)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [Courses] ([AuthorId], [Description], [Name], [Price], [ShortDescription], [Thumbnail])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+SELECT [Id]
+FROM [Courses]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2022-07-18 14:10:44.7396|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (6ms) [Parameters=[@p6='?' (DbType = Int32), @p7='?' (DbType = Int32), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Int32), @p12='?' (DbType = Int32), @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = Int32), @p17='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [CoursesMaterials] ([CourseId], [MaterialId], [Index])
+VALUES (@p6, @p7, @p8),
+(@p9, @p10, @p11);
+INSERT INTO [CoursesSkills] ([CourseId], [SkillId])
+VALUES (@p12, @p13),
+(@p14, @p15),
+(@p16, @p17);
+2022-07-18 14:10:45.1054|INFO|Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager|User profile is available. Using 'C:\Users\rareb\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2022-07-18 14:10:45.4514|INFO|Microsoft.Hosting.Lifetime|Now listening on: https://localhost:7106
+2022-07-18 14:10:45.4514|INFO|Microsoft.Hosting.Lifetime|Now listening on: http://localhost:7105
+2022-07-18 14:10:45.4514|INFO|Microsoft.Hosting.Lifetime|Application started. Press Ctrl+C to shut down.
+2022-07-18 14:10:45.4514|INFO|Microsoft.Hosting.Lifetime|Hosting environment: Development
+2022-07-18 14:10:45.4514|INFO|Microsoft.Hosting.Lifetime|Content root path: C:\Users\rareb\Desktop\github\educational-portal\EducationalPortal\EducationalPortal.API\
+2022-07-18 14:10:46.5983|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/index.html - -
+2022-07-18 14:10:47.2636|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - -
+2022-07-18 14:10:47.2636|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/_vs/browserLink - -
+2022-07-18 14:10:47.2984|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_framework/aspnetcore-browser-refresh.js - - - 200 12012 application/javascript;+charset=utf-8 32.7940ms
+2022-07-18 14:10:47.3586|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/index.html - - - 200 - text/html;charset=utf-8 767.6706ms
+2022-07-18 14:10:47.4641|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 200.5136ms
+2022-07-18 14:10:47.8929|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - -
+2022-07-18 14:10:48.2830|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 390.1791ms
+2022-07-18 14:23:28.8844|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 OPTIONS https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-07-18 14:23:28.9684|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 14:23:28.9684|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 OPTIONS https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 204 - - 88.6934ms
+2022-07-18 14:23:28.9839|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request starting HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - -
+2022-07-18 14:23:28.9839|INFO|Microsoft.AspNetCore.Cors.Infrastructure.CorsService|CORS policy execution successful.
+2022-07-18 14:23:29.7233|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Failed to validate the token.|Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateTokenPayload(JwtSecurityToken jwtToken, TokenValidationParameters validationParameters)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ValidateToken(String token, TokenValidationParameters validationParameters, SecurityToken& validatedToken)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+2022-07-18 14:23:30.1190|INFO|Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler|Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo: 'System.DateTime', Current time: 'System.DateTime'.
+2022-07-18 14:23:30.1190|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executing endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 14:23:30.1848|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Route matched with {action = "GetCourses", controller = "Courses"}. Executing controller action with signature System.Threading.Tasks.Task`1[System.Collections.Generic.IEnumerable`1[EducationalPortal.Application.Models.DTO.Course.CourseShortDto]] GetCoursesAsync(EducationalPortal.Application.Paging.PageParameters, System.Threading.CancellationToken) on controller EducationalPortal.API.Controllers.CoursesController (EducationalPortal.API).
+2022-07-18 14:23:30.3014|INFO|Microsoft.EntityFrameworkCore.Infrastructure|Entity Framework Core 6.0.3 initialized 'ApplicationContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer:6.0.3' with options: None
+2022-07-18 14:23:31.2499|WARN|Microsoft.EntityFrameworkCore.Query|The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2022-07-18 14:23:31.2499|WARN|Microsoft.EntityFrameworkCore.Query|The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2022-07-18 14:23:32.9862|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (37ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+SELECT [c].[Id], [c].[AuthorId], [c].[Description], [c].[Name], [c].[Price], [c].[ShortDescription], [c].[Thumbnail]
+FROM [Courses] AS [c]
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2022-07-18 14:23:33.1112|INFO|Microsoft.EntityFrameworkCore.Database.Command|Executed DbCommand (18ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Courses] AS [c]
+2022-07-18 14:23:33.1663|INFO|EducationalPortal.Infrastructure.Services.CoursesService|Returned courses page 1 from database.
+2022-07-18 14:23:33.5406|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor|Executing ObjectResult, writing value of type 'EducationalPortal.Application.Paging.PagedList`1[[EducationalPortal.Application.Models.DTO.Course.CourseShortDto, EducationalPortal.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2022-07-18 14:23:33.6370|INFO|Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker|Executed action EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API) in 3442.4463ms
+2022-07-18 14:23:33.6370|INFO|Microsoft.AspNetCore.Routing.EndpointMiddleware|Executed endpoint 'EducationalPortal.API.Controllers.CoursesController.GetCoursesAsync (EducationalPortal.API)'
+2022-07-18 14:23:33.6626|INFO|Microsoft.AspNetCore.Hosting.Diagnostics|Request finished HTTP/2 GET https://localhost:7106/api/courses?pageSize=3&pageNumber=1 - - - 200 818 application/json;+charset=utf-8 4678.7308ms
