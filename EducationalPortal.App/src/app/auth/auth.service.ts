@@ -13,7 +13,9 @@ export class AuthService {
 
   constructor(private _http: HttpClient, private _jwtHelper: JwtHelperService, private _router: Router) 
   { 
-    this.refreshTokens(null).subscribe();
+    if (localStorage.getItem("jwt")){
+      this.refreshTokens(null).subscribe();
+    }
   }
 
   public get name(){
