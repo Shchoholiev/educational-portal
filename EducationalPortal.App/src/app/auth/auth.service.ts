@@ -11,7 +11,10 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class AuthService {
 
-  constructor(private _http: HttpClient, private _jwtHelper: JwtHelperService, private _router: Router) { }
+  constructor(private _http: HttpClient, private _jwtHelper: JwtHelperService, private _router: Router) 
+  { 
+    this.refreshTokens(null).subscribe();
+  }
 
   public get name(){
     var token = localStorage.getItem("jwt");
@@ -31,7 +34,9 @@ export class AuthService {
     if (token != null) {
       var decodedToken = this._jwtHelper.decodeToken(token);
       var roles: Array<string> = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      return roles.includes(role);
+      if (roles) {
+        return roles.includes(role);
+      }
     }
     return false;
   }
@@ -57,7 +62,7 @@ export class AuthService {
     }
 
     var tokens = new Tokens(accessToken, refreshToken);
-    return this._http.post("https://localhost:7106/api/token/refresh", tokens, { observe: 'response' }).pipe(
+    return this._http.post("https://localhost:7106/api/tokens/refresh", tokens, { observe: 'response' }).pipe(
       map((response) => {
         this.login((<any>response).body);
         return true;

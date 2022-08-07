@@ -84,7 +84,8 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                 ValidateAudience = false, 
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("HHUHU92479-JKKNS23O")),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                    _configuration.GetValue<string>("JsonWebTokenKeys:IssuerSigningKey"))),
                 ValidateLifetime = false 
             };
             var tokenHandler = new JwtSecurityTokenHandler();
