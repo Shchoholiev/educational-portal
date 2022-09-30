@@ -88,7 +88,11 @@ export class ShoppingCartComponent implements OnInit {
       this._shoppingCartService.delete(id);
       var index = this.cartItems.findIndex(ci => ci.id == id);
       this.cartItems.splice(index, 1);
-      this.refreshTotalPrice();
+      if (this.cartItems.length > 0) {
+        this.refreshTotalPrice();
+      } else {
+        this.totalPrice = 0;
+      }
     }
   }
 

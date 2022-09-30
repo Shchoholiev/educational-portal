@@ -31,6 +31,11 @@
 		<ProjectReference Include="..\EducationalPortal.Infrastructure\EducationalPortal.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="ClientApp\dist\" />
+	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+
 	<Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />

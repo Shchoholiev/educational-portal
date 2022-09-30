@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Ez4/JFr6C4dX+8BVD88pvgemDecOgJNQClyrLA1c/5Awp9EG5T+cf437qjfzTYQxYFKHowzmoGkF2xbl11Jqlw==",
+  "dgSpecHash": "/Odp/txgSpz3yMALeQ4BCBYzdZpuhYGoHEvszJCthYcwxQR1qd8GhE2aIizb7+ZTAL60vOlPkr3XZwrWRD+YIg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
+  "projectFilePath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rareb\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
     "C:\\Users\\rareb\\.nuget\\packages\\fluentvalidation\\11.0.2\\fluentvalidation.11.0.2.nupkg.sha512",

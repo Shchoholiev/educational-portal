@@ -44,12 +44,18 @@ app.UseEndpoints(endpoints =>
 });
 
 app.UseStaticFiles();
-app.UseSpaStaticFiles();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseSpaStaticFiles();
+}
 
 app.UseSpa(spa =>
 {
     spa.Options.SourcePath = "ClientApp";
-    spa.UseAngularCliServer(npmScript: "start");
+    if (app.Environment.IsDevelopment())
+    {
+        spa.UseAngularCliServer(npmScript: "start");
+    }
 });
 
 app.Run();

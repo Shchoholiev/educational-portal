@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "J0XovYv4UWdS1ORE/3SbQz4pi7N9euLKKYPE5Tn4NK4SilfQnnglYA0FDvCiizBK+7fGoAMatxT09DO706t+sQ==",
+  "dgSpecHash": "hCngotlI/5f4nA8IEvxHdgt8ib0hXprQ8762hsT4oMYYiETbBIbiS8gydq9WBlXW9T0NYLJ/gFn7n8RxpZGy7A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rareb\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
     "C:\\Users\\rareb\\.nuget\\packages\\azure.core\\1.22.0\\azure.core.1.22.0.nupkg.sha512",

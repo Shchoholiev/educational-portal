@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj": {}
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.API\\EducationalPortal.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj": {
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.API\\EducationalPortal.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj",
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.API\\EducationalPortal.API.csproj",
         "projectName": "EducationalPortal.API",
-        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\EducationalPortal.API.csproj",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.API\\EducationalPortal.API.csproj",
         "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.API\\obj\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,14 +28,14 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
-                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj"
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj"
               },
-              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
-                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
               },
-              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj"
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj"
               }
             }
           }
@@ -97,14 +97,14 @@
         }
       }
     },
-    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
         "projectName": "EducationalPortal.Application",
-        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj",
         "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\obj\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -121,8 +121,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
-                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
               }
             }
           }
@@ -181,14 +181,14 @@
         }
       }
     },
-    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
         "projectName": "EducationalPortal.Core",
-        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
         "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\obj\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -235,14 +235,14 @@
         }
       }
     },
-    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj": {
+    "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
         "projectName": "EducationalPortal.Infrastructure",
-        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\EducationalPortal.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -259,11 +259,11 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
-                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Application\\EducationalPortal.Application.csproj"
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Application\\EducationalPortal.Application.csproj"
               },
-              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
-                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
+              "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj": {
+                "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj"
               }
             }
           }

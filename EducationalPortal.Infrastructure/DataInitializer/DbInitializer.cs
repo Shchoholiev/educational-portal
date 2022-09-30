@@ -22,7 +22,7 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 
         private static async Task Initialize(ApplicationContext context, ILogger<PasswordHasher> logger)
         {
-            await context.Database.EnsureDeletedAsync();
+            //await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
 
             var q144p = new Quality { Name = "144p" };

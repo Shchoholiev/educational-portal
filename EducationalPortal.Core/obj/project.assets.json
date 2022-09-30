@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
+      "projectUniqueName": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
       "projectName": "EducationalPortal.Core",
-      "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
+      "projectPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\EducationalPortal.Core.csproj",
       "packagesPath": "C:\\Users\\rareb\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal\\EducationalPortal.Core\\obj\\",
+      "outputPath": "C:\\Users\\rareb\\Desktop\\github\\educational-portal\\EducationalPortal.Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rareb\\AppData\\Roaming\\NuGet\\NuGet.Config",
