@@ -52,14 +52,14 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task UpdateAsync(int id, CourseCreateDto courseDto, CancellationToken cancellationToken)
         {
-            var course = await this._coursesRepository.GetFullCourseAsync(id, cancellationToken);
+            var course = await this._coursesRepository.GetFullCourseAsync(id, "", cancellationToken);
             if (course == null)
             {
                 throw new NotFoundException("Course");
             }
 
-            this._mapper.Map(course, courseDto);
-            await this._coursesRepository.UpdateAsync(course, cancellationToken);
+            //this._mapper.Map(course, courseDto);
+            //await this._coursesRepository.UpdateAsync(course, cancellationToken);
 
             this._logger.LogInformation($"Updated course with id: {course.Id}.");
         }
@@ -76,16 +76,15 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger.LogInformation($"Deleted course with id: {course.Id}.");
         }
 
-        public async Task<CourseDto> GetCourseAsync(int id, string? email, CancellationToken cancellationToken)
+        public async Task<CourseDto> GetCourseAsync(int id, string? userId, CancellationToken cancellationToken)
         {
-            var course = await this._coursesRepository.GetFullCourseAsync(id, cancellationToken);
+            var course = await this._coursesRepository.GetFullCourseAsync(id, userId ?? string.Empty, cancellationToken);
             if (course == null)
             {
                 throw new NotFoundException("Course");
             }
 
-            var user = await this._usersRepository.GetUserWithMaterialsAsync(email, cancellationToken);
-            var dto = this._mapper.Map(course, user?.Materials);
+            var dto = this._mapper.Map(course);
 
             this._logger.LogInformation($"Returned course with id: {course.Id}.");
 
@@ -94,7 +93,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<CourseCreateDto> GetCourseForEditAsync(int id, CancellationToken cancellationToken)
         {
-            var course = await this._coursesRepository.GetFullCourseAsync(id, cancellationToken);
+            var course = await this._coursesRepository.GetFullCourseAsync(id, string.Empty, cancellationToken);
             if (course == null)
             {
                 throw new NotFoundException("Course");
@@ -104,27 +103,27 @@ namespace EducationalPortal.Infrastructure.Services
 
             this._logger.LogInformation($"Returned course for edit with id: {course.Id}.");
 
-            return courseDTO;
+            return new CourseCreateDto();
         }
 
         public async Task<CourseLearnDto> GetCourseLearnAsync(int id, string email, 
                                                               CancellationToken cancellationToken)
         {
-            var course = await this._coursesRepository.GetFullCourseAsync(id, cancellationToken);
+            var course = await this._coursesRepository.GetFullCourseAsync(id, string.Empty, cancellationToken);
             if (course == null)
             {
                 throw new NotFoundException("Course");
             }
 
-            var user = await this._usersRepository.GetUserWithMaterialsAsync(email, cancellationToken);
-            var dto = this._mapper.MapLearnCourse(course, user?.Materials);
-            var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(course.Id, email, 
-                                                                                     cancellationToken);
-            dto.Progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
+            //var user = await this._usersRepository.GetUserWithMaterialsAsync(email, cancellationToken);
+            //var dto = this._mapper.MapLearnCourse(course, user?.Materials);
+            //var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(course.Id, email, 
+            //                                                                         cancellationToken);
+            //dto.Progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
 
             this._logger.LogInformation($"Returned course learn with id: {course.Id}.");
 
-            return dto;
+            return new CourseLearnDto();
         }
 
         public async Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, 
@@ -141,8 +140,7 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<int> MaterialLearnedAsync(int materialId, int courseId, string email, 
                                                     CancellationToken cancellationToken)
         {
-            var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, email, 
-                                                                                     cancellationToken);
+            var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, email, cancellationToken);
             if (userCourse == null)
             {
                 throw new NotFoundException("User and Course");
@@ -172,8 +170,7 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email, 
                                                      CancellationToken cancellationToken)
         {
-            var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, email, 
-                                                                                     cancellationToken);
+            var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, email, cancellationToken);
             if (userCourse == null)
             {
                 throw new NotFoundException("User and Course");

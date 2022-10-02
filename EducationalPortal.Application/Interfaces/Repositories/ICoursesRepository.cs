@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Application.Paging;
+﻿using EducationalPortal.Application.Models.QueryModels;
+using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using System.Linq.Expressions;
 
@@ -14,7 +15,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<Course?> GetCourseAsync(int id, CancellationToken cancellationToken);
 
-        Task<Course?> GetFullCourseAsync(int id, CancellationToken cancellationToken);
+        Task<CourseQueryModel?> GetFullCourseAsync(int id, string userId, CancellationToken cancellationToken);
 
         Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
 

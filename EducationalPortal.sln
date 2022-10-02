@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationalPortal.Applicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationalPortal.Infrastructure", "EducationalPortal.Infrastructure\EducationalPortal.Infrastructure.csproj", "{8696FA2A-88DF-4FE3-93C2-12F44DB5A218}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EducationalPortal.API", "EducationalPortal.API\EducationalPortal.API.csproj", "{663C7566-64D2-4082-8CC6-AC854B4C4817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EducationalPortal.API", "EducationalPortal.API\EducationalPortal.API.csproj", "{663C7566-64D2-4082-8CC6-AC854B4C4817}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchMarking", "BenchMarking\BenchMarking.csproj", "{06E2349E-B1E7-4ED9-86F1-F09896A4438A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{663C7566-64D2-4082-8CC6-AC854B4C4817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{663C7566-64D2-4082-8CC6-AC854B4C4817}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{663C7566-64D2-4082-8CC6-AC854B4C4817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06E2349E-B1E7-4ED9-86F1-F09896A4438A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06E2349E-B1E7-4ED9-86F1-F09896A4438A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06E2349E-B1E7-4ED9-86F1-F09896A4438A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06E2349E-B1E7-4ED9-86F1-F09896A4438A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

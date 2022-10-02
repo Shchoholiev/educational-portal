@@ -9,6 +9,7 @@ using EducationalPortal.Application.Models.DTO.EducationalMaterials.Properties;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
+using EducationalPortal.Application.Models.QueryModels;
 
 namespace EducationalPortal.Application.Mapping
 {
@@ -18,8 +19,11 @@ namespace EducationalPortal.Application.Mapping
         {
             cfg.CreateMap<MaterialsBase, MaterialBaseDto>();
             cfg.CreateMap<MaterialsBase, MaterialBaseCreateDto>();
+            cfg.CreateMap<MaterialQueryModel, MaterialBaseDto>();
 
             cfg.CreateMap<Course, CourseShortDto>();
+            cfg.CreateMap<CourseQueryModel, CourseDto>()
+               .ForMember(dest => dest.Materials, opt => opt.Ignore());
             cfg.CreateMap<Course, CourseDto>()
                .ForMember(dest => dest.Skills, 
                opt => opt.MapFrom(s => s.CoursesSkills.Select(cs => cs.Skill)));
@@ -29,6 +33,7 @@ namespace EducationalPortal.Application.Mapping
                .ForMember(dest => dest.Skills,
                opt => opt.MapFrom(s => s.CoursesSkills.Select(cs => cs.Skill))); ;
 
+            cfg.CreateMap<MaterialQueryModel, VideoDto>();
             cfg.CreateMap<Video, VideoDto>();
             cfg.CreateMap<VideoCreateDto, Video>()
                .ForMember(dest => dest.Duration, opt => opt.Ignore());
@@ -36,11 +41,13 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<Quality, QualityDto>();
             cfg.CreateMap<QualityDto, Quality>();
 
+            cfg.CreateMap<MaterialQueryModel, BookDto>();
             cfg.CreateMap<Book, BookDto>();
             cfg.CreateMap<BookCreateDto, Book>();
 
             cfg.CreateMap<Extension, ExtensionDto>();
 
+            cfg.CreateMap<MaterialQueryModel, ArticleDto>();
             cfg.CreateMap<Article, ArticleDto>();
             cfg.CreateMap<ArticleCreateDto, Article>();
 
@@ -77,6 +84,14 @@ namespace EducationalPortal.Application.Mapping
             var courseViewModel = this._mapper.Map<CourseDto>(course);
             courseViewModel.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
                                                      learnedMaterials);
+
+            return courseViewModel;
+        }
+
+        public CourseDto Map(CourseQueryModel course)
+        {
+            var courseViewModel = this._mapper.Map<CourseDto>(course);
+            courseViewModel.Materials = MapMaterials(course.Materials);
 
             return courseViewModel;
         }
@@ -263,6 +278,31 @@ namespace EducationalPortal.Application.Mapping
 
                     default:
                         break;
+                }
+            }
+
+            return materialsViewModel;
+        }
+
+        private List<MaterialBaseDto> MapMaterials(IEnumerable<MaterialQueryModel> materials)
+        {
+            var materialsViewModel = new List<MaterialBaseDto>();
+            foreach (var material in materials)
+            {
+                if (material.Extension != null)
+                {
+                    var videoViewModel = this._mapper.Map<BookDto>(material);
+                    materialsViewModel.Add(videoViewModel);
+                }
+                else if (material.Resource != null)
+                {
+                    var bookViewModel = this._mapper.Map<ArticleDto>(material);
+                    materialsViewModel.Add(bookViewModel);
+                }
+                else
+                {
+                    var articleViewModel = this._mapper.Map<VideoDto>(material);
+                    materialsViewModel.Add(articleViewModel);
                 }
             }
 

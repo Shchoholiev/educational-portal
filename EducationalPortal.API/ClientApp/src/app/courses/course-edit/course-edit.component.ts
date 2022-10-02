@@ -25,7 +25,11 @@ export class CourseEditComponent implements OnInit {
 
   setCourse(id: number){
     this._coursesService.getCourse(id).subscribe(
-      response => this.course = response
+      response => {
+        this.course = response;
+        console.log(this.course);
+        
+      }
     );
   }
 

@@ -19,6 +19,8 @@ export class CourseCreateComponent implements OnInit {
               private _router: Router ) { }
 
   ngOnInit(): void {
+    console.log("create");
+    
   }
 
   public setThumbnail(event: Event){
