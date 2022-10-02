@@ -24,6 +24,8 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<Course, CourseShortDto>();
             cfg.CreateMap<CourseQueryModel, CourseDto>()
                .ForMember(dest => dest.Materials, opt => opt.Ignore());
+            cfg.CreateMap<CourseQueryModel, CourseCreateDto>()
+               .ForMember(dest => dest.Materials, opt => opt.Ignore());
             cfg.CreateMap<Course, CourseDto>()
                .ForMember(dest => dest.Skills, 
                opt => opt.MapFrom(s => s.CoursesSkills.Select(cs => cs.Skill)));
@@ -79,15 +81,6 @@ namespace EducationalPortal.Application.Mapping
             return dtos;
         }
 
-        public CourseDto Map(Course course, IEnumerable<MaterialsBase>? learnedMaterials)
-        {
-            var courseViewModel = this._mapper.Map<CourseDto>(course);
-            courseViewModel.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
-                                                     learnedMaterials);
-
-            return courseViewModel;
-        }
-
         public CourseDto Map(CourseQueryModel course)
         {
             var courseViewModel = this._mapper.Map<CourseDto>(course);
@@ -96,15 +89,22 @@ namespace EducationalPortal.Application.Mapping
             return courseViewModel;
         }
 
-        public CourseLearnDto MapLearnCourse(Course course, IEnumerable<MaterialsBase>? learnedMaterials)
+        public CourseCreateDto MapForEdit(CourseQueryModel course)
+        {
+            var dto = this._mapper.Map<CourseCreateDto>(course);
+            dto.Materials = MapMaterials(course.Materials);
+
+            return dto;
+        }
+
+        public CourseLearnDto MapLearnCourse(CourseQueryModel course)
         {
             var learnCourse = new CourseLearnDto
             {
                 Id = course.Id,
                 Name = course.Name,
+                Materials = MapMaterials(course.Materials),
             };
-            learnCourse.Materials = MapMaterials(course.CoursesMaterials.Select(cm => cm.Material), 
-                                                 learnedMaterials);
 
             return learnCourse;
         }
@@ -203,12 +203,6 @@ namespace EducationalPortal.Application.Mapping
             return this._mapper.Map<IEnumerable<QualityDto>>(source);
         }
 
-        public CourseCreateDto Map(Course source)
-        {
-            var courseDTO = this._mapper.Map<CourseCreateDto>(source);
-            return courseDTO;
-        }
-
         public Course Map(CourseCreateDto courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
@@ -238,11 +232,7 @@ namespace EducationalPortal.Application.Mapping
                 course.CoursesMaterials.Add(courseMaterial);
             }
 
-            course.CoursesSkills = new List<CoursesSkills>();
-            foreach (var skill in courseDTO.Skills)
-            {
-                course.CoursesSkills.Add(new CoursesSkills { SkillId = skill.Id });
-            }
+            course.CoursesSkills = courseDTO.Skills.Select(s => new CoursesSkills { SkillId = s.Id }).ToList();
 
             return course;
         }

@@ -56,7 +56,7 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
         public async Task<PagedList<ArticleDto>> GetPageAsync(PageParameters pageParameters, 
                                                               CancellationToken cancellationToken)
         {
-            var articles = await this._articlesRepository.GetPageAsync(pageParameters, cancellationToken);
+            var articles = await this._articlesRepository.GetPageAsync(pageParameters, cancellationToken, a => a.Resource);
             var dtos = this._mapper.Map(articles);
 
             this._logger.LogInformation($"Returned articles page {articles.PageNumber} from database.");

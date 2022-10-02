@@ -69,6 +69,19 @@ namespace EducationalPortal.Infrastructure.Repositories
         }
 
         public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
+                                                 CancellationToken cancellationToken,
+                                                 params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            var query = this._table.AsNoTracking()
+                                   .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                                   .Take(pageParameters.PageSize);
+            var entities = await this.Include(query, includeProperties).ToListAsync(cancellationToken);
+            var totalCount = await this._table.CountAsync(cancellationToken);
+
+            return new PagedList<TEntity>(entities, pageParameters, totalCount);
+        }
+
+        public async Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
                                                  Expression<Func<TEntity, bool>> predicate,
                                                  CancellationToken cancellationToken,
                                                  params Expression<Func<TEntity, object>>[] includeProperties)

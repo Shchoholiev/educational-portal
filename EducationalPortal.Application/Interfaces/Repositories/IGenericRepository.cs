@@ -25,6 +25,10 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
 
         Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
+                                              CancellationToken cancellationToken,
+                                              params Expression<Func<TEntity, object>>[] includeProperties);
+
+        Task<PagedList<TEntity>> GetPageAsync(PageParameters pageParameters,
                                               Expression<Func<TEntity, bool>> predicate,
                                               CancellationToken cancellationToken,
                                               params Expression<Func<TEntity, object>>[] includeProperties);

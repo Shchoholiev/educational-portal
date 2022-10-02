@@ -18,12 +18,6 @@ namespace EducationalPortal.Infrastructure.EF
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            string connectionString = @"workstation id=educational-portal.mssql.somee.com;packet size=4096;user id=shchoholiev_SQLLogin_1;pwd=svy5quvzpk;data source=educational-portal.mssql.somee.com;persist security info=False;initial catalog=educational-portal";
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new CourseEntityConfiguration());

@@ -73,7 +73,7 @@ namespace EducationalPortal.Infrastructure.Services.EducationalMaterials
         public async Task<PagedList<VideoDto>> GetPageAsync(PageParameters pageParameters, 
                                                             CancellationToken cancellationToken)
         {
-            var videos = await this._videosRepository.GetPageAsync(pageParameters, cancellationToken);
+            var videos = await this._videosRepository.GetPageAsync(pageParameters, cancellationToken, v => v.Quality);
             var dtos = this._mapper.Map(videos);
 
             this._logger.LogInformation($"Returned videos page {videos.PageNumber} from database.");

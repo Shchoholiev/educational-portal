@@ -46,7 +46,7 @@ namespace EducationalPortal.API.Controllers
                                                      CancellationToken cancellationToken)
         {
             var course = await this._coursesService.CreateAsync(courseDto, Email, cancellationToken);
-            return CreatedAtAction("GetCourseAsync", new { id = course.Id }, course);
+            return CreatedAtAction("GetCourse", new { id = course.Id }, course);
         }
 
         [HttpGet("edit/{id}")]

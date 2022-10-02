@@ -7,11 +7,11 @@
                 <div class="d-flex flex-row justify-content-between mb-2">
                     <div class="d-flex flex-row">
                         <i class="fa-solid fa-file-lines me-2 my-auto"></i>
-                        <a href="{{a.link}}" target="_blank" style="margin-right:7px;">{{a.name}}</a>
+                        <a href="{{a?.link}}" target="_blank" style="margin-right:7px;">{{a?.name}}</a>
                     </div>
                     <p class="text-secondary mb-0">{{getDate(a)}}</p>
                 </div>
-                <p class="mb-1 text-secondary"><strong>Resource: </strong>{{a.resource.name}}</p>
+                <p class="mb-1 text-secondary"><strong>Resource: </strong>{{a?.resource?.name}}</p>
             </div>
             <button class="btn btn-sm btn-danger ms-4 my-auto p-1 px-2" (click)="this.delete(a.id)">
                 <i class="fa-xs fa-solid fa-trash-can"></i>
