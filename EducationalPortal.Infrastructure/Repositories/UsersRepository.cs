@@ -47,19 +47,19 @@ namespace EducationalPortal.Infrastructure.Repositories
                               .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        public Task<User?> GetUserWithSkillsAsync(string email, CancellationToken cancellationToken)
+        public Task<User?> GetUserWithSkillsAsync(string userId, CancellationToken cancellationToken)
         {
             return this._table
                        .Include(u => u.UsersSkills)
                             .ThenInclude(us => us.Skill)
-                       .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+                       .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
         }
 
-        public Task<User?> GetUserWithMaterialsAsync(string email, CancellationToken cancellationToken)
+        public Task<User?> GetUserWithMaterialsAsync(string userId, CancellationToken cancellationToken)
         {
             return this._table
                        .Include(u => u.Materials)
-                       .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
+                       .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
         }
 
         public Task<User?> GetAuthorAsync(string email, CancellationToken cancellationToken)
@@ -72,13 +72,13 @@ namespace EducationalPortal.Infrastructure.Repositories
                        .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         }
 
-        public async Task AddAcquiredSkillsAsync(int courseId, string email, CancellationToken cancellationToken)
+        public async Task AddAcquiredSkillsAsync(int courseId, string userId, CancellationToken cancellationToken)
         {
             var skills = await this._db.CoursesSkills
                                    .Where(cs => cs.CourseId == courseId)
                                    .ToListAsync(cancellationToken);
 
-            var user = await this.GetUserWithSkillsAsync(email, cancellationToken);
+            var user = await this.GetUserWithSkillsAsync(userId, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");

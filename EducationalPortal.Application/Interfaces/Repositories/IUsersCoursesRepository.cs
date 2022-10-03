@@ -6,7 +6,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 {
     public interface IUsersCoursesRepository
     {
-        Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email, CancellationToken cancellationToken);
+        Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string userId, CancellationToken cancellationToken);
 
         Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters,
                                                                Expression<Func<UsersCourses, bool>> predicate, 
