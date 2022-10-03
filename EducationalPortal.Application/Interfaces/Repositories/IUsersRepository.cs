@@ -13,13 +13,13 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<User?> GetUserAsync(string email, CancellationToken cancellationToken);
 
-        Task<User?> GetUserWithSkillsAsync(string email, CancellationToken cancellationToken);
+        Task<User?> GetUserWithSkillsAsync(string userId, CancellationToken cancellationToken);
 
-        Task<User?> GetUserWithMaterialsAsync(string email, CancellationToken cancellationToken);
+        Task<User?> GetUserWithMaterialsAsync(string userId, CancellationToken cancellationToken);
 
         Task<User?> GetAuthorAsync(string email, CancellationToken cancellationToken);
 
-        Task AddAcquiredSkillsAsync(int courseId, string email, CancellationToken cancellationToken);
+        Task AddAcquiredSkillsAsync(int courseId, string userId, CancellationToken cancellationToken);
     
         Task<bool> ExistsAsync(Expression<Func<User, bool>> predicate, CancellationToken cancellationToken);
     }

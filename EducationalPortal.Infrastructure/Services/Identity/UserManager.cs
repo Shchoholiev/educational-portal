@@ -167,6 +167,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
             };
 
             foreach (var role in user.Roles)

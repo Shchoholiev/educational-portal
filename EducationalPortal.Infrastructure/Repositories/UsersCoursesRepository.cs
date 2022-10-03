@@ -19,10 +19,9 @@ namespace EducationalPortal.Infrastructure.Repositories
             this._table = _db.UsersCourses;
         }
 
-        public Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string email, CancellationToken cancellationToken)
+        public Task<UsersCourses?> GetUsersCoursesAsync(int courseId, string userId, CancellationToken cancellationToken)
         {
-            return this._table.FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.User.Email == email,
-                                                   cancellationToken);
+            return this._table.FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.UserId == userId, cancellationToken);
         }
 
         public async Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, 
