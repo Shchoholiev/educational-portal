@@ -1,0 +1,92 @@
+﻿@model EducationalPortal.Core.Entities.User
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h5>Profile</h5>
+
+<div class="row d-flex flex-row justify-content-between">
+    <section class="col-md-4">
+        <form method="post" asp-controller="Account" asp-action="Update" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="d-flex">
+                <img class="avatar" style="width:75px;height:75px;" src="@Model.Avatar"/>
+                <div class="mb-3 mx-3">
+                    <label for="formFile" class="form-label">Your avatar</label>
+                    <input name="avatar" class="form-control" type="file" id="formFile">
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Position" class="control-label"></label>
+                <input asp-for="Position" class="form-control" />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Update" class="btn btn-primary"/>
+            </div>
+        </form>
+        <h6 class="my-2">Balance: @Model.Balance points</h6>
+
+    </section>
+    <section class="col-md-4">
+        <div class="card my-1" style="width:300px">
+            <div class="card-header">Your Skills:</div>
+            <div class="card-body">
+                @foreach (var userSkill in Model.UsersSkills)
+                {
+                    <div class="d-flex flex-row justify-content-between">
+                        <h6>@userSkill.Skill.Name</h6>
+                        <p class="text-primary">@userSkill.Level lvl</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>
+
+@if (User.IsInRole("Creator"))
+{
+    <form method="get" asp-action="Create" asp-controller="Courses">
+        <input type="submit" value="Create Course" class="btn btn-primary my-2"/>
+    </form>
+    <article class="mt-3" style="width:100%">
+        <h4>Created Courses:</h4>
+        <div class="d-flex flex-wrap">
+            @foreach (var course in Model.CreatedCourses)
+            {
+                <div class="card m-1" style="width: 18rem;">
+                    <img src="@course.Thumbnail" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">@course.Name</h5>
+                        <p class="card-text">@course.ShortDescription</p>
+                        <div class="d-flex flex-row">
+                            <a asp-controller="Courses"  asp-action="Edit" asp-route-id="@course.Id"
+                                class="btn btn-primary mx-2" style="z-index:1000">Edit</a>
+                            <a asp-controller="Courses"  asp-action="Delete" asp-route-id="@course.Id"
+                                class="btn btn-danger mx-2" style="z-index:1000">Delete</a>
+                        </div>
+                    </div>
+                    <a asp-action="Details" asp-controller="Courses" asp-route-id="@course.Id" 
+                       class="stretched-link"></a>
+                </div>
+            }
+        </div>
+    </article>
+}
+else
+{
+    <form method="post" asp-action="BecameCreator">
+        <input type="submit" value="Became Creator" class="btn btn-primary my-2"/>
+    </form>  
+}

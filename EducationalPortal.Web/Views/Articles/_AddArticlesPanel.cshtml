@@ -1,0 +1,92 @@
+﻿@using EducationalPortal.Application.DTO
+@using EducationalPortal.Core.Entities.EducationalMaterials.Properties
+@using EducationalPortal.Application.Paging
+@model PagedList<EducationalPortal.Web.ViewModels.CreateViewModels.ArticleCreateModel>
+
+<section class="d-flex flex-column">
+    @foreach (var article in Model)
+    {
+        var action = (article.IsChosen) ? "RemoveMaterial" : "AddMaterial";
+        var checkbox = (article.IsChosen) ? "checked" : "";
+        <div class="card m-1 d-flex flex-row">
+            <div class="card-body d-flex flex-row">
+                <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;"
+                       id="@($"Articles{article.Id}")" onclick="@(action + $"({article.Id}, 'Articles')")" @checkbox>
+                <div style="width:100%">   
+                    <div class="d-flex flex-row justify-content-between mb-2">
+                        <div class="d-flex flex-row">
+                            <img style="height:17px; margin-right:10px;" class="mt-1"
+                                 src="https://educationalportal.blob.core.windows.net/essentials/Article.svg"/>
+                            <a href="@article.Link" target="_blank" style="margin-right:7px;">@article.Name</a>
+                        </div>
+                        <p class="text-secondary mb-0">@article.PublicationDate.ToShortDateString()</p>
+                    </div>
+                    <p class="mb-1 text-secondary"><strong>Resource: </strong>@article.Resource.Name</p>
+                </div>
+                <input class="btn btn-danger btn-sm" type="button" value="Delete" style="margin-left:10px"
+                       onclick="DeleteMaterial(@article.Id, 'Articles', @Model.PageNumber)"/>
+            </div>
+        </div>
+    }
+</section>
+
+<div class="mt-2" id="createArticles">
+    @await Html.PartialAsync("_CreateArticle", new ArticleDTO())
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="mt-2" id="addResources"></div>
+    </div>
+</div>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+}
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a onclick="ChangeMaterialsPage(@(Model.PageNumber - 1), 'Articles')" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a onclick="ChangeMaterialsPage(@i, 'Articles')" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a onclick="ChangeMaterialsPage(@(Model.PageNumber + 1), 'Articles')" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    $(document).ready(function(){
+        $.ajax({  
+            type: "GET",  
+            url: `/Resources/Index`,
+            success: function(data){
+                $("#addResources").html(data);
+            }
+        });
+    });
+
+    function CreateArticle(){
+        var model = $(`#formArticles`).serialize();
+        $.ajax({  
+            type: "POST",  
+            url: `/Articles/Create`,
+            data: model,
+            success: function(data){
+                if(data.success){
+                    ChangeMaterialsPage(@Model.PageNumber, 'Articles');
+                }
+                else{
+                    $(`#createArticles`).html(data);
+                }
+            }
+        });
+    }
+</script>

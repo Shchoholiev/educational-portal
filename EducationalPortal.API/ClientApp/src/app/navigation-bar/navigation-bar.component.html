@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white shadow-sm mb-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">EducationalPortal</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/courses">Courses</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav" *ngIf="authService.isAuthenticated">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/shopping-cart"><i class="fa-solid fa-cart-shopping"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/my-learning">My Learning</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" (click)="authService.logout()">Logout</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/account/profile">{{authService.name}}</a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav" *ngIf="!authService.isAuthenticated">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/shopping-cart"><i class="fa-solid fa-cart-shopping"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/account/register">Register</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/account/login">Login</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>

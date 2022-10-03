@@ -1,0 +1,21 @@
+<div class="d-flex flex-row">
+    <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;" (click)="click()"
+        [checked]="book.isLearned">
+    <div style="width:100%; cursor:pointer;">
+        <div class="d-flex flex-row justify-content-between mb-2">
+            <div class="d-flex flex-row">
+                <img style="height:17px; margin-right:10px;" class="mt-1"
+                src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
+                <p class="mb-0" style="margin-right:7px;">{{book.name}}</p>
+            </div>
+            <div class="d-flex flex-row">
+                <p class="text-primary mb-0" style="margin-right:20px">{{book.extension.name}}</p>
+                <p class="text-secondary mb-0" style="white-space: nowrap">{{book.pagesCount}} pages</p>
+            </div>
+        </div>
+        <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
+            <span *ngFor="let author of book.authors">{{author.fullName}}</span>
+        </p>
+        <p class="mb-1 text-secondary"><strong>Publication year: </strong>{{book.publicationYear}}</p>
+    </div>
+</div>

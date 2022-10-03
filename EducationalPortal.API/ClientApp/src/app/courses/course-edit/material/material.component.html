@@ -1,0 +1,20 @@
+<div class="card my-1">
+    <div class="card-body d-flex flex-row justify-content-between p-2">
+        <div class="d-flex flex-row text-secondary">
+            <h6 class="my-auto ms-1 me-2">{{index}}</h6>
+            <i *ngIf="material.link.includes('videos')" class="fa-solid fa-circle-play my-auto me-2"></i>
+
+            <i *ngIf="material.link.includes('books')" class="fa-solid fa-book my-auto me-2"></i>
+            
+            <i  *ngIf="!material.link.includes('books') && !material.link.includes('videos')"
+                class="fa-solid fa-file-lines my-auto me-2"></i>
+                
+            <a href="{{material.link}}" target="_blank" class="my-auto">
+                <p class="my-auto">{{material.name}}</p>
+            </a>
+        </div>
+        <button class="btn btn-sm btn-danger ms-3 my-auto" (click)="remove.emit(material.id)">
+            <i class="fa-xs fa-solid fa-trash-can"></i>
+        </button>
+    </div>
+</div>

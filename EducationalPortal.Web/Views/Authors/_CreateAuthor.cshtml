@@ -1,0 +1,13 @@
+﻿@model EducationalPortal.Core.Entities.EducationalMaterials.Properties.Author
+
+<div class="form-group mb-2"> 
+    <form method="post" asp-action="Create" id="createAuthors">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row">
+            <p style="margin:auto 0;">Name</p>
+            <input asp-for="FullName" class="form-control mx-3" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+            <input type="button" value="Create Author" class="btn btn-primary" onclick="CreateAuthor()"/>
+        </div>
+    </form>
+</div>

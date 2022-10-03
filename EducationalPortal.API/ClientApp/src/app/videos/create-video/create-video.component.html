@@ -1,0 +1,33 @@
+<form (ngSubmit)="create()" #form="ngForm" novalidate>
+    <div class="d-flex flex-row mb-3">
+        <div class="form-group" style="margin-right:10px"> 
+            <label class="control-label">Name</label> 
+            <input class="form-control" [(ngModel)]="video.name" name="name" required>
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group" style="margin-right:10px">
+            <label class="control-label">File</label>
+            <input class="form-control" type="file" style="width:200px" (change)="upload($event)">
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group" style="margin-right:10px">
+            <label class="control-label">Duration (sec)</label>
+            <input class="form-control" style="width:105px" 
+                [(ngModel)]="video.duration" name="duration" required>
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Quality</label>
+            <select class="form-select" (change)="chooseQuality($event)">
+                <option><input type="text" placeholder="Write your own" value="0"></option>
+                <option *ngFor="let q of qualities" value="{{q.id}}">{{q.name}}</option>
+              </select>
+            <span class="text-danger"></span>
+        </div>
+    </div>
+    <input type="submit" value="Create Video" class="btn btn-primary"/>
+</form>
+
+<span class="text-danger">
+    <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+</span>

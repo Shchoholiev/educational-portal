@@ -1,0 +1,35 @@
+﻿@model EducationalPortal.Application.DTO.BookDTO
+
+<div class="form-group mb-2"> 
+    <form id="formBooks" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row mb-3">
+            <div class="form-group" style="margin-right:10px"> 
+                <label asp-for="Name" class="control-label"></label> 
+                <input asp-for="Name" class="form-control" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="File" class="control-label"></label>
+                <input asp-for="File" class="form-control" type="file">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="PagesCount" class="control-label">Pages Count</label>
+                <input asp-for="PagesCount" class="form-control" style="width:105px">
+                <span asp-validation-for="PagesCount" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="PublicationYear" class="control-label">Publication Year</label>
+                <input asp-for="PublicationYear" class="form-control" style="width:130px">
+                <span asp-validation-for="PublicationYear" class="text-danger"></span>
+            </div>
+        </div>
+    </form>
+    <h6 class="mt-2">Authors:</h6>
+    <form class="d-flex flex-wrap" style="margin-right:10px" id="Authors"></form>
+    <div>
+        <span asp-validation-for="Authors" class="text-danger"></span>
+    </div>
+    <input type="button" value="Create Book" class="btn btn-primary" onclick="CreateBook()"/>
+</div>

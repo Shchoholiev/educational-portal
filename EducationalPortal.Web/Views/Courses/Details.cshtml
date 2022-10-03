@@ -1,0 +1,116 @@
+﻿@using EducationalPortal.Core.Entities.EducationalMaterials
+@model EducationalPortal.Core.Entities.Course
+
+@{
+    ViewData["Title"] = $"{Model.Name}";
+}
+
+<section>
+    <div class="d-flex flex-row">
+        <section style="width: 100%;">
+            <h2>@Model.Name</h2>
+            <h5>@Model.ShortDescription</h5>
+            <a asp-action="Author" asp-controller="Account" asp-route-email="@Model.Author.Email" 
+                class="text-secondary">@Model.Author.Name - @Model.Author.Position</a>
+            <hr />
+            <article class="card my-1">
+                <div class="card-body">
+                    <h3>About this course</h3>
+                    <p>@Model.Description</p>
+                </div>
+            </article>
+            <article class="my-3">
+                <h3>Course content</h3>
+                <div class="card my-1">
+                    <div class="card-header">
+                        Materials count: @Model.Materials.Count()
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var material in Model.Materials)
+                        {
+                            switch (material.GetType().Name)
+                            {
+                                case "Video":
+                                    var video = (Video)material;
+                                    <li class="list-group-item d-flex flex-row justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;"
+                                                 src="https://educationalportal.blob.core.windows.net/essentials/Video.svg"/>
+                                            <h6>@video.Name</h6>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <p class="text-primary mb-0" style="margin-right:20px">@video.Quality.Name</p>
+                                            <p class="text-secondary mb-0">@video.Duration.ToString("mm:ss")</p>
+                                        </div>
+                                    </li>
+                                    break;
+
+                                case "Book":
+                                    var book = (Book)material;
+                                    <li class="list-group-item d-flex flex-row justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;"
+                                                 src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
+                                            <h6>@book.Name</h6>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <p class="text-primary mb-0" style="margin-right:20px">
+                                                @book.Authors.FirstOrDefault().FullName
+                                            </p>
+                                            <p class="text-secondary mb-0">@book.PagesCount pages</p>
+                                        </div>
+                                    </li>
+                                    break;
+
+                                case "Article":
+                                    var article = (Article)material;
+                                    <li class="list-group-item d-flex flex-row justify-content-between">
+                                        <div class="d-flex flex-row">
+                                            <img style="height:17px; margin-right:10px;"
+                                                 src="https://educationalportal.blob.core.windows.net/essentials/Article.svg"/>
+                                            <h6>@article.Name</h6>
+                                        </div>
+                                        <div class="d-flex flex-row">
+                                            <p class="text-primary mb-0" style="margin-right:20px">
+                                                @article.Resource.Name
+                                            </p>
+                                            <p class="text-secondary mb-0">@article.PublicationDate.ToShortDateString()</p>
+                                        </div>
+                                    </li>
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+                    </ul>
+                </div>
+            </article>
+        </section>
+
+        <section style="margin-left: 20px">
+            <div class="card m-1" style="width: 18rem;">
+                <img src="@Model.Thumbnail" class="card-img-top">
+                <div class="card-body">
+                    <h2 class="text-primary">@Model.Price points</h2>
+                    <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" 
+                          asp-route-courseId="@Model.Id" class="my-2 mb-3">
+                        <input type="submit" value="Add to cart" class="btn btn-primary" style="width:100%"/>
+                    </form>
+                    <h6>You will acquire skills:</h6>
+                    <ul>
+                        @foreach (var skill in Model.Skills)
+                        {
+                            <li>@skill.Name</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

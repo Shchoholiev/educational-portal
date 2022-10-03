@@ -1,0 +1,52 @@
+﻿@using EducationalPortal.Application.Paging
+@model PagedList<EducationalPortal.Core.Entities.Course>
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<h4>Courses</h4>
+
+<section class="d-flex flex-wrap">
+    @foreach (var course in Model)
+    {
+        <div class="card m-1" style="width: 18rem;">
+            <img src="@course.Thumbnail" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">@course.Name</h5>
+                <p class="card-text">@course.ShortDescription</p>
+                <div class="d-flex flex-row justify-content-between">
+                    <h5 class="text-primary">@course.Price points</h5>
+                    <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart" 
+                          asp-route-courseId="@course.Id" style="z-index:5">
+                        <input type="submit" value="Add to cart" class="btn btn-primary"/>
+                    </form>
+                </div>
+            </div>
+            <a asp-action="Details" asp-route-id="@course.Id" class="stretched-link"></a>
+        </div>
+    }
+</section>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+}
+
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a asp-action="Index" asp-route-PageNumber="@(Model.PageNumber - 1)" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a asp-action="Index" asp-route-PageNumber="@i" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a asp-action="Index" asp-route-PageNumber="@(Model.PageNumber + 1)" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>

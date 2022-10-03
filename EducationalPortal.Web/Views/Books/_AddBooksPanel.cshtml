@@ -1,0 +1,110 @@
+﻿@using EducationalPortal.Application.DTO
+@using EducationalPortal.Application.Paging
+@model PagedList<EducationalPortal.Web.ViewModels.CreateViewModels.BookCreateModel>
+
+<section class="d-flex flex-column">
+    @foreach (var book in Model)
+    {
+        var action = (book.IsChosen) ? "RemoveMaterial" : "AddMaterial";
+        var checkbox = (book.IsChosen) ? "checked" : "";
+        <div class="card m-1 d-flex flex-row">
+            <div class="card-body d-flex flex-row">
+                <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;"
+                       id="@($"Books{book.Id}")" onclick="@(action + $"({book.Id}, 'Books')")" @checkbox>
+                <div style="width:100%">
+                    <div class="d-flex flex-row justify-content-between mb-2">
+                        <div class="d-flex flex-row">
+                            <img style="height:17px; margin-right:10px;" class="mt-1"
+                                 src="https://educationalportal.blob.core.windows.net/essentials/Book.svg"/>
+                            <a href="@book.Link" target="_blank"><p class="mb-0" style="margin-right:7px;">@book.Name</p></a>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <p class="text-primary mb-0" style="margin-right:20px">@book.Extension.Name</p>
+                            <p class="text-secondary mb-0" style="white-space: nowrap">@book.PagesCount pages</p>
+                        </div>
+                    </div>
+                        <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
+                            @foreach (var author in book.Authors)
+                            {
+                                <span>@author.FullName, </span>
+                            }
+                        </p>
+                        <p class="mb-1 text-secondary"><strong>Publication year: </strong>@book.PublicationYear</p>
+                </div>
+                <input class="btn btn-danger btn-sm" type="button" value="Delete" style="margin-left:10px"
+                       onclick="DeleteMaterial(@book.Id, 'Books', @Model.PageNumber)"/>
+            </div>
+        </div>
+    }
+</section>
+
+<div class="mt-2" id="createBooks">
+    @await Html.PartialAsync("_CreateBook", new BookDTO())
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="mt-2" id="addAuthors"></div>
+    </div>
+</div>
+
+@{
+    var previousPage = (Model.HasPreviousPage) ? "" : "disabled";
+    var nextPage = (Model.HasNextPage) ? "" : "disabled";
+}
+<nav class=mt-3>
+    <ul class="pagination justify-content-center">
+        <li class="page-item @previousPage">
+            <a onclick="ChangeMaterialsPage(@(Model.PageNumber - 1), 'Books')" class="page-link">Previous</a>
+        </li>
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            string linkStatus = (i == Model.PageNumber) ? "active" : "";
+            <li class="page-item @linkStatus">
+                <a onclick="ChangeMaterialsPage(@i, 'Books')" class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item @nextPage">
+            <a onclick="ChangeMaterialsPage(@(Model.PageNumber + 1), 'Books')" class="page-link">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    $(document).ready(function(){
+        $.ajax({  
+            type: "GET",  
+            url: `/Authors/Index`,
+            success: function(data){
+                $("#addAuthors").html(data);
+            }
+        });
+    });
+
+    function CreateBook(){
+        var form = document.getElementById(`formBooks`);
+        var formData = new FormData(form);
+        var files = $('#File').prop("files");
+        formData.append("File", files[0]);
+        var authors = $("#Authors").serializeArray();
+        authors.forEach(function(fields){
+            formData.append(`Authors${fields.name}`, fields.value);
+        });
+
+        $.ajax({  
+            type: "POST",  
+            url: `/Books/Create`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.success){
+                    ChangeMaterialsPage(@Model.PageNumber, `Books`);
+                }
+                else{
+                    $(`#createBooks`).html(data);
+                }
+            }
+        });
+    }
+</script>

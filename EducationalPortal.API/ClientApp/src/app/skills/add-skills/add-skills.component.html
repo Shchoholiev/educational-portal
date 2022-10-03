@@ -1,0 +1,29 @@
+<section class="d-flex flex-wrap">
+    <div class="card m-1" *ngFor="let s of skills">
+        <div class="card-body d-flex flex-row">
+            <input type="checkbox" class="form-check-input checkbox me-1" [checked]="skillExistsInCourse(s.id)"
+                    (click)="addSkillToCourse(s.id)"/>
+            <p class="mb-0" style="margin-right:10px;">{{s.name}}</p>
+            <button class="btn btn-sm btn-danger ms-3 p-1 px-2" (click)="this.delete(s.id)">
+                <i class="fa-xs fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<span class="text-danger">{{deleteError}}</span>
+
+<div class="form-group my-2"> 
+    <form (ngSubmit)="create()" #form="ngForm" novalidate>
+        <div class="d-flex flex-row">
+            <p style="margin:auto 0;">Name</p>
+            <input class="form-control mx-3" [(ngModel)]="skill.name" name="name" required/>
+            <input type="submit" value="Create Skill" class="btn btn-primary" [disabled]="form.invalid"/>
+        </div>
+        <span class="text-danger">
+            <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+        </span>
+    </form>
+</div>
+
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>

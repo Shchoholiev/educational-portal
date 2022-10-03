@@ -1,0 +1,30 @@
+﻿@model EducationalPortal.Application.DTO.ArticleDTO
+
+<div class="form-group mb-2"> 
+    <form id="formArticles">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex flex-row mb-3">
+            <div class="form-group" style="margin-right:10px"> 
+                <label asp-for="Name" class="control-label"></label> 
+                <input asp-for="Name" class="form-control" >
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="Link" class="control-label"></label>
+                <input asp-for="Link" class="form-control" >
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-right:10px">
+                <label asp-for="PublicationDate" class="control-label">Publication Date</label>
+                <input type="date" asp-for="PublicationDate" class="form-control">
+                <span asp-validation-for="PublicationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Resource</label>
+                <div id="Resource"></div>
+                <span asp-validation-for="Resource" class="text-danger"></span>
+            </div>
+        </div>
+        <input type="button" value="Create Article" class="btn btn-primary" onclick="CreateArticle()"/>
+    </form>
+</div>

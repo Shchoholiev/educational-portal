@@ -1,0 +1,28 @@
+html {
+  font-size: 14px;
+}
+
+.avatar {
+    vertical-align: middle;
+    border-radius: 50%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.checkbox{
+    min-width: 16px;
+    max-width: 16px;
+}
