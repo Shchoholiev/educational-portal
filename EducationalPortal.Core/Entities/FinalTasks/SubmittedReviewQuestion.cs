@@ -1,12 +1,12 @@
-﻿namespace EducationalPortal.Core.Entities.FinalTask
+﻿namespace EducationalPortal.Core.Entities.FinalTasks
 {
-    public class QuestionSubmittedFinalTask
+    public class SubmittedReviewQuestion
     {
         public int Mark { get; set; }
 
         public int QuestionId { get; set; }
 
-        public Question Question { get; set; }
+        public ReviewQuestion Question { get; set; }
 
         public int SubmittedFinalTaskId { get; set; }
 

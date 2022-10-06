@@ -1,8 +1,8 @@
 ﻿using EducationalPortal.Core.Common;
 
-namespace EducationalPortal.Core.Entities.FinalTask
+namespace EducationalPortal.Core.Entities.FinalTasks
 {
-    public class Question : EntityBase
+    public class ReviewQuestion : EntityBase
     {
         public string Text { get; set; }
 

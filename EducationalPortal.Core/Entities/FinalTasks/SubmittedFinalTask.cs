@@ -1,4 +1,4 @@
-﻿namespace EducationalPortal.Core.Entities.FinalTask
+﻿namespace EducationalPortal.Core.Entities.FinalTasks
 {
     public class SubmittedFinalTask
     {

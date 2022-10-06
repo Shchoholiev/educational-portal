@@ -2,7 +2,7 @@
 
 namespace EducationalPortal.Application.Models.DTO
 {
-    public class CartItemDto : EntityBaseDto
+    public class CartItemDto : BaseDto
     {
         public CourseShortDto Course { get; set; }
 
