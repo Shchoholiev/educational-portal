@@ -10,6 +10,8 @@ using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Models.QueryModels;
+using EducationalPortal.Core.Entities.FinalTasks;
+using EducationalPortal.Application.Models.DTO.FinalTasks;
 
 namespace EducationalPortal.Application.Mapping
 {
@@ -71,6 +73,12 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<Author, AuthorDto>();
 
             cfg.CreateMap<CartItem, CartItemDto>();
+
+            cfg.CreateMap<FinalTask, FinalTaskDto>();
+            cfg.CreateMap<ReviewQuestion, ReviewQuestionDto>();
+
+            cfg.CreateMap<FinalTaskDto, FinalTask>();
+            cfg.CreateMap<ReviewQuestionDto, ReviewQuestion>();
 
         }).CreateMapper();
 
@@ -211,6 +219,18 @@ namespace EducationalPortal.Application.Mapping
             return course;
         }
 
+        public PagedList<FinalTaskDto> Map(PagedList<FinalTask> source)
+        {
+            var dtos = this._mapper.Map<PagedList<FinalTaskDto>>(source);
+            dtos.MapList(source);
+            return dtos;
+        }
+
+        public FinalTask Map(FinalTaskDto source)
+        {
+            return this._mapper.Map<FinalTask>(source);
+        }
+
         public Course Map(Course course, CourseCreateDto courseDTO)
         {
             course = this._mapper.Map(courseDTO, course);
@@ -235,43 +255,6 @@ namespace EducationalPortal.Application.Mapping
             course.CoursesSkills = courseDTO.Skills.Select(s => new CoursesSkills { SkillId = s.Id }).ToList();
 
             return course;
-        }
-
-        private List<MaterialBaseDto> MapMaterials(IEnumerable<MaterialsBase> materials,
-                                                   IEnumerable<MaterialsBase>? learnedMaterials)
-        {
-            var materialsViewModel = new List<MaterialBaseDto>();
-            foreach (var material in materials)
-            {
-                switch (material.GetType().Name)
-                {
-                    case "Video":
-                        var video = (Video)material;
-                        var videoViewModel = this._mapper.Map<VideoDto>(video);
-                        videoViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
-                        materialsViewModel.Add(videoViewModel);
-                        break;
-
-                    case "Book":
-                        var book = (Book)material;
-                        var bookViewModel = this._mapper.Map<BookDto>(book);
-                        bookViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
-                        materialsViewModel.Add(bookViewModel);
-                        break;
-
-                    case "Article":
-                        var article = (Article)material;
-                        var articleViewModel = this._mapper.Map<ArticleDto>(article);
-                        articleViewModel.IsLearned = learnedMaterials?.Any(m => m.Id == material.Id) ?? false;
-                        materialsViewModel.Add(articleViewModel);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-
-            return materialsViewModel;
         }
 
         private List<MaterialBaseDto> MapMaterials(IEnumerable<MaterialQueryModel> materials)
