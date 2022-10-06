@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.FluentAPI;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,9 @@ namespace EducationalPortal.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new CartItemEntityConfiguration());
             modelBuilder.ApplyConfiguration(new ShoppingHistoryEntityConfiguration());
             modelBuilder.ApplyConfiguration(new RoleEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new FinalTaskEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SubmittedFinalTaskEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SubmittedReviewQuestionEntityConfiguration());
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -69,5 +73,13 @@ namespace EducationalPortal.Infrastructure.EF
         public DbSet<CartItem> CartItems { get; set; }
 
         public DbSet<ShoppingHistory> ShoppingHistory { get; set; }
+
+        public DbSet<FinalTask> FinalTasks { get; set; }
+
+        public DbSet<ReviewQuestion> ReviewQuestions { get; set; }
+
+        public DbSet<SubmittedFinalTask> SubmittedFinalTasks { get; set; }
+
+        public DbSet<SubmittedReviewQuestion> SubmittedReviewQuestions { get; set; }
     }
 }

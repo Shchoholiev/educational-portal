@@ -9,5 +9,7 @@ namespace EducationalPortal.Core.Entities.FinalTasks
         public int MaxMark { get; set; }
 
         public FinalTask FinalTask { get; set; }
+
+        public List<SubmittedReviewQuestion> SubmittedReviewQuestions { get; set; }
     }
 }
