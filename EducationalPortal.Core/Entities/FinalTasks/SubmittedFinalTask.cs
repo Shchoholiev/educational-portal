@@ -10,7 +10,7 @@ namespace EducationalPortal.Core.Entities.FinalTasks
 
         public int Mark { get; set; }
 
-        public string RevievedById { get; set; }
+        public User? RevievedBy { get; set; }
 
         public int FinalTaskId { get; set; }
 
@@ -20,6 +20,6 @@ namespace EducationalPortal.Core.Entities.FinalTasks
 
         public User User { get; set; }
 
-        public List<SubmittedReviewQuestion> SubmittedReviewQuestions { get; set; }
+        public List<SubmittedReviewQuestion>? SubmittedReviewQuestions { get; set; }
     }
 }

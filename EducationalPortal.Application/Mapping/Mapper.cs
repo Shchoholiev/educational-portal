@@ -75,10 +75,14 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<CartItem, CartItemDto>();
 
             cfg.CreateMap<FinalTask, FinalTaskDto>();
-            cfg.CreateMap<ReviewQuestion, ReviewQuestionDto>();
-
             cfg.CreateMap<FinalTaskDto, FinalTask>();
+
+            cfg.CreateMap<ReviewQuestion, ReviewQuestionDto>();
             cfg.CreateMap<ReviewQuestionDto, ReviewQuestion>();
+
+            cfg.CreateMap<SubmittedReviewQuestionDto, SubmittedReviewQuestion>();
+
+            cfg.CreateMap<SubmittedFinalTaskDto, SubmittedFinalTask>();
 
         }).CreateMapper();
 
@@ -230,6 +234,28 @@ namespace EducationalPortal.Application.Mapping
         {
             return this._mapper.Map<FinalTask>(source);
         }
+
+        public SubmittedFinalTask Map(SubmittedFinalTaskDto source)
+        {
+            return this._mapper.Map<SubmittedFinalTask>(source);
+        }
+
+        public IEnumerable<SubmittedReviewQuestion> Map(IEnumerable<SubmittedReviewQuestionDto> source, int submittedFinalTaskId)
+        {
+            var submittedQuestions = this._mapper.Map<IEnumerable<SubmittedReviewQuestion>>(source);
+            foreach (var question in submittedQuestions)
+            {
+                question.SubmittedFinalTaskId = submittedFinalTaskId;
+            }
+
+            return submittedQuestions;
+        }
+
+        public FinalTaskDto Map(FinalTask source)
+        {
+            return this._mapper.Map<FinalTaskDto>(source);
+        }
+
 
         public Course Map(Course course, CourseCreateDto courseDTO)
         {

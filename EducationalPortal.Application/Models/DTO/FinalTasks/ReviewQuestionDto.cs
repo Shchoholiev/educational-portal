@@ -4,8 +4,6 @@
     {
         public string Text { get; set; }
 
-        public int Mark { get; set; }
-
         public int MaxMark { get; set; }
     }
 }

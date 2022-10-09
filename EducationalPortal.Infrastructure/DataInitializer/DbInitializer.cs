@@ -12,15 +12,15 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 {
     public static class DbInitializer
     {
-        public static async Task InitializeDb(WebApplication app)
+        public static async Task InitializeDbAsync(WebApplication app)
         {
             var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<PasswordHasher>>();
-            await Initialize(context, logger);
+            await InitializeAsync(context, logger);
         }
 
-        private static async Task Initialize(ApplicationContext context, ILogger<PasswordHasher> logger)
+        private static async Task InitializeAsync(ApplicationContext context, ILogger<PasswordHasher> logger)
         {
             //await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();

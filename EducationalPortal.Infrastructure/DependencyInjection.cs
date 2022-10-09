@@ -38,6 +38,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IUsersCoursesRepository, UsersCoursesRepository>();
             services.AddScoped<ICartItemsRepository, CartItemsRepository>();
+            services.AddScoped<IFinalTasksRepository, FinalTasksRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;
@@ -58,6 +59,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IResourcesService, ResourcesService>();
             services.AddScoped<ICloudStorageService, CloudStorageService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            services.AddScoped<IFinalTasksService, FinalTasksService>();
 
             return services;
         }
