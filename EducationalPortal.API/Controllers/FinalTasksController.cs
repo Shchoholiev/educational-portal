@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationalPortal.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class FinalTasksController : ApiControllerBase
     {
         private readonly IFinalTasksService _finalTasksService;
@@ -41,7 +41,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "Creator")]
+        [Authorize(Roles = "Creator")]
         public async Task<IEnumerable<FinalTaskDto>> GetFinalTasksAsync([FromQuery] PageParameters pageParameters,
                                                                        CancellationToken cancellationToken)
         {
@@ -51,7 +51,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Creator")]
+        [Authorize(Roles = "Creator")]
         public async Task<IActionResult> CreateAsync([FromBody] FinalTaskDto finalTaskDto, CancellationToken cancellationToken)
         {
             await this._finalTasksService.CreateAsync(finalTaskDto, cancellationToken);
