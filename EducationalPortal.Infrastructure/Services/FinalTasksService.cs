@@ -26,7 +26,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<FinalTaskDto> GetFinalTaskAsync(int courseId, CancellationToken cancellationToken)
         {
-            var finalTask = await this._finalTasksRepository.GetFinalTaskAsync(courseId, cancellationToken);
+            var finalTask = await this._finalTasksRepository.GetFinalTaskByCourseIdAsync(courseId, cancellationToken);
             if (finalTask == null)
             {
                 throw new NotFoundException("FinalTask");
@@ -37,6 +37,31 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger.LogInformation($"Returned FinalTask with Id: {finalTask.Id}.");
 
             return dto;
+        }
+
+        public async Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, CancellationToken cancellationToken)
+        {
+            var finalTask = await this._finalTasksRepository.GetFinalTaskByCourseIdAsync(courseId, cancellationToken);
+            if (finalTask == null)
+            {
+                throw new NotFoundException("FinalTask");
+            }
+
+            var submittedTask = await this._finalTasksRepository.GetSubmittedFinalTaskForReviewAsync(courseId, cancellationToken);
+            if (submittedTask == null)
+            {
+                throw new NotFoundException("SubmittedFinalTask");
+            }
+
+            var taskForReview = new FinalTaskForReview
+            {
+                FinalTaskText = finalTask.Text,
+                ReviewQuestions = this._mapper.Map(finalTask.ReviewQuestions),
+                SubmittedFinalTaskId = submittedTask.Id,
+                FileLink = submittedTask.FileLink,
+            };
+
+            return taskForReview;
         }
 
         public async Task CreateAsync(FinalTaskDto finalTaskDto, CancellationToken cancellationToken)

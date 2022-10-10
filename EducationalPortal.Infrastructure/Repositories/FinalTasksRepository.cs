@@ -36,6 +36,14 @@ namespace EducationalPortal.Infrastructure.Repositories
             return this._table.FirstOrDefaultAsync(ft => ft.Id == id, cancellationToken);
         }
 
+        public Task<FinalTask?> GetFinalTaskByCourseIdAsync(int courseId, CancellationToken cancellationToken)
+        {
+            return this._db.Courses
+                .Where(c => c.Id == courseId)
+                .Select(c => c.FinalTask)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
         public Task<FinalTask?> GetFullFinalTaskAsync(int id, CancellationToken cancellationToken)
         {
             return this._table
@@ -98,6 +106,15 @@ namespace EducationalPortal.Infrastructure.Repositories
             return await this._db.ReviewQuestions
                                  .Where(q => q.FinalTask.Id == finalTaskId)
                                  .ToListAsync(cancellationToken);
+        }
+
+        public Task<SubmittedFinalTask?> GetSubmittedFinalTaskForReviewAsync(int finalTaskId, CancellationToken cancellationToken)
+        {
+            return this._db.SubmittedFinalTasks
+                .Where(s => s.FinalTaskId == finalTaskId
+                       && s.SubmitDateUTC.Ticks + s.FinalTask.ReviewDeadlineTime.Ticks > DateTime.UtcNow.Ticks)
+                .OrderBy(s => s.SubmitDateUTC)
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)

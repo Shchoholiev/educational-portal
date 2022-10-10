@@ -11,6 +11,8 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<FinalTask?> GetFinalTaskAsync(int id, CancellationToken cancellationToken);
 
+        Task<FinalTask?> GetFinalTaskByCourseIdAsync(int courseId, CancellationToken cancellationToken);
+
         Task<FinalTask?> GetFullFinalTaskAsync(int id, CancellationToken cancellationToken);
 
         Task<PagedList<FinalTask>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
@@ -28,5 +30,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task AddSubmittedReviewQuestionsAsync(IEnumerable<SubmittedReviewQuestion> questions, CancellationToken cancellationToken);
 
         Task<IEnumerable<ReviewQuestion>> GetReviewQuestionsAsync(int finalTaskId, CancellationToken cancellationToken);
+        
+        Task<SubmittedFinalTask?> GetSubmittedFinalTaskForReviewAsync(int finalTaskId, CancellationToken cancellationToken);
     }
 }

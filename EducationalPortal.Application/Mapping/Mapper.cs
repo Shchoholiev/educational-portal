@@ -251,11 +251,15 @@ namespace EducationalPortal.Application.Mapping
             return submittedQuestions;
         }
 
+        public IEnumerable<ReviewQuestionDto> Map(IEnumerable<ReviewQuestion> source)
+        {
+            return this._mapper.Map<IEnumerable<ReviewQuestionDto>>(source);
+        }
+
         public FinalTaskDto Map(FinalTask source)
         {
             return this._mapper.Map<FinalTaskDto>(source);
         }
-
 
         public Course Map(Course course, CourseCreateDto courseDTO)
         {

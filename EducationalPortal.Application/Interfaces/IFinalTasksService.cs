@@ -7,6 +7,8 @@ namespace EducationalPortal.Application.Interfaces
     {
         Task<FinalTaskDto> GetFinalTaskAsync(int courseId, CancellationToken cancellationToken);
 
+        Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, CancellationToken cancellationToken);
+
         Task CreateAsync(FinalTaskDto finalTaskDto, CancellationToken cancellationToken);
 
         Task<PagedList<FinalTaskDto>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
