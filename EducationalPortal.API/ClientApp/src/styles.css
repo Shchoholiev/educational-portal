@@ -1,1 +1,106 @@
-/* You can add global styles to this file, and also import other style files */
+html {
+    overflow-x: hidden;
+    --main-color: #E278F7;
+}
+
+.material-card {
+    border-radius: 15px;
+    background-color: #1E1E2C;
+    padding: 15px;
+}
+
+.material-card.chosen {
+    background-color: #6D4781;
+}
+
+.text-red {
+    color: #FD4756;
+}
+
+.text-green {
+    color: #25B299;
+}
+
+.text-pink {
+    color: #E278F7;
+}
+
+.bg-red {
+    background-color: #FD4756 !important;
+}
+
+.bg-green {
+    background-color: #25B299 !important;
+}
+
+.bg-pink {
+    background-color: #E278F7 !important;
+}
+
+.to-pink {
+    filter: invert(71%) sepia(95%) saturate(3381%) hue-rotate(235deg) brightness(100%) contrast(94%);
+}
+
+.btn-pink-small {
+    background-color: #E278F7;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    padding: 3px 11px;
+    border-radius: 14px;
+    transition: 0.7s;
+}
+
+    .btn-pink-small:hover {
+        background-color: #ac5abd;
+    }
+
+.btn-pink {
+    background-color: #E278F7;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 16px;
+    transition: 0.7s;
+}
+
+    .btn-pink:hover {
+        background-color: #ac5abd;
+    }
+
+a.text-pink:hover {
+    color: #ac5abd;
+}
+
+.input-pink {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--main-color);
+    background: #2A2C3E;
+    border: 1px solid var(--main-color);
+    border-radius: 14px;
+    padding: 1px 7px;
+}
+
+.btn-download {
+    background-color: #E278F7;
+    color: #fff;
+    font-size: 17px;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 3px;
+    transition: 0.7s;
+    text-decoration: none;
+    font-weight: 600;
+}
+    .btn-download:hover {
+        background-color: #ac5abd;
+        color: #fff;
+    }
+
+.form-check-input:checked {
+    background-color: var(--main-color) !important;
+    border-color: var(--main-color) !important;
+}

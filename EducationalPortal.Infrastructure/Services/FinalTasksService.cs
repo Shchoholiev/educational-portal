@@ -39,7 +39,23 @@ namespace EducationalPortal.Infrastructure.Services
             return dto;
         }
 
-        public async Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, CancellationToken cancellationToken)
+        public async Task<SubmittedFinalTaskDto> GetSubmittedFinalTaskAsync(int finalTaskId, string userId, CancellationToken cancellationToken)
+        {
+            var submittedTask = await this._finalTasksRepository.GetSubmittedFinalTaskAsync(finalTaskId, userId, cancellationToken);
+            if (submittedTask == null)
+            {
+                throw new NotFoundException("SubmittedFinalTask");
+            }
+
+            var dto = this._mapper.Map(submittedTask);
+            dto.ReviewedTask = await this._finalTasksRepository.ReviewedOtherTaskAsync(finalTaskId, userId, cancellationToken);
+
+            this._logger.LogInformation($"Returned SubmittedFinalTask with Id: {submittedTask.Id}.");
+
+            return dto;
+        }
+
+        public async Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, string userId, CancellationToken cancellationToken)
         {
             var finalTask = await this._finalTasksRepository.GetFinalTaskByCourseIdAsync(courseId, cancellationToken);
             if (finalTask == null)
@@ -47,7 +63,7 @@ namespace EducationalPortal.Infrastructure.Services
                 throw new NotFoundException("FinalTask");
             }
 
-            var submittedTask = await this._finalTasksRepository.GetSubmittedFinalTaskForReviewAsync(courseId, cancellationToken);
+            var submittedTask = await this._finalTasksRepository.GetSubmittedFinalTaskForReviewAsync(finalTask.Id, userId, cancellationToken);
             if (submittedTask == null)
             {
                 throw new NotFoundException("SubmittedFinalTask");
@@ -55,7 +71,6 @@ namespace EducationalPortal.Infrastructure.Services
 
             var taskForReview = new FinalTaskForReview
             {
-                FinalTaskText = finalTask.Text,
                 ReviewQuestions = this._mapper.Map(finalTask.ReviewQuestions),
                 SubmittedFinalTaskId = submittedTask.Id,
                 FileLink = submittedTask.FileLink,
@@ -127,22 +142,22 @@ namespace EducationalPortal.Infrastructure.Services
             await this._finalTasksRepository.AddSubmittedReviewQuestionsAsync(submittedReviewQuestions, cancellationToken);
 
             submittedFinalTask.Mark = this.GetFinalTaskMark(reviewedFinalTask.SubmittedReviewQuestions, reviewQuestions);
-            submittedFinalTask.RevievedBy = new User { Id = reviewedFinalTask.ReviewerId };
+            submittedFinalTask.ReviewedById = reviewedFinalTask.ReviewerId;
 
             await this._finalTasksRepository.UpdateSubmittedFinalTaskAsync(submittedFinalTask, cancellationToken);
         }
 
-        private async Task CheckDeadlineAsync(FinalTask finalTask, string reviewerId, CancellationToken cancellationToken)
+        private async Task CheckDeadlineAsync(FinalTask finalTask, string userId, CancellationToken cancellationToken)
         {
             var reviewerFinalTask = await this._finalTasksRepository.GetSubmittedFinalTaskAsync(
-                finalTask.Id, reviewerId, cancellationToken);
+                finalTask.Id, userId, cancellationToken);
             if (reviewerFinalTask == null)
             {
                 throw new InvalidOperationException("Reviewer did not submit his task!");
             }
 
             var deadlineTime = new TimeSpan(finalTask.ReviewDeadlineTime.Ticks);
-            if (reviewerFinalTask.SubmitDateUTC.Add(deadlineTime) > DateTime.UtcNow)
+            if (reviewerFinalTask.SubmitDateUTC.Add(deadlineTime) < DateTime.UtcNow)
             {
                 throw new InvalidOperationException("Reviewer reviewed the task after the deadline!");
             }

@@ -40,7 +40,14 @@ namespace EducationalPortal.Infrastructure.Repositories
         {
             return this._db.Courses
                 .Where(c => c.Id == courseId)
-                .Select(c => c.FinalTask)
+                .Select(c => new FinalTask
+                {
+                    Id = c.FinalTask.Id,
+                    Name = c.FinalTask.Name,
+                    Text = c.FinalTask.Text,
+                    ReviewDeadlineTime = c.FinalTask.ReviewDeadlineTime,
+                    ReviewQuestions = c.FinalTask.ReviewQuestions,
+                })
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -78,9 +85,8 @@ namespace EducationalPortal.Infrastructure.Repositories
 
         public async Task UpdateSubmittedFinalTaskAsync(SubmittedFinalTask finalTask, CancellationToken cancellationToken)
         {
-            this._db.Attach(finalTask);
             this._db.Entry(finalTask).Property(ft => ft.Mark).IsModified = true;
-            this._db.Entry(finalTask).Property(ft => ft.RevievedBy).IsModified = true;
+            this._db.Entry(finalTask).Property(ft => ft.ReviewedById).IsModified = true;
             await this.SaveAsync(cancellationToken);
         }
 
@@ -89,11 +95,19 @@ namespace EducationalPortal.Infrastructure.Repositories
             return this._db.SubmittedFinalTasks.FirstOrDefaultAsync(sft => sft.Id == id, cancellationToken);
         }
 
-        public Task<SubmittedFinalTask?> GetSubmittedFinalTaskAsync(int finalTaskId, string reviewerId, CancellationToken cancellationToken)
+        public Task<SubmittedFinalTask?> GetSubmittedFinalTaskAsync(int finalTaskId, string userId, CancellationToken cancellationToken)
         {
             return this._db.SubmittedFinalTasks
+                .Include(s => s.ReviewedBy)
                 .FirstOrDefaultAsync(sft => sft.FinalTaskId == finalTaskId 
-                                         && sft.UserId == reviewerId, cancellationToken);
+                                         && sft.UserId == userId, cancellationToken);
+        }
+
+        public Task<bool> ReviewedOtherTaskAsync(int finalTaskId, string userId, CancellationToken cancellationToken)
+        {
+            return this._db.SubmittedFinalTasks
+                .AnyAsync(s => s.FinalTaskId == finalTaskId 
+                          && s.ReviewedById == userId, cancellationToken);
         }
 
         public async Task AddSubmittedReviewQuestionsAsync(IEnumerable<SubmittedReviewQuestion> questions, CancellationToken cancellationToken)
@@ -108,11 +122,14 @@ namespace EducationalPortal.Infrastructure.Repositories
                                  .ToListAsync(cancellationToken);
         }
 
-        public Task<SubmittedFinalTask?> GetSubmittedFinalTaskForReviewAsync(int finalTaskId, CancellationToken cancellationToken)
+        public Task<SubmittedFinalTask?> GetSubmittedFinalTaskForReviewAsync(int finalTaskId, string userId, 
+            CancellationToken cancellationToken)
         {
             return this._db.SubmittedFinalTasks
                 .Where(s => s.FinalTaskId == finalTaskId
-                       && s.SubmitDateUTC.Ticks + s.FinalTask.ReviewDeadlineTime.Ticks > DateTime.UtcNow.Ticks)
+                       && s.ReviewedById == null
+                       //&& s.SubmitDateUTC.Ticks + s.FinalTask.ReviewDeadlineTime.Ticks > DateTime.UtcNow.Ticks
+                       && s.UserId != userId)
                 .OrderBy(s => s.SubmitDateUTC)
                 .FirstOrDefaultAsync(cancellationToken);
         }

@@ -1,6 +1,6 @@
 ﻿namespace EducationalPortal.Application.Models.DTO.FinalTasks
 {
-    public class ReviewQuestionDto
+    public class ReviewQuestionDto : BaseDto
     {
         public string Text { get; set; }
 

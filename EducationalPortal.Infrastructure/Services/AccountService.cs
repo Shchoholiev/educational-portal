@@ -102,11 +102,6 @@ namespace EducationalPortal.Infrastructure.Services
                 throw new NotFoundException("User");
             }
 
-            if (!author.Roles.Any(r => r.Name == "Creator"))
-            {
-                throw new NotFoundException("Author");
-            }
-
             var dto = this._mapper.Map(author);
 
             this._logger.LogInformation($"Returned user as author with email: {author.Email}.");

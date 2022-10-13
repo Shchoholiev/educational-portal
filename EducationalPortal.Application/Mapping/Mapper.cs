@@ -83,6 +83,7 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<SubmittedReviewQuestionDto, SubmittedReviewQuestion>();
 
             cfg.CreateMap<SubmittedFinalTaskDto, SubmittedFinalTask>();
+            cfg.CreateMap<SubmittedFinalTask, SubmittedFinalTaskDto>();
 
         }).CreateMapper();
 
@@ -267,6 +268,11 @@ namespace EducationalPortal.Application.Mapping
             course = MapCourseJoinEntities(course, courseDTO);
 
             return course;
+        }
+
+        public SubmittedFinalTaskDto Map(SubmittedFinalTask source)
+        {
+            return this._mapper.Map<SubmittedFinalTaskDto>(source);
         }
 
         private Course MapCourseJoinEntities(Course course, CourseCreateDto courseDTO)

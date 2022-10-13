@@ -7,7 +7,9 @@ namespace EducationalPortal.Application.Interfaces
     {
         Task<FinalTaskDto> GetFinalTaskAsync(int courseId, CancellationToken cancellationToken);
 
-        Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, CancellationToken cancellationToken);
+        Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, string userId, CancellationToken cancellationToken);
+
+        Task<SubmittedFinalTaskDto> GetSubmittedFinalTaskAsync(int finalTaskId, string userId, CancellationToken cancellationToken);
 
         Task CreateAsync(FinalTaskDto finalTaskDto, CancellationToken cancellationToken);
 

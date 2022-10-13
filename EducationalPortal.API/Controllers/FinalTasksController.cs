@@ -25,18 +25,26 @@ namespace EducationalPortal.API.Controllers
         [HttpGet("for-review/{courseId}")]
         public async Task<FinalTaskForReview> GetFinalTaskForReviewAsync(int courseId, CancellationToken cancellationToken)
         {
-            return await this._finalTasksService.GetFinalTaskForReviewAsync(courseId, cancellationToken);
+            return await this._finalTasksService.GetFinalTaskForReviewAsync(courseId, UserId, cancellationToken);
+        }
+
+        [HttpGet("submitted/{finalTaskId}")]
+        public async Task<SubmittedFinalTaskDto> GetSubmittedFinalTaskAsync(int finalTaskId, CancellationToken cancellationToken)
+        {
+            return await this._finalTasksService.GetSubmittedFinalTaskAsync(finalTaskId, UserId, cancellationToken);
         }
 
         [HttpPost("submit")]
         public async Task SubmitAsync([FromBody] SubmittedFinalTaskDto submittedTaskDto, CancellationToken cancellationToken)
         {
+            submittedTaskDto.UserId = UserId;
             await this._finalTasksService.SubmitAsync(submittedTaskDto, cancellationToken);
         }
 
         [HttpPost("review")]
         public async Task ReviewAsync([FromBody] ReviewedFinalTask reviewedFinalTask, CancellationToken cancellationToken)
         {
+            reviewedFinalTask.ReviewerId = UserId;
             await this._finalTasksService.ReviewAsync(reviewedFinalTask, cancellationToken);
         }
 

@@ -1,15 +1,15 @@
-<div class="d-flex flex-row">
+<div class="material-card d-flex flex-row">
     <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;" (click)="click()"
         [checked]="article.isLearned">
     <div style="width:100%">   
         <div class="d-flex flex-row justify-content-between mb-2">
             <div class="d-flex flex-row">
-                <img style="height:17px; margin-right:10px;" class="mt-1"
+                <img style="height:17px; margin-right:10px;" class="mt-1 to-pink"
                 src="https://educationalportal.blob.core.windows.net/essentials/Article.svg"/>
-                <a href="{{article.link}}" target="_blank" style="margin-right:7px;">{{article.name}}</a>
+                <a href="{{article.link}}" target="_blank" class="text-pink" style="margin-right:7px;">{{article.name}}</a>
             </div>
-            <p class="text-secondary mb-0">{{getDate()}}</p>
+            <p class="text-white mb-0">{{getDate()}}</p>
         </div>
-        <p class="mb-1 text-secondary"><strong>Resource: </strong>{{article.resource.name}}</p>
+        <p class="mb-1 text-white"><strong>Resource: </strong>{{article.resource.name}}</p>
     </div>
 </div>

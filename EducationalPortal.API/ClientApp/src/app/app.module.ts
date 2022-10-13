@@ -40,6 +40,9 @@ import { CreateAuthorComponent } from './authors/create-author/create-author.com
 import { AddVideosComponent } from './videos/add-videos/add-videos.component';
 import { CreateVideoComponent } from './videos/create-video/create-video.component';
 import { CourseCreateComponent } from './courses/course-create/course-create.component';
+import { BasicLayoutComponent } from './basic-layout/basic-layout.component';
+import { FinalTaskComponent } from './final-tasks/final-task/final-task.component';
+import { ReviewFinalTaskComponent } from './final-tasks/review-final-task/review-final-task.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -80,7 +83,10 @@ export function tokenGetter() {
     CreateAuthorComponent,
     AddVideosComponent,
     CreateVideoComponent,
-    CourseCreateComponent
+    CourseCreateComponent,
+    BasicLayoutComponent,
+    FinalTaskComponent,
+    ReviewFinalTaskComponent
   ],
   imports: [
     BrowserModule,

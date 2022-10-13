@@ -6,8 +6,6 @@
 
         public string FileLink { get; set; }
 
-        public string FinalTaskText { get; set; }
-
         public IEnumerable<ReviewQuestionDto> ReviewQuestions { get; set; }
     }
 }

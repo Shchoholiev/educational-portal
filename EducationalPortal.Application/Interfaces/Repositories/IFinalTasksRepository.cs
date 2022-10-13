@@ -25,12 +25,14 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<SubmittedFinalTask?> GetSubmittedFinalTaskAsync(int id, CancellationToken cancellationToken);
         
-        Task<SubmittedFinalTask?> GetSubmittedFinalTaskAsync(int finalTaskId, string reviewerId, CancellationToken cancellationToken);
+        Task<SubmittedFinalTask?> GetSubmittedFinalTaskAsync(int finalTaskId, string userId, CancellationToken cancellationToken);
+        
+        Task<bool> ReviewedOtherTaskAsync(int finalTaskId, string userId, CancellationToken cancellationToken);
 
         Task AddSubmittedReviewQuestionsAsync(IEnumerable<SubmittedReviewQuestion> questions, CancellationToken cancellationToken);
 
         Task<IEnumerable<ReviewQuestion>> GetReviewQuestionsAsync(int finalTaskId, CancellationToken cancellationToken);
         
-        Task<SubmittedFinalTask?> GetSubmittedFinalTaskForReviewAsync(int finalTaskId, CancellationToken cancellationToken);
+        Task<SubmittedFinalTask?> GetSubmittedFinalTaskForReviewAsync(int finalTaskId, string userId, CancellationToken cancellationToken);
     }
 }

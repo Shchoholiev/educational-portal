@@ -19,6 +19,9 @@ namespace EducationalPortal.Infrastructure.FluentAPI
 
             builder.HasMany<SubmittedReviewQuestion>(s => s.SubmittedReviewQuestions)
                    .WithOne(s => s.SubmittedFinalTask);
+
+            builder.Property(s => s.ReviewedById)
+                .IsRequired(false);
         } 
     }
 }

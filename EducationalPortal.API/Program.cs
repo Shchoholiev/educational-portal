@@ -24,7 +24,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    //await DbInitializer.InitializeDbAsync(app);
+    //await DbInitializer.AddFinalTaskAsync(app);
     app.UseSwagger();
     app.UseSwaggerUI();
 }

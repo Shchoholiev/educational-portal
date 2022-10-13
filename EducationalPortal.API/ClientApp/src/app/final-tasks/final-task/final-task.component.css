@@ -1,0 +1,11 @@
+.drag-n-drop {
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    border: 2px dashed var(--main-color);
+    border-radius: 15px;
+}
+
+.drag-n-drop.highlight {
+    background-color: #2A2C3E;
+}

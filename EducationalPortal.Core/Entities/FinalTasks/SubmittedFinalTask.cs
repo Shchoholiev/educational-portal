@@ -10,7 +10,9 @@ namespace EducationalPortal.Core.Entities.FinalTasks
 
         public int Mark { get; set; }
 
-        public User? RevievedBy { get; set; }
+        public User? ReviewedBy { get; set; }
+
+        public string? ReviewedById { get; set; }
 
         public int FinalTaskId { get; set; }
 

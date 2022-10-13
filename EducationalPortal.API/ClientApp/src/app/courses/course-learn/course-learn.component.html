@@ -1,19 +1,53 @@
-<div class="row d-flex flex-wrap">
-    <section class="col-md-8">
-        <app-book-learn *ngIf="bookLink" [link]="bookLink"></app-book-learn>
-        <app-video-learn *ngIf="videoLink" [link]="videoLink"></app-video-learn>
-    </section>
-    <section class="col-md-4">
-        <app-progress-bar [progress]="course.progress"></app-progress-bar>
-        <ul class="list-group list-group-flush" style="border-left:0.5px solid rgba(0,0,0,.125)">
-            <li *ngFor="let material of course.materials" class="list-group-item">
-                <app-video-side *ngIf="material.hasOwnProperty('duration')" [video]="$any(material)" [courseId]="course.id"
-                    (click)="setVideo(material.link)" (changeProgress)="changeProgress($event)"></app-video-side>
-                <app-book-side *ngIf="material.hasOwnProperty('authors')" [book]="$any(material)" [courseId]="course.id"
-                    (click)="setBook(material.link)" (changeProgress)="changeProgress($event)"></app-book-side>
-                <app-article-side *ngIf="material.hasOwnProperty('resource')" [article]="$any(material)"
-                    (changeProgress)="changeProgress($event)" [courseId]="course.id"></app-article-side>
-            </li>
-        </ul>
-    </section>
-</div>
+<section class="course-learn-body" style="min-height: 100vh;">
+
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark shadow-sm px-3 ps-4">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">EducationalPortal</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/my-learning">My Learning</a>
+                      </li>
+                </ul>
+            </div>
+            <div class="d-flex gap-3 align-items-center">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item" style="width: 210px;">
+                    <app-progress-bar [progress]="course.progress"></app-progress-bar>
+                  </li>
+                </ul>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <button class="btn-pink-small" (click)="setFinalTask()">FINAL TASK</button>
+                  </li>
+                </ul>
+            </div>
+          </div>
+        </div>
+    </nav>
+    
+    <div class="row d-flex justify-content-between">
+        <section class="col p-3 ps-5 pb-5 material-details">
+            <app-book-learn *ngIf="bookLink" [link]="bookLink"></app-book-learn>
+            <app-video-learn *ngIf="videoLink" [link]="videoLink"></app-video-learn>
+            <app-final-task *ngIf="showFinalTask" [courseId]="course.id"></app-final-task>
+        </section>
+        <section style="width: 382px;" class="ps-0">
+            <div class="d-flex flex-column gap-3 materials-list p-3">
+                <div *ngFor="let material of course.materials">
+                    <app-video-side *ngIf="material.hasOwnProperty('duration')" [video]="$any(material)" [courseId]="course.id"
+                            (click)="setVideo(material)" (changeProgress)="changeProgress($event)" [isChosen]="this.chosenMaterialId == material.id"></app-video-side>
+                    <app-book-side *ngIf="material.hasOwnProperty('authors')" [book]="$any(material)" [courseId]="course.id"
+                            (click)="setBook(material)" (changeProgress)="changeProgress($event)" [isChosen]="this.chosenMaterialId == material.id"></app-book-side>
+                    <app-article-side *ngIf="material.hasOwnProperty('resource')" [article]="$any(material)"
+                            (changeProgress)="changeProgress($event)" [courseId]="course.id"></app-article-side>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</section>

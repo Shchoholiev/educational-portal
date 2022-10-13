@@ -1,4 +1,6 @@
-<div class="progress" style="height: 5px;">
-    <div class="progress-bar" [ngStyle]="{ 'width.%': progress }"></div>
+<div class="d-flex gap-2 align-items-center">
+    <p class="text-pink m-0 text-nowrap">{{progress}}%</p>
+    <div class="progress" style="height: 5px; width: 100%;">
+        <div class="progress-bar bg-pink" [ngStyle]="{ 'width.%': progress }"></div>
+    </div>
 </div>
-<p class="text-primary">{{progress}}% Complete</p>

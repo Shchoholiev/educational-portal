@@ -24,8 +24,6 @@ namespace EducationalPortal.Infrastructure.Services
         {
             this._logger.LogInformation($"Uploading file with name: '{fileName}' to container: {containerName}.");
 
-            throw new Exception("test");
-
             try
             {
                 var container = new BlobContainerClient(this._connectionString, containerName);
