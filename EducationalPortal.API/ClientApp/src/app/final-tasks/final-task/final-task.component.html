@@ -1,0 +1,44 @@
+<section>
+    <p class="m-0 text-pink text-uppercase fw-bold" style="font-size: 14px;">FINAL TASK</p>
+    <div class="d-flex justify-content-between align-items-center gap-2" style="position: relative; top: -5px; height: 37px;">
+        <h3 class="text-white m-0">{{finalTask.name}}</h3>
+        <h3 *ngIf="submittedFinalTask && submittedFinalTask.reviewedTask && submittedFinalTask.reviewedBy" 
+            class="text-white fw-normal m-0" style="position: relative; top: -3px;">
+            Mark: <span class="text-pink fw-bold fs-1">{{submittedFinalTask.mark}}%</span>
+        </h3>
+    </div>
+    <p class="text-white">{{finalTask.text}}</p>
+    <div *ngIf="!submittedFinalTask && !showReviewTask">
+        <div class="drag-n-drop d-flex mt-2" id="dropArea">
+            <label for="fileInput" class="text-white m-auto fs-5">Drag and drop, or <span class="text-pink fw-bold">browse</span> your files</label>
+            <input type="file" id="fileInput" accept=".zip" hidden>
+        </div>
+        <div class="mt-1">
+            <a  *ngIf="submittedFinalTask || link" href="{{link}}" class="text-pink mt-1">
+                Download file</a>
+        </div>
+        <button class="btn-pink mt-3" (click)="submitTask()">Submit Task</button>
+    </div>
+    <div *ngIf="submittedFinalTask && !showReviewTask">
+        <div class="my-2 mb-3">
+            <a  href="{{submittedFinalTask.fileLink}}" download class="btn-download">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                Download submitted file
+            </a>
+        </div>
+        <div *ngIf="!submittedFinalTask.reviewedTask">
+            <p class="text-white mb-0">To see your mark review final task submitted by another user.</p>
+            <h6 class="text-white">Review deadline time: <span class="text-pink fw-bold">{{getReviewDeadline()}}</span></h6>
+        </div>
+        <div *ngIf="!submittedFinalTask.reviewedBy">
+            <p class="text-white mb-0">To see your mark wait until your task is reviewed.</p>
+        </div>
+        <p *ngIf="submittedFinalTask.reviewedTask && submittedFinalTask.reviewedBy" class="text-white">ReviewedBy: 
+            <a class="text-pink fw-bold" routerLink="/account/author/{{submittedFinalTask.reviewedBy.email}}">
+                {{submittedFinalTask.reviewedBy.name}} - {{submittedFinalTask.reviewedBy.position}}
+            </a>
+        </p>
+        <button *ngIf="!submittedFinalTask.reviewedTask" class="btn-pink mt-2" (click)="reviewTask()">Review Task</button>
+    </div>
+    <app-review-final-task *ngIf="showReviewTask" [courseId]="courseId" (updateSubmittedTask)="updateSubmittedTask()"></app-review-final-task>
+</section>

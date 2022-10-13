@@ -1,6 +1,7 @@
 ﻿using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
+using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Infrastructure.EF;
 using EducationalPortal.Infrastructure.Services.Identity;
@@ -12,15 +13,61 @@ namespace EducationalPortal.Infrastructure.DataInitializer
 {
     public static class DbInitializer
     {
-        public static async Task InitializeDb(WebApplication app)
+        public static async Task InitializeDbAsync(WebApplication app)
         {
             var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<PasswordHasher>>();
-            await Initialize(context, logger);
+            await InitializeAsync(context, logger);
         }
 
-        private static async Task Initialize(ApplicationContext context, ILogger<PasswordHasher> logger)
+        public static async Task AddFinalTaskAsync(WebApplication app)
+        {
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+
+            await context.Database.EnsureCreatedAsync();
+            var finalTask = new FinalTask
+            {
+                Name = "Landing Page (HTML/CSS)",
+                Text = "Create Landing Page for anything you want. It can be store, tour agency, etc. " +
+                "It has to include service description and contact us form. Lorem ipsum dolor sit amet, " +
+                "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna " +
+                "aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip " +
+                "ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse " +
+                "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
+                "sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, " +
+                "consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea " +
+                "commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
+                "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in " +
+                "culpa qui officia deserunt mollit anim id est laborum. Use at least 5 images. Upload zip file.",
+                ReviewDeadlineTime = DateTime.MinValue.AddDays(7),
+                ReviewQuestions = new List<ReviewQuestion>
+                {
+                    new ReviewQuestion 
+                    { 
+                        Text = "Is there service description and contact us form? <br/>0 - none <br/>5 - only one <br/>10 - both",
+                        MaxMark = 10,
+                    },
+                    new ReviewQuestion 
+                    { 
+                        Text = "How many images does the website have?",
+                        MaxMark = 5,
+                    },
+                },
+                Courses = new List<Course>
+                {
+                    new Course { Id = 2 },
+                },
+            };
+
+            context.Attach(finalTask);
+            await context.FinalTasks.AddAsync(finalTask);
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task InitializeAsync(ApplicationContext context, ILogger<PasswordHasher> logger)
         {
             //await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();

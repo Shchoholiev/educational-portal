@@ -21,8 +21,8 @@ namespace EducationalPortal.API.Controllers
         {
             using (var stream = file.OpenReadStream())
             {
-                var link = await this._cloudStorageService.UploadAsync(stream, file.FileName, file.ContentType,
-                                                                   blobContainer, cancellationToken);
+                var link = await this._cloudStorageService.UploadAsync(stream, 
+                    Path.GetFileNameWithoutExtension(file.FileName), file.ContentType, blobContainer, cancellationToken);
                 return Ok(new { link });
             }
         }

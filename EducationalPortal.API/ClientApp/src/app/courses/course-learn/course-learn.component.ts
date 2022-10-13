@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LearnCourse } from 'src/app/shared/learn-course.model';
+import { MaterialBase } from 'src/app/shared/material-base.model';
 import { CoursesService } from '../courses.service';
 
 @Component({
@@ -15,6 +16,10 @@ export class CourseLearnComponent implements OnInit {
   public bookLink = "";
 
   public videoLink = "";
+
+  public showFinalTask = false;
+
+  public chosenMaterialId = 0;
 
   constructor(private _route: ActivatedRoute, private _coursesService: CoursesService) { }
 
@@ -33,13 +38,26 @@ export class CourseLearnComponent implements OnInit {
     this.course.progress = number;
   }
 
-  public setBook(link: string){
+  public setBook(material: MaterialBase){
     this.videoLink = "";
-    this.bookLink = link;
+    this.showFinalTask = false;
+    this.bookLink = material.link;
+    this.chosenMaterialId = material.id;
   }
 
-  public setVideo(link: string){
+  public setVideo(material: MaterialBase){
     this.bookLink = "";
-    this.videoLink = link;
+    this.showFinalTask = false;
+    this.videoLink = material.link;
+    this.chosenMaterialId = material.id;
+  }
+
+  public setFinalTask(){
+    if (this.course.progress == 100) {
+      this.videoLink = "";
+      this.bookLink = "";
+      this.showFinalTask = true;
+      this.chosenMaterialId = 0;
+    }
   }
 }

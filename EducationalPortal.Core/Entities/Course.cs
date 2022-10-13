@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Core.Common;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Core.Entities.JoinEntities;
 
 namespace EducationalPortal.Core.Entities
@@ -19,6 +20,8 @@ namespace EducationalPortal.Core.Entities
         public List<CoursesSkills> CoursesSkills { get; set; }
 
         public List<CoursesMaterials> CoursesMaterials { get; set; }
+
+        public FinalTask? FinalTask { get; set; }
 
         public User Author { get; set; }
 

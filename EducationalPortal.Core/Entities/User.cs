@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Core.Common;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.ComponentModel.DataAnnotations;
 
@@ -33,5 +34,7 @@ namespace EducationalPortal.Core.Entities
         public List<UsersCourses> UsersCourses { get; set; }
 
         public List<Course?> CreatedCourses { get; set; }
+
+        public List<SubmittedFinalTask> SubmittedFinalTasks { get; set; }
     }
 }
