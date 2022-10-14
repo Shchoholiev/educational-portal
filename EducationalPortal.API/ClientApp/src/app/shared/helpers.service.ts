@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class HelpersService {
 
-  private readonly helpersURL = 'https://localhost:7106/api/helpers';
+  private readonly helpersURL = '/api/helpers';
 
   constructor(private _http: HttpClient) { }
 
