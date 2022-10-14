@@ -22,25 +22,36 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<string> UploadAsync(Stream fileStream, string fileName, string fileType, 
                                               string containerName, CancellationToken cancellationToken)
         {
-            var container = new BlobContainerClient(this._connectionString, containerName);
-            var blob = container.GetBlobClient(fileName);
+            this._logger.LogInformation($"Uploading file with name: '{fileName}' to container: {containerName}.");
 
-            while (await blob.ExistsAsync(cancellationToken))
+            try
             {
-                this._logger.LogInformation($"File with name: {fileName} already exists. " +
-                                            $"Changing name and trying upload file again.");
+                var container = new BlobContainerClient(this._connectionString, containerName);
+                var blob = container.GetBlobClient(fileName);
 
-                fileName += "_new";
-                blob = container.GetBlobClient(fileName);
+                while (await blob.ExistsAsync(cancellationToken))
+                {
+                    this._logger.LogInformation($"File with name: {fileName} already exists. " +
+                                                $"Changing name and trying upload file again.");
+
+                    fileName += "_new";
+                    blob = container.GetBlobClient(fileName);
+                }
+
+                var options = new BlobUploadOptions { HttpHeaders = new BlobHttpHeaders { ContentType = fileType } };
+                await blob.UploadAsync(fileStream, options, cancellationToken);
+                var link = blob.Uri.ToString();
+
+                this._logger.LogInformation($"Uploaded file to Blob Storage. Link: {link}.");
+
+                return link;
             }
+            catch (Exception e)
+            {
+                this._logger.LogError("Error while uploading a file: @model", e);
 
-            var options = new BlobUploadOptions { HttpHeaders = new BlobHttpHeaders { ContentType = fileType } };
-            await blob.UploadAsync(fileStream, options, cancellationToken);
-            var link = blob.Uri.ToString();
-
-            this._logger.LogInformation($"Uploaded file to Blob Storage. Link: {link}.");
-
-            return link;
+                throw;
+            }
         }
         
         public async Task DeleteAsync(string fileLink, string containerName, CancellationToken cancellationToken)

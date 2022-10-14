@@ -5,7 +5,7 @@
                 <label class="control-label">Name</label> 
                 <input class="form-control" [(ngModel)]="course.name" name="name" required
                         minlength="5" maxlength="100"/>
-                <span *ngIf="form.controls['name'].invalid" class="text-danger">
+                <span *ngIf="form.controls['name']?.invalid" class="text-danger">
                     Name must be between 5 and 100 characters.</span> 
             </div>
             <div class="d-flex mb-2 flex-column">
@@ -19,21 +19,21 @@
                 <label class="control-label">Short Description</label> 
                 <textarea class="form-control" rows="2" [(ngModel)]="course.shortDescription" 
                         name="shortDescription" minlength="30" maxlength="150" required></textarea>
-                <span *ngIf="form.controls['shortDescription'].invalid" class="text-danger">
+                <span *ngIf="form.controls['shortDescription']?.invalid" class="text-danger">
                     Short description must be between 30 and 150 characters.</span> 
             </div>
             <div class="form-group mb-2"> 
                 <label class="control-label">Description</label> 
                 <textarea class="form-control" rows="5" [(ngModel)]="course.description" name="description" 
                     minlength="100" maxlength="3000" required></textarea>
-                <span *ngIf="form.controls['description'].invalid" class="text-danger">
+                <span *ngIf="form.controls['description']?.invalid" class="text-danger">
                     Description must be between 100 and 3000 characters.</span> 
             </div>
             <div class="form-group mb-2"> 
                 <label class="control-label">Price</label> 
                 <input class="form-control" [(ngModel)]="course.price" name="price" type="number" 
                     required min="0" max="1000"/>
-                <span *ngIf="form.controls['price'].invalid" class="text-danger">
+                <span *ngIf="form.controls['price']?.invalid" class="text-danger">
                     Price must be between 0 and 1000</span>
             </div>
         </form>
@@ -73,7 +73,7 @@
 
         <section class="form-group mb-2 d-flex">
             <input type="button" value="Save" class="btn btn-success mx-auto w-50" (click)="update()" 
-                [disabled]="form.invalid || !course.materials.length || !course.skills.length"/>
+                [disabled]="form?.invalid || !course.materials.length || !course.skills.length"/>
         </section>
     </div>
 

@@ -11,6 +11,8 @@ namespace EducationalPortal.API.Controllers
     {
         protected string? Email => User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
+        protected string? UserId => User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
         protected void SetPagingMetadata(IPagedList pagedList)
         {
             var metadata = new

@@ -1,6 +1,6 @@
 ﻿namespace EducationalPortal.Application.Models.DTO.Course
 {
-    public class CourseDto : EntityBaseDto
+    public class CourseDto : BaseDto
     {
         public string Name { get; set; }
 

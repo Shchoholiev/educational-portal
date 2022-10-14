@@ -13,6 +13,8 @@ export class VideoSideComponent implements OnInit {
 
   @Input() courseId: number = 0;
 
+  @Input() isChosen = false;
+
   @Output() changeProgress = new EventEmitter<any>(true);
 
   constructor(private _coursesService: CoursesService) { }

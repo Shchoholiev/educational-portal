@@ -1,6 +1,6 @@
 ﻿namespace EducationalPortal.Application.Models.DTO
 {
-    public class MaterialBaseDto : EntityBaseDto
+    public class MaterialBaseDto : BaseDto
     {
         public string Name { get; set; }
 

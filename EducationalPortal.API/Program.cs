@@ -1,5 +1,6 @@
 using EducationalPortal.API;
 using EducationalPortal.Infrastructure;
+using EducationalPortal.Infrastructure.DataInitializer;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    //await DbInitializer.AddFinalTaskAsync(app);
     app.UseSwagger();
     app.UseSwaggerUI();
 }

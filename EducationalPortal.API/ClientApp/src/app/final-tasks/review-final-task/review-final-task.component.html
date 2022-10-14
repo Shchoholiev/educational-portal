@@ -1,0 +1,29 @@
+<hr class="bg-pink"/>
+<div *ngIf="!finalTaskForReview">
+    <p class="text-pink">No tasks to review now, try again later.</p>
+</div>
+<section *ngIf="finalTaskForReview">
+    <div class="my-1">
+        <p class="text-white mb-2">Submitted file:</p>
+        <a  href="{{finalTaskForReview.fileLink}}" download class="btn-download">
+            <i class="fa-solid fa-file-arrow-down"></i>
+            Download
+        </a>
+    </div>
+    <p class="mt-4 mb-2 text-pink text-uppercase fw-bold" style="font-size: 14px;">REVIEW QUESTIONS:</p>
+    <div class="d-flex flex-column" style="gap: 15px;">
+        <div *ngFor="let question of finalTaskForReview.reviewQuestions; index as i">
+            <p class="text-white mb-2">
+                <span class="text-pink fw-bold">{{i + 1}}. </span>
+                <span [innerHTML]="question.text"></span>
+            </p>
+            <div class="d-flex gap-2 align-items-center">
+                <label class="text-white">Mark:</label>
+                <input class="input-pink" type="number" min="0" max="{{question.maxMark}}" 
+                    [(ngModel)]="reviewedFinalTask.submittedReviewQuestions[i].mark" />
+                <label class="text-white">max: <span class="text-pink fw-bold">{{question.maxMark}}</span></label>
+            </div>
+        </div>
+    </div>
+    <button class="btn-pink mt-4" (click)="submitReview()">Submit</button>
+</section>

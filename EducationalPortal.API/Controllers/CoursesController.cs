@@ -31,13 +31,13 @@ namespace EducationalPortal.API.Controllers
         [AllowAnonymous]
         public async Task<CourseDto> GetCourseAsync(int id, CancellationToken cancellationToken)
         {
-            return await this._coursesService.GetCourseAsync(id, Email, cancellationToken);
+            return await this._coursesService.GetCourseAsync(id, UserId, cancellationToken);
         }
 
         [HttpGet("learn/{id}")]
         public async Task<CourseLearnDto> GetCourseToLearnAsync(int id, CancellationToken cancellationToken)
         {
-            return await this._coursesService.GetCourseLearnAsync(id, Email, cancellationToken);
+            return await this._coursesService.GetCourseLearnAsync(id, UserId, cancellationToken);
         }
 
         [HttpPost]
@@ -45,7 +45,7 @@ namespace EducationalPortal.API.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] CourseCreateDto courseDto, 
                                                      CancellationToken cancellationToken)
         {
-            var course = await this._coursesService.CreateAsync(courseDto, Email, cancellationToken);
+            var course = await this._coursesService.CreateAsync(courseDto, UserId, cancellationToken);
             return CreatedAtAction("GetCourse", new { id = course.Id }, course);
         }
 
@@ -74,17 +74,15 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpPut("learned")]
-        public async Task<int> LearnedAsync([FromQuery]int materialId, [FromQuery]int courseId, 
-                                            CancellationToken cancellationToken)
+        public async Task<int> LearnedAsync([FromQuery]int materialId, [FromQuery]int courseId, CancellationToken cancellationToken)
         {
-            return await this._coursesService.MaterialLearnedAsync(materialId, courseId, Email, cancellationToken);
+            return await this._coursesService.MaterialLearnedAsync(materialId, courseId, UserId, cancellationToken);
         }
 
         [HttpPut("unlearned")]
-        public async Task<int> UnlearnedAsync([FromQuery]int materialId, [FromQuery]int courseId, 
-                                              CancellationToken cancellationToken)
+        public async Task<int> UnlearnedAsync([FromQuery]int materialId, [FromQuery]int courseId, CancellationToken cancellationToken)
         {
-            return await this._coursesService.MaterialUnearnedAsync(materialId, courseId, Email, cancellationToken);
+            return await this._coursesService.MaterialUnearnedAsync(materialId, courseId, UserId, cancellationToken);
         }
     }
 }
