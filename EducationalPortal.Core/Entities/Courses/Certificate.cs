@@ -4,7 +4,7 @@ namespace EducationalPortal.Core.Entities.Courses
 {
     public class Certificate : EntityBase
     {
-        public string VerificationCode { get; set; }
+        public Guid VerificationCode { get; set; }
 
         public DateTime DateOfCompletionUTC { get; set; }
 
