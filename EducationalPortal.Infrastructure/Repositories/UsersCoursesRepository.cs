@@ -4,6 +4,7 @@ using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using EducationalPortal.Application.Interfaces.Repositories;
+using EducationalPortal.Core.Entities;
 
 namespace EducationalPortal.Infrastructure.Repositories
 {
@@ -68,6 +69,11 @@ namespace EducationalPortal.Infrastructure.Repositories
         public Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken)
         {
             return this._table.AnyAsync(uc => uc.Course.Id == courseId && uc.User.Email == email, cancellationToken);
+        }
+
+        public Task<bool> ExistsByIdsAsync(int courseId, string userId, CancellationToken cancellationToken)
+        {
+            return this._table.AnyAsync(uc => uc.CourseId == courseId && uc.UserId == userId, cancellationToken);
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)

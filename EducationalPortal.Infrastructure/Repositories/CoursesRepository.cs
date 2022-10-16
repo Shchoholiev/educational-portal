@@ -163,6 +163,14 @@ namespace EducationalPortal.Infrastructure.Repositories
             var courses = await this._table.AsNoTracking()
                                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                            .Take(pageParameters.PageSize)
+                                           .Select(c => new Course
+                                           {
+                                               Id = c.Id,
+                                               Name = c.Name,
+                                               Thumbnail = c.Thumbnail,
+                                               ShortDescription = c.ShortDescription,
+                                               Price = c.Price,
+                                           })
                                            .ToListAsync(cancellationToken);
             var totalCount = await this._table.CountAsync(cancellationToken);
 

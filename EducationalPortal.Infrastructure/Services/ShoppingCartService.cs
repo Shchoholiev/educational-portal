@@ -23,6 +23,8 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly ICoursesRepository _coursesRepository;
 
+        private readonly ICertificatesService _certificatesService;
+
         private readonly ILogger _logger;
 
         private readonly Mapper _mapper = new();
@@ -31,13 +33,16 @@ namespace EducationalPortal.Infrastructure.Services
                                    IGenericRepository<ShoppingHistory> shoppingHistoryRepository,
                                    IUsersRepository usersRepository,
                                    IUsersCoursesRepository usersCoursesRepository, 
-                                   ICoursesRepository coursesRepository, ILogger<ShoppingCartService> logger)
+                                   ICoursesRepository coursesRepository,
+                                   ICertificatesService certificatesService,
+                                   ILogger<ShoppingCartService> logger)
         {
             this._cartItemsRepository = cartItemsRepository;
             this._shoppingHistoryRepository = shoppingHistoryRepository;
             this._usersRepository = usersRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._coursesRepository = coursesRepository;
+            this._certificatesService = certificatesService;
             this._logger = logger;
         }
 
@@ -252,14 +257,15 @@ namespace EducationalPortal.Infrastructure.Services
                                                                     course.Id, user.Email, cancellationToken),
             };
 
-            if (userCourse.MaterialsCount == userCourse.LearnedMaterialsCount)
-            {
-                await this._usersRepository.AddAcquiredSkillsAsync(course.Id, user.Email, cancellationToken);
-            }
-
             await this._usersCoursesRepository.AddUsersCoursesAsync(userCourse, cancellationToken);
 
             this._logger.LogInformation($"Added course with id: {course.Id} to user with email: {user.Email}.");
+
+            if (userCourse.MaterialsCount == userCourse.LearnedMaterialsCount)
+            {
+                await this._usersRepository.AddAcquiredSkillsAsync(course.Id, user.Id, cancellationToken);
+                await this._certificatesService.CreateAsync(course.Id, user.Id, cancellationToken);
+            }
         }
     }
 }
