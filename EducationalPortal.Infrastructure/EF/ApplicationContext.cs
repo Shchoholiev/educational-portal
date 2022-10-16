@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Entities.Courses;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.EducationalMaterials.Properties;
 using EducationalPortal.Core.Entities.FinalTasks;
@@ -81,5 +82,7 @@ namespace EducationalPortal.Infrastructure.EF
         public DbSet<SubmittedFinalTask> SubmittedFinalTasks { get; set; }
 
         public DbSet<SubmittedReviewQuestion> SubmittedReviewQuestions { get; set; }
+
+        public DbSet<Certificate> Certificates { get; set; }
     }
 }

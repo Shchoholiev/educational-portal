@@ -21,6 +21,8 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
 
+        private readonly ICertificatesService _certificatesService;
+
         private readonly ILogger _logger;
 
         private readonly Mapper _mapper = new();
@@ -28,12 +30,14 @@ namespace EducationalPortal.Infrastructure.Services
         public CoursesService(ICoursesRepository coursesRepository, IUsersRepository usersRepository,
                               IUsersCoursesRepository usersCoursesRepository,
                               IGenericRepository<MaterialsBase> materialsRepository,
+                              ICertificatesService certificatesService,
                               ILogger<CoursesService> logger)
         {
             this._coursesRepository = coursesRepository;
             this._usersRepository = usersRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._materialsRepository = materialsRepository;
+            this._certificatesService = certificatesService;
             this._logger = logger;
         }
 
@@ -132,8 +136,7 @@ namespace EducationalPortal.Infrastructure.Services
             return coursesDtos;
         }
 
-        public async Task<int> MaterialLearnedAsync(int materialId, int courseId, string userId, 
-                                                    CancellationToken cancellationToken)
+        public async Task<int> MaterialLearnedAsync(int materialId, int courseId, string userId, CancellationToken cancellationToken)
         {
             var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, userId, cancellationToken);
             if (userCourse == null)
@@ -152,9 +155,10 @@ namespace EducationalPortal.Infrastructure.Services
                                         $" Material learned.");
 
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
-            if (progress == 100)
+            if (progress == 100 && !await _certificatesService.ExistsAsync(courseId, userId, cancellationToken))
             {
                 await this._usersRepository.AddAcquiredSkillsAsync(courseId, userId, cancellationToken);
+                await this._certificatesService.CreateAsync(courseId, userId, cancellationToken);
                 this._logger.LogInformation($"Added skills of course with id: {courseId} " +
                                             $"to user with id: {userId}. Course learned.");
             }
@@ -162,13 +166,12 @@ namespace EducationalPortal.Infrastructure.Services
             return progress;
         }
 
-        public async Task<int> MaterialUnearnedAsync(int materialId, int courseId, string userId, 
-                                                     CancellationToken cancellationToken)
+        public async Task<int> MaterialUnearnedAsync(int materialId, int courseId, string userId, CancellationToken cancellationToken)
         {
             var userCourse = await this._usersCoursesRepository.GetUsersCoursesAsync(courseId, userId, cancellationToken);
             if (userCourse == null)
             {
-                throw new NotFoundException("User and Course");
+                throw new NotFoundException("UserCourse");
             }
 
             userCourse.LearnedMaterialsCount--;

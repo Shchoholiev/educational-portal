@@ -7,7 +7,7 @@ namespace EducationalPortal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ApiControllerBase : Controller
+    public class ApiControllerBase : ControllerBase
     {
         protected string? Email => User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 

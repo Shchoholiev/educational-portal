@@ -1,5 +1,6 @@
 using EducationalPortal.API;
 using EducationalPortal.Infrastructure;
+using EducationalPortal.Infrastructure.CustomMiddlewares;
 using EducationalPortal.Infrastructure.DataInitializer;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 
@@ -12,6 +13,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddFluentValidators();
 builder.Logging.AddLogger(builder.Configuration);
+builder.Services.AddAppHttpContextAccessor();
 builder.Services.AddSpaStaticFiles(config =>
 {
     config.RootPath = "ClientApp/dist";
@@ -30,6 +32,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.ConfigureCustomExceptionMiddleware();
+app.UseAppHttpContext();
 
 app.UseRouting();
 

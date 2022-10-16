@@ -9,5 +9,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<Certificate?> GetCertificateAsync(int courseId, string userId, CancellationToken cancellationToken);
 
         Task<Certificate?> GetCertificateAsync(Guid verificationCode, CancellationToken cancellationToken);
+
+        Task<bool> ExistsAsync(int courseId, string userId, CancellationToken cancellationToken);
     }
 }
