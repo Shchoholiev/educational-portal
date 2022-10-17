@@ -12,6 +12,10 @@
 
         public int Price { get; set; }
 
+        public DateTime UpdateDateUTC { get; set; }
+
+        public int StudentsCount { get; set; }
+
         public UserDto Author { get; set; }
 
         public List<SkillDto> Skills { get; set; }

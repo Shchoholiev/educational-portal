@@ -7,6 +7,7 @@ using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -46,6 +47,8 @@ namespace EducationalPortal.Infrastructure.Services
             var course = this._mapper.Map(courseDto);
             var author = await this._usersRepository.GetUserAsync(authorEmail, cancellationToken);
             course.Author = author;
+            course.UpdateDateUTC = DateTime.UtcNow;
+
             await this._coursesRepository.AddAsync(course, cancellationToken);
 
             this._logger.LogInformation($"Created course with id: {course.Id}.");
@@ -62,6 +65,8 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             this._mapper.Map(course, courseDto);
+            course.UpdateDateUTC = DateTime.UtcNow;
+
             await this._coursesRepository.UpdateAsync(course, cancellationToken);
 
             this._logger.LogInformation($"Updated course with id: {course.Id}.");
@@ -129,6 +134,18 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken)
         {
             var courses = await this._coursesRepository.GetPageAsync(pageParameters, cancellationToken);
+            var coursesDtos = this._mapper.Map(courses);
+
+            this._logger.LogInformation($"Returned courses page {courses.PageNumber} from database.");
+
+            return coursesDtos;
+        }
+
+        public async Task<PagedList<CourseShortDto>> GetFilteredPageAsync(PageParameters pageParameters, 
+            string filter, CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken)
+        {
+            var courses = await this._coursesRepository.GetPageAsync(pageParameters, filter, 
+                orderBy, isAscending, cancellationToken);
             var coursesDtos = this._mapper.Map(courses);
 
             this._logger.LogInformation($"Returned courses page {courses.PageNumber} from database.");
