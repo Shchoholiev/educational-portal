@@ -27,12 +27,13 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             this._logger = logger;
         }
 
-        public async Task<TokensModel> RefreshAsync(TokensModel tokensModel, string email, 
-                                               CancellationToken cancellationToken)
+        public async Task<TokensModel> RefreshAsync(TokensModel tokensModel, CancellationToken cancellationToken)
         {
             var principal = this.GetPrincipalFromExpiredToken(tokensModel.AccessToken);
 
-            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
+            var user = await this._usersRepository.GetUserAsync(
+                principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value, 
+                cancellationToken);
             if (user == null || user?.UserToken?.RefreshToken != tokensModel.RefreshToken
                              || user?.UserToken?.RefreshTokenExpiryTime <= DateTime.Now)
             {

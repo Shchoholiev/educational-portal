@@ -17,7 +17,7 @@ namespace EducationalPortal.API.Controllers
         public async Task<ActionResult<TokensModel>> RefreshAsync([FromBody] TokensModel tokensModel, 
                                                                   CancellationToken cancellationToken)
         {
-            return await this._tokenService.RefreshAsync(tokensModel, Email, cancellationToken);
+            return await this._tokenService.RefreshAsync(tokensModel, cancellationToken);
         }
     }
 }
