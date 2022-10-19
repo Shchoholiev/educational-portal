@@ -9,6 +9,8 @@ export class Course {
     shortDescription: string = "";
     description: string = "";
     price: number = 0;
+    updateDateUTC: Date = new Date;
+    studentsCount: number = 0;
     materials: MaterialBase[] = [];
     skills: Skill[] = [];
     author: User;

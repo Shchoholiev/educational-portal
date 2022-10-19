@@ -17,6 +17,8 @@ namespace EducationalPortal.Core.Entities
 
         public int Price { get; set; }
 
+        public DateTime UpdateDateUTC { get; set; }
+
         public List<CoursesSkills> CoursesSkills { get; set; }
 
         public List<CoursesMaterials> CoursesMaterials { get; set; }

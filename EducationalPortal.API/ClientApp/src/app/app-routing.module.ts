@@ -14,6 +14,7 @@ import { CourseLearnComponent } from './courses/course-learn/course-learn.compon
 import { CourseEditComponent } from './courses/course-edit/course-edit.component';
 import { CourseCreateComponent } from './courses/course-create/course-create.component';
 import { BasicLayoutComponent } from './basic-layout/basic-layout.component';
+import { CoursesSearchComponent } from './courses/courses-search/courses-search.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch: 'full' },
@@ -21,6 +22,8 @@ const routes: Routes = [
     component: BasicLayoutComponent, 
     children: [
       { path: 'courses', component: CoursesComponent, pathMatch: 'full' },
+      { path: 'courses/filtered', component: CoursesSearchComponent, pathMatch: 'full' },
+      { path: 'courses/filtered/:filter', component: CoursesSearchComponent, pathMatch: 'full' },
       { path: 'courses/:id', component: CourseDetailsComponent, pathMatch: 'full' },
       { path: 'courses/edit/:id', component: CourseEditComponent, canActivate: [AuthGuard], pathMatch: 'full' },
       { path: 'create-course', component: CourseCreateComponent, canActivate: [AuthGuard], pathMatch: 'full' },

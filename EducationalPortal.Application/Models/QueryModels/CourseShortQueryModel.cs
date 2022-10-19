@@ -1,7 +1,9 @@
-﻿namespace EducationalPortal.Application.Models.DTO.Course
+﻿namespace EducationalPortal.Application.Models.QueryModels
 {
-    public class CourseShortDto : BaseDto
+    public class CourseShortQueryModel
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Thumbnail { get; set; }

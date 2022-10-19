@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { Course } from '../shared/course.model';
 import { User } from '../shared/user.model';
 import { LearnCourse } from '../shared/learn-course.model';
+import { CoursesOrderBy } from '../shared/courses-order-by.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,12 @@ export class CoursesService {
                                           pageSize: pageSize, 
                                           pageNumber: pageNumber
                                         }, observe: 'response' });
+  }
+
+  public getFilteredCoursesPage(pageNumber: number, pageSize: number, orderBy: CoursesOrderBy, 
+                                isAscending: boolean, filter: string){
+    return this._http.get<Course[]>(`${this.baseURL}/filtered/${pageNumber}/${pageSize}/${orderBy}/${isAscending}/${filter}`, 
+            { observe: 'response' });
   }
 
   public getCourse(id: number){
