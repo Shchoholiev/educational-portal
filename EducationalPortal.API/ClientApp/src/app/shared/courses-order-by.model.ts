@@ -1,6 +1,6 @@
 export enum CoursesOrderBy {
     Id,
-    Price,
-    UpdateDate,
     StudentsCount,
+    UpdateDate,
+    Price,
 }

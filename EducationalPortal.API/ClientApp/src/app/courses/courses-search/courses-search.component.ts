@@ -54,6 +54,8 @@ export class CoursesSearchComponent implements OnInit {
   setOrderBy(order: number) {
     if (this.orderBy != order) {
       this.orderBy = order;
+      console.log(this.orderBy);
+      
       this.setPage(1);
     }
   }
