@@ -2,6 +2,7 @@
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
+using EducationalPortal.Core.Enums;
 
 namespace EducationalPortal.Application.Interfaces
 {
@@ -9,6 +10,9 @@ namespace EducationalPortal.Application.Interfaces
     {
         Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, 
                                                      CancellationToken cancellationToken);
+
+        Task<PagedList<CourseShortDto>> GetFilteredPageAsync(PageParameters pageParameters,
+            string filter, CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken);
 
         Task<CourseDto> GetCourseAsync(int id, string? email, CancellationToken cancellationToken);
 

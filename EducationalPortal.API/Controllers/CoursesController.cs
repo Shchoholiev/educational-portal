@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
+using EducationalPortal.Core.Enums;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -23,6 +24,17 @@ namespace EducationalPortal.API.Controllers
                                                                        CancellationToken cancellationToken)
         {
             var courses = await this._coursesService.GetPageAsync(pageParameters, cancellationToken);
+            this.SetPagingMetadata(courses);
+            return courses;
+        }
+
+        [HttpGet("filtered/{pageNumber}/{pageSize}/{orderBy}/{isAscending}/{filter?}")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<CourseShortDto>> GetFilteredPageAsync(int pageNumber, int pageSize, 
+            CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken, string filter = "")
+        {
+            var courses = await this._coursesService.GetFilteredPageAsync(new PageParameters(pageNumber, pageSize),
+                filter, orderBy, isAscending, cancellationToken);
             this.SetPagingMetadata(courses);
             return courses;
         }

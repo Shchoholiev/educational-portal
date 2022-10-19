@@ -43,6 +43,8 @@ import { CourseCreateComponent } from './courses/course-create/course-create.com
 import { BasicLayoutComponent } from './basic-layout/basic-layout.component';
 import { FinalTaskComponent } from './final-tasks/final-task/final-task.component';
 import { ReviewFinalTaskComponent } from './final-tasks/review-final-task/review-final-task.component';
+import { CoursesSearchComponent } from './courses/courses-search/courses-search.component';
+import { CourseSearchComponent } from './courses/courses-search/course-search/course-search.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -86,7 +88,9 @@ export function tokenGetter() {
     CourseCreateComponent,
     BasicLayoutComponent,
     FinalTaskComponent,
-    ReviewFinalTaskComponent
+    ReviewFinalTaskComponent,
+    CoursesSearchComponent,
+    CourseSearchComponent
   ],
   imports: [
     BrowserModule,

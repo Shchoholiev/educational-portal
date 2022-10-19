@@ -93,6 +93,9 @@ namespace EducationalPortal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdateDateUTC")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
@@ -100,6 +103,36 @@ namespace EducationalPortal.Infrastructure.Migrations
                     b.HasIndex("FinalTaskId");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("EducationalPortal.Core.Entities.Courses.Certificate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfCompletionUTC")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("VerificationCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Certificates");
                 });
 
             modelBuilder.Entity("EducationalPortal.Core.Entities.EducationalMaterials.MaterialsBase", b =>
@@ -621,6 +654,25 @@ namespace EducationalPortal.Infrastructure.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("FinalTask");
+                });
+
+            modelBuilder.Entity("EducationalPortal.Core.Entities.Courses.Certificate", b =>
+                {
+                    b.HasOne("EducationalPortal.Core.Entities.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EducationalPortal.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EducationalPortal.Core.Entities.FinalTasks.ReviewQuestion", b =>

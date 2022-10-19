@@ -1,12 +1,15 @@
 <div class="card m-1" style="width: 18rem;">
-    <img src="{{userCourse.course.thumbnail}}" class="card-img-top">
+    <a routerLink="/courses/learn/{{userCourse.course.id}}">
+        <img src="{{userCourse.course.thumbnail}}" class="card-img-top">
+    </a>
     <div class="card-body">
         <h5 class="card-title">{{userCourse.course.name}}</h5>
         <p class="card-text">{{userCourse.course.shortDescription}}</p>
         <div class="progress" style="height: 5px;">
-            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width.%': progress }"></div>
+            <div class="progress-bar bg-pink" role="progressbar" [ngStyle]="{ 'width.%': progress }"></div>
         </div>
-        <p class="text-primary">{{progress}}% Complete</p>
+        <p class="text-pink mb-2">{{progress}}% Complete</p>
+        <button class="btn-pink-small" *ngIf="progress == 100" style="text-decoration: none;" 
+            (click)="getCertificate()">CERTIFICATE</button>
     </div>
-    <a class="stretched-link" routerLink="/courses/learn/{{userCourse.course.id}}"></a>
 </div>

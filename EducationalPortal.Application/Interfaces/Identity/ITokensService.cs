@@ -9,6 +9,6 @@ namespace EducationalPortal.Application.Interfaces.Identity
 
         string GenerateRefreshToken();
 
-        Task<TokensModel> RefreshAsync(TokensModel tokensModel, string email, CancellationToken cancellationToken);
+        Task<TokensModel> RefreshAsync(TokensModel tokensModel, CancellationToken cancellationToken);
     }
 }

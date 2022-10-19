@@ -9,5 +9,9 @@
         public string ShortDescription { get; set; }
 
         public int Price { get; set; }
+
+        public DateTime UpdateDateUTC { get; set; }
+
+        public int StudentsCount { get; set; }
     }
 }

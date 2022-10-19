@@ -24,6 +24,7 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<MaterialQueryModel, MaterialBaseDto>();
 
             cfg.CreateMap<Course, CourseShortDto>();
+            cfg.CreateMap<CourseShortQueryModel, CourseShortDto>();
             cfg.CreateMap<CourseQueryModel, CourseDto>()
                .ForMember(dest => dest.Materials, opt => opt.Ignore());
             cfg.CreateMap<CourseQueryModel, CourseCreateDto>()
@@ -88,6 +89,13 @@ namespace EducationalPortal.Application.Mapping
         }).CreateMapper();
 
         public PagedList<CourseShortDto> Map(PagedList<Course> source)
+        {
+            var dtos = this._mapper.Map<PagedList<CourseShortDto>>(source);
+            dtos.MapList(source);
+            return dtos;
+        }
+
+        public PagedList<CourseShortDto> Map(PagedList<CourseShortQueryModel> source)
         {
             var dtos = this._mapper.Map<PagedList<CourseShortDto>>(source);
             dtos.MapList(source);

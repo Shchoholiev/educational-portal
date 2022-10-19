@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CertificatesService } from 'src/app/certificates/certificates.service';
 import { UsersCourses } from 'src/app/shared/users-courses.model';
 
 @Component({
@@ -12,7 +13,7 @@ export class CourseProgressComponent implements OnInit {
 
   public progress: number = 0;
 
-  constructor() { }
+  constructor(private _certificateService: CertificatesService) { }
 
   ngOnInit(): void {
     if (this.userCourse.learnedMaterialsCount) {
@@ -20,4 +21,12 @@ export class CourseProgressComponent implements OnInit {
     }
   }
 
+  public getCertificate(){
+    this._certificateService.getCertificate(this.userCourse.course.id).subscribe(
+      response => {
+        var url = window.URL.createObjectURL(response);
+        window.open(url);
+      }
+    )
+  }
 }

@@ -9,6 +9,7 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Text;
 using Newtonsoft.Json;
+using EducationalPortal.Core.Enums;
 
 namespace EducationalPortal.Infrastructure.Repositories
 {
@@ -157,30 +158,73 @@ namespace EducationalPortal.Infrastructure.Repositories
             return course;
         }
 
-        public async Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, 
+        public async Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, 
                                                           CancellationToken cancellationToken)
         {
             var courses = await this._table.AsNoTracking()
                                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
                                            .Take(pageParameters.PageSize)
+                                           .Select(c => new CourseShortQueryModel
+                                           {
+                                               Id = c.Id,
+                                               Name = c.Name,
+                                               Thumbnail = c.Thumbnail,
+                                               ShortDescription = c.ShortDescription,
+                                               Price = c.Price,
+                                               UpdateDateUTC = c.UpdateDateUTC,
+                                               StudentsCount = c.UsersCourses.Count
+                                           })
                                            .ToListAsync(cancellationToken);
             var totalCount = await this._table.CountAsync(cancellationToken);
 
-            return new PagedList<Course>(courses, pageParameters, totalCount);
+            return new PagedList<CourseShortQueryModel>(courses, pageParameters, totalCount);
         }
 
-        public async Task<PagedList<Course>> GetPageAsync(PageParameters pageParameters, 
-                                                          Expression<Func<Course, bool>> predicate, 
-                                                          CancellationToken cancellationToken)
+        public async Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, string filter,
+            CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken)
         {
-            var courses = await this._table.AsNoTracking()
-                                           .Where(predicate)
-                                           .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
-                                           .Take(pageParameters.PageSize)
-                                           .ToListAsync(cancellationToken);
+            Expression<Func<Course, bool>> predicate = c => c.Name.Contains(filter)
+                       || c.ShortDescription.Contains(filter)
+                       || c.Description.Contains(filter)
+                       || c.Author.Name.Contains(filter);
+
+            var query = _table.AsNoTracking()
+                .Where(predicate);
+
+            query = orderBy switch
+            {
+                CoursesOrderBy.Id => isAscending 
+                    ? query.OrderBy(c => c.Id) 
+                    : query.OrderByDescending(c => c.Id),
+                CoursesOrderBy.Price => isAscending 
+                    ? query.OrderBy(c => c.Price) 
+                    : query.OrderByDescending(c => c.Price),
+                CoursesOrderBy.UpdateDate => isAscending
+                    ? query.OrderBy(c => c.UpdateDateUTC)
+                    : query.OrderByDescending(c => c.UpdateDateUTC),
+                CoursesOrderBy.StudentsCount => isAscending
+                    ? query.OrderBy(c => c.UsersCourses.Count)
+                    : query.OrderByDescending(c => c.UsersCourses.Count),
+                _ => throw new NotImplementedException(),
+            };
+
+            var courses = await query
+                .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
+                .Take(pageParameters.PageSize)
+                .Select(c => new CourseShortQueryModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Thumbnail = c.Thumbnail,
+                    ShortDescription = c.ShortDescription,
+                    Price = c.Price,
+                    UpdateDateUTC = c.UpdateDateUTC,
+                    StudentsCount = c.UsersCourses.Count
+                })
+                .ToListAsync(cancellationToken);
             var totalCount = await this._table.CountAsync(predicate, cancellationToken);
 
-            return new PagedList<Course>(courses, pageParameters, totalCount);
+            return new PagedList<CourseShortQueryModel>(courses, pageParameters, totalCount);
         }
 
         public Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken)

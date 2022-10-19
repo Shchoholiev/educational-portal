@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CartItem } from 'src/app/shared/cart-item.model';
-import { Course } from 'src/app/shared/course.model';
 import { ShoppingCartService } from '../shopping-cart.service';
 
 @Component({

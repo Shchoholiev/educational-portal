@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AccountService } from 'src/app/account/account.service';
+import { CertificatesService } from 'src/app/certificates/certificates.service';
 import { UsersCourses } from 'src/app/shared/users-courses.model';
 
 @Component({

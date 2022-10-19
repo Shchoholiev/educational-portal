@@ -19,5 +19,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<int> GetLearnedMaterialsCountAsync(int courseId, string email, CancellationToken cancellationToken);
 
         Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken);
+
+        Task<bool> ExistsByIdsAsync(int courseId, string userId, CancellationToken cancellationToken);
     }
 }
