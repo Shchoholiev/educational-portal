@@ -9,5 +9,7 @@
         public int SkillId { get; set; }
 
         public Skill Skill { get; set; }
+
+        public int Level { get; set; }
     }
 }
