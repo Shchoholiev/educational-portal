@@ -102,6 +102,11 @@ namespace EducationalPortal.Application.Mapping
             return dtos;
         }
 
+        public List<CourseShortDto> Map(List<CourseShortQueryModel> source)
+        {
+            return this._mapper.Map<List<CourseShortDto>>(source);
+        }
+
         public CourseDto Map(CourseQueryModel course)
         {
             var courseViewModel = this._mapper.Map<CourseDto>(course);

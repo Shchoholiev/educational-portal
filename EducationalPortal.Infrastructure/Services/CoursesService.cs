@@ -4,9 +4,11 @@ using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
+using EducationalPortal.Application.Models.LookupModels;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
+using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Core.Enums;
 using Microsoft.Extensions.Logging;
 
@@ -203,6 +205,113 @@ namespace EducationalPortal.Infrastructure.Services
 
             var progress = (int)(userCourse.LearnedMaterialsCount * 100 / userCourse.MaterialsCount);
             return progress;
+        }
+
+        public async Task<List<CourseShortDto>> GetCoursesByAutomatedSearchAsync(
+            List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            var chosenCoursesIds = new List<int>();
+            while (skillLookups.Count > 0)
+            {
+                var unprocessed = await _coursesRepository.GetLookupModelsAsync(
+                    skillLookups.Select(sl => sl.SkillId).ToList(), chosenCoursesIds, cancellationToken);
+
+                if (unprocessed.Count == 0)
+                {
+                    throw new NoResultException("There is no courses to fulfill the requirements");
+                }
+
+                var courseLookups = this.ProcessCourseLookups(unprocessed, skillLookups);
+
+                var chosenCourse = courseLookups.OrderByDescending(cl => cl.Levels).FirstOrDefault();
+                foreach (var cs in chosenCourse.CoursesSkills)
+                {
+                    var skillLookup = skillLookups.FirstOrDefault(sl => sl.SkillId == cs.SkillId);
+                    skillLookup.Level -= cs.Level;
+                    if (skillLookup.Level == 0)
+                    {
+                        skillLookups.Remove(skillLookup);
+                    }
+                }
+                chosenCoursesIds.Add(chosenCourse.CourseId);
+            }
+
+            var courses = await this._coursesRepository.GetCoursesAsync(chosenCoursesIds, cancellationToken);
+            var coursesDtos = this._mapper.Map(courses);
+
+            this._logger.LogInformation($"Returned courses by automated search from database.");
+
+            return coursesDtos;
+        }
+
+        public async Task<List<CourseShortDto>> GetCoursesByAutomatedSearchBasedOnTimeAsync(
+            List<SkillLookupModel> skillLookups, string userId, CancellationToken cancellationToken)
+        {
+            var chosenCoursesIds = new List<int>();
+            var materialIds = new List<int>();
+            while (skillLookups.Count > 0)
+            {
+                var unprocessed = await _coursesRepository.GetLookupModelsAsync(skillLookups.Select(sl => sl.SkillId).ToList(), 
+                    chosenCoursesIds, materialIds, userId, cancellationToken);
+
+                if (unprocessed.Count == 0)
+                {
+                    throw new NoResultException("There is no courses to fulfill the requirements");
+                }
+
+                var courseLookups = this.ProcessCourseLookups(unprocessed, skillLookups);
+
+                var chosenCourse = courseLookups.OrderByDescending(cl => cl.Levels)
+                    .ThenBy(cl => cl.LearningTime)
+                    .FirstOrDefault();
+                foreach (var cs in chosenCourse.CoursesSkills)
+                {
+                    var skillLookup = skillLookups.FirstOrDefault(sl => sl.SkillId == cs.SkillId);
+                    skillLookup.Level -= cs.Level;
+                    if (skillLookup.Level == 0)
+                    {
+                        skillLookups.Remove(skillLookup);
+                    }
+
+                    materialIds.AddRange(chosenCourse.MaterialIds);
+                }
+                chosenCoursesIds.Add(chosenCourse.CourseId);
+            }
+
+            var courses = await this._coursesRepository.GetCoursesAsync(chosenCoursesIds, cancellationToken);
+            var coursesDtos = this._mapper.Map(courses);
+
+            this._logger.LogInformation($"Returned courses by automated search from database.");
+
+            return coursesDtos;
+        }
+
+        private List<CourseLookupModel> ProcessCourseLookups(List<CourseLookupModel> courseLookups, 
+            List<SkillLookupModel> skillLookups)
+        {
+            var processed = new List<CourseLookupModel>();
+            foreach (var lookup in courseLookups)
+            {
+                var courseSkills = new List<CoursesSkills>();
+                foreach (var cs in lookup.CoursesSkills)
+                {
+                    var skillLookup = skillLookups.FirstOrDefault(s => s.SkillId == cs.SkillId);
+                    courseSkills.Add(new CoursesSkills
+                    {
+                        Level = Math.Min(cs.Level, skillLookup.Level),
+                    });
+                }
+                processed.Add(new CourseLookupModel
+                {
+                    CourseId = lookup.CourseId,
+                    Levels = courseSkills.Sum(cs => cs.Level),
+                    CoursesSkills = lookup.CoursesSkills,
+                    MaterialIds = lookup.MaterialIds,
+                    LearningTime = lookup.LearningTime,
+                });
+            }
+
+            return processed;
         }
     }
 }

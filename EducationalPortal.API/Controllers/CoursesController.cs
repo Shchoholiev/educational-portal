@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Core.Enums;
+using EducationalPortal.Application.Models.LookupModels;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -37,6 +38,23 @@ namespace EducationalPortal.API.Controllers
                 filter, orderBy, isAscending, cancellationToken);
             this.SetPagingMetadata(courses);
             return courses;
+        }
+
+        [HttpPost("automated-search")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<CourseShortDto>> GetCoursesByAutomatedSearchAsync(
+            [FromBody] List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            return await this._coursesService.GetCoursesByAutomatedSearchAsync(skillLookups, cancellationToken);
+        }
+
+        [HttpPost("automated-search-based-on-time")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<CourseShortDto>> GetCoursesByAutomatedSearchBasedOnTimeAsync(
+            [FromBody] List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            return await this._coursesService.GetCoursesByAutomatedSearchBasedOnTimeAsync(skillLookups, 
+                UserId ?? string.Empty, cancellationToken);
         }
 
         [HttpGet("{id}")]
