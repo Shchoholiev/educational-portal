@@ -24,7 +24,8 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, string filter, 
             CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken);
 
-        Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, IEnumerable<int> courseIds, CancellationToken cancellationToken);
+        Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, IEnumerable<int> courseIds, 
+            string userId, CancellationToken cancellationToken);
         
         Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, IEnumerable<int> courseIds,
             IEnumerable<int> materialIds, string userId, CancellationToken cancellationToken);
@@ -34,5 +35,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken);
 
         Task<User?> GetCourseAuthor(int courseId, CancellationToken cancellationToken);
+
+        Task<List<Skill>> GetSkillsAsync(IEnumerable<int> skillIds, CancellationToken cancellationToken);
     }
 }

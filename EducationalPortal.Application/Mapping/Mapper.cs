@@ -12,6 +12,7 @@ using EducationalPortal.Application.Paging;
 using EducationalPortal.Application.Models.QueryModels;
 using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Application.Models.DTO.FinalTasks;
+using EducationalPortal.Application.Models.LookupModels;
 
 namespace EducationalPortal.Application.Mapping
 {
@@ -286,6 +287,22 @@ namespace EducationalPortal.Application.Mapping
         public SubmittedFinalTaskDto Map(SubmittedFinalTask source)
         {
             return this._mapper.Map<SubmittedFinalTaskDto>(source);
+        }
+
+        public List<SkillDto> Map(IEnumerable<Skill> skills, IEnumerable<SkillLookupModel> skillLookups)
+        {
+            var dtos = new List<SkillDto>();
+            foreach (var skill in skills)
+            {
+                dtos.Add(new SkillDto
+                {
+                    Id = skill.Id,
+                    Name = skill.Name,
+                    Level = skillLookups.FirstOrDefault(s => s.SkillId == skill.Id).Level,
+                });
+            }
+
+            return dtos;
         }
 
         private Course MapCourseJoinEntities(Course course, CourseCreateDto courseDTO)

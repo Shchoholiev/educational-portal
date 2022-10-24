@@ -3,6 +3,7 @@ using EducationalPortal.Application.Interfaces;
 using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models.CreateDTO;
+using EducationalPortal.Application.Models.DTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Application.Models.LookupModels;
 using EducationalPortal.Application.Paging;
@@ -10,6 +11,12 @@ using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Core.Enums;
+using EducationalPortal.Infrastructure.CustomMiddlewares;
+using iText.IO.Font.Constants;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using Microsoft.Extensions.Logging;
 
 namespace EducationalPortal.Infrastructure.Services
@@ -29,6 +36,10 @@ namespace EducationalPortal.Infrastructure.Services
         private readonly ILogger _logger;
 
         private readonly Mapper _mapper = new();
+
+        private const string _searchResultsPdfUrl = "https://educationalportal.blob.core.windows.net/essentials/Search%20results.pdf";
+
+        private const string _robotoSlabBold = "https://educationalportal.blob.core.windows.net/essentials/RobotoSlab-Bold.ttf";
 
         public CoursesService(ICoursesRepository coursesRepository, IUsersRepository usersRepository,
                               IUsersCoursesRepository usersCoursesRepository,
@@ -208,13 +219,13 @@ namespace EducationalPortal.Infrastructure.Services
         }
 
         public async Task<List<CourseShortDto>> GetCoursesByAutomatedSearchAsync(
-            List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+            List<SkillLookupModel> skillLookups, string userId, CancellationToken cancellationToken)
         {
             var chosenCoursesIds = new List<int>();
             while (skillLookups.Count > 0)
             {
                 var unprocessed = await _coursesRepository.GetLookupModelsAsync(
-                    skillLookups.Select(sl => sl.SkillId).ToList(), chosenCoursesIds, cancellationToken);
+                    skillLookups.Select(sl => sl.SkillId).ToList(), chosenCoursesIds, userId, cancellationToken);
 
                 if (unprocessed.Count == 0)
                 {
@@ -228,7 +239,7 @@ namespace EducationalPortal.Infrastructure.Services
                 {
                     var skillLookup = skillLookups.FirstOrDefault(sl => sl.SkillId == cs.SkillId);
                     skillLookup.Level -= cs.Level;
-                    if (skillLookup.Level == 0)
+                    if (skillLookup.Level <= 0)
                     {
                         skillLookups.Remove(skillLookup);
                     }
@@ -268,7 +279,7 @@ namespace EducationalPortal.Infrastructure.Services
                 {
                     var skillLookup = skillLookups.FirstOrDefault(sl => sl.SkillId == cs.SkillId);
                     skillLookup.Level -= cs.Level;
-                    if (skillLookup.Level == 0)
+                    if (skillLookup.Level <= 0)
                     {
                         skillLookups.Remove(skillLookup);
                     }
@@ -284,6 +295,81 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger.LogInformation($"Returned courses by automated search from database.");
 
             return coursesDtos;
+        }
+
+        public async Task<byte[]> GetPdfForAutomatedSearchAsync(List<SkillLookupModel> skillLookups, 
+            string userId, CancellationToken cancellationToken)
+        {
+            var skills = await _coursesRepository.GetSkillsAsync(skillLookups.Select(s => s.SkillId), cancellationToken);
+            var skillDtos = _mapper.Map(skills, skillLookups);
+            var courseDtos = await this.GetCoursesByAutomatedSearchAsync(skillLookups, userId, cancellationToken);
+            
+            return this.GenerateSearchResultsPdf(skillDtos, courseDtos);
+        }
+
+        public async Task<byte[]> GetPdfForAutomatedSearchBasedOnTimeAsync(List<SkillLookupModel> skillLookups, 
+            string userId, CancellationToken cancellationToken)
+        {
+            var skills = await _coursesRepository.GetSkillsAsync(skillLookups.Select(s => s.SkillId), cancellationToken);
+            var skillDtos = _mapper.Map(skills, skillLookups);
+            var courseDtos = await this.GetCoursesByAutomatedSearchBasedOnTimeAsync(skillLookups, userId, cancellationToken);
+            
+            return this.GenerateSearchResultsPdf(skillDtos, courseDtos);
+        }
+
+        private byte[] GenerateSearchResultsPdf(List<SkillDto> skillDtos, List<CourseShortDto> courseDtos)
+        {
+            using var reader = new PdfReader(_searchResultsPdfUrl);
+            using var newFile = new MemoryStream();
+            using var writer = new PdfWriter(newFile);
+            using var pdf = new PdfDocument(reader, writer);
+
+            var page = pdf.GetPage(1);
+            var canvas = new PdfCanvas(page);
+
+            var rows = 0;
+            foreach (var skill in skillDtos)
+            {
+                canvas.BeginText()
+                    .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
+                    .SetFillColor(new DeviceRgb(42, 44, 62))
+                    .MoveText(17, 520 - rows * 20)
+                    .ShowText($"{skill.Name} - {skill.Level}")
+                    .EndText();
+
+                rows++;
+            }
+
+            rows = 0;
+            foreach (var course in courseDtos)
+            {
+                canvas.BeginText()
+                    .SetFontAndSize(PdfFontFactory.CreateFont(_robotoSlabBold), 16)
+                    .SetFillColor(new DeviceRgb(42, 44, 62))
+                    .MoveText(217, 520 - rows * 65)
+                    .ShowText(course.Name)
+                    .EndText();
+
+                canvas.BeginText()
+                    .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 12)
+                    .SetFillColor(new DeviceRgb(42, 44, 62))
+                    .MoveText(217, 505 - rows * 65)
+                    .ShowText($"Updated on {course.UpdateDateUTC:MMM dd, yyyy}")
+                    .EndText();
+
+                canvas.BeginText()
+                    .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10)
+                    .SetFillColor(new DeviceRgb(226, 120, 247))
+                    .MoveText(217, 490 - rows * 65)
+                    .ShowText($"{AppHttpContext.BaseUrl}/api/courses/{course.Id}")
+                    .EndText();
+
+                rows++;
+            }
+
+            pdf.Close();
+
+            return newFile.ToArray();
         }
 
         private List<CourseLookupModel> ProcessCourseLookups(List<CourseLookupModel> courseLookups, 

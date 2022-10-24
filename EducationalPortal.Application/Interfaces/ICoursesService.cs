@@ -34,9 +34,16 @@ namespace EducationalPortal.Application.Interfaces
         Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email, 
                                         CancellationToken cancellationToken);
 
-        Task<List<CourseShortDto>> GetCoursesByAutomatedSearchAsync(List<SkillLookupModel> skillLookups, CancellationToken cancellationToken);
+        Task<List<CourseShortDto>> GetCoursesByAutomatedSearchAsync(List<SkillLookupModel> skillLookups, 
+            string userId, CancellationToken cancellationToken);
         
         Task<List<CourseShortDto>> GetCoursesByAutomatedSearchBasedOnTimeAsync(List<SkillLookupModel> skillLookups, 
+            string userId, CancellationToken cancellationToken);
+
+        Task<byte[]> GetPdfForAutomatedSearchAsync(List<SkillLookupModel> skillLookups,
+            string userId, CancellationToken cancellationToken);
+
+        Task<byte[]> GetPdfForAutomatedSearchBasedOnTimeAsync(List<SkillLookupModel> skillLookups,
             string userId, CancellationToken cancellationToken);
     }
 }

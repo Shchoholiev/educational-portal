@@ -17,6 +17,7 @@ namespace EducationalPortal.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IEnumerable<SkillDto>> GetSkillsAsync([FromQuery] PageParameters pageParameters, 
                                                                 CancellationToken cancellationToken)
         {
