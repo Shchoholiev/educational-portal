@@ -1,0 +1,18 @@
+.page-item.active .page-link {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.page-item.disabled .page-link {
+    border: none;
+}
+
+.active {
+    cursor: default !important;
+}
+
+.page-link {
+    color: var(--main-color);
+    border: none;
+    border-radius: 10px !important;
+}

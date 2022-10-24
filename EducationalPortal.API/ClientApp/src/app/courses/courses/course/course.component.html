@@ -1,16 +1,15 @@
-<div class="card m-1" [ngStyle]="{ 'width.rem': width }">
-    <img src="{{course.thumbnail}}" class="card-img-top">
-    <div class="card-body d-flex flex-column justify-content-between">
-        <div class="mb-4">
+<div class="card-wide flex-column">
+    <img src="{{course.thumbnail}}" routerLink="/courses/{{course.id}}" style="cursor: pointer;">
+    <div class="d-flex flex-column justify-content-between" style="height: 100%;">
+        <div class="mb-4" routerLink="/courses/{{course.id}}" style="cursor: pointer;">
             <h5 class="card-title">{{course.name}}</h5>
             <p class="card-text">{{course.shortDescription}}</p>
         </div>
         <div class="d-flex flex-row justify-content-between">
-            <h5 class="text-primary">{{course.price}} points</h5>
-            <button class="btn btn-primary" style="z-index: 1000;" (click)="addToCart(course.id)">
+            <h5 class="text-pink">{{course.price}} points</h5>
+            <button class="btn-pink" style="z-index: 1000;" (click)="addToCart(course.id)">
                 Add to cart
             </button>
         </div>
     </div>
-    <a routerLink="/courses/{{course.id}}" class="stretched-link"></a>
 </div>
