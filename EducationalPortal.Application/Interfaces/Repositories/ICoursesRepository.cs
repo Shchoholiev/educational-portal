@@ -1,4 +1,5 @@
-﻿using EducationalPortal.Application.Models.QueryModels;
+﻿using EducationalPortal.Application.Models.LookupModels;
+using EducationalPortal.Application.Models.QueryModels;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Enums;
@@ -23,8 +24,18 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, string filter, 
             CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken);
 
+        Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, IEnumerable<int> courseIds, 
+            string userId, CancellationToken cancellationToken);
+        
+        Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, IEnumerable<int> courseIds,
+            IEnumerable<int> materialIds, string userId, CancellationToken cancellationToken);
+
+        Task<List<CourseShortQueryModel>> GetCoursesAsync(IEnumerable<int> courseIds, CancellationToken cancellationToken);
+
         Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken);
 
         Task<User?> GetCourseAuthor(int courseId, CancellationToken cancellationToken);
+
+        Task<List<Skill>> GetSkillsAsync(IEnumerable<int> skillIds, CancellationToken cancellationToken);
     }
 }

@@ -4,6 +4,7 @@ import { Course } from '../shared/course.model';
 import { User } from '../shared/user.model';
 import { LearnCourse } from '../shared/learn-course.model';
 import { CoursesOrderBy } from '../shared/courses-order-by.model';
+import { SkillLookup } from '../shared/lookup-models/skill-lookup.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,22 @@ export class CoursesService {
                                 isAscending: boolean, filter: string){
     return this._http.get<Course[]>(`${this.baseURL}/filtered/${pageNumber}/${pageSize}/${orderBy}/${isAscending}/${filter}`, 
             { observe: 'response' });
+  }
+
+  public getCoursesByAutomatedSearch(skillLookups: SkillLookup[]){
+    return this._http.post<Course[]>(`${this.baseURL}/automated-search`, skillLookups);
+  }
+
+  public getCoursesByAutomatedSearchBasedOnTime(skillLookups: SkillLookup[]){
+    return this._http.post<Course[]>(`${this.baseURL}/automated-search-based-on-time`, skillLookups);
+  }
+
+  public getPdfForAutomatedSearch(skillLookups: SkillLookup[]){
+    return this._http.post(`${this.baseURL}/pdf-for-automated-search`, skillLookups, { responseType: 'blob' });
+  }
+
+  public getPdfForAutomatedSearchBasedOnTime(skillLookups: SkillLookup[]){
+    return this._http.post(`${this.baseURL}/pdf-for-automated-search-based-on-time`, skillLookups, { responseType: 'blob' });
   }
 
   public getCourse(id: number){

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
 using EducationalPortal.Core.Enums;
+using EducationalPortal.Application.Models.LookupModels;
 
 namespace EducationalPortal.API.Controllers
 {
@@ -37,6 +38,49 @@ namespace EducationalPortal.API.Controllers
                 filter, orderBy, isAscending, cancellationToken);
             this.SetPagingMetadata(courses);
             return courses;
+        }
+
+        [HttpPost("automated-search")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<CourseShortDto>> GetCoursesByAutomatedSearchAsync(
+            [FromBody] List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            return await this._coursesService.GetCoursesByAutomatedSearchAsync(skillLookups, UserId, cancellationToken);
+        }
+
+        [HttpPost("automated-search-based-on-time")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<CourseShortDto>> GetCoursesByAutomatedSearchBasedOnTimeAsync(
+            [FromBody] List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            return await this._coursesService.GetCoursesByAutomatedSearchBasedOnTimeAsync(skillLookups, 
+                UserId ?? string.Empty, cancellationToken);
+        }
+
+        [HttpPost("pdf-for-automated-search")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPdfForAutomatedSearchAsync(
+            [FromBody] List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            var bytes = await this._coursesService.GetPdfForAutomatedSearchAsync(skillLookups, 
+                UserId ?? string.Empty, cancellationToken);
+            var result = new FileContentResult(bytes, "application/pdf");
+            Response.Headers.Add("Content-Disposition", $"inline; filename=Search Results.pdf");
+
+            return result;
+        }
+
+        [HttpPost("pdf-for-automated-search-based-on-time")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPdfForAutomatedSearchBasedOnTimeAsync(
+            [FromBody] List<SkillLookupModel> skillLookups, CancellationToken cancellationToken)
+        {
+            var bytes = await this._coursesService.GetPdfForAutomatedSearchBasedOnTimeAsync(skillLookups, 
+                UserId ?? string.Empty, cancellationToken);
+            var result = new FileContentResult(bytes, "application/pdf");
+            Response.Headers.Add("Content-Disposition", $"inline; filename=Search Results.pdf");
+
+            return result;
         }
 
         [HttpGet("{id}")]

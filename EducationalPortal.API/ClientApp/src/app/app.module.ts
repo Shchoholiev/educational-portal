@@ -45,6 +45,7 @@ import { FinalTaskComponent } from './final-tasks/final-task/final-task.componen
 import { ReviewFinalTaskComponent } from './final-tasks/review-final-task/review-final-task.component';
 import { CoursesSearchComponent } from './courses/courses-search/courses-search.component';
 import { CourseSearchComponent } from './courses/courses-search/course-search/course-search.component';
+import { ChooseSkillsComponent } from './courses/courses-search/choose-skills/choose-skills.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -90,7 +91,8 @@ export function tokenGetter() {
     FinalTaskComponent,
     ReviewFinalTaskComponent,
     CoursesSearchComponent,
-    CourseSearchComponent
+    CourseSearchComponent,
+    ChooseSkillsComponent
   ],
   imports: [
     BrowserModule,

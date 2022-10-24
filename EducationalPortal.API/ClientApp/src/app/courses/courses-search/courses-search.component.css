@@ -3,3 +3,18 @@
     color: #fff;
     border: none;
 }
+
+.search-container {
+    padding: 12px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--main-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.search-description {
+    color: #9b9b9b;
+    line-height: 1.1;
+    font-size: 14px;
+}

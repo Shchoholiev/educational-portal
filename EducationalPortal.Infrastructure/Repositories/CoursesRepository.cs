@@ -10,6 +10,7 @@ using System.Data;
 using System.Text;
 using Newtonsoft.Json;
 using EducationalPortal.Core.Enums;
+using EducationalPortal.Application.Models.LookupModels;
 
 namespace EducationalPortal.Infrastructure.Repositories
 {
@@ -227,6 +228,60 @@ namespace EducationalPortal.Infrastructure.Repositories
             return new PagedList<CourseShortQueryModel>(courses, pageParameters, totalCount);
         }
 
+        public Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, 
+            IEnumerable<int> courseIds, string userId, CancellationToken cancellationToken)
+        {
+            return this._table
+                .Where(c => c.CoursesSkills.Any(cs => skillIds.Contains(cs.SkillId) 
+                                                && !courseIds.Contains(cs.CourseId))
+                       && !c.UsersCourses.Any(uc => uc.UserId == userId))
+                .Select(c => new CourseLookupModel
+                {
+                    CourseId = c.Id,
+                    CoursesSkills = c.CoursesSkills.Where(cs => skillIds.Contains(cs.SkillId)).ToList(),
+                }).ToListAsync(cancellationToken);
+        }
+
+        public Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, 
+            IEnumerable<int> courseIds, IEnumerable<int> materialIds, string userId, CancellationToken cancellationToken)
+        {
+            return this._table
+                .Where(c => c.CoursesSkills.Any(cs => skillIds.Contains(cs.SkillId) 
+                                                && !courseIds.Contains(cs.CourseId))
+                       && !c.UsersCourses.Any(uc => uc.UserId == userId))
+                .Select(c => new CourseLookupModel
+                {
+                    CourseId = c.Id,
+                    CoursesSkills = c.CoursesSkills.Where(cs => skillIds.Contains(cs.SkillId)).ToList(),
+                    MaterialIds = c.CoursesMaterials
+                        .Where(cm => !materialIds.Contains(cm.MaterialId)
+                               && !cm.Material.Users.Any(u => u.Id == userId))
+                        .Select(cm => cm.MaterialId).ToList(),
+                    LearningTime = c.CoursesMaterials
+                        .Where(cm => !materialIds.Contains(cm.MaterialId)
+                               && !cm.Material.Users.Any(u => u.Id == userId))
+                        .Select(cm => cm.Material)
+                        .Sum(m => m.LearningMinutes),
+                }).ToListAsync(cancellationToken);
+        }
+
+        public Task<List<CourseShortQueryModel>> GetCoursesAsync(IEnumerable<int> courseIds, CancellationToken cancellationToken)
+        {
+            return this._table
+                .Where(c => courseIds.Contains(c.Id))
+                .Select(c => new CourseShortQueryModel
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Thumbnail = c.Thumbnail,
+                    ShortDescription = c.ShortDescription,
+                    Price = c.Price,
+                    UpdateDateUTC = c.UpdateDateUTC,
+                    StudentsCount = c.UsersCourses.Count
+                })
+                .ToListAsync(cancellationToken);
+        }
+
         public Task<int> GetMaterialsCountAsync(int courseId, CancellationToken cancellationToken)
         {
             return this._db.CoursesMaterials.AsNoTracking()
@@ -238,6 +293,13 @@ namespace EducationalPortal.Infrastructure.Repositories
         {
             return this._db.Users.FirstOrDefaultAsync(u => u.CreatedCourses.Any(c => c.Id == courseId), 
                                                       cancellationToken);
+        }
+
+        public Task<List<Skill>> GetSkillsAsync(IEnumerable<int> skillIds, CancellationToken cancellationToken)
+        {
+            return this._db.Skills.AsNoTracking()
+                .Where(s => skillIds.Contains(s.Id))
+                .ToListAsync(cancellationToken);
         }
 
         private async Task SaveAsync(CancellationToken cancellationToken)
