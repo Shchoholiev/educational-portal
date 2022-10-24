@@ -37,7 +37,7 @@ export class CoursesSearchComponent implements OnInit {
   public error = "";
 
   constructor(
-    private service: CoursesService, 
+    private _service: CoursesService, 
     private _route: ActivatedRoute
     ) { }
   
@@ -47,7 +47,7 @@ export class CoursesSearchComponent implements OnInit {
   }
 
   setPage(pageNumber: number) {
-    this.service.getFilteredCoursesPage(pageNumber, this.pageSize, this.orderBy, this.isAscending, this.filter)
+    this._service.getFilteredCoursesPage(pageNumber, this.pageSize, this.orderBy, this.isAscending, this.filter)
     .subscribe(
       response => { 
         this.list = response.body as Course[];
@@ -105,7 +105,7 @@ export class CoursesSearchComponent implements OnInit {
   performAutomatedSearch(){
     this.clearFilters();
     if (this.isBasedOnTime) {
-      this.service.getCoursesByAutomatedSearchBasedOnTime(this.skillLookups)
+      this._service.getCoursesByAutomatedSearchBasedOnTime(this.skillLookups)
       .pipe(
         map(response => { 
           this.list = response;
@@ -118,7 +118,7 @@ export class CoursesSearchComponent implements OnInit {
       ).subscribe();
     }
     else {
-      this.service.getCoursesByAutomatedSearch(this.skillLookups)
+      this._service.getCoursesByAutomatedSearch(this.skillLookups)
       .pipe(
         map(response => { 
           this.list = response;
@@ -128,6 +128,35 @@ export class CoursesSearchComponent implements OnInit {
           this.error = err.error.Message;
           return throwError(() => { return this.error; })
       })
+      ).subscribe();
+    }
+  }
+
+  public getPdf(){
+    this.clearFilters();
+    if (this.isBasedOnTime) {
+      this._service.getPdfForAutomatedSearchBasedOnTime(this.skillLookups)
+      .pipe(
+        map(response => {
+          var url = window.URL.createObjectURL(response);
+          window.open(url);
+        }),
+        catchError(err => {
+          this.error = err.error.Message;
+          return throwError(() => { return this.error; })
+        })
+      ).subscribe();
+    } else {
+      this._service.getPdfForAutomatedSearch(this.skillLookups)
+      .pipe(
+        map(response => {
+          var url = window.URL.createObjectURL(response);
+          window.open(url);
+        }),
+        catchError(err => {
+          this.error = err.error.Message;
+          return throwError(() => { return this.error; })
+        })
       ).subscribe();
     }
   }

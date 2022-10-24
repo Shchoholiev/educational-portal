@@ -36,6 +36,14 @@ export class CoursesService {
     return this._http.post<Course[]>(`${this.baseURL}/automated-search-based-on-time`, skillLookups);
   }
 
+  public getPdfForAutomatedSearch(skillLookups: SkillLookup[]){
+    return this._http.post(`${this.baseURL}/pdf-for-automated-search`, skillLookups, { responseType: 'blob' });
+  }
+
+  public getPdfForAutomatedSearchBasedOnTime(skillLookups: SkillLookup[]){
+    return this._http.post(`${this.baseURL}/pdf-for-automated-search-based-on-time`, skillLookups, { responseType: 'blob' });
+  }
+
   public getCourse(id: number){
     return this._http.get<Course>(`${this.baseURL}/${id}`);
   }
