@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.Models.CreateDTO;
 using EducationalPortal.Application.Models.DTO.Course;
+using EducationalPortal.Application.Models.LookupModels;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities;
 using EducationalPortal.Core.Enums;
@@ -32,5 +33,17 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email, 
                                         CancellationToken cancellationToken);
+
+        Task<List<CourseShortDto>> GetCoursesByAutomatedSearchAsync(List<SkillLookupModel> skillLookups, 
+            string userId, CancellationToken cancellationToken);
+        
+        Task<List<CourseShortDto>> GetCoursesByAutomatedSearchBasedOnTimeAsync(List<SkillLookupModel> skillLookups, 
+            string userId, CancellationToken cancellationToken);
+
+        Task<byte[]> GetPdfForAutomatedSearchAsync(List<SkillLookupModel> skillLookups,
+            string userId, CancellationToken cancellationToken);
+
+        Task<byte[]> GetPdfForAutomatedSearchBasedOnTimeAsync(List<SkillLookupModel> skillLookups,
+            string userId, CancellationToken cancellationToken);
     }
 }

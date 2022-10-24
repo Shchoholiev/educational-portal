@@ -1,0 +1,11 @@
+<section class="d-flex flex-wrap">
+    <div class="card m-1" *ngFor="let s of skills">
+        <div class="card-body d-flex flex-row">
+            <input type="checkbox" class="form-check-input checkbox me-1" [checked]="skillChosen(s.id)"
+                    (click)="chooseSkill(s.id)"/>
+            <p class="mb-0" style="margin-right:10px;">{{s.name}}</p>
+        </div>
+    </div>
+</section>
+
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>

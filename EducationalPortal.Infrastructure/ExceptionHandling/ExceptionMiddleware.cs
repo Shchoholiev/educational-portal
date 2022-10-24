@@ -34,6 +34,11 @@ namespace EducationalPortal.Infrastructure.ExceptionHandling
                 this._logger.LogError($"Entity already exists: {ex}");
                 await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.BadRequest);
             }
+            catch (NoResultException ex)
+            {
+                this._logger.LogError($"Operation yielded no result: {ex}");
+                await HandleExceptionAsync(httpContext, ex, (int)HttpStatusCode.BadRequest);
+            }
             catch (DeleteEntityException ex)
             {
                 this._logger.LogError($"Can't delete entity due to error: {ex}");
@@ -56,6 +61,7 @@ namespace EducationalPortal.Infrastructure.ExceptionHandling
                 NotFoundException => $"{exception.Message} Refresh the page and try again.",
                 AlreadyExistsException => $"{exception.Message} Change properties or delete existing object.",
                 DeleteEntityException => $"{exception.Message}",
+                NoResultException => $"Can't get a result, because: {exception.Message}.",
                 _ => "Internal Server Error",
             };
 
