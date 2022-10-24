@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { catchError, map, throwError } from 'rxjs';
 import { Course } from 'src/app/shared/course.model';
 import { CoursesOrderBy } from 'src/app/shared/courses-order-by.model';
-import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
+import { SkillLookup } from 'src/app/shared/lookup-models/skill-lookup.model';
+import { SkillsService } from 'src/app/skills/skills.service';
 import { CoursesService } from '../courses.service';
 
 @Component({
@@ -26,9 +28,16 @@ export class CoursesSearchComponent implements OnInit {
 
   public lastSearch = "";
 
+  public showSkills = false;
+
+  public skillLookups: SkillLookup[] = [];
+
+  public isBasedOnTime = false;
+
+  public error = "";
+
   constructor(
-    public service: CoursesService, 
-    public shoppingCartService: ShoppingCartService,
+    private service: CoursesService, 
     private _route: ActivatedRoute
     ) { }
   
@@ -47,6 +56,7 @@ export class CoursesSearchComponent implements OnInit {
           this.metadata = JSON.parse(metadata);
         }
         this.lastSearch = this.filter;
+        this.showSkills = false;
       }
     )
   }
@@ -54,8 +64,6 @@ export class CoursesSearchComponent implements OnInit {
   setOrderBy(order: number) {
     if (this.orderBy != order) {
       this.orderBy = order;
-      console.log(this.orderBy);
-      
       this.setPage(1);
     }
   }
@@ -64,6 +72,63 @@ export class CoursesSearchComponent implements OnInit {
     if (this.isAscending != isAscending) {
       this.isAscending = isAscending;
       this.setPage(1);
+    }
+  }
+
+  setShowSkills(){
+    this.showSkills = true;
+    this.error = "";
+  }
+
+  toggleBasedOnTime(){
+    this.isBasedOnTime = !this.isBasedOnTime;
+  }
+
+  cleanSkills(){
+    this.skillLookups = [];
+  }
+
+  removeSkill(skillId: number){
+    var index = this.skillLookups.findIndex(s => s.skillId == skillId);
+    if (index > -1) {
+      this.skillLookups.splice(index, 1);
+    }
+  }
+
+  clearFilters(){
+    this.filter = "";
+    this.isAscending = true;
+    this.orderBy = CoursesOrderBy.Id;
+    this.error = "";
+  }
+
+  performAutomatedSearch(){
+    this.clearFilters();
+    if (this.isBasedOnTime) {
+      this.service.getCoursesByAutomatedSearchBasedOnTime(this.skillLookups)
+      .pipe(
+        map(response => { 
+          this.list = response;
+          this.showSkills = false;
+        }),
+        catchError(err => {
+          this.error = err.error.Message;
+          return throwError(() => { return this.error; })
+      })
+      ).subscribe();
+    }
+    else {
+      this.service.getCoursesByAutomatedSearch(this.skillLookups)
+      .pipe(
+        map(response => { 
+          this.list = response;
+          this.showSkills = false;
+        }),
+        catchError(err => {
+          this.error = err.error.Message;
+          return throwError(() => { return this.error; })
+      })
+      ).subscribe();
     }
   }
 }
