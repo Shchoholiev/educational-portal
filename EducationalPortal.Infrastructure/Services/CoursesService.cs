@@ -361,7 +361,7 @@ namespace EducationalPortal.Infrastructure.Services
                     .SetFontAndSize(PdfFontFactory.CreateFont(StandardFonts.HELVETICA), 10)
                     .SetFillColor(new DeviceRgb(226, 120, 247))
                     .MoveText(217, 490 - rows * 65)
-                    .ShowText($"{AppHttpContext.BaseUrl}/api/courses/{course.Id}")
+                    .ShowText($"{AppHttpContext.BaseUrl}/courses/{course.Id}")
                     .EndText();
 
                 rows++;
