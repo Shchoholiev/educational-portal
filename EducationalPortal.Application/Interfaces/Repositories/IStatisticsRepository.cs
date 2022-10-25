@@ -8,7 +8,7 @@ namespace EducationalPortal.Application.Interfaces.Repositories
         Task<PagedList<MaterialStatisticsQueryModel>> GetMaterialsStatisticsAsync(PageParameters pageParameters, 
             CancellationToken cancellationToken);
 
-        Task<SalesStatisticsQueryModel> GetSalesStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken);
+        Task<SalesStatisticsQueryModel> GetSalesStatisticsAsync(CancellationToken cancellationToken);
 
         Task<PagedList<UserStatisticsQueryModel>> GetUsersStatisticsAsync(PageParameters pageParameters,
             CancellationToken cancellationToken);

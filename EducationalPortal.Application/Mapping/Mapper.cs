@@ -13,6 +13,8 @@ using EducationalPortal.Application.Models.QueryModels;
 using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Application.Models.DTO.FinalTasks;
 using EducationalPortal.Application.Models.LookupModels;
+using EducationalPortal.Application.Models.StatisticsModel;
+using EducationalPortal.Application.Models.QueryModels.Statistics;
 
 namespace EducationalPortal.Application.Mapping
 {
@@ -86,6 +88,11 @@ namespace EducationalPortal.Application.Mapping
 
             cfg.CreateMap<SubmittedFinalTaskDto, SubmittedFinalTask>();
             cfg.CreateMap<SubmittedFinalTask, SubmittedFinalTaskDto>();
+
+            cfg.CreateMap<MaterialStatisticsQueryModel, MaterialStatisticsModel>();
+            cfg.CreateMap<SalesStatisticsQueryModel, SalesStatisticsModel>();
+            cfg.CreateMap<UserStatisticsQueryModel, UserStatisticsModel>();
+            cfg.CreateMap<CourseShortQueryModel, CourseStatisticsModel>();
 
         }).CreateMapper();
 
@@ -303,6 +310,37 @@ namespace EducationalPortal.Application.Mapping
             }
 
             return dtos;
+        }
+
+        public PagedList<MaterialStatisticsModel> Map(PagedList<MaterialStatisticsQueryModel> source)
+        {
+            var dtos = this._mapper.Map<PagedList<MaterialStatisticsModel>>(source);
+            dtos.MapList(source);
+            return dtos;
+        }
+
+        public PagedList<UserStatisticsModel> Map(PagedList<UserStatisticsQueryModel> source)
+        {
+            var dtos = this._mapper.Map<PagedList<UserStatisticsModel>>(source);
+            dtos.MapList(source);
+            foreach (var user in dtos)
+            {
+                user.CompletedCoursesPercentage = user.CompletedCoursesCount * 100 / user.BoughtCoursesCount;
+            }
+
+            return dtos;
+        }
+
+        public PagedList<CourseStatisticsModel> MapStatistics(PagedList<CourseShortQueryModel> source)
+        {
+            var dtos = this._mapper.Map<PagedList<CourseStatisticsModel>>(source);
+            dtos.MapList(source);
+            return dtos;
+        }
+
+        public SalesStatisticsModel Map(SalesStatisticsQueryModel source)
+        {
+            return this._mapper.Map<SalesStatisticsModel>(source);
         }
 
         private Course MapCourseJoinEntities(Course course, CourseCreateDto courseDTO)

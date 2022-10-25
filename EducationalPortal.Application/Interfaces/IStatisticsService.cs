@@ -8,10 +8,10 @@ namespace EducationalPortal.Application.Interfaces
         Task<PagedList<MaterialStatisticsModel>> GetMaterialsStatisticsAsync(PageParameters pageParameters,
             CancellationToken cancellationToken);
 
-        Task<SalesStatisticsModel> GetSalesStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken);
+        Task<SalesStatisticsModel> GetSalesStatisticsAsync(CancellationToken cancellationToken);
 
         Task<UsersStatisticsModel> GetUsersStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken);
     
-        Task<PagedList<CourseStatisticsModel>> GetUCoursesStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken);
+        Task<PagedList<CourseStatisticsModel>> GetCoursesStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken);
     }
 }
