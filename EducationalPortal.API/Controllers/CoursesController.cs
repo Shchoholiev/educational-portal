@@ -98,8 +98,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> CreateAsync([FromBody] CourseCreateDto courseDto, 
-                                                     CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateAsync([FromBody] CourseCreateDto courseDto, CancellationToken cancellationToken)
         {
             var course = await this._coursesService.CreateAsync(courseDto, UserId, cancellationToken);
             return CreatedAtAction("GetCourse", new { id = course.Id }, course);

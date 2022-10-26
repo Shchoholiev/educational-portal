@@ -360,7 +360,9 @@ namespace EducationalPortal.Application.Mapping
                 course.CoursesMaterials.Add(courseMaterial);
             }
 
-            course.CoursesSkills = courseDTO.Skills.Select(s => new CoursesSkills { SkillId = s.Id }).ToList();
+            course.CoursesSkills = courseDTO.Skills.Select(
+                s => new CoursesSkills { SkillId = s.Id, Level = s.Level }
+                ).ToList();
 
             return course;
         }

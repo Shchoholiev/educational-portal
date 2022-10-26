@@ -14,7 +14,7 @@ export class CoursesComponent implements OnInit {
 
   public metadata: any;
   
-  public pageSize = 3;
+  public pageSize = 4;
 
   constructor(public service: CoursesService, public shoppingCartService: ShoppingCartService) { }
   

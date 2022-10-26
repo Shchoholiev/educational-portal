@@ -21,18 +21,15 @@ namespace EducationalPortal.Application.Interfaces
 
         Task<CourseCreateDto> GetCourseForEditAsync(int id, CancellationToken cancellationToken);
 
-        Task<Course> CreateAsync(CourseCreateDto courseDto, string authorEmail, 
-                                 CancellationToken cancellationToken);
+        Task<Course> CreateAsync(CourseCreateDto courseDto, string userId,  CancellationToken cancellationToken);
 
         Task UpdateAsync(int id, CourseCreateDto courseDto, CancellationToken cancellationToken);
 
         Task DeleteAsync(int id, CancellationToken cancellationToken);
 
-        Task<int> MaterialLearnedAsync(int materialId, int courseId, string email, 
-                                       CancellationToken cancellationToken);
+        Task<int> MaterialLearnedAsync(int materialId, int courseId, string email, CancellationToken cancellationToken);
 
-        Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email, 
-                                        CancellationToken cancellationToken);
+        Task<int> MaterialUnearnedAsync(int materialId, int courseId, string email, CancellationToken cancellationToken);
 
         Task<List<CourseShortDto>> GetCoursesByAutomatedSearchAsync(List<SkillLookupModel> skillLookups, 
             string userId, CancellationToken cancellationToken);

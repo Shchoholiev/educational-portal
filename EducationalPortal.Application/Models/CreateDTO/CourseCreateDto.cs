@@ -1,9 +1,12 @@
 ﻿using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.DTO.FinalTasks;
 
 namespace EducationalPortal.Application.Models.CreateDTO
 {
     public class CourseCreateDto
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Thumbnail { get; set; }
@@ -17,5 +20,7 @@ namespace EducationalPortal.Application.Models.CreateDTO
         public List<SkillDto> Skills { get; set; }
 
         public List<MaterialBaseDto> Materials { get; set; }
+
+        public FinalTaskDto? FinalTask { get; set; }
     }
 }

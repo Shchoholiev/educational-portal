@@ -12,6 +12,7 @@
                     <p class="text-secondary mb-0">{{getDate(a)}}</p>
                 </div>
                 <p class="mb-1 text-secondary"><strong>Resource: </strong>{{a?.resource?.name}}</p>
+                <p class="mb-1 text-secondary"><strong>Time to Learn: </strong>{{a?.learningMinutes}} minutes</p>
             </div>
             <button class="btn btn-sm btn-danger ms-4 my-auto p-1 px-2" (click)="this.delete(a.id)">
                 <i class="fa-xs fa-solid fa-trash-can"></i>
@@ -54,6 +55,12 @@
                         <p class="mb-0">{{article?.resource?.name || "Choose resource"}}</p>
                     </div>
                 </div>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Minutes To Learn</label>
+                <input class="form-control" type="number"
+                    [(ngModel)]="article.learningMinutes" name="learningMinutes" required>
                 <span class="text-danger"></span>
             </div>
             <input type="submit" value="Create Article" class="btn btn-primary mt-auto" 

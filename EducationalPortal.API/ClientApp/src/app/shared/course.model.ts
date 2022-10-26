@@ -1,3 +1,4 @@
+import { FinalTask } from "./final-task.model";
 import { MaterialBase } from "./material-base.model";
 import { Skill } from "./skill.model";
 import { User } from "./user.model";
@@ -16,4 +17,5 @@ export class Course {
     materials: MaterialBase[] = [];
     skills: Skill[] = [];
     author: User;
+    finalTask: FinalTask;
 }

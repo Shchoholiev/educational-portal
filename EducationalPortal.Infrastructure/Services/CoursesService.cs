@@ -31,6 +31,8 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IGenericRepository<MaterialsBase> _materialsRepository;
 
+        private readonly IFinalTasksRepository _finalTasksRepository;
+
         private readonly ICertificatesService _certificatesService;
 
         private readonly ILogger _logger;
@@ -41,9 +43,11 @@ namespace EducationalPortal.Infrastructure.Services
 
         private const string _robotoSlabBold = "https://educationalportal.blob.core.windows.net/essentials/RobotoSlab-Bold.ttf";
 
-        public CoursesService(ICoursesRepository coursesRepository, IUsersRepository usersRepository,
+        public CoursesService(ICoursesRepository coursesRepository, 
+                              IUsersRepository usersRepository,
                               IUsersCoursesRepository usersCoursesRepository,
                               IGenericRepository<MaterialsBase> materialsRepository,
+                              IFinalTasksRepository finalTasksRepository,
                               ICertificatesService certificatesService,
                               ILogger<CoursesService> logger)
         {
@@ -52,13 +56,14 @@ namespace EducationalPortal.Infrastructure.Services
             this._usersCoursesRepository = usersCoursesRepository;
             this._materialsRepository = materialsRepository;
             this._certificatesService = certificatesService;
+            this._finalTasksRepository = finalTasksRepository;
             this._logger = logger;
         }
 
-        public async Task<Course> CreateAsync(CourseCreateDto courseDto, string authorEmail, CancellationToken cancellationToken)
+        public async Task<Course> CreateAsync(CourseCreateDto courseDto, string userId, CancellationToken cancellationToken)
         {
             var course = this._mapper.Map(courseDto);
-            var author = await this._usersRepository.GetUserAsync(authorEmail, cancellationToken);
+            var author = await this._usersRepository.GetUserAsync(userId, cancellationToken);
             course.Author = author;
             course.UpdateDateUTC = DateTime.UtcNow;
 
@@ -121,6 +126,12 @@ namespace EducationalPortal.Infrastructure.Services
             }
 
             var courseDTO = this._mapper.MapForEdit(course);
+
+            var finalTask = await _finalTasksRepository.GetFinalTaskByCourseIdAsync(id, cancellationToken);
+            if (finalTask != null)
+            {
+                courseDTO.FinalTask = _mapper.Map(finalTask);
+            }
 
             this._logger.LogInformation($"Returned course for edit with id: {course.Id}.");
 

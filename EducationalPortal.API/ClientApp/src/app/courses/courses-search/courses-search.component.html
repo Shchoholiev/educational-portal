@@ -68,7 +68,7 @@
             <div *ngIf="!showSkills" class="d-flex flex-column gap-3">
                 <app-course-search *ngFor="let c of list" [course]="c" style="display: flex;"></app-course-search>
             </div>
-            <app-pagination  *ngIf="!showSkills && metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>
+            <app-pagination *ngIf="!showSkills && metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>
         </div>
         <div *ngIf="error" class="d-flex p-5">
             <p class="mx-auto text-light-gray" style="text-align: center;">{{error}}</p>
