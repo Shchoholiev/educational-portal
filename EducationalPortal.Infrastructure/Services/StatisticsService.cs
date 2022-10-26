@@ -39,11 +39,12 @@ namespace EducationalPortal.Infrastructure.Services
         public async Task<SalesStatisticsModel> GetSalesStatisticsAsync(CancellationToken cancellationToken)
         {
             var statistic = await _statisticsRepository.GetSalesStatisticsAsync(cancellationToken);
-            var dtos = _mapper.Map(statistic);
+            var dto = _mapper.Map(statistic);
+            dto.CompletedCoursesPercentage = dto.CompletedCoursesCount * 100 / dto.SaledCoursesCount;
 
             this._logger.LogInformation($"Returned Sales statistics from database.");
 
-            return dtos;
+            return dto;
         }
 
         public async Task<PagedList<CourseStatisticsModel>> GetCoursesStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken)
@@ -63,7 +64,7 @@ namespace EducationalPortal.Infrastructure.Services
             var statistics = new UsersStatisticsModel
             {
                 Users = dtos,
-                AverageCompletedCoursesPercentage = dtos.Sum(u => u.CompletedCoursesPercentage) / dtos.Count,
+                AverageCompletedCoursesPercentage = dtos.Sum(u => u.CompletedCoursesPercentage) / dtos.Where(u => u.BoughtCoursesCount > 0).Count(),
             };
 
             this._logger.LogInformation($"Returned Sales statistics from database.");

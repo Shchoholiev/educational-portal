@@ -5,11 +5,27 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+        <div class="d-flex gap-2">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" routerLink="/courses">Courses</a>
           </li>
         </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a *ngIf="authService.isInRole('Admin')" class="nav-link dropdown-toggle text-secondary" id="navbarDarkDropdownMenuLink" 
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Statistics
+            </a>
+            <ul *ngIf="authService.isInRole('Admin')" class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item" routerLink="/statistics/materials">Materials</a></li>
+              <li><a class="dropdown-item" routerLink="/statistics/sales">Sales</a></li>
+              <li><a class="dropdown-item" routerLink="/statistics/courses">Courses</a></li>
+              <li><a class="dropdown-item" routerLink="/statistics/users">Users</a></li>
+            </ul>
+          </li>
+        </ul>
+        </div>
 
         <form class="d-flex align-items-center" (ngSubmit)="search()">
           <input class="input-main" style="width: 400px;" type="text" placeholder="Search request" name="filter" [(ngModel)]="filter"/>

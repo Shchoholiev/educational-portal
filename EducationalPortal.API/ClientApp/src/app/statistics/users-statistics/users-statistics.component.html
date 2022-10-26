@@ -1,0 +1,28 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="m-0">Users Statistics</h2>
+    <h3 class="text-pink m-0">Average completion: {{statistics.averageCompletedCoursesPercentage}} %</h3>
+</div>
+<table class="table">
+    <thead>
+      <tr class="text-pink">
+        <th scope="col">Name</th>
+        <th scope="col"  class="text-center">Email</th>
+        <th scope="col"  class="text-center">Balance</th>
+        <th scope="col"  class="text-center">Bought Courses</th>
+        <th scope="col"  class="text-center">Completed Courses</th>
+        <th scope="col"  class="text-center">Courses Completion (%)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of statistics.users">
+        <th>{{user.name}}</th>
+        <td>{{user.email}}</td>
+        <td class="text-center">{{user.balance}}</td>
+        <td class="text-center">{{user.boughtCoursesCount}}</td>
+        <td class="text-center">{{user.completedCoursesCount}}</td>
+        <td class="text-center">{{user.completedCoursesPercentage}} %</td>
+      </tr>
+    </tbody>
+  </table>
+
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>

@@ -46,6 +46,10 @@ import { ReviewFinalTaskComponent } from './final-tasks/review-final-task/review
 import { CoursesSearchComponent } from './courses/courses-search/courses-search.component';
 import { CourseSearchComponent } from './courses/courses-search/course-search/course-search.component';
 import { ChooseSkillsComponent } from './courses/courses-search/choose-skills/choose-skills.component';
+import { MaterialsStatisticsComponent } from './statistics/materials-statistics/materials-statistics.component';
+import { SalesStatisticsComponent } from './statistics/sales-statistics/sales-statistics.component';
+import { CoursesStatisticsComponent } from './statistics/courses-statistics/courses-statistics.component';
+import { UsersStatisticsComponent } from './statistics/users-statistics/users-statistics.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -92,7 +96,11 @@ export function tokenGetter() {
     ReviewFinalTaskComponent,
     CoursesSearchComponent,
     CourseSearchComponent,
-    ChooseSkillsComponent
+    ChooseSkillsComponent,
+    MaterialsStatisticsComponent,
+    SalesStatisticsComponent,
+    CoursesStatisticsComponent,
+    UsersStatisticsComponent
   ],
   imports: [
     BrowserModule,

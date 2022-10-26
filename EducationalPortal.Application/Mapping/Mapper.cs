@@ -325,7 +325,10 @@ namespace EducationalPortal.Application.Mapping
             dtos.MapList(source);
             foreach (var user in dtos)
             {
-                user.CompletedCoursesPercentage = user.CompletedCoursesCount * 100 / user.BoughtCoursesCount;
+                if (user.BoughtCoursesCount > 0)
+                {
+                    user.CompletedCoursesPercentage = user.CompletedCoursesCount * 100 / user.BoughtCoursesCount;
+                }
             }
 
             return dtos;
