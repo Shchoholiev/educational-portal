@@ -10,6 +10,9 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<SalesStatisticsQueryModel> GetSalesStatisticsAsync(CancellationToken cancellationToken);
 
+        Task<PagedList<CourseStatisticsQueryModel>> GetCoursesStatisticsAsync(PageParameters pageParameters,
+            CancellationToken cancellationToken);
+
         Task<PagedList<UserStatisticsQueryModel>> GetUsersStatisticsAsync(PageParameters pageParameters,
             CancellationToken cancellationToken);
     }

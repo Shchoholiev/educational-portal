@@ -11,6 +11,8 @@ export class Course {
     price: number = 0;
     updateDateUTC: Date = new Date;
     studentsCount: number = 0;
+    learningTime: number = 0;
+    isBought: boolean = false;
     materials: MaterialBase[] = [];
     skills: Skill[] = [];
     author: User;

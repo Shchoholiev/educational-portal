@@ -9,11 +9,11 @@ namespace EducationalPortal.Application.Interfaces
 {
     public interface ICoursesService
     {
-        Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, 
-                                                     CancellationToken cancellationToken);
+        Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, string userId,
+            CancellationToken cancellationToken);
 
         Task<PagedList<CourseShortDto>> GetFilteredPageAsync(PageParameters pageParameters,
-            string filter, CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken);
+            string filter, CoursesOrderBy orderBy, bool isAscending, string userId, CancellationToken cancellationToken);
 
         Task<CourseDto> GetCourseAsync(int id, string? email, CancellationToken cancellationToken);
 

@@ -64,6 +64,7 @@ namespace EducationalPortal.Application.Mapping
 
             cfg.CreateMap<Skill, SkillDto>();
             cfg.CreateMap<SkillDto, Skill>();
+            cfg.CreateMap<SkillQueryModel, SkillDto>();
 
             cfg.CreateMap<User, UserDto>();
             cfg.CreateMap<UserDto, User>()
@@ -92,7 +93,7 @@ namespace EducationalPortal.Application.Mapping
             cfg.CreateMap<MaterialStatisticsQueryModel, MaterialStatisticsModel>();
             cfg.CreateMap<SalesStatisticsQueryModel, SalesStatisticsModel>();
             cfg.CreateMap<UserStatisticsQueryModel, UserStatisticsModel>();
-            cfg.CreateMap<CourseShortQueryModel, CourseStatisticsModel>();
+            cfg.CreateMap<CourseStatisticsQueryModel, CourseStatisticsModel>();
 
         }).CreateMapper();
 
@@ -334,7 +335,7 @@ namespace EducationalPortal.Application.Mapping
             return dtos;
         }
 
-        public PagedList<CourseStatisticsModel> MapStatistics(PagedList<CourseShortQueryModel> source)
+        public PagedList<CourseStatisticsModel> Map(PagedList<CourseStatisticsQueryModel> source)
         {
             var dtos = this._mapper.Map<PagedList<CourseStatisticsModel>>(source);
             dtos.MapList(source);

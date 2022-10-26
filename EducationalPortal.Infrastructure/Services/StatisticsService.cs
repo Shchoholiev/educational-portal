@@ -49,8 +49,8 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task<PagedList<CourseStatisticsModel>> GetCoursesStatisticsAsync(PageParameters pageParameters, CancellationToken cancellationToken)
         {
-            var courses = await _coursesRepository.GetPageAsync(pageParameters, string.Empty, Core.Enums.CoursesOrderBy.StudentsCount, false, cancellationToken);
-            var dtos = _mapper.MapStatistics(courses);
+            var courses = await _statisticsRepository.GetCoursesStatisticsAsync(pageParameters, cancellationToken);
+            var dtos = _mapper.Map(courses);
 
             this._logger.LogInformation($"Returned courses statistics page from database.");
 

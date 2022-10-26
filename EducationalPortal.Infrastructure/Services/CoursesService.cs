@@ -144,9 +144,9 @@ namespace EducationalPortal.Infrastructure.Services
             return dto;
         }
 
-        public async Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken)
+        public async Task<PagedList<CourseShortDto>> GetPageAsync(PageParameters pageParameters, string userId, CancellationToken cancellationToken)
         {
-            var courses = await this._coursesRepository.GetPageAsync(pageParameters, cancellationToken);
+            var courses = await this._coursesRepository.GetPageAsync(pageParameters, userId, cancellationToken);
             var coursesDtos = this._mapper.Map(courses);
 
             this._logger.LogInformation($"Returned courses page {courses.PageNumber} from database.");
@@ -155,10 +155,10 @@ namespace EducationalPortal.Infrastructure.Services
         }
 
         public async Task<PagedList<CourseShortDto>> GetFilteredPageAsync(PageParameters pageParameters, 
-            string filter, CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken)
+            string filter, CoursesOrderBy orderBy, bool isAscending, string userId, CancellationToken cancellationToken)
         {
             var courses = await this._coursesRepository.GetPageAsync(pageParameters, filter, 
-                orderBy, isAscending, cancellationToken);
+                orderBy, isAscending, userId, cancellationToken);
             var coursesDtos = this._mapper.Map(courses);
 
             this._logger.LogInformation($"Returned courses page {courses.PageNumber} from database.");

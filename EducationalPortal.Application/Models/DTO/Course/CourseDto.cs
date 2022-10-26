@@ -16,6 +16,10 @@
 
         public int StudentsCount { get; set; }
 
+        public int LearningTime { get; set; }
+
+        public bool IsBought { get; set; }
+
         public UserDto Author { get; set; }
 
         public List<SkillDto> Skills { get; set; }
