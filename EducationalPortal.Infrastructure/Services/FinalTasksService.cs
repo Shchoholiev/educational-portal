@@ -89,6 +89,11 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
+            if (await this._finalTasksRepository.IsUsedAsync(id, cancellationToken))
+            {
+                throw new DeleteEntityException("This article is used in other courses!");
+            }
+
             var finalTask = await this._finalTasksRepository.GetFinalTaskAsync(id, cancellationToken);
             if (finalTask == null)
             {

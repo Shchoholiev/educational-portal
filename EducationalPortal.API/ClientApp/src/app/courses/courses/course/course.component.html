@@ -7,9 +7,8 @@
         </div>
         <div class="d-flex flex-row justify-content-between">
             <h5 class="text-pink">{{course.price}} points</h5>
-            <button class="btn-pink" style="z-index: 1000;" (click)="addToCart(course.id)">
-                Add to cart
-            </button>
+            <button *ngIf="!course?.isBought" class="btn-pink" (click)="addToCart(course.id)">Add to cart</button>
+            <button *ngIf="course?.isBought" class="btn-pink" routerLink="/courses/learn/{{course.id}}">Learn Course</button>
         </div>
     </div>
 </div>

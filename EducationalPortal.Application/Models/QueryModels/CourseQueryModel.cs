@@ -16,7 +16,11 @@ namespace EducationalPortal.Application.Models.QueryModels
 
         public int Price { get; set; }
 
-        public IEnumerable<Skill> Skills { get; set; }
+        public int LearningTime { get; set; }
+
+        public bool IsBought { get; set; }
+
+        public IEnumerable<SkillQueryModel> Skills { get; set; }
 
         public IEnumerable<MaterialQueryModel> Materials { get; set; }
 

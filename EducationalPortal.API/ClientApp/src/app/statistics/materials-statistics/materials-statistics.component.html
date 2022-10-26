@@ -1,0 +1,19 @@
+<h2>Materials Statistics</h2>
+<table class="table">
+    <thead>
+      <tr class="text-pink">
+        <th scope="col">Name</th>
+        <th scope="col"  class="text-center">Courses Count</th>
+        <th scope="col"  class="text-center">Users Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let material of materials">
+        <th>{{material.name}}</th>
+        <td class="text-center">{{material.coursesCount}}</td>
+        <td  class="text-center">{{material.usersCount}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>

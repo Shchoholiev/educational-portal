@@ -34,13 +34,14 @@ namespace EducationalPortal.Infrastructure
                 options.UseSqlServer(connectionString)
             );
 
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ICoursesRepository, CoursesRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<IUsersCoursesRepository, UsersCoursesRepository>();
             services.AddScoped<ICartItemsRepository, CartItemsRepository>();
             services.AddScoped<IFinalTasksRepository, FinalTasksRepository>();
             services.AddScoped<ICertificatesRepository, CertificatesRepository>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IStatisticsRepository, StatisticsRepository>();
 
             return services;
         }
@@ -62,6 +63,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<IFinalTasksService, FinalTasksService>();
             services.AddScoped<ICertificatesService, CertificatesService>();
+            services.AddScoped<IStatisticsService, StatisticsService>();
 
             return services;
         }

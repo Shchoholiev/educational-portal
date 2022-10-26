@@ -1,0 +1,75 @@
+<section class="d-flex flex-column">
+    <div class="card my-1 d-flex flex-row" *ngFor="let f of finalTasks">
+        <div class="card-body d-flex flex-row">
+            <input class="form-check-input checkbox" type="checkbox" style="margin-right:10px;" 
+                    [checked]="f.id == course.finalTask?.id" (click)="chooseFinalTask(f.id)">
+            <div style="width:100%">   
+                <div class="d-flex flex-columnmb-2">
+                    <div class="d-flex flex-row">
+                        <p class="m-0">{{f?.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-danger ms-4 my-auto p-1 px-2" (click)="this.delete(f.id)">
+                <i class="fa-xs fa-solid fa-trash-can"></i>
+            </button>        
+        </div>
+    </div>
+</section>
+
+<span class="text-danger">{{deleteError}}</span>
+
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>
+
+<hr/>
+
+<section class="form-group mb-2"> 
+    <form (ngSubmit)="create()" #form="ngForm" novalidate>
+        <div class="d-flex flex-row mb-3 gap-2">
+            <div class="form-group"> 
+                <label class="control-label">Name</label> 
+                <input class="form-control" [(ngModel)]="finalTask.name" name="name" required/>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group"> 
+                <label class="control-label">Time To Review</label> 
+                <input class="form-control" type="datetime-local" [(ngModel)]="finalTask.reviewDeadlineTime" 
+                name="reviewDeadlineTime" required max="0001-01-14T00:00"/>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="d-flex flex-row mb-3 gap-2">
+            <div class="form-group" style="flex: 1;">
+                <label class="control-label">Text</label>
+                <textarea class="form-control" [(ngModel)]="finalTask.text" name="text" required></textarea>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2" style="width: 100%">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0">Review Questions</h6>
+                <button class="btn-pink" type="button" (click)="addReviewQuestion()">Add Question</button>  
+            </div>
+            <div class="d-flex flex-column gap-2">
+                <div class="card p-3 d-flex flex-column gap-2" *ngFor="let q of finalTask.reviewQuestions">
+                    <p class="m-0">Question</p>
+                    <div class="d-flex flex-columnp-2 gap-2 justify-content-between">
+                        <h6>Text:</h6>
+                        <textarea class="form-control" type="text" [(ngModel)]="q.text"></textarea>
+                    </div>
+                    <div class="d-flex gap-2 justify-content-between align-items-center">
+                        <h6 class="m-0" style="white-space: nowrap;">Max Mark:</h6>
+                        <input class="form-control" type="text" [(ngModel)]="q.maxMark"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row my-3">
+            <input type="submit" value="Create Final Task" class="btn btn-primary mt-auto" 
+                    [disabled]="form.invalid || !finalTask.reviewQuestions"/>
+        </div>
+    </form>
+    <span class="text-danger">
+        <span class="me-1" *ngFor="let err of createErrors">{{err}}</span>
+    </span>
+</section>

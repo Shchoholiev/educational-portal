@@ -13,6 +13,8 @@ using EducationalPortal.Application.Models.QueryModels;
 using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Application.Models.DTO.FinalTasks;
 using EducationalPortal.Application.Models.LookupModels;
+using EducationalPortal.Application.Models.StatisticsModel;
+using EducationalPortal.Application.Models.QueryModels.Statistics;
 
 namespace EducationalPortal.Application.Mapping
 {
@@ -62,6 +64,7 @@ namespace EducationalPortal.Application.Mapping
 
             cfg.CreateMap<Skill, SkillDto>();
             cfg.CreateMap<SkillDto, Skill>();
+            cfg.CreateMap<SkillQueryModel, SkillDto>();
 
             cfg.CreateMap<User, UserDto>();
             cfg.CreateMap<UserDto, User>()
@@ -86,6 +89,11 @@ namespace EducationalPortal.Application.Mapping
 
             cfg.CreateMap<SubmittedFinalTaskDto, SubmittedFinalTask>();
             cfg.CreateMap<SubmittedFinalTask, SubmittedFinalTaskDto>();
+
+            cfg.CreateMap<MaterialStatisticsQueryModel, MaterialStatisticsModel>();
+            cfg.CreateMap<SalesStatisticsQueryModel, SalesStatisticsModel>();
+            cfg.CreateMap<UserStatisticsQueryModel, UserStatisticsModel>();
+            cfg.CreateMap<CourseStatisticsQueryModel, CourseStatisticsModel>();
 
         }).CreateMapper();
 
@@ -305,6 +313,40 @@ namespace EducationalPortal.Application.Mapping
             return dtos;
         }
 
+        public PagedList<MaterialStatisticsModel> Map(PagedList<MaterialStatisticsQueryModel> source)
+        {
+            var dtos = this._mapper.Map<PagedList<MaterialStatisticsModel>>(source);
+            dtos.MapList(source);
+            return dtos;
+        }
+
+        public PagedList<UserStatisticsModel> Map(PagedList<UserStatisticsQueryModel> source)
+        {
+            var dtos = this._mapper.Map<PagedList<UserStatisticsModel>>(source);
+            dtos.MapList(source);
+            foreach (var user in dtos)
+            {
+                if (user.BoughtCoursesCount > 0)
+                {
+                    user.CompletedCoursesPercentage = user.CompletedCoursesCount * 100 / user.BoughtCoursesCount;
+                }
+            }
+
+            return dtos;
+        }
+
+        public PagedList<CourseStatisticsModel> Map(PagedList<CourseStatisticsQueryModel> source)
+        {
+            var dtos = this._mapper.Map<PagedList<CourseStatisticsModel>>(source);
+            dtos.MapList(source);
+            return dtos;
+        }
+
+        public SalesStatisticsModel Map(SalesStatisticsQueryModel source)
+        {
+            return this._mapper.Map<SalesStatisticsModel>(source);
+        }
+
         private Course MapCourseJoinEntities(Course course, CourseCreateDto courseDTO)
         {
             course.CoursesMaterials = new List<CoursesMaterials>();
@@ -318,7 +360,9 @@ namespace EducationalPortal.Application.Mapping
                 course.CoursesMaterials.Add(courseMaterial);
             }
 
-            course.CoursesSkills = courseDTO.Skills.Select(s => new CoursesSkills { SkillId = s.Id }).ToList();
+            course.CoursesSkills = courseDTO.Skills.Select(
+                s => new CoursesSkills { SkillId = s.Id, Level = s.Level }
+                ).ToList();
 
             return course;
         }

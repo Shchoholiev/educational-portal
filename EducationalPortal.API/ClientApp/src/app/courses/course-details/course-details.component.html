@@ -17,6 +17,9 @@
                 <div class="card-header">
                     <div class="d-flex flex-row justify-content-between">
                         <p class="mb-0">Materials count: {{course?.materials?.length}}</p>
+                        <p class="mb-0">
+                            Learning time: <span class="text-pink">{{(course.learningTime / 60).toFixed(1)}} hours</span>
+                        </p>
                         <p class="mb-0 text-secondary" style="font-size:14px" 
                             *ngIf="authService.isAuthenticated">Learned</p>
                     </div>
@@ -30,7 +33,7 @@
                             <h6>{{material.name}}</h6>
                         </div>
                         <div class="d-flex flex-row">
-                            <p class="text-primary mb-0" style="margin-right:20px">{{$any(material).quality.name}}</p>
+                            <p class="text-pink mb-0" style="margin-right:20px">{{$any(material).quality.name}}</p>
                             <p class="text-secondary mb-0">{{$any(material).duration.split('T')[1]}}</p>
                             <input type="checkbox" class="form-check-input ms-4 me-3" disabled 
                                    *ngIf="authService.isAuthenticated" [checked]="material.isLearned" />
@@ -44,7 +47,7 @@
                             <h6>{{material.name}}</h6>
                         </div>
                         <div class="d-flex flex-row">
-                            <p class="text-primary mb-0" style="margin-right:20px">
+                            <p class="text-pink mb-0" style="margin-right:20px">
                                 {{$any(material).authors[0].name}}
                             </p>
                             <p class="text-secondary mb-0">{{$any(material).pagesCount}} pages</p>
@@ -60,7 +63,7 @@
                             <h6>{{material.name}}</h6>
                         </div>
                         <div class="d-flex flex-row">
-                            <p class="text-primary mb-0" style="margin-right:20px">{{$any(material).resource.name}}</p>
+                            <p class="text-pink mb-0" style="margin-right:20px">{{$any(material).resource.name}}</p>
                             <p class="text-secondary mb-0">{{$any(material).publicationDate.split('T')[0]}}</p>
                             <input type="checkbox" class="form-check-input ms-4 me-3" disabled 
                                    *ngIf="authService.isAuthenticated" [checked]="material.isLearned" />
@@ -75,12 +78,16 @@
         <div class="card m-1" style="width: 18rem;">
             <img src="{{course?.thumbnail}}" class="card-img-top">
             <div class="card-body">
-                <h2 class="text-primary">{{course?.price}} points</h2>
-                <a class="btn btn-primary mb-3 w-100" (click)="addToCart(course.id)">Add to cart</a>
+                <h2 *ngIf="!course?.isBought" class="text-pink">{{course?.price}} points</h2>
+                <button *ngIf="!course?.isBought" class="btn-pink mb-3 w-100" (click)="addToCart(course.id)">Add to cart</button>
+                <button *ngIf="course?.isBought" class="btn-pink mb-3 w-100" routerLink="/courses/learn/{{course.id}}">Learn Course</button>
                 <h6>You will acquire skills:</h6>
-                <ul>
-                    <li *ngFor="let skill of course?.skills">{{skill.name}}</li>
-                </ul>
+                <div class="d-flex gap-2 flex-column">
+                    <div class="d-flex justify-content-between" *ngFor="let skill of course?.skills">
+                        <h6 class="m-0">{{skill.name}}</h6>
+                        <h6 class="m-0 text-pink">{{skill.level}}</h6>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

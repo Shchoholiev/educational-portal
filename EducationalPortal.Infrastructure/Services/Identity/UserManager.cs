@@ -65,7 +65,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
 
         public async Task<TokensModel> LoginAsync(LoginModel login, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetUserAsync(login.Email, cancellationToken);
+            var user = await this._usersRepository.GetUserByEmailAsync(login.Email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -94,7 +94,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
                 throw new NotFoundException("Role");
             }
 
-            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
+            var user = await this._usersRepository.GetUserByEmailAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -118,7 +118,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
             }
 
             if (email != userDto.Email 
-                && await this._usersRepository.GetUserAsync(userDto.Email, cancellationToken) != null)
+                && await this._usersRepository.GetUserByEmailAsync(userDto.Email, cancellationToken) != null)
             {
                 throw new AlreadyExistsException("email", userDto.Email);
             }

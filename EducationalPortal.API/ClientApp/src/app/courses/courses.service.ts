@@ -47,6 +47,10 @@ export class CoursesService {
   public getCourse(id: number){
     return this._http.get<Course>(`${this.baseURL}/${id}`);
   }
+
+  public getCourseForEdit(id: number){
+    return this._http.get<Course>(`${this.baseURL}/edit/${id}`);
+  }
   
   public create(course: Course){
     return this._http.post(`${this.baseURL}`, course);

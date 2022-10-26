@@ -19,10 +19,10 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<CourseQueryModel?> GetFullCourseAsync(int id, string userId, CancellationToken cancellationToken);
 
-        Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, CancellationToken cancellationToken);
+        Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, string userId, CancellationToken cancellationToken);
 
         Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, string filter, 
-            CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken);
+            CoursesOrderBy orderBy, bool isAscending, string userId, CancellationToken cancellationToken);
 
         Task<List<CourseLookupModel>> GetLookupModelsAsync(IEnumerable<int> skillIds, IEnumerable<int> courseIds, 
             string userId, CancellationToken cancellationToken);
