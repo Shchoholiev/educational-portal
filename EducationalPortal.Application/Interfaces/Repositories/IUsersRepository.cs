@@ -11,7 +11,9 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task DeleteAsync(User user, CancellationToken cancellationToken);
 
-        Task<User?> GetUserAsync(string email, CancellationToken cancellationToken);
+        Task<User?> GetUserAsync(string userId, CancellationToken cancellationToken);
+
+        Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
 
         Task<User?> GetUserWithSkillsAsync(string userId, CancellationToken cancellationToken);
 

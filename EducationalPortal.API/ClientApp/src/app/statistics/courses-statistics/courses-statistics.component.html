@@ -1,0 +1,21 @@
+<h2>Courses Statistics</h2>
+<table class="table">
+    <thead>
+      <tr class="text-pink">
+        <th scope="col">Name</th>
+        <th scope="col"  class="text-center">Update Date</th>
+        <th scope="col"  class="text-center">Price</th>
+        <th scope="col"  class="text-center">Students Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let course of courses">
+        <th>{{course.name}}</th>
+        <td class="text-center">{{getDate(course.updateDateUTC)}}</td>
+        <td  class="text-center">{{course.price}}</td>
+        <td  class="text-center">{{course.studentsCount}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>

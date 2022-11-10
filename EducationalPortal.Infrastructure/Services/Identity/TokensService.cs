@@ -31,7 +31,7 @@ namespace EducationalPortal.Infrastructure.Services.Identity
         {
             var principal = this.GetPrincipalFromExpiredToken(tokensModel.AccessToken);
 
-            var user = await this._usersRepository.GetUserAsync(
+            var user = await this._usersRepository.GetUserByEmailAsync(
                 principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value, 
                 cancellationToken);
             if (user == null || user?.UserToken?.RefreshToken != tokensModel.RefreshToken

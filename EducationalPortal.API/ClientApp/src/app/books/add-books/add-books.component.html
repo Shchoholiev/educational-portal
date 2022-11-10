@@ -7,19 +7,20 @@
                 <div class="d-flex flex-row justify-content-between mb-2">
                     <div class="d-flex flex-row">
                         <i class="fa-solid fa-book mt-1 me-2"></i>
-                        <a href="{{book?.link}}" target="_blank">
+                        <a href="{{book?.link}}" class="text-pink" target="_blank">
                             <p class="mb-0" style="margin-right:7px;">{{book?.name}}</p>
                         </a>
                     </div>
                     <div class="d-flex flex-row">
-                        <p class="text-primary mb-0" style="margin-right:20px">{{book?.extension?.name}}</p>
+                        <p class="text-pink mb-0" style="margin-right:20px">{{book?.extension?.name}}</p>
                         <p class="text-secondary mb-0" style="white-space: nowrap">{{book?.pagesCount}} pages</p>
                     </div>
                 </div>
-                    <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
-                        <span *ngFor="let a of book.authors">{{a?.fullName}}, </span>
-                    </p>
-                    <p class="mb-1 text-secondary"><strong>Publication year: </strong>{{book?.publicationYear}}</p>
+                <p class="mb-1 text-secondary"><strong style="margin-right:7px;">Authors:</strong>
+                    <span *ngFor="let a of book.authors">{{a?.fullName}}, </span>
+                </p>
+                <p class="mb-1 text-secondary"><strong>Publication year: </strong>{{book?.publicationYear}}</p>
+                <p class="mb-1 text-secondary"><strong>Time to Learn: </strong>{{book?.learningMinutes}} minutes</p>
             </div>
             <button class="btn btn-sm btn-danger ms-4 my-auto p-1 px-2" (click)="this.delete(book.id)">
                 <i class="fa-xs fa-solid fa-trash-can"></i>

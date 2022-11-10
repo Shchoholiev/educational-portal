@@ -1,4 +1,6 @@
-﻿namespace EducationalPortal.Application.Models.DTO.Course
+﻿using EducationalPortal.Core.Entities.FinalTasks;
+
+namespace EducationalPortal.Application.Models.DTO.Course
 {
     public class CourseDto : BaseDto
     {
@@ -15,6 +17,12 @@
         public DateTime UpdateDateUTC { get; set; }
 
         public int StudentsCount { get; set; }
+
+        public int LearningTime { get; set; }
+
+        public bool IsBought { get; set; }
+
+        public FinalTask FinalTask { get; set; }
 
         public UserDto Author { get; set; }
 

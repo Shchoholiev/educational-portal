@@ -19,6 +19,8 @@ namespace EducationalPortal.Application.Interfaces.Repositories
 
         Task<bool> ExistsAsync(string name, CancellationToken cancellationToken);
 
+        Task<bool> IsUsedAsync(int finalTaskId, CancellationToken cancellationToken);
+
         Task<SubmittedFinalTask?> AddSubmittedFinalTaskAsync(SubmittedFinalTask finalTask, CancellationToken cancellationToken);
 
         Task UpdateSubmittedFinalTaskAsync(SubmittedFinalTask finalTask, CancellationToken cancellationToken);

@@ -7,5 +7,7 @@
         public string Link { get; set; }
 
         public bool IsLearned { get; set; }
+
+        public int LearningMinutes { get; set; }
     }
 }

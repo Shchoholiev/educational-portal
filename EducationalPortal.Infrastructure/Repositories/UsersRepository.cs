@@ -40,7 +40,12 @@ namespace EducationalPortal.Infrastructure.Repositories
             await this.SaveAsync(cancellationToken);
         }
 
-        public Task<User?> GetUserAsync(string email, CancellationToken cancellationToken)
+        public Task<User?> GetUserAsync(string userId, CancellationToken cancellationToken)
+        {
+            return this._table.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        }
+
+        public Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
         {
             return this._table.Include(u => u.UserToken)
                               .Include(u => u.Roles)

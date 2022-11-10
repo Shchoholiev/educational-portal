@@ -24,9 +24,9 @@
         <div class="card">
             <article class="card-body">
                 <h5 class="d-flex align-items-center mb-3">Created Courses</h5>
-                <div class="d-flex flex-wrap">
+                <div class="d-flex flex-wrap gap-2">
                     <app-course *ngFor="let c of user?.createdCourses" [course]="c" [width]="16" 
-                            style="display: flex;"></app-course>
+                    style="width: 24%; min-width: 300px; flex: 1; display: flex;"></app-course>
                 </div>
             </article>
         </div>

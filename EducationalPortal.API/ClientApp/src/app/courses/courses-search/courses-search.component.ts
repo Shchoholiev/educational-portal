@@ -18,7 +18,7 @@ export class CoursesSearchComponent implements OnInit {
 
   public metadata: any;
   
-  public pageSize = 3;
+  public pageSize = 4;
 
   public orderBy = CoursesOrderBy.Id;
 
@@ -78,6 +78,7 @@ export class CoursesSearchComponent implements OnInit {
   setShowSkills(){
     this.showSkills = true;
     this.error = "";
+    this.metadata = null;
   }
 
   toggleBasedOnTime(){

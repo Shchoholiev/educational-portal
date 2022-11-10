@@ -70,7 +70,8 @@ namespace EducationalPortal.Infrastructure.Repositories
                     "c.[Price] AS [Price], " +
                     "(SELECT " +
                         "s.Id, " +
-                        "s.[Name] " +
+                        "s.[Name], " +
+                        "cs.[Level] " +
                     "FROM dbo.CoursesSkills AS cs " +
                         "JOIN dbo.Skills AS s ON s.Id = cs.SkillId " +
                         "JOIN dbo.Courses AS courses ON courses.Id = cs.CourseId " +
@@ -130,7 +131,25 @@ namespace EducationalPortal.Infrastructure.Repositories
                     "WHERE courses.Id = c.Id " +
                     "ORDER BY cm.[Index] " +
                     "FOR JSON PATH " +
-                    ") AS Materials " +
+                    ") AS Materials, " +
+                    "(SELECT SUM(LearningMinutes) " +
+                    "FROM dbo.Materials AS m " +
+                    "JOIN dbo.CoursesMaterials AS cm ON cm.MaterialId = m.Id " +
+                    "WHERE cm.CourseId = c.Id" +
+                    ") AS LearningTime, " +
+                    "CASE WHEN LEN(@userId) > 0 " +
+                        "THEN ( " +
+                            "CAST( " +
+                                "CASE WHEN EXISTS ( " +
+                                "SELECT 1 " +
+                                "FROM dbo.UsersCourses AS uc " +
+                                "WHERE uc.UserId = @userId AND uc.CourseId = c.Id " +
+                                ") " +
+                                "THEN 1 " +
+                                "ELSE 0 " +
+                                "END " +
+                            "AS BIT) " +
+                        ") END AS [IsBought] " +
                     "FROM dbo.Courses AS c " +
                         "JOIN dbo.Users AS u ON u.Id = c.AuthorId " +
                     "WHERE c.Id = @id " +
@@ -149,18 +168,13 @@ namespace EducationalPortal.Infrastructure.Repositories
                     }
                 }
             }
+            var course = JsonConvert.DeserializeObject<List<CourseQueryModel>>(json.ToString());
 
-            json.Remove(0, 1);
-            json.Remove(json.Length - 3, 2);
-            json.Append('}');
-
-            var course = JsonConvert.DeserializeObject<CourseQueryModel>(json.ToString());
-
-            return course;
+            return course?.FirstOrDefault();
         }
 
         public async Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, 
-                                                          CancellationToken cancellationToken)
+            string userId, CancellationToken cancellationToken)
         {
             var courses = await this._table.AsNoTracking()
                                            .Skip((pageParameters.PageNumber - 1) * pageParameters.PageSize)
@@ -173,7 +187,8 @@ namespace EducationalPortal.Infrastructure.Repositories
                                                ShortDescription = c.ShortDescription,
                                                Price = c.Price,
                                                UpdateDateUTC = c.UpdateDateUTC,
-                                               StudentsCount = c.UsersCourses.Count
+                                               StudentsCount = c.UsersCourses.Count,
+                                               IsBought = c.UsersCourses.Any(uc => uc.UserId == userId)
                                            })
                                            .ToListAsync(cancellationToken);
             var totalCount = await this._table.CountAsync(cancellationToken);
@@ -182,7 +197,7 @@ namespace EducationalPortal.Infrastructure.Repositories
         }
 
         public async Task<PagedList<CourseShortQueryModel>> GetPageAsync(PageParameters pageParameters, string filter,
-            CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken)
+            CoursesOrderBy orderBy, bool isAscending, string userId, CancellationToken cancellationToken)
         {
             Expression<Func<Course, bool>> predicate = c => c.Name.Contains(filter)
                        || c.ShortDescription.Contains(filter)
@@ -220,7 +235,8 @@ namespace EducationalPortal.Infrastructure.Repositories
                     ShortDescription = c.ShortDescription,
                     Price = c.Price,
                     UpdateDateUTC = c.UpdateDateUTC,
-                    StudentsCount = c.UsersCourses.Count
+                    StudentsCount = c.UsersCourses.Count,
+                    IsBought = c.UsersCourses.Any(uc => uc.UserId == userId)
                 })
                 .ToListAsync(cancellationToken);
             var totalCount = await this._table.CountAsync(predicate, cancellationToken);

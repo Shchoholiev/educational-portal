@@ -62,6 +62,10 @@ export class CourseCreateComponent implements OnInit {
     this.panel = "videos";
   }
 
+  public addFinalTask(){
+    this.panel = "finalTasks";
+  }
+
   private fileToLink(event: Event){
     var input = event.target as HTMLInputElement;
     if (input.files) {

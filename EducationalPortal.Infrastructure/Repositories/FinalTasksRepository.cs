@@ -40,14 +40,14 @@ namespace EducationalPortal.Infrastructure.Repositories
         {
             return this._db.Courses
                 .Where(c => c.Id == courseId)
-                .Select(c => new FinalTask
+                .Select(c => c.FinalTask != null ? new FinalTask
                 {
                     Id = c.FinalTask.Id,
                     Name = c.FinalTask.Name,
                     Text = c.FinalTask.Text,
                     ReviewDeadlineTime = c.FinalTask.ReviewDeadlineTime,
                     ReviewQuestions = c.FinalTask.ReviewQuestions,
-                })
+                } : null)
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -72,6 +72,11 @@ namespace EducationalPortal.Infrastructure.Repositories
         public Task<bool> ExistsAsync(string name, CancellationToken cancellationToken)
         {
             return this._table.AnyAsync(ft => ft.Name == name, cancellationToken);
+        }
+
+        public Task<bool> IsUsedAsync(int finalTaskId, CancellationToken cancellationToken)
+        {
+            return this._db.Courses.AnyAsync(c => c.FinalTask.Id == finalTaskId, cancellationToken);
         }
 
         public async Task<SubmittedFinalTask?> AddSubmittedFinalTaskAsync(SubmittedFinalTask finalTask, CancellationToken cancellationToken)

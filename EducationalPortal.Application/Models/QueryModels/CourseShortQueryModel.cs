@@ -15,5 +15,7 @@
         public DateTime UpdateDateUTC { get; set; }
 
         public int StudentsCount { get; set; }
+
+        public bool IsBought { get; set; }
     }
 }

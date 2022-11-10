@@ -13,9 +13,8 @@
                 </p>
                 <h5 class="text-pink m-0">{{course.price}} points</h5>
             </div>
-            <button class="btn-pink" style="z-index: 1000;" (click)="addToCart(course.id)">
-                Add to cart
-            </button>
+            <button *ngIf="!course?.isBought" class="btn-pink" style="z-index: 1000;" (click)="addToCart(course.id)">Add to cart</button>
+            <button *ngIf="course?.isBought" class="btn-pink" style="z-index: 1000;" routerLink="/courses/learn/{{course.id}}">Learn Course</button>
         </div>
         <a routerLink="/courses/{{course.id}}" class="stretched-link"></a>
     </div>

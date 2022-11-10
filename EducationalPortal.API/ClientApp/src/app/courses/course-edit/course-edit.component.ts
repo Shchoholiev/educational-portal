@@ -24,7 +24,7 @@ export class CourseEditComponent implements OnInit {
   }
 
   setCourse(id: number){
-    this._coursesService.getCourse(id).subscribe(
+    this._coursesService.getCourseForEdit(id).subscribe(
       response => {
         this.course = response;
       }
@@ -48,6 +48,8 @@ export class CourseEditComponent implements OnInit {
   }
 
   public update(){
+    console.log(this.course);
+    
     this._coursesService.update(this.course).subscribe(
       () => this._router.navigate(["courses", this.course.id])
     );
@@ -67,6 +69,10 @@ export class CourseEditComponent implements OnInit {
 
   public addVideos(){
     this.panel = "videos";
+  }
+
+  public addFinalTask(){
+    this.panel = "finalTasks";
   }
 
   private fileToLink(event: Event){

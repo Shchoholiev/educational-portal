@@ -16,6 +16,7 @@
                         <p class="text-secondary mb-0">{{getTime(video)}}</p>
                     </div>
                 </div>
+                <p class="mb-1 text-secondary"><strong>Time to Learn: </strong>{{video?.learningMinutes}} minutes</p>
             </div>
             <button class="btn btn-sm btn-danger ms-4 my-auto p-1 px-2" (click)="this.delete(video.id)">
                 <i class="fa-xs fa-solid fa-trash-can"></i>

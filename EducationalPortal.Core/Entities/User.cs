@@ -1,4 +1,5 @@
 ﻿using EducationalPortal.Core.Common;
+using EducationalPortal.Core.Entities.Courses;
 using EducationalPortal.Core.Entities.EducationalMaterials;
 using EducationalPortal.Core.Entities.FinalTasks;
 using EducationalPortal.Core.Entities.JoinEntities;
@@ -36,5 +37,7 @@ namespace EducationalPortal.Core.Entities
         public List<Course?> CreatedCourses { get; set; }
 
         public List<SubmittedFinalTask> SubmittedFinalTasks { get; set; }
+
+        public List<Certificate> Certificates { get; set; }
     }
 }

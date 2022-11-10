@@ -53,7 +53,7 @@ namespace EducationalPortal.Infrastructure.Services
                 throw new AlreadyExistsException("Cart");
             }
 
-            var user = await this._usersRepository.GetUserAsync(email, cancellationToken);
+            var user = await this._usersRepository.GetUserByEmailAsync(email, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");
@@ -145,7 +145,7 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task BuyAsync(string userEmail, CancellationToken cancellationToken)
         {
-            var user = await this._usersRepository.GetUserAsync(userEmail, cancellationToken);
+            var user = await this._usersRepository.GetUserByEmailAsync(userEmail, cancellationToken);
             if (user == null)
             {
                 throw new NotFoundException("User");

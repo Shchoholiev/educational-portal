@@ -24,7 +24,7 @@ namespace EducationalPortal.API.Controllers
         public async Task<IEnumerable<CourseShortDto>> GetCoursesAsync([FromQuery] PageParameters pageParameters, 
                                                                        CancellationToken cancellationToken)
         {
-            var courses = await this._coursesService.GetPageAsync(pageParameters, cancellationToken);
+            var courses = await this._coursesService.GetPageAsync(pageParameters, UserId, cancellationToken);
             this.SetPagingMetadata(courses);
             return courses;
         }
@@ -35,7 +35,7 @@ namespace EducationalPortal.API.Controllers
             CoursesOrderBy orderBy, bool isAscending, CancellationToken cancellationToken, string filter = "")
         {
             var courses = await this._coursesService.GetFilteredPageAsync(new PageParameters(pageNumber, pageSize),
-                filter, orderBy, isAscending, cancellationToken);
+                filter, orderBy, isAscending, UserId, cancellationToken);
             this.SetPagingMetadata(courses);
             return courses;
         }
@@ -98,8 +98,7 @@ namespace EducationalPortal.API.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Creator")]
-        public async Task<IActionResult> CreateAsync([FromBody] CourseCreateDto courseDto, 
-                                                     CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateAsync([FromBody] CourseCreateDto courseDto, CancellationToken cancellationToken)
         {
             var course = await this._coursesService.CreateAsync(courseDto, UserId, cancellationToken);
             return CreatedAtAction("GetCourse", new { id = course.Id }, course);

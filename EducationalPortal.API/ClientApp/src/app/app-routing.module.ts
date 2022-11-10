@@ -15,6 +15,10 @@ import { CourseEditComponent } from './courses/course-edit/course-edit.component
 import { CourseCreateComponent } from './courses/course-create/course-create.component';
 import { BasicLayoutComponent } from './basic-layout/basic-layout.component';
 import { CoursesSearchComponent } from './courses/courses-search/courses-search.component';
+import { MaterialsStatisticsComponent } from './statistics/materials-statistics/materials-statistics.component';
+import { SalesStatisticsComponent } from './statistics/sales-statistics/sales-statistics.component';
+import { CoursesStatisticsComponent } from './statistics/courses-statistics/courses-statistics.component';
+import { UsersStatisticsComponent } from './statistics/users-statistics/users-statistics.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'courses', pathMatch: 'full' },
@@ -33,6 +37,10 @@ const routes: Routes = [
       { path: 'account/author/:email', component: AuthorComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
       { path: 'my-learning', component: MyLearningComponent, canActivate: [AuthGuard] },
+      { path: 'statistics/materials', component: MaterialsStatisticsComponent, canActivate: [AuthGuard] },
+      { path: 'statistics/sales', component: SalesStatisticsComponent, canActivate: [AuthGuard] },
+      { path: 'statistics/courses', component: CoursesStatisticsComponent, canActivate: [AuthGuard] },
+      { path: 'statistics/users', component: UsersStatisticsComponent, canActivate: [AuthGuard] },
     ]
   },
   { path: 'courses/learn/:id', component: CourseLearnComponent, canActivate: [AuthGuard] },
