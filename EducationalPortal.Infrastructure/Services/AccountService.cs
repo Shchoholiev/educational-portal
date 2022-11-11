@@ -5,6 +5,7 @@ using EducationalPortal.Application.Interfaces.Repositories;
 using EducationalPortal.Application.Mapping;
 using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.UserStatistics;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.JoinEntities;
 using Microsoft.Extensions.Logging;
@@ -22,18 +23,22 @@ namespace EducationalPortal.Infrastructure.Services
 
         private readonly IShoppingCartService _shoppingCartService;
 
+        private readonly IUsersMaterialsRepository _usersMaterialsRepository;
+
         private readonly ILogger _logger;
 
         private readonly Mapper _mapper = new();
 
         public AccountService(IUsersRepository userRepository, IUsersCoursesRepository usersCoursesRepository,
                               IUserManager userManager, IShoppingCartService shoppingCartService,
+                              IUsersMaterialsRepository usersMaterialsRepository,
                               ILogger<AccountService> logger)
         {
             this._usersRepository = userRepository;
             this._usersCoursesRepository = usersCoursesRepository;
             this._userManager = userManager;
             this._shoppingCartService = shoppingCartService;
+            this._usersMaterialsRepository = usersMaterialsRepository;
             this._logger = logger;
         }
 
@@ -133,6 +138,24 @@ namespace EducationalPortal.Infrastructure.Services
             this._logger.LogInformation($"Returned users courses page {usersCourses.PageNumber} from database.");
 
             return usersCourses;
+        }
+
+        public async Task<List<LearningUserStatistics>> GetLearningStatisticsForDateRangeAsync(DateTime dateStart, 
+            DateTime dateEnd, string userId, CancellationToken cancellationToken)
+        {
+            var statistics = await _usersMaterialsRepository.GetLearningStatisticsForDateRangeAsync(
+                dateStart, dateEnd, userId, cancellationToken);
+
+            return statistics;
+        }
+
+        public async Task<DetailedLearningUserStatistics?> GetLearningStatiscsForDayAsync(DateTime date,
+            string userId, CancellationToken cancellationToken)
+        {
+            var statistics = await _usersMaterialsRepository.GetLearningStatiscsForDayAsync(
+                date, userId, cancellationToken);
+
+            return statistics;
         }
     }
 }

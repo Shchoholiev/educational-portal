@@ -10,6 +10,8 @@ namespace EducationalPortal.Core.Entities.FinalTasks
 
         public int Mark { get; set; }
 
+        public DateTime ReviewDeadlineUTC { get; set; }
+
         public User? ReviewedBy { get; set; }
 
         public string? ReviewedById { get; set; }

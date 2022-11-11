@@ -109,8 +109,8 @@ namespace EducationalPortal.Infrastructure.Repositories
                             "CAST( " +
                                 "CASE WHEN EXISTS ( " +
                                 "SELECT 1 " +
-                                "FROM dbo.MaterialsBaseUser AS mbu " +
-                                "WHERE mbu.UsersId = @userId AND mbu.MaterialsId = m.Id " +
+                                "FROM dbo.UsersMaterials AS mbu " +
+                                "WHERE mbu.UserId = @userId AND mbu.MaterialId = m.Id " +
                                 ") " +
                                 "THEN 1 " +
                                 "ELSE 0 " +

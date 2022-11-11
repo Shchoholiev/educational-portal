@@ -85,5 +85,7 @@ namespace EducationalPortal.Infrastructure.EF
         public DbSet<SubmittedReviewQuestion> SubmittedReviewQuestions { get; set; }
 
         public DbSet<Certificate> Certificates { get; set; }
+
+        public DbSet<UserMaterial> UsersMaterials { get; set; }
     }
 }

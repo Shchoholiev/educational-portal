@@ -59,7 +59,7 @@ namespace EducationalPortal.Infrastructure.Repositories
         }
 
         public async Task<int> GetLearnedMaterialsCountAsync(int courseId, string email, 
-                                                            CancellationToken cancellationToken)
+            CancellationToken cancellationToken)
         {
             return await this._db.CoursesMaterials.AsNoTracking()
                 .CountAsync(cm => cm.CourseId == courseId 
