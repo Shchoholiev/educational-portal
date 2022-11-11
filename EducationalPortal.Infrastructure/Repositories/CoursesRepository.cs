@@ -271,12 +271,12 @@ namespace EducationalPortal.Infrastructure.Repositories
                     CoursesSkills = c.CoursesSkills.Where(cs => skillIds.Contains(cs.SkillId)).ToList(),
                     MaterialIds = c.CoursesMaterials
                         .Where(cm => !materialIds.Contains(cm.MaterialId)
-                               && !cm.Material.Users.Any(u => u.Id == userId))
-                        .Select(cm => cm.MaterialId).ToList(),
+                               && !cm.Material.UsersMaterial.Any(um => um.UserId == userId))
+                        .Select(um => um.MaterialId).ToList(),
                     LearningTime = c.CoursesMaterials
                         .Where(cm => !materialIds.Contains(cm.MaterialId)
-                               && !cm.Material.Users.Any(u => u.Id == userId))
-                        .Select(cm => cm.Material)
+                               && !cm.Material.UsersMaterial.Any(um => um.UserId == userId))
+                        .Select(um => um.Material)
                         .Sum(m => m.LearningMinutes),
                 }).ToListAsync(cancellationToken);
         }

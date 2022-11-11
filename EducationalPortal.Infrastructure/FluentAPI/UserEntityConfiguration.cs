@@ -17,9 +17,6 @@ namespace EducationalPortal.Infrastructure.FluentAPI
                    .WithOne(uc => uc.User)
                    .HasForeignKey(uc => uc.UserId);
 
-            builder.HasMany<MaterialsBase>(u => u.Materials)
-                   .WithMany(m => m.Users);
-
             builder.HasIndex(u => u.Email)
                    .IsUnique();
 

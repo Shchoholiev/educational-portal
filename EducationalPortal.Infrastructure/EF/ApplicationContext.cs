@@ -39,6 +39,7 @@ namespace EducationalPortal.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new FinalTaskEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubmittedFinalTaskEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubmittedReviewQuestionEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserMaterialEntityConfiguration());
         }
 
         public DbSet<Course> Courses { get; set; }

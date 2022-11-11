@@ -10,8 +10,6 @@ namespace EducationalPortal.Infrastructure.FluentAPI
         public void Configure(EntityTypeBuilder<MaterialsBase> builder)
         {
             builder.ToTable("Materials");
-            builder.HasMany<User>(m => m.Users)
-                   .WithMany(u => u.Materials);
         }
     }
 }
