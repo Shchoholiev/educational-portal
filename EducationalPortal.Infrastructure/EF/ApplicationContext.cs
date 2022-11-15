@@ -39,6 +39,7 @@ namespace EducationalPortal.Infrastructure.EF
             modelBuilder.ApplyConfiguration(new FinalTaskEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubmittedFinalTaskEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubmittedReviewQuestionEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserMaterialEntityConfiguration());
         }
 
         public DbSet<Course> Courses { get; set; }
@@ -84,5 +85,7 @@ namespace EducationalPortal.Infrastructure.EF
         public DbSet<SubmittedReviewQuestion> SubmittedReviewQuestions { get; set; }
 
         public DbSet<Certificate> Certificates { get; set; }
+
+        public DbSet<UserMaterial> UsersMaterials { get; set; }
     }
 }

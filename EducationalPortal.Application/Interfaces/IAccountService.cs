@@ -1,5 +1,6 @@
 ﻿using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.UserStatistics;
 using EducationalPortal.Application.Paging;
 using EducationalPortal.Core.Entities.JoinEntities;
 using System.Linq.Expressions;
@@ -17,8 +18,13 @@ namespace EducationalPortal.Application.Interfaces
         Task DeleteAsync(string id, CancellationToken cancellationToken);
 
         Task<PagedList<UsersCourses>> GetUsersCoursesPageAsync(string email, PageParameters pageParameters,
-                                                               Expression<Func<UsersCourses, bool>> predicate, 
-                                                               CancellationToken cancellationToken);
+            Expression<Func<UsersCourses, bool>> predicate, CancellationToken cancellationToken);
+
+        Task<List<LearningUserStatistics>> GetLearningStatisticsForDateRangeAsync(DateTime dateStart,
+            DateTime dateEnd, string userId, CancellationToken cancellationToken);
+
+        Task<DetailedLearningUserStatistics?> GetLearningStatiscsForDayAsync(DateTime date,
+            string userId, CancellationToken cancellationToken);
 
         Task<TokensModel> RegisterAsync(RegisterModel register, CancellationToken cancellationToken);
 

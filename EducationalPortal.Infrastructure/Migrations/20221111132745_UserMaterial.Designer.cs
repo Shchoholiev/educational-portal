@@ -4,6 +4,7 @@ using EducationalPortal.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EducationalPortal.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221111132745_UserMaterial")]
+    partial class UserMaterial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -297,9 +299,6 @@ namespace EducationalPortal.Infrastructure.Migrations
                     b.Property<int>("Mark")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReviewDeadlineUTC")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ReviewedById")
                         .HasColumnType("nvarchar(450)");
 
@@ -390,7 +389,7 @@ namespace EducationalPortal.Infrastructure.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("UsersMaterials");
+                    b.ToTable("UserMaterial");
                 });
 
             modelBuilder.Entity("EducationalPortal.Core.Entities.JoinEntities.UsersCourses", b =>

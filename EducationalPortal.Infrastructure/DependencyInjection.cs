@@ -42,6 +42,7 @@ namespace EducationalPortal.Infrastructure
             services.AddScoped<IFinalTasksRepository, FinalTasksRepository>();
             services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             services.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            services.AddScoped<IUsersMaterialsRepository, UsersMaterialsRepository>();
 
             return services;
         }

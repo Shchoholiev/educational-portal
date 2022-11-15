@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using EducationalPortal.Core.Entities.JoinEntities;
 using EducationalPortal.Application.Models;
 using EducationalPortal.Application.Models.DTO;
+using EducationalPortal.Application.Models.UserStatistics;
 
 namespace EducationalPortal.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : ApiControllerBase
     {
         private readonly IAccountService _accountService;
@@ -68,6 +69,20 @@ namespace EducationalPortal.API.Controllers
                 uc => uc.MaterialsCount == uc.LearnedMaterialsCount, cancellationToken);
             this.SetPagingMetadata(usersCourses);
             return usersCourses;
+        }
+
+        [HttpGet("learning-statistics/{dateStart}/{dateEnd}")]
+        public async Task<List<LearningUserStatistics>> GetLearningStatisticsForDateRangeAsync(DateTime dateStart,
+            DateTime dateEnd, CancellationToken cancellationToken)
+        {
+            return await _accountService.GetLearningStatisticsForDateRangeAsync(dateStart, dateEnd, UserId, cancellationToken);
+        }
+
+        [HttpGet("learning-statistics-details/{date}")]
+        public async Task<DetailedLearningUserStatistics?> GetLearningStatiscsForDayAsync(DateTime date,
+            CancellationToken cancellationToken)
+        {
+            return await _accountService.GetLearningStatiscsForDayAsync(date, UserId, cancellationToken);
         }
 
         [HttpPost("register")]

@@ -51,6 +51,7 @@ import { SalesStatisticsComponent } from './statistics/sales-statistics/sales-st
 import { CoursesStatisticsComponent } from './statistics/courses-statistics/courses-statistics.component';
 import { UsersStatisticsComponent } from './statistics/users-statistics/users-statistics.component';
 import { AddFinalTaskComponent } from './final-tasks/add-final-task/add-final-task.component';
+import { UserStatisticsComponent } from './courses/my-learning/user-statistics/user-statistics.component';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -102,7 +103,8 @@ export function tokenGetter() {
     SalesStatisticsComponent,
     CoursesStatisticsComponent,
     UsersStatisticsComponent,
-    AddFinalTaskComponent
+    AddFinalTaskComponent,
+    UserStatisticsComponent
   ],
   imports: [
     BrowserModule,

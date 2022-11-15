@@ -1,6 +1,6 @@
 <h4 class="my-3">Courses</h4>
 <div class="d-flex flex-wrap gap-2">
-    <app-course *ngFor="let c of list" [course]="c" style="width: 24%; min-width: 300px; max-width: 500px; flex: 1; display: flex;"></app-course>
+    <app-course *ngFor="let c of list" [course]="c" style="width: 24%; min-width: 300px; max-width: 420px; flex: 1; display: flex;"></app-course>
 </div>
 
 <app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="setPage($event)"></app-pagination>

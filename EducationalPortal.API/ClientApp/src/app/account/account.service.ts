@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
 import { Tokens } from '../auth/tokens.model';
+import { DetailedLearningUserStatistics } from '../shared/user-statistics/detailed-learning-user-statistics.model';
+import { LearningUserStatistics } from '../shared/user-statistics/learning-user-statistics.model';
 import { User } from '../shared/user.model';
 import { UsersCourses } from '../shared/users-courses.model';
 import { Login } from './login/login.model';
@@ -65,5 +66,13 @@ export class AccountService {
                                             pageNumber: pageNumber
                                           }, observe: 'response' });
   }
+
+  public getLearningStatisticsForDateRange(dateStart: Date, dateEnd: Date) {
+    return this._http.get<LearningUserStatistics[]>(
+      this.baseURL + `/learning-statistics/${dateStart.toDateString()}/${dateEnd.toDateString()}`);
+  }
+
+  public getLearningStatiscsForDay(date: Date) {
+    return this._http.get<DetailedLearningUserStatistics>(this.baseURL + `/learning-statistics-details/${date.toDateString()}`);
+  }
 }
-  

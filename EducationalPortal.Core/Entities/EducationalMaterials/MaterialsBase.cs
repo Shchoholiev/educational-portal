@@ -11,8 +11,8 @@ namespace EducationalPortal.Core.Entities.EducationalMaterials
 
         public int LearningMinutes { get; set; }
 
-        public List<CoursesMaterials?> CoursesMaterials { get; set; }
+        public List<CoursesMaterials> CoursesMaterials { get; set; }
          
-        public List<User?> Users { get; set; }
+        public List<UserMaterial> UsersMaterial { get; set; }
     }
 }

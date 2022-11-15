@@ -116,8 +116,15 @@ namespace EducationalPortal.Infrastructure.Services
 
         public async Task SubmitAsync(SubmittedFinalTaskDto submittedTaskDto, CancellationToken cancellationToken)
         {
+            var finalTask = await this._finalTasksRepository.GetFinalTaskAsync(submittedTaskDto.FinalTaskId, cancellationToken);
+            if (finalTask == null)
+            {
+                throw new NotFoundException("FinalTask");
+            }
+            
             var submittedTask = this._mapper.Map(submittedTaskDto);
             submittedTask.SubmitDateUTC = DateTime.UtcNow;
+            submittedTask.ReviewDeadlineUTC = DateTime.UtcNow.Add(new TimeSpan(finalTask.ReviewDeadlineTime.Ticks));
             var dbTask = await this._finalTasksRepository.AddSubmittedFinalTaskAsync(submittedTask, cancellationToken);
 
             this._logger.LogInformation($"Created SudmittedFinalTask with Id: {dbTask.Id}.");

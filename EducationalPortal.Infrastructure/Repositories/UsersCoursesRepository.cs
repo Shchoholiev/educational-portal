@@ -59,11 +59,11 @@ namespace EducationalPortal.Infrastructure.Repositories
         }
 
         public async Task<int> GetLearnedMaterialsCountAsync(int courseId, string email, 
-                                                            CancellationToken cancellationToken)
+            CancellationToken cancellationToken)
         {
             return await this._db.CoursesMaterials.AsNoTracking()
-                .CountAsync(cm => cm.CourseId == courseId && cm.Material.Users.Any(
-                    u => u.Id == this._db.Users.FirstOrDefault(u => u.Email == email).Id));
+                .CountAsync(cm => cm.CourseId == courseId 
+                            && cm.Material.UsersMaterial.Any(um => um.User.Email == email));
         }
 
         public Task<bool> ExistsAsync(int courseId, string email, CancellationToken cancellationToken)

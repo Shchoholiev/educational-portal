@@ -1,0 +1,45 @@
+.date {
+    aspect-ratio : 1 / 1;
+    border-radius: 15px;
+    background: #f3f3f3;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.date:hover {
+    background: var(--main-color);
+    color: #fff;
+}
+
+.chosen {
+    background: var(--main-color) !important;
+    color: #fff !important;
+}
+
+.bg-low-pink {
+    background: #f9dcff;
+}
+
+.bg-medium-pink {
+    background: #f2b0ff;
+}
+
+.bg-high-pink {
+    background: #ef9eff;
+}
+
+.btn-calendar-paging {
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.month {
+    background-color: #9b9b9b;
+    color: #fff;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
