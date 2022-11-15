@@ -1,17 +1,63 @@
-<nav class="navbar navbar-light">
-    <ul class="navbar-nav d-flex flex-row" style="margin: 0 auto">
-        <li class="nav-link nav-item mx-5 fs-5">
-            <a (click)="navToMyLearning()" style="cursor: pointer;">All</a>
-        </li>
-        <li class="nav-link nav-item mx-5 fs-5">
-            <a (click)="navToCoursesInProgress()" style="cursor: pointer;">In progress</a>
-        </li>
-        <li class="nav-link nav-item mx-5 fs-5">
-            <a (click)="navToLearnedCourses()" style="cursor: pointer;">Learned</a>
-        </li>
-    </ul>
+<nav class="text-light-gray mb-4" style="margin-top: -5px;">
+    <span routerLink="/" class="cursor-pointer link">Home</span>
+    <span> / </span>
+    <span routerLink="/my-learning" class="cursor-pointer link">My Learning</span>
+    <span class="text-pink"> / </span>
+    <span class="text-dark">{{getDisplayedSectionString()}}</span>
 </nav>
-<section class="d-flex flex-wrap">
-    <app-course-progress *ngFor="let uc of usersCourses" [userCourse]="uc"></app-course-progress>
-</section>
-<app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="delegate($event)"></app-pagination>
+
+<div class="d-flex justify-content-between text-light-gray mb-3">
+    <div class="d-flex gap-2">
+        <div class="card-borders fw-bold font-14 cursor-pointer align-items-center" 
+            [ngClass]="{'chosen': displayedSection == 0}" (click)="setDisplaySection(0)">ALL</div>
+        <div class="card-borders fw-bold font-14 cursor-pointer align-items-center" 
+            [ngClass]="{'chosen': displayedSection == 1}" (click)="setDisplaySection(1)">IN PROGRESS</div>
+        <div class="card-borders fw-bold font-14 cursor-pointer align-items-center" 
+            [ngClass]="{'chosen': displayedSection == 2}" (click)="setDisplaySection(2)">LEARNED</div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <div class="card-borders fw-bold cursor-pointer d-flex align-items-center gap-2" 
+            [ngClass]="{'chosen': displayedSection == 3}" (click)="setDisplaySection(3)">
+            <i class="fa-regular fa-calendar"></i>
+            Statistics
+        </div>
+        <div class="card-borders cursor-pointer fw-bold d-flex align-items-center gap-2" 
+            style="padding: 2px 9px;" data-bs-toggle="modal" data-bs-target="#helpModal">
+            <i class="fa-solid fa-question"></i>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="displayedSection != 3">
+    <section class="d-flex flex-wrap gap-2">
+        <app-course-progress *ngFor="let uc of usersCourses" [userCourse]="uc" 
+            style="width: 24%; min-width: 300px; max-width: 420px; flex: 1; display: flex;"></app-course-progress>
+    </section>
+    <app-pagination *ngIf="metadata" [metadata]="metadata" (changePageFunction)="delegate($event)"></app-pagination>
+</div>
+
+<app-user-statistics *ngIf="displayedSection == 3"></app-user-statistics>
+
+<div class="modal" id="helpModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Help</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>On statistics page you can see data about your <span class="text-pink">educational perfomance</span> 
+            such as learned materials and ongoing <span class="text-pink">deadlines</span> for your final tasks.</p>
+          <p>How to see deadlines? <span class="text-pink">Clock</span> on the date tile means you have a deadline this day.</p>
+          <p>As brighter <span class="text-pink">tiles</span> in a calendar more materials you've learned this day. 
+            To see detailed information about certain date click on the tile.</p>
+          <p>Click on the <span class="text-pink">arrows</span> to change the dates.</p>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button type="button" class="btn-pink fw-bold" data-bs-dismiss="modal" (click)="setDisplaySection(3)">
+            Go To Statistics</button>
+        </div>
+      </div>
+    </div>
+  </div>

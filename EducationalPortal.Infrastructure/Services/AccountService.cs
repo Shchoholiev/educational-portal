@@ -145,6 +145,9 @@ namespace EducationalPortal.Infrastructure.Services
         {
             var statistics = await _usersMaterialsRepository.GetLearningStatisticsForDateRangeAsync(
                 dateStart, dateEnd, userId, cancellationToken);
+            var deadlines = await _usersMaterialsRepository.GetLearningStatisticsDeadlinesForRangeAsync(
+                dateStart, dateEnd, userId, cancellationToken);
+            statistics.AddRange(deadlines.Where(d => statistics.Any(s => s.Date != d.Date)));
 
             return statistics;
         }

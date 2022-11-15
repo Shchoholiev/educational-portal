@@ -1,0 +1,58 @@
+<section class="d-flex gap-3 mb-5">
+    <div style="flex: 5" class="d-flex gap-3 flex-column text-center">
+        <div class="d-flex gap-2 text-light-gray">
+            <p class="m-0" style="flex: 1;">S</p>
+            <p class="m-0" style="flex: 1;">M</p>
+            <p class="m-0" style="flex: 1;">T</p>
+            <p class="m-0" style="flex: 1;">W</p>
+            <p class="m-0" style="flex: 1;">T</p>
+            <p class="m-0" style="flex: 1;">F</p>
+            <p class="m-0" style="flex: 1;">S</p>
+        </div>
+        <div class="d-flex gap-2 flex-column">
+            <div *ngFor="let week of weeks" class="d-flex gap-2">
+                <div *ngFor="let day of week" style="flex: 1;">
+                    <div *ngIf="day" class="d-flex date text-light-gray flex-column" style="text-align: left;"
+                        (click)="getDetailsForDay($any(day).date)"
+                        [ngClass]="{'chosen': $any(day).date == chosenDate, 
+                            'bg-low-pink' : $any(day).data?.learnedMaterialsCount > 0,
+                            'bg-medium-pink' : $any(day).data?.learnedMaterialsCount > 3,
+                            'bg-high-pink' : $any(day).data?.learnedMaterialsCount > 8 }">
+                        <i *ngIf="$any(day).data?.hasDeadline" class="fa-regular fa-clock" style="font-size: 19px;"></i>
+                        <h2 class="mt-auto mb-0">{{$any(day).dayOfMonth}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <i class="fa-solid fa-angle-left text-pink btn-calendar-paging" (click)="getPreviousTwoWeeks()"></i>
+            <div class="d-flex gap-3">
+                <div *ngFor="let month of getMonthsText()" class="month">
+                    {{month}}
+                </div>
+            </div>
+            <i class="fa-solid fa-angle-right text-pink btn-calendar-paging" (click)="getNextTwoWeeks()"></i>
+        </div>
+    </div>
+    <div class="d-flex" style="flex: 2">
+        <div *ngIf="details" class="d-flex flex-column gap-2">
+            <article *ngIf="details.materialsNames.length">
+                <h6>Learned Materials: </h6>
+                <div *ngFor="let m of details.materialsNames; let i = index">
+                    <p class="m-0 text-light-gray">{{(i + 1) + ". " + m}}</p>
+                </div>
+            </article>
+            <article *ngIf="details.deadlines.length">
+                <h6>Deadlines: </h6>
+                <div *ngFor="let d of details.deadlines">
+                    <p *ngIf="d.deadlineType == 0" class="m-0 text-light-gray">
+                        Review final task before: <span class="text-pink">{{getDeadlineDate(d.dateTimeUTC)}}</span>
+                    </p>
+                </div>
+            </article>
+        </div>
+        <h6 *ngIf="!chosenDate" class="text-light-gray text-center m-auto">Choose day to see details!</h6>
+        <h6 *ngIf="chosenDate && !details?.materialsNames?.length && !details?.deadlines?.length" 
+            class="text-light-gray text-center m-auto">No details.</h6>
+    </div>
+</section>

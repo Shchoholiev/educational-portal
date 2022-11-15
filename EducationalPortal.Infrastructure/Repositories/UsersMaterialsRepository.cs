@@ -35,6 +35,21 @@ namespace EducationalPortal.Infrastructure.Repositories
                 .ToListAsync(cancellationToken);
         }
 
+        public Task<List<LearningUserStatistics>> GetLearningStatisticsDeadlinesForRangeAsync(DateTime dateStart,
+            DateTime dateEnd, string userId, CancellationToken cancellationToken)
+        {
+            return this._db.SubmittedFinalTasks.AsNoTracking()
+                .Where(sft => sft.UserId == userId 
+                           && sft.ReviewDeadlineUTC.Date >= dateStart.Date
+                           && sft.ReviewDeadlineUTC.Date <= dateEnd.Date)
+                .Select(sft => new LearningUserStatistics
+                {
+                    Date = DateOnly.FromDateTime(sft.ReviewDeadlineUTC),
+                    HasDeadline = true,
+                })
+                .ToListAsync(cancellationToken);
+        }
+
         public Task<DetailedLearningUserStatistics?> GetLearningStatiscsForDayAsync(DateTime date, 
             string userId, CancellationToken cancellationToken)
         {

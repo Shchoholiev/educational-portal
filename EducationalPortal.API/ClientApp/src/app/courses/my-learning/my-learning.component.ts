@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { AccountService } from 'src/app/account/account.service';
 import { CertificatesService } from 'src/app/certificates/certificates.service';
 import { UsersCourses } from 'src/app/shared/users-courses.model';
+import { MyLearningSections } from './my-learning-sections.model';
 
 @Component({
   selector: 'app-my-learning',
@@ -13,16 +14,18 @@ export class MyLearningComponent implements OnInit {
 
   public usersCourses: UsersCourses[] = [];
 
-  public metadata: string | null;
+  public metadata: any;
   
   public pageSize = 3;
 
   public delegate: (pageNumber: number) => void;
 
+  public displayedSection = MyLearningSections.All;
+
   constructor(private _accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.navToMyLearning();
+    this.setDisplaySection(MyLearningSections.All);
   }
 
   public getMyLearningCoursesPage(pageNumber: number){
@@ -30,7 +33,10 @@ export class MyLearningComponent implements OnInit {
       response => { 
         if (response.body) {
           this.usersCourses = response.body;
-          this.metadata = response.headers.get('x-pagination');
+          var metadata = response.headers.get('x-pagination');
+          if (metadata) {
+            this.metadata = JSON.parse(metadata);
+          }
         }
       });
   }
@@ -40,7 +46,10 @@ export class MyLearningComponent implements OnInit {
       response => { 
         if (response.body) {
           this.usersCourses = response.body;
-          this.metadata = response.headers.get('x-pagination');
+          var metadata = response.headers.get('x-pagination');
+          if (metadata) {
+            this.metadata = JSON.parse(metadata);
+          }
         }
       });
   }
@@ -50,23 +59,54 @@ export class MyLearningComponent implements OnInit {
       response => { 
         if (response.body) {
           this.usersCourses = response.body;
-          this.metadata = response.headers.get('x-pagination');
+          var metadata = response.headers.get('x-pagination');
+          if (metadata) {
+            this.metadata = JSON.parse(metadata);
+          }
         }
       });
   }
 
-  public navToMyLearning(){
-    this.getMyLearningCoursesPage(1);
-    this.delegate = this.getMyLearningCoursesPage;
+  public setDisplaySection(section: MyLearningSections) {
+    switch (section) {
+      case MyLearningSections.All:
+        this.displayedSection = MyLearningSections.All;
+        this.getMyLearningCoursesPage(1);
+        this.delegate = this.getMyLearningCoursesPage;
+        break;
+
+      case MyLearningSections.InProgress:
+        this.displayedSection = MyLearningSections.InProgress;
+        this.getCoursesInProgressPage(1);
+        this.delegate = this.getCoursesInProgressPage;
+        break;
+
+      case MyLearningSections.Learned:
+        this.displayedSection = MyLearningSections.Learned;
+        this.getLearnedCoursesPage(1);
+        this.delegate = this.getLearnedCoursesPage;
+        break;
+
+      case MyLearningSections.Statistics:
+        this.displayedSection = MyLearningSections.Statistics;
+        
+        break;
+    }
   }
 
-  public navToLearnedCourses(){
-    this.getLearnedCoursesPage(1);
-    this.delegate = this.getLearnedCoursesPage;
-  }
+  public getDisplayedSectionString(){
+    switch (this.displayedSection) {
+      case MyLearningSections.All:
+        return "All"
 
-  public navToCoursesInProgress(){
-    this.getCoursesInProgressPage(1);
-    this.delegate = this.getCoursesInProgressPage;
+      case MyLearningSections.InProgress:
+        return "In Progress"
+
+      case MyLearningSections.Learned:
+        return "Learned"
+
+      case MyLearningSections.Statistics:
+        return "Statistics"
+    }
   }
 }
