@@ -23,7 +23,9 @@ namespace EducationalPortal.Infrastructure.Repositories
             DateTime dateEnd, string userId, CancellationToken cancellationToken)
         {
             return this._table.AsNoTracking()
-                .Where(um => um.LearnDateUTC.Date >= dateStart.Date && um.LearnDateUTC.Date <= dateEnd.Date)
+                .Where(um => um.UserId == userId
+                          && um.LearnDateUTC.Date >= dateStart.Date 
+                          && um.LearnDateUTC.Date <= dateEnd.Date)
                 .GroupBy(um => um.LearnDateUTC.Date)
                 .Select(g => new LearningUserStatistics
                 {
