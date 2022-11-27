@@ -63,7 +63,7 @@ namespace EducationalPortal.Infrastructure.Repositories
         public Task<User?> GetUserWithMaterialsAsync(string userId, CancellationToken cancellationToken)
         {
             return this._table
-                       .Include(u => u.Materials)
+                       .Include(u => u.UserMaterials)
                        .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
         }
 

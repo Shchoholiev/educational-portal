@@ -1,15 +1,18 @@
-<div class="card m-1" style="width: 18rem;">
-    <a routerLink="/courses/learn/{{userCourse.course.id}}">
-        <img src="{{userCourse.course.thumbnail}}" class="card-img-top">
-    </a>
-    <div class="card-body">
-        <h5 class="card-title">{{userCourse.course.name}}</h5>
-        <p class="card-text">{{userCourse.course.shortDescription}}</p>
-        <div class="progress" style="height: 5px;">
-            <div class="progress-bar bg-pink" role="progressbar" [ngStyle]="{ 'width.%': progress }"></div>
+<div class="card-wide flex-column">
+    <img src="{{userCourse.course.thumbnail}}" routerLink="/courses/learn/{{userCourse.course.id}}"
+        style="cursor: pointer;">
+    <div class="d-flex flex-column justify-content-between" style="height: 100%;">
+        <div class="mb-4" routerLink="/courses/learn/{{userCourse.course.id}}" style="cursor: pointer;">
+            <h5 class="card-title">{{userCourse.course.name}}</h5>
+            <p class="card-text">{{userCourse.course.shortDescription}}</p>
         </div>
-        <p class="text-pink mb-2">{{progress}}% Complete</p>
-        <button class="btn-pink-small" *ngIf="progress == 100" style="text-decoration: none;" 
-            (click)="getCertificate()">CERTIFICATE</button>
+        <div class="d-flex gap-2 align-items-center">
+            <p class="text-pink m-0">{{progress}}%</p>
+            <div class="progress" style="height: 5px; flex: 1;">
+                <div class="progress-bar bg-pink" role="progressbar" [ngStyle]="{ 'width.%': progress }"></div>
+            </div>
+            <button class="btn-pink-small" *ngIf="progress == 100" style="text-decoration: none;"
+                (click)="getCertificate()">CERTIFICATE</button>
+        </div>
     </div>
 </div>

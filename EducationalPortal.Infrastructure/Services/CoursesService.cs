@@ -189,7 +189,18 @@ namespace EducationalPortal.Infrastructure.Services
             await this._usersCoursesRepository.UpdateUsersCoursesAsync(userCourse, cancellationToken);
 
             var user = await this._usersRepository.GetUserWithMaterialsAsync(userId, cancellationToken);
-            user.Materials.Add(await this._materialsRepository.GetOneAsync(materialId, cancellationToken));
+            if (!await this._materialsRepository.ExistsAsync(m => m.Id == materialId, cancellationToken))
+            {
+                throw new NotFoundException("Material");
+            }
+
+            user!.UserMaterials.Add(new UserMaterial
+            {
+                UserId = user.Id,
+                MaterialId = materialId,
+                LearnDateUTC = DateTime.UtcNow,
+            });
+
             await this._usersRepository.UpdateAsync(user, cancellationToken);
 
             this._logger.LogInformation($"Material with id: {materialId} added to user with id: {userId}." +
@@ -200,6 +211,7 @@ namespace EducationalPortal.Infrastructure.Services
             {
                 await this._usersRepository.AddAcquiredSkillsAsync(courseId, userId, cancellationToken);
                 await this._certificatesService.CreateAsync(courseId, userId, cancellationToken);
+
                 this._logger.LogInformation($"Added skills of course with id: {courseId} " +
                                             $"to user with id: {userId}. Course learned.");
             }
@@ -219,7 +231,8 @@ namespace EducationalPortal.Infrastructure.Services
             await this._usersCoursesRepository.UpdateUsersCoursesAsync(userCourse, cancellationToken);
 
             var user = await this._usersRepository.GetUserWithMaterialsAsync(userId, cancellationToken);
-            user.Materials.Remove(user.Materials.FirstOrDefault(m => m.Id == materialId));
+            user!.UserMaterials.Remove(user.UserMaterials.FirstOrDefault(um => um.MaterialId == materialId));
+
             await this._usersRepository.UpdateAsync(user, cancellationToken);
 
             this._logger.LogInformation($"Material with id: {materialId} added removed from user with " +

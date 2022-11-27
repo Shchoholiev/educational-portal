@@ -1,0 +1,20 @@
+.chosen {
+    background-color: var(--main-color);
+    color: #fff;
+    border-color: var(--main-color);
+    transition: 0.5s;
+}
+
+.card-borders:hover {
+    background-color: var(--main-color);
+    color: #fff;
+    border-color: var(--main-color);
+}
+
+.link {
+    transition: 0.3s;
+}
+
+.link:hover {
+    color: var(--main-color);
+}

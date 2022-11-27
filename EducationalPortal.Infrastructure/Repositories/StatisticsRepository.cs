@@ -33,8 +33,8 @@ namespace EducationalPortal.Infrastructure.Repositories
                         "WHERE cm.MaterialId = m.Id" +
                         ") as CoursesCount, " +
                         "(SELECT COUNT(*) " +
-                        "FROM dbo.MaterialsBaseUser AS mu " +
-                        "WHERE mu.MaterialsId = m.Id" +
+                        "FROM dbo.UsersMaterials AS mu " +
+                        "WHERE mu.MaterialId = m.Id" +
                         ") as UsersCount " +
                     "FROM dbo.Materials AS m " +
                     "GROUP BY m.Id, m.[Name] " +
